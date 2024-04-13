@@ -9,24 +9,15 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="include\glad">
-      <UniqueIdentifier>{4ef6a31d-73e4-4683-9634-17b1407e7dd6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="include\KHR">
-      <UniqueIdentifier>{6e1778b5-c87a-483c-87e3-54dd7a833ccb}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\glad\glad.c">
+    <ClInclude Include="..\..\include\framework\framework.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\framework\framework.cpp">
       <Filter>src</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\include\glad\glad.h">
-      <Filter>include\glad</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\KHR\khrplatform.h">
-      <Filter>include\KHR</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

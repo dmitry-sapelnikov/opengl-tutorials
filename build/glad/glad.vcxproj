@@ -11,11 +11,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\glad\include\glad\glad.h" />
-    <ClInclude Include="..\..\src\glad\include\KHR\khrplatform.h" />
+    <ClCompile Include="..\..\src\glad\glad.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\glad\src\glad.c" />
+    <ClInclude Include="..\..\include\glad\glad.h" />
+    <ClInclude Include="..\..\include\KHR\khrplatform.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
@@ -68,7 +68,7 @@
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile />
-      <AdditionalIncludeDirectories>../../src/glad/include/</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../include/</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -89,7 +89,7 @@
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile />
-      <AdditionalIncludeDirectories>../../src/glad/include/</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../include/</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
