@@ -17,7 +17,6 @@ const char* WINDOW_TITLE = "Hello Window";
 /// Renders the scene
 void render(GLFWwindow* window)
 {
-	glClearColor(0.1f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 	glfwSwapBuffers(window);
 }
@@ -55,6 +54,9 @@ int main()
 	{
 		return -1;
 	}
+
+	// Set the background color
+	glClearColor(0.1f, 0.3f, 0.3f, 1.0f);
 
 	// Set the resize callback
 	glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
