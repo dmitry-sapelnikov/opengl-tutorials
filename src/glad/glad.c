@@ -88,10 +88,10 @@ static
 int open_gl(void) {
 #ifdef __APPLE__
     static const char *NAMES[] = {
-        "../Frameworks/OpenGL.framework/OpenGL",
-        "/Library/Frameworks/OpenGL.framework/OpenGL",
-        "/System/Library/Frameworks/OpenGL.framework/OpenGL",
-        "/System/Library/Frameworks/OpenGL.framework/Versions/Current/OpenGL"
+        "../Frameworks/OpenGL.engine/OpenGL",
+        "/Library/Frameworks/OpenGL.engine/OpenGL",
+        "/System/Library/Frameworks/OpenGL.engine/OpenGL",
+        "/System/Library/Frameworks/OpenGL.engine/Versions/Current/OpenGL"
     };
 #else
     static const char *NAMES[] = {"libGL.so.1", "libGL.so"};
