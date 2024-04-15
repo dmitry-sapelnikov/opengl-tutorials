@@ -14,9 +14,15 @@
     <ClInclude Include="..\..\include\framework\framework.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\framework\shaders.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\framework\framework.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\framework\shaders.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
