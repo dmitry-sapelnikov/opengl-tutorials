@@ -1,0 +1,47 @@
+#ifndef OPENGL_TUTORIALS_MESH_H
+#define OPENGL_TUTORIALS_MESH_H
+
+// Includes
+#include "engine/IMesh.h"
+#include <vector>
+
+namespace gltut
+{
+
+class Mesh : public IMesh
+{
+public:
+	/// Constructor
+	Mesh(
+		float* vertices,
+		u32 vertexCount,
+		u32* indices,
+		u32 indexCount);
+
+	/// Destructor
+	~Mesh() override;
+
+	/// Renders the mesh
+	void render() const noexcept override;
+
+private:
+	/// The vertices
+	std::vector<float> mVertices;
+
+	/// The indices
+	std::vector<u32> mIndices;
+
+	/// The vertex buffer object
+	unsigned mVBO = 0;
+
+	/// The vertex array object
+	unsigned mVAO = 0;
+
+	/// The element buffer object
+	unsigned mEBO = 0;
+};
+
+// End of the namespace gltut
+}
+
+#endif

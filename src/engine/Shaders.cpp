@@ -1,5 +1,5 @@
 // Includes
-#include "framework/shaders.h"
+#include "Shaders.h"
 #include <iostream>
 
 namespace gltut

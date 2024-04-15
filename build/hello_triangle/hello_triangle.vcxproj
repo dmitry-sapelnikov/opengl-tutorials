@@ -14,7 +14,7 @@
     <ClCompile Include="..\..\src\hello_triangle\hello_triangle.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\framework\framework.vcxproj">
+    <ProjectReference Include="..\engine\engine.vcxproj">
       <Project>{311fac3f-ab40-49e8-8c3f-34270879cdf4}</Project>
     </ProjectReference>
     <ProjectReference Include="..\glad\glad.vcxproj">
