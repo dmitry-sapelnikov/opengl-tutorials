@@ -36,7 +36,7 @@ const char* FRAGMENT_SHADER_SOURCE_CODE =
 void render(GLFWwindow* window)
 {
 	glClear(GL_COLOR_BUFFER_BIT);
-	glDrawArrays(GL_TRIANGLES, 0, 3);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	glfwSwapBuffers(window);
 }
 
@@ -83,17 +83,17 @@ int main()
 		return -1;
 	}
 
-	// Define the vertices to draw
-	const float vertices[] = {
-		-0.5f, -0.5f, 0.0f,
-		 0.5f, -0.5f, 0.0f,
-		 0.0f,  0.5f, 0.0f
+	float vertices[] = {
+		 0.5f,  0.5f, 0.0f,  // top right
+		 0.5f, -0.5f, 0.0f,  // bottom right
+		-0.5f, -0.5f, 0.0f,  // bottom left
+		-0.5f,  0.5f, 0.0f   // top left 
 	};
 
-	//	Create the vertex array object
-	unsigned VAO = 0;
-	glGenVertexArrays(1, &VAO);
-	glBindVertexArray(VAO);
+	unsigned int indices[] = {  // note that we start from 0!
+		0, 1, 3,  // first Triangle
+		1, 2, 3   // second Triangle
+	};
 
 	//	Create the vertex buffer object
 	unsigned VBO = 0;
@@ -101,9 +101,21 @@ int main()
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
+	//	Create the vertex array object
+	unsigned VAO = 0;
+	glGenVertexArrays(1, &VAO);
+	glBindVertexArray(VAO);
 	//	Define the vertex attributes
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
 	glEnableVertexAttribArray(0);
+	// Unbind the vertex buffer object
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	//	Create the element buffer object
+	unsigned EBO;
+	glGenBuffers(1, &EBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
 	// The render loop initialization
 	// Bind the shader program
@@ -122,6 +134,9 @@ int main()
 	unsigned frames = 0;
 	double time = glfwGetTime();
 
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glLineWidth(2.0f);
+
 	// The render loop
 	while (!glfwWindowShouldClose(window))
 	{
@@ -130,7 +145,12 @@ int main()
 		gltut::showFPS(window, WINDOW_TITLE, time, frames);
 	}
 
-	// glfw: terminate, clearing all previously allocated GLFW resources
+	// Clean up
+	glDeleteVertexArrays(1, &VAO);
+	glDeleteBuffers(1, &VBO);
+	glDeleteBuffers(1, &EBO);
+	glDeleteProgram(shaderProgram);
 	glfwTerminate();
+
 	return 0;
 }
