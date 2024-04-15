@@ -42,6 +42,8 @@ GLFWwindow* createWindow(
 	}
 
 	glfwMakeContextCurrent(window);
+	//	Disable VSync
+	glfwSwapInterval(0);
 	return window;
 }
 
