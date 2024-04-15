@@ -1,7 +1,6 @@
 // Includes
 #include <iostream>
 #include <string>
-#include <GLFW/glfw3.h>
 #include <framework/framework.h>
 
 namespace

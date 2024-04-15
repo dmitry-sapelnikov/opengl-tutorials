@@ -1,6 +1,11 @@
 #ifndef OPENGL_TUTORIALS_FRAMEWORK_H
 #define OPENGL_TUTORIALS_FRAMEWORK_H
 
+// Includes
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+
+
 // Forward declarations
 struct GLFWwindow;
 
