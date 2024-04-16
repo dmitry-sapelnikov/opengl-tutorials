@@ -17,7 +17,6 @@ public:
 	/**
 		\brief Creates a mesh
 		\return The mesh if it was created successfully, nullptr otherwise
-		\note The caller is NOT responsible for deleting the mesh
 	*/
 	virtual Mesh* createMesh(
 		float* vertices,

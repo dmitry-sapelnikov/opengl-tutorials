@@ -4,6 +4,8 @@
 // Includes
 #include <cassert>
 
+// Macros
+/// Assert macro
 #define GLTUT_ASSERT(condition) assert(condition)
 
 #endif

@@ -8,6 +8,7 @@
 namespace gltut
 {
 //	Global classes
+///	The rendering engine
 class Engine
 {
 public:
@@ -21,10 +22,10 @@ public:
 		const char* title) noexcept = 0;
 
 	/**
-		\brief Performs a single step of the engine
-		\return true if the step was successful, false otherwise
+		\brief Performs a single update of the engine
+		\return true if the update was successful, false otherwise
 	*/
-	virtual bool doStep() noexcept = 0;
+	virtual bool update() noexcept = 0;
 
 	/// Returns the scene
 	virtual Scene* getScene() noexcept = 0;
@@ -32,9 +33,9 @@ public:
 
 //	Global functions
 /**
-	\brief Creates an engine
+	\brief Creates an engine instance
 	\return The engine if it was created successfully, nullptr otherwise
-	\note The caller is responsible for deleting the engine
+	\note The caller is responsible for deleting the instance
 */
 Engine* createEngine() noexcept;
 

@@ -1,13 +1,14 @@
 // Includes
 #include "MeshC.h"
+#include <glad/glad.h>
 #include "engine/core/Assert.h"
 #include "engine/core/Types.h"
-#include <glad/glad.h>
 
 namespace gltut
 {
-
-MeshC::MeshC(float* vertices,
+//	Global classes
+MeshC::MeshC(
+	float* vertices,
 	u32 vertexCount,
 	u32* indices,
 	u32 indexCount)
@@ -91,7 +92,7 @@ void MeshC::render() const noexcept
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mEBO);
 	glDrawElements(
 		GL_TRIANGLES,
-		static_cast<u32>(mIndices.size()),
+		static_cast<GLsizei>(mIndices.size()),
 		GL_UNSIGNED_INT,
 		nullptr);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);

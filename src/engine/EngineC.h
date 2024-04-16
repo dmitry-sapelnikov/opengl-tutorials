@@ -4,12 +4,14 @@
 // Includes
 #include <memory>
 #include "engine/Engine.h"
-#include "WindowC.h"
-#include "SceneC.h"
 
 namespace gltut
 {
+// Global classes
+class WindowC;
+class SceneC;
 
+/// Implementation of the Engine class
 class EngineC final : public Engine
 {
 public:
@@ -26,14 +28,16 @@ public:
 		const char* title) noexcept final;
 
 	/// Runs the engine
-	bool doStep() noexcept final;
+	bool update() noexcept final;
 
 	/// Returns the scene
 	virtual Scene* getScene() noexcept final;
 
 private:
+	/// The window
 	std::unique_ptr<WindowC> mWindow;
 
+	/// The scene
 	std::unique_ptr<SceneC> mScene;
 };
 

@@ -18,7 +18,7 @@ int main()
 	}
 
 	window->showFPS(true);
-	while (engine->doStep())
+	while (engine->update())
 	{
 		// Do nothing
 	}

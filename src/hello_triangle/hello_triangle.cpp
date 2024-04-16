@@ -76,7 +76,7 @@ int main()
 		return -1;
 	}
 
-	while (engine->doStep())
+	while (engine->update())
 	{
 	}
 

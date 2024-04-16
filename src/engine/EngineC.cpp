@@ -1,5 +1,8 @@
 // Includes
 #include "EngineC.h"
+
+#include "WindowC.h"
+#include "SceneC.h"
 #include <stdexcept>
 #include <iostream>
 #include <glad/glad.h>
@@ -7,7 +10,7 @@
 
 namespace gltut
 {
-
+// Global classes
 EngineC::EngineC()
 {
 	if (glfwInit() != GLFW_TRUE)
@@ -63,11 +66,11 @@ Window* EngineC::createWindow(
 	}
 }
 
-bool EngineC::doStep() noexcept
+bool EngineC::update() noexcept
 {
 	if (mWindow.get() == nullptr)
 	{
-		std::cerr << "WindowC not created" << std::endl;
+		std::cerr << "The window not created yet." << std::endl;
 		return false;
 	}
 
