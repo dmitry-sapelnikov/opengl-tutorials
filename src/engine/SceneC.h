@@ -3,14 +3,16 @@
 
 // Includes
 #include <deque>
+#include "engine/core/NonCopyable.h"
 #include "engine/Scene.h"
 #include "engine/Renderer.h"
 #include "Meshc.h"
 
 namespace gltut
 {
-
-class SceneC final : public Scene
+// Global classes
+/// Implementation of the Scene interface
+class SceneC final : public Scene, public NonCopyable
 {
 public:
 	SceneC(Renderer& renderer);
@@ -26,10 +28,13 @@ public:
 	void render() noexcept final;
 
 private:
+	/// The renderer
 	Renderer& mRenderer;
 
+	/// The default shader
 	Shader* mDefaultShader = nullptr;
 
+	/// The meshes
 	std::deque<MeshC> mMeshes;
 };
 

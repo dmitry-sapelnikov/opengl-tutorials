@@ -5,8 +5,12 @@
 
 namespace gltut
 {
-
-void framebufferSizeCallback(GLFWwindow* window, int width, int height)
+// Local functions
+/// The callback function for the window resize event
+static void framebufferSizeCallback(
+	GLFWwindow* window,
+	int width,
+	int height)
 {
 	WindowC* engineWindow = static_cast<WindowC*>(
 		glfwGetWindowUserPointer(window));

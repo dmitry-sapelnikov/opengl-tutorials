@@ -11,6 +11,7 @@
 /// Assert that a string is not empty
 inline void GLTUT_ASSERT_STRING(const char* string)
 {
+	string;
 	assert(strlen(string) > 0);
 }
 
