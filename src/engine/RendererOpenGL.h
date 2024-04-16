@@ -47,15 +47,24 @@ public:
 	void drawIndexedTriangles(u32 indicesCount) noexcept final;
 
 	/// Creates a shader program
-	virtual unsigned createShaderProgram(
+	unsigned createShaderProgram(
 		const char* vertexShader,
 		const char* fragmentShader) noexcept final;
 
-	/// Sets a shader program
-	virtual void setShaderProgram(unsigned program) noexcept final;
+	/// Returns the current shader program
+	unsigned getShaderProgram() const noexcept final;
+
+	/**
+		\brief Sets a shader program
+		\note Repetitive calls does not degrade performance
+	*/
+	void setShaderProgram(unsigned program) noexcept final;
 
 	/// Frees a shader program
-	virtual void freeShaderProgram(unsigned program) noexcept final;
+	void freeShaderProgram(unsigned program) noexcept final;
+
+private:
+	unsigned mShaderProgram = 0;
 };
 
 // End of the namespace gltut

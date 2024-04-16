@@ -4,6 +4,7 @@
 // Includes
 #include "Window.h"
 #include "Scene.h"
+#include "Renderer.h"
 
 namespace gltut
 {
@@ -23,6 +24,9 @@ public:
 
 	/// Returns the window
 	virtual Window* getWindow() noexcept = 0;
+
+	/// Returns the renderer
+	virtual Renderer* getRenderer() noexcept = 0;
 
 	/// Returns the scene
 	virtual Scene* getScene() noexcept = 0;

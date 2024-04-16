@@ -57,6 +57,11 @@ Window* EngineC::getWindow() noexcept
 	return mWindow.get();
 }
 
+Renderer* EngineC::getRenderer() noexcept
+{
+	return mRenderer.get();
+}
+
 Scene* EngineC::getScene() noexcept
 {
 	return mScene.get();

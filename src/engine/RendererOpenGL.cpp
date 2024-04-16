@@ -16,6 +16,11 @@ RendererOpenGL::RendererOpenGL()
 	{
 		throw std::runtime_error("Failed to initialize GLAD");
 	}
+
+	//	Check that the current shader program is 0
+	GLint currentProgram = 0;
+	glGetIntegerv(GL_CURRENT_PROGRAM, &currentProgram);
+	GLTUT_ASSERT(currentProgram == 0);
 }
 
 void RendererOpenGL::setClearColor(float r, float g, float b, float a) noexcept
@@ -52,7 +57,7 @@ u32 RendererOpenGL::allocateIndexBuffer(u32* indices, u32 count) noexcept
 	return ibo;
 }
 
-void RendererOpenGL::freeBuffer(u32 buffer) noexcept
+void RendererOpenGL::freeBuffer(unsigned buffer) noexcept
 {
 	glDeleteBuffers(1, &buffer);
 }
@@ -123,9 +128,18 @@ unsigned RendererOpenGL::createShaderProgram(
 	return result;
 }
 
+unsigned RendererOpenGL::getShaderProgram() const noexcept
+{
+	return mShaderProgram;
+}
+
 void RendererOpenGL::setShaderProgram(unsigned program) noexcept
 {
-	glUseProgram(program);
+	if (program != mShaderProgram)
+	{
+		glUseProgram(program);
+		mShaderProgram = program;
+	}
 }
 
 void RendererOpenGL::freeShaderProgram(unsigned program) noexcept

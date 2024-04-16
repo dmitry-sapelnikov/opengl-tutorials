@@ -28,6 +28,9 @@ public:
 	///	Returns the window
 	virtual Window* getWindow() noexcept final;
 
+	/// Returns the renderer
+	virtual Renderer* getRenderer() noexcept final;
+
 	/// Returns the scene
 	virtual Scene* getScene() noexcept final;
 

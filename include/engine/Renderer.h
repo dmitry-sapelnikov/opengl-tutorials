@@ -52,7 +52,13 @@ public:
 		const char* vertexShader,
 		const char* fragmentShader) noexcept = 0;
 
-	///	Sets a shader program
+	/// Returns the current shader program
+	virtual unsigned getShaderProgram() const noexcept = 0;
+
+	/**
+		\brief Sets a shader program
+		\note Repetitive calls does not degrade performance
+	*/
 	virtual void setShaderProgram(unsigned program) noexcept = 0;
 
 	/// Frees a shader program

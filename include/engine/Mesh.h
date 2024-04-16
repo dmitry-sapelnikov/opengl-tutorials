@@ -16,6 +16,12 @@ public:
 
 	/// Renders the mesh
 	virtual void render() const noexcept = 0;
+
+	///	Retuns the shader program
+	virtual unsigned getShaderProgram() const noexcept = 0;
+
+	/// Sets a shader program
+	virtual void setShaderProgram(unsigned program) noexcept = 0;
 };
 
 // End of the namespace gltut
