@@ -1,3 +1,6 @@
+#ifndef OPENGL_TUTORIALS_ENGINE_C_H
+#define OPENGL_TUTORIALS_ENGINE_C_H
+
 // Includes
 #include <memory>
 #include "engine/Engine.h"
@@ -36,3 +39,5 @@ private:
 
 // End of the namespace gltut
 }
+
+#endif
