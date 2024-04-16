@@ -35,6 +35,15 @@ public:
 	/// Sets a float value to a shader variable
 	void setFloat(const char* name, float value) noexcept final;
 
+	/// Sets a 2D vector to a shader variable
+	void setVec2(const char* name, float x, float y) noexcept final;
+
+	/// Sets a 3D vector to a shader variable
+	void setVec3(const char* name, float x, float y, float z) noexcept final;
+
+	/// Sets a 4D vector to a shader variable
+	void setVec4(const char* name, float x, float y, float z, float w) noexcept final;
+
 private:
 	/// Shader program
 	unsigned mProgram = 0;

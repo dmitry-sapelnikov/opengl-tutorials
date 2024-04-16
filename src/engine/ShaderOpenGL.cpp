@@ -101,5 +101,23 @@ void ShaderOpenGL::setFloat(const char* name, float value) noexcept
 	glUniform1f(glGetUniformLocation(mProgram, name), value);
 }
 
+void ShaderOpenGL::setVec2(const char* name, float x, float y) noexcept
+{
+	GLTUT_ASSERT_STRING(name);
+	glUniform2f(glGetUniformLocation(mProgram, name), x, y);
+}
+
+void ShaderOpenGL::setVec3(const char* name, float x, float y, float z) noexcept
+{
+	GLTUT_ASSERT_STRING(name);
+	glUniform3f(glGetUniformLocation(mProgram, name), x, y, z);
+}
+
+void ShaderOpenGL::setVec4(const char* name, float x, float y, float z, float w) noexcept
+{
+	GLTUT_ASSERT_STRING(name);
+	glUniform4f(glGetUniformLocation(mProgram, name), x, y, z, w);
+}
+
 // End of the namespace gltut
 }

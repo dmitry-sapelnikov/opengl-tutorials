@@ -24,6 +24,15 @@ public:
 
 	/// Sets a float value to a shader variable
 	virtual void setFloat(const char* name, float value) noexcept = 0;
+
+	/// Sets a 2D vector to a shader variable
+	virtual void setVec2(const char* name, float x, float y) noexcept = 0;
+
+	/// Sets a 3D vector to a shader variable
+	virtual void setVec3(const char* name, float x, float y, float z) noexcept = 0;
+
+	/// Sets a 4D vector to a shader variable
+	virtual void setVec4(const char* name, float x, float y, float z, float w) noexcept = 0;
 };
 
 // End of the namespace gltut
