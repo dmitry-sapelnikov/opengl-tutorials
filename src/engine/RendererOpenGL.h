@@ -2,12 +2,15 @@
 #define OPENGL_TUTORIALS_RENDERER_OPEN_GL_H
 
 // Includes
+#include "engine/core/NonCopyable.h"
 #include "engine/Renderer.h"
+#include <vector>
+#include <memory>
 
 namespace gltut
 {
 /// OpenGL renderer
-class RendererOpenGL final : public Renderer
+class RendererOpenGL final : public Renderer, public NonCopyable
 {
 public:
 	/// Constructor
@@ -46,25 +49,22 @@ public:
 	/// Draws the indexed triangles
 	void drawIndexedTriangles(u32 indicesCount) noexcept final;
 
-	/// Creates a shader program
-	unsigned createShaderProgram(
+	/// Creates a shader
+	Shader* createShader(
 		const char* vertexShader,
 		const char* fragmentShader) noexcept final;
 
-	/// Returns the current shader program
-	unsigned getShaderProgram() const noexcept final;
+	/// Loads a shader from files
+	Shader* loadShader(
+		const char* vertexShaderPath,
+		const char* fragmentShaderPath) noexcept final;
 
-	/**
-		\brief Sets a shader program
-		\note Repetitive calls does not degrade performance
-	*/
-	void setShaderProgram(unsigned program) noexcept final;
-
-	/// Frees a shader program
-	void freeShaderProgram(unsigned program) noexcept final;
+	/// Removes a shader
+	void removeShader(Shader* shader) noexcept final;
 
 private:
-	unsigned mShaderProgram = 0;
+	/// Shaders
+	std::vector<std::unique_ptr<Shader>> mShaders;
 };
 
 // End of the namespace gltut

@@ -28,7 +28,7 @@ public:
 private:
 	Renderer& mRenderer;
 
-	unsigned mShaderProgram = 0;
+	Shader* mDefaultShader = nullptr;
 
 	std::deque<MeshC> mMeshes;
 };

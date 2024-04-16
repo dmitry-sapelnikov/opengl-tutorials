@@ -44,23 +44,23 @@ MeshC::~MeshC()
 
 void MeshC::render() const noexcept
 {
-	if (mShaderProgram != 0)
+	if (mShader != 0)
 	{
-		mRenderer.setShaderProgram(mShaderProgram);
+		mShader->use();
 	}
 	mRenderer.setVertexArray(mVAO);
 	mRenderer.drawIndexedTriangles(static_cast<u32>(mIndices.size()));
 	mRenderer.setVertexArray(0);
 }
 
-unsigned MeshC::getShaderProgram() const noexcept
+Shader* MeshC::getShader() const noexcept
 {
-	return mShaderProgram;
+	return mShader;
 }
 
-void MeshC::setShaderProgram(unsigned shaderProgram) noexcept
+void MeshC::setShader(Shader* shader) noexcept
 {
-	mShaderProgram = shaderProgram;
+	mShader = shader;
 }
 
 // End of the namespace gltut

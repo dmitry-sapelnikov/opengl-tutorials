@@ -35,7 +35,7 @@
     <ClInclude Include="..\..\src\engine\WindowC.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\engine\Shaders.h">
+    <ClInclude Include="..\..\src\engine\ShaderOpenGL.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\engine\core\Types.h">
@@ -53,6 +53,15 @@
     <ClInclude Include="..\..\include\engine\core\Check.h">
       <Filter>include\core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\engine\Shader.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\core\NonCopyable.h">
+      <Filter>include\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\File.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\engine\MeshC.cpp">
@@ -67,10 +76,13 @@
     <ClCompile Include="..\..\src\engine\WindowC.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\engine\Shaders.cpp">
+    <ClCompile Include="..\..\src\engine\ShaderOpenGL.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\engine\RendererOpenGL.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\File.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

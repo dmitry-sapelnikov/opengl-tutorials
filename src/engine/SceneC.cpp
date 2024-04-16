@@ -1,6 +1,8 @@
 // Includes
 #include "SceneC.h"
+
 #include <stdexcept>
+#include "engine/core/Check.h"
 #include "MeshC.h"
 
 namespace
@@ -30,22 +32,19 @@ namespace gltut
 SceneC::SceneC(Renderer& renderer) :
 	mRenderer(renderer)
 {
-	// Set the background color
-	mRenderer.setClearColor(0.1f, 0.3f, 0.3f, 1.0f);
-
-	mShaderProgram = mRenderer.createShaderProgram(
+	mDefaultShader = mRenderer.createShader(
 		VERTEX_SHADER_SOURCE_CODE,
 		FRAGMENT_SHADER_SOURCE_CODE);
 
-	if (!mShaderProgram)
-	{
-		throw std::runtime_error("Failed to create the shader program");
-	}
+	GLTUT_CHECK(mDefaultShader != nullptr, "Failed to create the default scene shader");
+
+	// Set the background color
+	mRenderer.setClearColor(0.1f, 0.3f, 0.3f, 1.0f);
 }
 
 SceneC::~SceneC() noexcept
 {
-	mRenderer.freeShaderProgram(mShaderProgram);
+	mRenderer.removeShader(mDefaultShader);
 }
 
 Mesh* SceneC::createMesh(
@@ -72,10 +71,9 @@ Mesh* SceneC::createMesh(
 void SceneC::render() noexcept
 {
 	mRenderer.clear();
-	unsigned currentProgram = mShaderProgram;
 	for (const auto& mesh : mMeshes)
 	{
-		mRenderer.setShaderProgram(mShaderProgram);
+		mDefaultShader->use();
 		mesh.render();
 	}
 }

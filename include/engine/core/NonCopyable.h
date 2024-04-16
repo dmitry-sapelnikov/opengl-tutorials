@@ -1,0 +1,37 @@
+#ifndef OPENGL_TUTORIALS_NON_COPYABLE_H
+#define OPENGL_TUTORIALS_NON_COPYABLE_H
+
+namespace gltut
+{
+/**
+	The class provides
+	non-copyable and non-movable properties to a derived class
+	Inspired by boost::noncopyable
+*/
+class NonCopyable
+{
+public:
+	///	 Deleted copy constructor
+	NonCopyable(const NonCopyable&) = delete;
+
+	///	 Deleted copy assignment operator
+	void operator=(const NonCopyable&) = delete;
+
+	///	Deleted move constructor
+	NonCopyable(NonCopyable&& other) = delete;
+
+	///	Deleted move operator
+	NonCopyable& operator=(NonCopyable&& other) = delete;
+
+protected:
+	///	Default constructor
+	NonCopyable() = default;
+
+	///	Destructor
+	~NonCopyable() = default;
+};
+
+//	End of the namespace gltut
+}
+
+#endif

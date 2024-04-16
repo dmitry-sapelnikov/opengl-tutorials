@@ -11,7 +11,7 @@ int main()
 
 	try
 	{
-		gltut::Engine* engine = gltut::createEngine(1024, 768);
+		engine = gltut::createEngine(1024, 768);
 		GLTUT_CHECK(engine != nullptr, "Failed to create engine")
 
 		engine->getWindow()->setTitle("Shaders");
@@ -36,7 +36,7 @@ int main()
 
 		GLTUT_CHECK(mesh != nullptr, "Failed to create mesh")
 
-		unsigned shader = engine->getRenderer()->createShaderProgram(
+		gltut::Shader* shader = engine->getRenderer()->createShader(
 			"#version 330 core\n"
 			"layout (location = 0) in vec3 aPos;\n"
 			"out vec4 vertexColor;\n"
@@ -55,10 +55,14 @@ int main()
 			"}");
 
 		GLTUT_CHECK(shader != 0, "Failed to create shader program")
-		mesh->setShaderProgram(shader);
+		mesh->setShader(shader);
 
-		while (engine->update())
+		for (;;)
 		{
+			if (!engine->update())
+			{
+				break;
+			}
 		}
 	}
 	catch (const std::exception& e)
