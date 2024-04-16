@@ -8,4 +8,10 @@
 /// Assert macro
 #define GLTUT_ASSERT(condition) assert(condition)
 
+#define GLTUT_CHECK(condition, message)\
+if (!(condition))\
+{\
+	throw std::runtime_error(message);\
+}
+
 #endif

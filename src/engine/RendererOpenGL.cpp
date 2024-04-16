@@ -4,7 +4,7 @@
 #include <stdexcept>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include "engine/core/Assert.h"
+#include "engine/core/Check.h"
 #include "Shaders.h"
 
 namespace gltut

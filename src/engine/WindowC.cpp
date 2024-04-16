@@ -1,6 +1,6 @@
 // Includes
 #include "WindowC.h"
-#include "engine/core/Assert.h"
+#include "engine/core/Check.h"
 #include "GLFW/glfw3.h"
 
 namespace gltut

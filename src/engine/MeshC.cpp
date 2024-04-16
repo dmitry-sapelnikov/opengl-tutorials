@@ -1,6 +1,6 @@
 // Includes
 #include "MeshC.h"
-#include "engine/core/Assert.h"
+#include "engine/core/Check.h"
 
 namespace gltut
 {
