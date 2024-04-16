@@ -38,9 +38,6 @@
     <ClInclude Include="..\..\src\engine\Shaders.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\engine\core\Assert.h">
-      <Filter>include\core</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\engine\core\Types.h">
       <Filter>include\core</Filter>
     </ClInclude>
@@ -52,6 +49,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\engine\RendererOpenGL.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\core\Check.h">
+      <Filter>include\core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
