@@ -4,9 +4,6 @@
 // Includes
 #include <glad/glad.h>
 
-// Forward declarations
-struct GLFWwindow;
-
 namespace gltut
 {
 

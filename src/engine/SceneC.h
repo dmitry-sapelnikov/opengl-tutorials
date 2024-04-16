@@ -4,6 +4,7 @@
 // Includes
 #include <deque>
 #include "engine/Scene.h"
+#include "engine/Renderer.h"
 #include "Meshc.h"
 
 namespace gltut
@@ -12,7 +13,7 @@ namespace gltut
 class SceneC final : public Scene
 {
 public:
-	SceneC();
+	SceneC(Renderer& renderer);
 
 	~SceneC() noexcept final;
 
@@ -25,6 +26,8 @@ public:
 	void render() noexcept final;
 
 private:
+	Renderer& mRenderer;
+
 	unsigned mShaderProgram = 0;
 
 	std::deque<MeshC> mMeshes;

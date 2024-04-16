@@ -3,9 +3,9 @@
 
 #include "WindowC.h"
 #include "SceneC.h"
+#include "RendererOpenGL.h"
 #include <stdexcept>
 #include <iostream>
-#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 namespace gltut
@@ -21,26 +21,26 @@ EngineC::EngineC(u32 windowWidth, u32 windowHeight)
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	mWindow = std::make_unique<WindowC>(
-		windowWidth,
-		windowHeight,
-		[this](u32 width, u32 height)
+
+	auto resizeCallback = [this](u32 width, u32 height)
 		{
 			glViewport(0, 0, width, height);
 			mScene->render();
-		});
+		};
 
-	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-	{
-		throw std::runtime_error("Failed to initialize GLAD");
-	}
+	mWindow = std::make_unique<WindowC>(
+		windowWidth,
+		windowHeight,
+		resizeCallback);
 
-	mScene = std::make_unique<SceneC>();
+	mRenderer = std::make_unique<RendererOpenGL>();
+	mScene = std::make_unique<SceneC>(*mRenderer);
 }
 
 EngineC::~EngineC() noexcept
 {
 	mScene.reset();
+	mRenderer.reset();
 	mWindow.reset();
 	glfwTerminate();
 }

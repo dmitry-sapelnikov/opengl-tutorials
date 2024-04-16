@@ -30,7 +30,6 @@ WindowC::WindowC(
 {
 	GLTUT_ASSERT(width > 0);
 	GLTUT_ASSERT(height > 0);
-	GLTUT_ASSERT(title != nullptr);
 
 	mWindow = glfwCreateWindow(
 		width,

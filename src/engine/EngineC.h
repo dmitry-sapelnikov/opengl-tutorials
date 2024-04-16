@@ -4,6 +4,7 @@
 // Includes
 #include <memory>
 #include "engine/Engine.h"
+#include "engine/Renderer.h"
 
 namespace gltut
 {
@@ -34,8 +35,11 @@ private:
 	/// The window
 	std::unique_ptr<WindowC> mWindow;
 
+	///	The renderer
+	std::unique_ptr<Renderer> mRenderer;
+
 	/// The scene
-	std::unique_ptr<SceneC> mScene;
+	std::unique_ptr<Scene> mScene;
 };
 
 // End of the namespace gltut

@@ -2,7 +2,6 @@
 #include "SceneC.h"
 #include <stdexcept>
 #include "MeshC.h"
-#include "Shaders.h"
 
 namespace
 {
@@ -28,12 +27,13 @@ const char* FRAGMENT_SHADER_SOURCE_CODE =
 namespace gltut
 {
 
-SceneC::SceneC()
+SceneC::SceneC(Renderer& renderer) :
+	mRenderer(renderer)
 {
 	// Set the background color
-	glClearColor(0.1f, 0.3f, 0.3f, 1.0f);
+	mRenderer.setClearColor(0.1f, 0.3f, 0.3f, 1.0f);
 
-	mShaderProgram = createShaderProgram(
+	mShaderProgram = mRenderer.createShaderProgram(
 		VERTEX_SHADER_SOURCE_CODE,
 		FRAGMENT_SHADER_SOURCE_CODE);
 
@@ -45,7 +45,7 @@ SceneC::SceneC()
 
 SceneC::~SceneC() noexcept
 {
-	glDeleteProgram(mShaderProgram);
+	mRenderer.freeShaderProgram(mShaderProgram);
 }
 
 Mesh* SceneC::createMesh(
@@ -57,6 +57,7 @@ Mesh* SceneC::createMesh(
 	try
 	{
 		return &mMeshes.emplace_back(
+			mRenderer,
 			vertices,
 			vertexCount,
 			indices,
@@ -70,8 +71,8 @@ Mesh* SceneC::createMesh(
 
 void SceneC::render() noexcept
 {
-	glClear(GL_COLOR_BUFFER_BIT);
-	glUseProgram(mShaderProgram);
+	mRenderer.clear();
+	mRenderer.setShaderProgram(mShaderProgram);
 	for (const auto& mesh : mMeshes)
 	{
 		mesh.render();

@@ -47,6 +47,12 @@
     <ClInclude Include="..\..\src\engine\EngineC.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\engine\Renderer.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\RendererOpenGL.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\engine\MeshC.cpp">
@@ -62,6 +68,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\engine\Shaders.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\RendererOpenGL.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

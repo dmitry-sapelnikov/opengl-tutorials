@@ -3,6 +3,7 @@
 
 // Includes
 #include "engine/Mesh.h"
+#include "engine/Renderer.h"
 #include <vector>
 
 namespace gltut
@@ -13,6 +14,7 @@ class MeshC : public Mesh
 public:
 	/// Constructor
 	MeshC(
+		Renderer& renderer,
 		float* vertices,
 		u32 vertexCount,
 		u32* indices,
@@ -25,6 +27,9 @@ public:
 	void render() const noexcept override;
 
 private:
+	/// The renderer
+	Renderer& mRenderer;
+
 	/// The vertices
 	std::vector<float> mVertices;
 

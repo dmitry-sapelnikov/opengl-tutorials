@@ -8,7 +8,7 @@
 namespace gltut
 {
 //	Global classes
-///	The rendering engine
+///	The engine
 class Engine
 {
 public:
