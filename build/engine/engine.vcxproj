@@ -13,22 +13,22 @@
   <ItemGroup>
     <ClInclude Include="..\..\include\engine\core\Assert.h" />
     <ClInclude Include="..\..\include\engine\core\Types.h" />
-    <ClInclude Include="..\..\include\engine\IEngine.h" />
-    <ClInclude Include="..\..\include\engine\IMesh.h" />
-    <ClInclude Include="..\..\include\engine\IScene.h" />
-    <ClInclude Include="..\..\include\engine\IWindow.h" />
-    <ClInclude Include="..\..\src\engine\Engine.h" />
-    <ClInclude Include="..\..\src\engine\Mesh.h" />
-    <ClInclude Include="..\..\src\engine\Scene.h" />
+    <ClInclude Include="..\..\include\engine\Engine.h" />
+    <ClInclude Include="..\..\include\engine\Mesh.h" />
+    <ClInclude Include="..\..\include\engine\Scene.h" />
+    <ClInclude Include="..\..\include\engine\Window.h" />
+    <ClInclude Include="..\..\src\engine\EngineC.h" />
+    <ClInclude Include="..\..\src\engine\MeshC.h" />
+    <ClInclude Include="..\..\src\engine\SceneC.h" />
     <ClInclude Include="..\..\src\engine\Shaders.h" />
-    <ClInclude Include="..\..\src\engine\Window.h" />
+    <ClInclude Include="..\..\src\engine\WindowC.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\engine\Engine.cpp" />
-    <ClCompile Include="..\..\src\engine\Mesh.cpp" />
-    <ClCompile Include="..\..\src\engine\Scene.cpp" />
+    <ClCompile Include="..\..\src\engine\EngineC.cpp" />
+    <ClCompile Include="..\..\src\engine\MeshC.cpp" />
+    <ClCompile Include="..\..\src\engine\SceneC.cpp" />
     <ClCompile Include="..\..\src\engine\Shaders.cpp" />
-    <ClCompile Include="..\..\src\engine\Window.cpp" />
+    <ClCompile Include="..\..\src\engine\WindowC.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

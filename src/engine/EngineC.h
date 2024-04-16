@@ -1,23 +1,23 @@
 // Includes
 #include <memory>
-#include "engine/IEngine.h"
-#include "Window.h"
-#include "Scene.h"
+#include "engine/Engine.h"
+#include "WindowC.h"
+#include "SceneC.h"
 
 namespace gltut
 {
 
-class Engine final : public IEngine
+class EngineC final : public Engine
 {
 public:
 	/// Constructor
-	Engine();
+	EngineC();
 
 	/// Destructor
-	~Engine() noexcept final;
+	~EngineC() noexcept final;
 
 	/// Creates a window
-	IWindow* createWindow(
+	Window* createWindow(
 		u32 width,
 		u32 height,
 		const char* title) noexcept final;
@@ -26,12 +26,12 @@ public:
 	bool doStep() noexcept final;
 
 	/// Returns the scene
-	virtual IScene* getScene() noexcept final;
+	virtual Scene* getScene() noexcept final;
 
 private:
-	std::unique_ptr<Window> mWindow;
+	std::unique_ptr<WindowC> mWindow;
 
-	std::unique_ptr<Scene> mScene;
+	std::unique_ptr<SceneC> mScene;
 };
 
 // End of the namespace gltut

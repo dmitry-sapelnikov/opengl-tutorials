@@ -1,21 +1,21 @@
-#ifndef OPENGL_TUTORIALS_FRAMEWORK_H
-#define OPENGL_TUTORIALS_FRAMEWORK_H
+#ifndef OPENGL_TUTORIALS_ENGINE_H
+#define OPENGL_TUTORIALS_ENGINE_H
 
 // Includes
-#include "IWindow.h"
-#include "IScene.h"
+#include "Window.h"
+#include "Scene.h"
 
 namespace gltut
 {
-
-class IEngine
+//	Global classes
+class Engine
 {
 public:
 	/// Virtual destructor
-	virtual ~IEngine() noexcept = default;
+	virtual ~Engine() noexcept = default;
 
 	/// Creates a window
-	virtual IWindow* createWindow(
+	virtual Window* createWindow(
 		u32 width,
 		u32 height,
 		const char* title) noexcept = 0;
@@ -27,16 +27,16 @@ public:
 	virtual bool doStep() noexcept = 0;
 
 	/// Returns the scene
-	virtual IScene* getScene() noexcept = 0;
+	virtual Scene* getScene() noexcept = 0;
 };
 
 //	Global functions
 /**
-	Creates an engine
+	\brief Creates an engine
 	\return The engine if it was created successfully, nullptr otherwise
 	\note The caller is responsible for deleting the engine
 */
-IEngine* createEngine() noexcept;
+Engine* createEngine() noexcept;
 
 // End of the namespace gltut
 }

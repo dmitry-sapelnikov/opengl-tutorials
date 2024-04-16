@@ -1,15 +1,15 @@
 // Includes
-#include "engine/IEngine.h"
+#include "engine/Engine.h"
 
 int main()
 {
-	gltut::IEngine* engine = gltut::createEngine();
+	gltut::Engine* engine = gltut::createEngine();
 	if (!engine)
 	{
 		return -1;
 	}
 
-	gltut::IWindow* window = engine->createWindow(1024, 768, "Hello Window");
+	gltut::Window* window = engine->createWindow(1024, 768, "Hello WindowC");
 
 	if (!window)
 	{

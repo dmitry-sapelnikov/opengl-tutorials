@@ -2,24 +2,24 @@
 #define OPENGL_TUTORIALS_ISCENE_H
 
 // Includes
-#include "IMesh.h"
+#include "Mesh.h"
 
 namespace gltut
 {
-
+// Global classes
 /// The class represents a scene
-class IScene
+class Scene
 {
 public:
 	/// Virtual destructor
-	virtual ~IScene() noexcept = default;
+	virtual ~Scene() noexcept = default;
 
 	/**
 		\brief Creates a mesh
 		\return The mesh if it was created successfully, nullptr otherwise
 		\note The caller is NOT responsible for deleting the mesh
 	*/
-	virtual IMesh* createMesh(
+	virtual Mesh* createMesh(
 		float* vertices,
 		u32 vertexCount,
 		u32* indices,
@@ -28,13 +28,6 @@ public:
 	/// Renders the scene
 	virtual void render() noexcept = 0;
 };
-
-/**
-	Creates a scene
-	\return The scene if it was created successfully, nullptr otherwise
-	\note The caller is responsible for deleting the scene
-*/
-IScene* createScene() noexcept;
 
 // End of the namespace gltut
 }

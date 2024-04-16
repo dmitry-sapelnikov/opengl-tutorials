@@ -1,19 +1,22 @@
+#ifndef OPENGL_TUTORIALS_SCENE_C_H
+#define OPENGL_TUTORIALS_SCENE_C_H
+
 // Includes
 #include <deque>
-#include "engine/IScene.h"
-#include "Mesh.h"
+#include "engine/Scene.h"
+#include "Meshc.h"
 
 namespace gltut
 {
 
-class Scene final : public IScene
+class SceneC final : public Scene
 {
 public:
-	Scene();
+	SceneC();
 
-	~Scene() noexcept final;
+	~SceneC() noexcept final;
 
-	IMesh* createMesh(
+	Mesh* createMesh(
 		float* vertices,
 		u32 vertexCount,
 		u32* indices,
@@ -24,8 +27,10 @@ public:
 private:
 	unsigned mShaderProgram = 0;
 
-	std::deque<Mesh> mMeshes;
+	std::deque<MeshC> mMeshes;
 };
 
 // End of the namespace gltut
 }
+
+#endif

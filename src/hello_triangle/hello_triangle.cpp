@@ -1,13 +1,13 @@
 // Includes
 #include <iostream>
 #include <string>
-#include "engine/IEngine.h"
+#include "engine/Engine.h"
 
 namespace
 {
 
 // Local constants
-// Window settings
+// WindowC settings
 const unsigned int WINDOW_WIDTH = 1024;
 const unsigned int WINDOW_HEIGHT = 768;
 const char* WINDOW_TITLE = "Hello Triangle";
@@ -18,13 +18,13 @@ const char* WINDOW_TITLE = "Hello Triangle";
 ///	The program entry point
 int main()
 {
-	gltut::IEngine* engine = gltut::createEngine();
+	gltut::Engine* engine = gltut::createEngine();
 	if (!engine)
 	{
 		return -1;
 	}
 
-	gltut::IWindow* window = engine->createWindow(
+	gltut::Window* window = engine->createWindow(
 		WINDOW_WIDTH,
 		WINDOW_HEIGHT,
 		WINDOW_TITLE);

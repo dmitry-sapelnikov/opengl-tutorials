@@ -1,26 +1,30 @@
+#ifndef OPENGL_TUTORIALS_WINDOW_C_H
+#define OPENGL_TUTORIALS_WINDOW_C_H
+
 // Includes
 #include <string>
 #include <functional>
-#include "engine/IWindow.h"
+#include "engine/Window.h"
 
 struct GLFWwindow;
 
 namespace gltut
 {
-class Window final : public IWindow
+
+class WindowC final : public Window
 {
 public:
 	///	Resize callback
 	using ResizeCallback = std::function<void(u32, u32)>;
 
-	Window(
+	WindowC(
 		u32 width,
 		u32 height,
 		const char* title,
 		ResizeCallback resizeCallback);
 
 	/// Virtual destructor
-	~Window() noexcept final;
+	~WindowC() noexcept final;
 
 	/// Shows frames per second (FPS) in the window title
 	void showFPS(bool show) noexcept final;
@@ -52,3 +56,5 @@ private:
 
 // End of the namespace gltut
 }
+
+#endif

@@ -1,5 +1,5 @@
 // Includes
-#include "Window.h"
+#include "WindowC.h"
 #include "engine/core/Assert.h"
 #include "GLFW/glfw3.h"
 
@@ -8,7 +8,7 @@ namespace gltut
 
 void framebufferSizeCallback(GLFWwindow* window, int width, int height)
 {
-	Window* engineWindow = static_cast<Window*>(
+	WindowC* engineWindow = static_cast<WindowC*>(
 		glfwGetWindowUserPointer(window));
 
 	if (engineWindow)
@@ -21,7 +21,7 @@ void framebufferSizeCallback(GLFWwindow* window, int width, int height)
 }
 
 // Global classes
-Window::Window(
+WindowC::WindowC(
 	u32 width,
 	u32 height,
 	const char* title,
@@ -52,12 +52,12 @@ Window::Window(
 	glfwSetFramebufferSizeCallback(mWindow, framebufferSizeCallback);
 }
 
-Window::~Window() noexcept
+WindowC::~WindowC() noexcept
 {
 	glfwDestroyWindow(mWindow);
 }
 
-void Window::showFPS(bool show) noexcept
+void WindowC::showFPS(bool show) noexcept
 {
 	if (show == mShowFPS)
 	{
@@ -72,17 +72,17 @@ void Window::showFPS(bool show) noexcept
 	}
 }
 
-void Window::enableVSync(bool vSync) noexcept
+void WindowC::enableVSync(bool vSync) noexcept
 {
 	glfwSwapInterval(vSync ? 1 : 0);
 }
 
-bool Window::shouldClose() const noexcept
+bool WindowC::shouldClose() const noexcept
 {
 	return glfwWindowShouldClose(mWindow) != 0;
 }
 
-void Window::update() noexcept
+void WindowC::update() noexcept
 {
 	GLTUT_ASSERT(!shouldClose());
 

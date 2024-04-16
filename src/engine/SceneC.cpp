@@ -1,7 +1,7 @@
 // Includes
-#include "Scene.h"
+#include "SceneC.h"
 #include <stdexcept>
-#include "Mesh.h"
+#include "MeshC.h"
 #include "Shaders.h"
 
 namespace
@@ -28,7 +28,7 @@ const char* FRAGMENT_SHADER_SOURCE_CODE =
 namespace gltut
 {
 
-Scene::Scene()
+SceneC::SceneC()
 {
 	// Set the background color
 	glClearColor(0.1f, 0.3f, 0.3f, 1.0f);
@@ -43,12 +43,12 @@ Scene::Scene()
 	}
 }
 
-Scene::~Scene() noexcept
+SceneC::~SceneC() noexcept
 {
 	glDeleteProgram(mShaderProgram);
 }
 
-IMesh* Scene::createMesh(
+Mesh* SceneC::createMesh(
 	float* vertices,
 	u32 vertexCount,
 	u32* indices,
@@ -68,25 +68,13 @@ IMesh* Scene::createMesh(
 	}
 }
 
-void Scene::render() noexcept
+void SceneC::render() noexcept
 {
 	glClear(GL_COLOR_BUFFER_BIT);
 	glUseProgram(mShaderProgram);
 	for (const auto& mesh : mMeshes)
 	{
 		mesh.render();
-	}
-}
-
-IScene* createScene() noexcept
-{
-	try
-	{
-		return new Scene();
-	}
-	catch (...)
-	{
-		return nullptr;
 	}
 }
 

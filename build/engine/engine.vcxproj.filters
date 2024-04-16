@@ -14,28 +14,25 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\engine\IMesh.h">
+    <ClInclude Include="..\..\include\engine\Mesh.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\engine\IScene.h">
+    <ClInclude Include="..\..\include\engine\Scene.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\engine\Mesh.h">
+    <ClInclude Include="..\..\src\engine\MeshC.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\engine\Scene.h">
+    <ClInclude Include="..\..\src\engine\SceneC.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\engine\IEngine.h">
+    <ClInclude Include="..\..\include\engine\Engine.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\engine\IWindow.h">
+    <ClInclude Include="..\..\include\engine\Window.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\engine\Engine.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\engine\Window.h">
+    <ClInclude Include="..\..\src\engine\WindowC.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\engine\Shaders.h">
@@ -47,18 +44,21 @@
     <ClInclude Include="..\..\include\engine\core\Types.h">
       <Filter>include\core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\engine\EngineC.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\engine\Mesh.cpp">
+    <ClCompile Include="..\..\src\engine\MeshC.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\engine\Scene.cpp">
+    <ClCompile Include="..\..\src\engine\SceneC.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\engine\Engine.cpp">
+    <ClCompile Include="..\..\src\engine\EngineC.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\engine\Window.cpp">
+    <ClCompile Include="..\..\src\engine\WindowC.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\engine\Shaders.cpp">

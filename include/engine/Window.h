@@ -1,22 +1,22 @@
-#ifndef OPENGL_TUTORIALS_IWINDOW_H
-#define OPENGL_TUTORIALS_IWINDOW_H
+#ifndef OPENGL_TUTORIALS_WINDOW_H
+#define OPENGL_TUTORIALS_WINDOW_H
 
 // Includes
 #include "Core/Types.h"
 
 namespace gltut
 {
-
-class IWindow
+// Global classes
+class Window
 {
 public:
 	/// Virtual destructor
-	virtual ~IWindow() noexcept = default;
+	virtual ~Window() noexcept = default;
 
 	/// Shows frames per second (FPS) in the window title
 	virtual void showFPS(bool show) noexcept = 0;
 
-	/// Enables or disables vertical synchronization
+	/// Enables or disables the vertical synchronization
 	virtual void enableVSync(bool vSync) noexcept = 0;
 };
 

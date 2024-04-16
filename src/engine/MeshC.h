@@ -1,25 +1,25 @@
-#ifndef OPENGL_TUTORIALS_MESH_H
-#define OPENGL_TUTORIALS_MESH_H
+#ifndef OPENGL_TUTORIALS_MESH_C_H
+#define OPENGL_TUTORIALS_MESH_C_H
 
 // Includes
-#include "engine/IMesh.h"
+#include "engine/Mesh.h"
 #include <vector>
 
 namespace gltut
 {
 
-class Mesh : public IMesh
+class MeshC : public Mesh
 {
 public:
 	/// Constructor
-	Mesh(
+	MeshC(
 		float* vertices,
 		u32 vertexCount,
 		u32* indices,
 		u32 indexCount);
 
 	/// Destructor
-	~Mesh() override;
+	~MeshC() override;
 
 	/// Renders the mesh
 	void render() const noexcept override;

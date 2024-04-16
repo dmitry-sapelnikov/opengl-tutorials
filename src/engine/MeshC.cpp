@@ -1,5 +1,5 @@
 // Includes
-#include "Mesh.h"
+#include "MeshC.h"
 #include "engine/core/Assert.h"
 #include "engine/core/Types.h"
 #include <glad/glad.h>
@@ -7,7 +7,7 @@
 namespace gltut
 {
 
-Mesh::Mesh(float* vertices,
+MeshC::MeshC(float* vertices,
 	u32 vertexCount,
 	u32* indices,
 	u32 indexCount)
@@ -67,7 +67,7 @@ Mesh::Mesh(float* vertices,
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-Mesh::~Mesh()
+MeshC::~MeshC()
 {
 	if (mVAO != 0)
 	{
@@ -85,7 +85,7 @@ Mesh::~Mesh()
 	}
 }
 
-void Mesh::render() const noexcept
+void MeshC::render() const noexcept
 {
 	glBindVertexArray(mVAO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mEBO);

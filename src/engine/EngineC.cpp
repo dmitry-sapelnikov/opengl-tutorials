@@ -1,5 +1,5 @@
 // Includes
-#include "Engine.h"
+#include "EngineC.h"
 #include <stdexcept>
 #include <iostream>
 #include <glad/glad.h>
@@ -8,7 +8,7 @@
 namespace gltut
 {
 
-Engine::Engine()
+EngineC::EngineC()
 {
 	if (glfwInit() != GLFW_TRUE)
 	{
@@ -19,25 +19,25 @@ Engine::Engine()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 }
 
-Engine::~Engine() noexcept
+EngineC::~EngineC() noexcept
 {
 	glfwTerminate();
 }
 
-IWindow* Engine::createWindow(
+Window* EngineC::createWindow(
 	u32 width,
 	u32 height,
 	const char* title) noexcept
 {
 	if (mWindow.get() != nullptr)
 	{
-		std::cerr << "Window already created" << std::endl;
+		std::cerr << "WindowC already created" << std::endl;
 		return nullptr;
 	}
 
 	try
 	{
-		mWindow = std::make_unique<Window>(
+		mWindow = std::make_unique<WindowC>(
 			width,
 			height,
 			title,
@@ -53,7 +53,7 @@ IWindow* Engine::createWindow(
 			return nullptr;
 		}
 
-		mScene = std::make_unique<Scene>();
+		mScene = std::make_unique<SceneC>();
 		return mWindow.get();
 	}
 	catch (const std::exception& e)
@@ -63,11 +63,11 @@ IWindow* Engine::createWindow(
 	}
 }
 
-bool Engine::doStep() noexcept
+bool EngineC::doStep() noexcept
 {
 	if (mWindow.get() == nullptr)
 	{
-		std::cerr << "Window not created" << std::endl;
+		std::cerr << "WindowC not created" << std::endl;
 		return false;
 	}
 
@@ -76,17 +76,17 @@ bool Engine::doStep() noexcept
 	return !mWindow->shouldClose();
 }
 
-IScene* Engine::getScene() noexcept
+Scene* EngineC::getScene() noexcept
 {
 	return mScene.get();
 }
 
 // Global functions
-IEngine* createEngine() noexcept
+Engine* createEngine() noexcept
 {
 	try
 	{
-		return new Engine();
+		return new EngineC();
 	}
 	catch (const std::exception& e)
 	{
