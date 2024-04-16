@@ -3,21 +3,14 @@
 
 int main()
 {
-	gltut::Engine* engine = gltut::createEngine();
+	gltut::Engine* engine = gltut::createEngine(1024, 768);
 	if (!engine)
 	{
 		return -1;
 	}
+	engine->getWindow()->setTitle("Hello Window");
+	engine->getWindow()->showFPS(true);
 
-	gltut::Window* window = engine->createWindow(1024, 768, "Hello WindowC");
-
-	if (!window)
-	{
-		delete engine;
-		return -1;
-	}
-
-	window->showFPS(true);
 	while (engine->update())
 	{
 		// Do nothing

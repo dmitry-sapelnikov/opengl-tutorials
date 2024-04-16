@@ -3,38 +3,17 @@
 #include <string>
 #include "engine/Engine.h"
 
-namespace
-{
-
-// Local constants
-// WindowC settings
-const unsigned int WINDOW_WIDTH = 1024;
-const unsigned int WINDOW_HEIGHT = 768;
-const char* WINDOW_TITLE = "Hello Triangle";
-
-// End of anonymous namespace
-}
 
 ///	The program entry point
 int main()
 {
-	gltut::Engine* engine = gltut::createEngine();
+	gltut::Engine* engine = gltut::createEngine(1024, 768);
 	if (!engine)
 	{
 		return -1;
 	}
-
-	gltut::Window* window = engine->createWindow(
-		WINDOW_WIDTH,
-		WINDOW_HEIGHT,
-		WINDOW_TITLE);
-
-	if (!window)
-	{
-		delete engine;
-		return -1;
-	}
-	window->showFPS(true);
+	engine->getWindow()->setTitle("Hello Triangle");
+	engine->getWindow()->showFPS(true);
 
 	float vertices1[] = {
 		0.5f,  0.5f, 0.0f,  // top right

@@ -20,11 +20,13 @@ public:
 	WindowC(
 		u32 width,
 		u32 height,
-		const char* title,
 		ResizeCallback resizeCallback);
 
 	/// Virtual destructor
 	~WindowC() noexcept final;
+
+	///	Sets the window title
+	void setTitle(const char* title) noexcept final;
 
 	/// Shows frames per second (FPS) in the window title
 	void showFPS(bool show) noexcept final;

@@ -16,19 +16,16 @@ class EngineC final : public Engine
 {
 public:
 	/// Constructor
-	EngineC();
+	EngineC(u32 windowWidth, u32 windowHeight);
 
 	/// Destructor
 	~EngineC() noexcept final;
 
-	/// Creates a window
-	Window* createWindow(
-		u32 width,
-		u32 height,
-		const char* title) noexcept final;
-
 	/// Runs the engine
 	bool update() noexcept final;
+
+	///	Returns the window
+	virtual Window* getWindow() noexcept final;
 
 	/// Returns the scene
 	virtual Scene* getScene() noexcept final;

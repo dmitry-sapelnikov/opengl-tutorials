@@ -13,6 +13,9 @@ public:
 	/// Virtual destructor
 	virtual ~Window() noexcept = default;
 
+	/// Sets the window title
+	virtual void setTitle(const char* label) noexcept = 0;
+
 	/// Shows frames per second (FPS) in the window title
 	virtual void showFPS(bool show) noexcept = 0;
 

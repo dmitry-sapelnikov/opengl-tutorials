@@ -24,7 +24,6 @@ void framebufferSizeCallback(GLFWwindow* window, int width, int height)
 WindowC::WindowC(
 	u32 width,
 	u32 height,
-	const char* title,
 	ResizeCallback resizeCallback) :
 
 	mResizeCallback(resizeCallback)
@@ -33,15 +32,12 @@ WindowC::WindowC(
 	GLTUT_ASSERT(height > 0);
 	GLTUT_ASSERT(title != nullptr);
 
-	mTitle = title;
-
 	mWindow = glfwCreateWindow(
 		width,
 		height,
-		title,
+		"",
 		nullptr,
 		nullptr);
-
 
 	GLTUT_ASSERT(mWindow != nullptr);
 	glfwMakeContextCurrent(mWindow);
@@ -55,6 +51,13 @@ WindowC::WindowC(
 WindowC::~WindowC() noexcept
 {
 	glfwDestroyWindow(mWindow);
+}
+
+void WindowC::setTitle(const char* title) noexcept
+{
+	GLTUT_ASSERT(title != nullptr);
+	mTitle = title;
+	glfwSetWindowTitle(mWindow, title);
 }
 
 void WindowC::showFPS(bool show) noexcept
