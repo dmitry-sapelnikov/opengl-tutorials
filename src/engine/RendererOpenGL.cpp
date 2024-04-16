@@ -57,9 +57,12 @@ void RendererOpenGL::freeBuffer(u32 buffer) noexcept
 	glDeleteBuffers(1, &buffer);
 }
 
-u32 RendererOpenGL::allocateVertexArray(unsigned vertexBuffer) noexcept
+u32 RendererOpenGL::allocateVertexArray(
+	unsigned vertexBuffer,
+	unsigned indexBuffer) noexcept
 {
 	GLTUT_ASSERT(vertexBuffer != 0);
+	GLTUT_ASSERT(indexBuffer != 0);
 
 	u32 vao = 0;
 	glGenVertexArrays(1, &vao);
@@ -67,6 +70,7 @@ u32 RendererOpenGL::allocateVertexArray(unsigned vertexBuffer) noexcept
 
 	glBindVertexArray(vao);
 	setVertexBuffer(vertexBuffer);
+	setIndexBuffer(indexBuffer);
 
 	glVertexAttribPointer(
 		0,
@@ -75,9 +79,13 @@ u32 RendererOpenGL::allocateVertexArray(unsigned vertexBuffer) noexcept
 		GL_FALSE,
 		3 * sizeof(float),
 		nullptr);
+
 	glEnableVertexAttribArray(0);
 
+	glBindVertexArray(0);
+
 	setVertexBuffer(0);
+	setIndexBuffer(0);
 	return vao;
 }
 

@@ -30,7 +30,7 @@ public:
 	virtual void freeBuffer(unsigned buffer) noexcept = 0;
 
 	/// Allocates a vertex array
-	virtual unsigned allocateVertexArray(unsigned vertexBuffer) noexcept = 0;
+	virtual unsigned allocateVertexArray(unsigned vertexBuffer, unsigned indexBuffer) noexcept = 0;
 
 	/// Frees a vertex array
 	virtual void freeVertexArray(unsigned vertexArray) noexcept = 0;

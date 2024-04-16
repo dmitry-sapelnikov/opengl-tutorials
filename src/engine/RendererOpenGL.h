@@ -29,7 +29,7 @@ public:
 	void freeBuffer(unsigned buffer) noexcept final;
 
 	/// Allocates a vertex array
-	unsigned allocateVertexArray(unsigned vertexBuffer) noexcept final;
+	unsigned allocateVertexArray(unsigned vertexBuffer, unsigned indexBuffer) noexcept final;
 
 	/// Frees a vertex array
 	void freeVertexArray(unsigned vertexArray) noexcept final;

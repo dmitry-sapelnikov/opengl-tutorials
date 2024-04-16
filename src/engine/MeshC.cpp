@@ -32,7 +32,7 @@ MeshC::MeshC(
 		&mIndices[0],
 		static_cast<u32>(mIndices.size()));
 
-	mVAO = mRenderer.allocateVertexArray(mVBO);
+	mVAO = mRenderer.allocateVertexArray(mVBO, mEBO);
 }
 
 MeshC::~MeshC()
@@ -45,7 +45,6 @@ MeshC::~MeshC()
 void MeshC::render() const noexcept
 {
 	mRenderer.setVertexArray(mVAO);
-	mRenderer.setIndexBuffer(mEBO);
 	mRenderer.drawIndexedTriangles(static_cast<u32>(mIndices.size()));
 	mRenderer.setVertexArray(0);
 }
