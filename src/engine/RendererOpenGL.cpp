@@ -7,10 +7,43 @@
 #include "engine/core/Check.h"
 #include "engine/VertexFormat.h"
 #include "ShaderOpenGL.h"
+#include "TextureOpenGL.h"
+#include "stb_image.h"
 #include "File.h"
+
 
 namespace gltut
 {
+// Local functions
+template <typename T>
+void removeElement(
+	std::vector<std::unique_ptr<T>>& container,
+	T* element,
+	const char* elementName)
+{
+	if (element == nullptr)
+	{
+		return;
+	}
+
+	auto findResult = std::find_if(
+		container.begin(),
+		container.end(),
+		[&element](const auto& e)
+		{
+			return e.get() == element;
+		});
+
+	if (findResult != container.end())
+	{
+		container.erase(findResult);
+	}
+	else
+	{
+		std::cerr << "Failed to remove the element: " << elementName << std::endl;
+	}
+}
+
 // Global classes
 RendererOpenGL::RendererOpenGL()
 {
@@ -172,27 +205,34 @@ Shader* RendererOpenGL::loadShader(
 
 void RendererOpenGL::removeShader(Shader* shader) noexcept
 {
-	if (shader == nullptr)
-	{
-		return;
-	}
+	removeElement(mShaders, shader, "Shader");
+}
 
-	auto findResult = std::find_if(
-		mShaders.begin(),
-		mShaders.end(),
-		[&shader](const auto& s)
-		{
-			return s.get() == shader;
-		});
+Texture* RendererOpenGL::createTexture(
+	const u8* data,
+	u32 width,
+	u32 height,
+	u32 channels) noexcept
+{
+	try
+	{
+		mTextures.emplace_back(std::make_unique<TextureOpenGL>(
+			data,
+			width,
+			height,
+			channels));
+		return mTextures.back().get();
+	}
+	catch (const std::exception& e)
+	{
+		std::cerr << e.what() << std::endl;
+		return nullptr;
+	}
+}
 
-	if (findResult != mShaders.end())
-	{
-		mShaders.erase(findResult);
-	}
-	else
-	{
-		std::cerr << "Failed to remove the shader" << std::endl;
-	}
+void RendererOpenGL::removeTexture(Texture* texture) noexcept
+{
+	removeElement(mTextures, texture, "Texture");
 }
 
 // End of the namespace gltut

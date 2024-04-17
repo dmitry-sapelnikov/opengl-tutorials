@@ -13,6 +13,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "engine", "engine\engine.vcx
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "shaders", "shaders\shaders.vcxproj", "{7CBB86BC-DF8F-4822-A0F9-2430455F8BE2}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tutorials", "tutorials", "{0397819A-9899-4953-AE17-B1F07ADBB3B9}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "textures", "tutorials\textures\textures.vcxproj", "{234E1CE3-6531-4566-8777-76DE6AFB0E10}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -39,9 +43,16 @@ Global
 		{7CBB86BC-DF8F-4822-A0F9-2430455F8BE2}.Debug|x64.Build.0 = Debug|x64
 		{7CBB86BC-DF8F-4822-A0F9-2430455F8BE2}.Release|x64.ActiveCfg = Release|x64
 		{7CBB86BC-DF8F-4822-A0F9-2430455F8BE2}.Release|x64.Build.0 = Release|x64
+		{234E1CE3-6531-4566-8777-76DE6AFB0E10}.Debug|x64.ActiveCfg = Debug|x64
+		{234E1CE3-6531-4566-8777-76DE6AFB0E10}.Debug|x64.Build.0 = Debug|x64
+		{234E1CE3-6531-4566-8777-76DE6AFB0E10}.Release|x64.ActiveCfg = Release|x64
+		{234E1CE3-6531-4566-8777-76DE6AFB0E10}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{234E1CE3-6531-4566-8777-76DE6AFB0E10} = {0397819A-9899-4953-AE17-B1F07ADBB3B9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6671FED5-F651-4A55-91AE-C9B03C9D54D5}

@@ -3,14 +3,14 @@
 
 // Includes
 #include "engine/core/NonCopyable.h"
-#include "engine/Renderer.h"
+#include "RendererBase.h"
 #include <vector>
 #include <memory>
 
 namespace gltut
 {
 /// OpenGL renderer
-class RendererOpenGL final : public Renderer, public NonCopyable
+class RendererOpenGL final : public RendererBase
 {
 public:
 	/// Constructor
@@ -65,9 +65,22 @@ public:
 	/// Removes a shader
 	void removeShader(Shader* shader) noexcept final;
 
+	/// Creates a texture
+	Texture* createTexture(
+		const u8* data,
+		u32 width,
+		u32 height,
+		u32 channels) noexcept final;
+
+	/// Removes a texture
+	void removeTexture(Texture* texture) noexcept final;
+
 private:
 	/// Shaders
 	std::vector<std::unique_ptr<Shader>> mShaders;
+
+	/// Textures
+	std::vector<std::unique_ptr<Texture>> mTextures;
 };
 
 // End of the namespace gltut

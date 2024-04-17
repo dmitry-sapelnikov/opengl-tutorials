@@ -4,6 +4,7 @@
 // Includes
 #include "engine/core/Types.h"
 #include "Shader.h"
+#include "Texture.h"
 
 namespace gltut
 {
@@ -23,6 +24,9 @@ public:
 
 	/// Sets a shader
 	virtual void setShader(Shader* shader) noexcept = 0;
+
+	/// Sets a texture
+	virtual void setTexture(Texture* texture, u32 slot) noexcept = 0;
 };
 
 // End of the namespace gltut

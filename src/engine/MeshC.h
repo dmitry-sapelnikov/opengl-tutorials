@@ -5,6 +5,7 @@
 #include "engine/Mesh.h"
 #include "engine/Renderer.h"
 #include "engine/core/NonCopyable.h"
+#include <array>
 #include <vector>
 
 namespace gltut
@@ -34,7 +35,12 @@ public:
 	/// Sets a shader
 	void setShader(Shader* shader) noexcept final;
 
+	/// Sets a texture
+	void setTexture(Texture* texture, u32 slot) noexcept final;
+
 private:
+	static constexpr u32 TEXTURE_SLOTS = 16;
+
 	/// The renderer
 	Renderer& mRenderer;
 
@@ -55,6 +61,9 @@ private:
 
 	/// The shader
 	Shader* mShader = nullptr;
+
+	/// Texture slots
+	std::array<Texture*, TEXTURE_SLOTS> mTextures;
 };
 
 // End of the namespace gltut

@@ -3,6 +3,7 @@
 
 // Includes
 #include <cassert>
+#include <stdexcept>
 
 // Macros
 /// Assert macro
@@ -20,5 +21,10 @@ if (!(condition))\
 {\
 	throw std::runtime_error(message);\
 }
+
+#define GLTUT_UNEXPECTED_SWITCH_DEFAULT_CASE(switchValue)\
+default:\
+	GLTUT_ASSERT(false && "Unexpected value of the switch variable: " #switchValue);\
+	break;
 
 #endif

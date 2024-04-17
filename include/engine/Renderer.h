@@ -4,6 +4,7 @@
 // Includes
 #include "core/Types.h"
 #include "Shader.h"
+#include "Texture.h"
 #include "VertexFormat.h"
 
 namespace gltut
@@ -64,6 +65,19 @@ public:
 
 	/// Removes a shader
 	virtual void removeShader(Shader* shader) noexcept = 0;
+
+	/// Creates a texture
+	virtual Texture* createTexture(
+		const u8* data,
+		u32 width,
+		u32 height,
+		u32 channels) noexcept = 0;
+
+	/// Loads a texture
+	virtual Texture* loadTexture(const char* path) noexcept = 0;
+
+	/// Removes a texture
+	virtual void removeTexture(Texture* texture) noexcept = 0;
 };
 
 // End of the namespace gltut

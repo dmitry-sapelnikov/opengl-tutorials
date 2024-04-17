@@ -19,17 +19,17 @@ public:
 	static constexpr u32 COMPONENT_STRIDE = 4;
 
 	///	Maximum number of vertex components
-	static constexpr u32 MAX_VERTEX_COMPONENTS = (sizeof(char) * sizeof(u64)) / COMPONENT_STRIDE;
+	static constexpr u32 MAX_VERTEX_COMPONENTS = (8 * sizeof(u64)) / COMPONENT_STRIDE;
 
 	///	Returns the number of float numbers in a vertex component
-	constexpr u32 getComponentSize(u32 index)
+	u32 getComponentSize(u32 index)
 	{
 		GLTUT_ASSERT(index < MAX_VERTEX_COMPONENTS);
 		return (mFormat >> (index * COMPONENT_STRIDE)) & VERTEX_COMPONENT_MASK;
 	}
 
 	///	Sets the number of float numbers in a vertex component
-	constexpr void setComponentSize(u32 index, u32 size)
+	void setComponentSize(u32 index, u32 size)
 	{
 		GLTUT_ASSERT(index < MAX_VERTEX_COMPONENTS);
 		GLTUT_ASSERT(size <= MAX_COMPONENT_SIZE);
@@ -37,7 +37,7 @@ public:
 		//	Check that all previous elements are set
 		for (u32 i = 0; i < index; ++i)
 		{
-			GLTUT_ASSERT(getComponentElements(i) != 0);
+			GLTUT_ASSERT(getComponentSize(i) != 0);
 		}
 #endif
 		const u32 offset = index * COMPONENT_STRIDE;
@@ -46,20 +46,26 @@ public:
 	}
 
 	///	Returns the size of a vertex component in bytes
-	constexpr u32 getComponentSizeInBytes(u32 index)
+	u32 getComponentSizeInBytes(u32 index)
 	{
 		return getComponentSize(index) * sizeof(float);
 	}
 
-	///	Returns the total size of the vertex in bytes
-	constexpr u32 getTotalSizeInBytes()
+	///	Returns the total size of the vertex in float numbers
+	u32 getTotalSize()
 	{
-		u32 stride = 0;
+		u32 result = 0;
 		for (u32 i = 0; i < MAX_VERTEX_COMPONENTS; ++i)
 		{
-			stride += getComponentSizeInBytes(i);
+			result += getComponentSize(i);
 		}
-		return stride;
+		return result;
+	}
+
+	///	Returns the total size of the vertex in bytes
+	u32 getTotalSizeInBytes()
+	{
+		return getTotalSize() * sizeof(float);
 	}
 
 private:
@@ -73,7 +79,7 @@ private:
 // Global functions
 /// Creates a vertex format from an array of component sizes
 template <u32 ElementsCount>
-constexpr VertexFormat createVertexFormat(const u32(&elements)[ElementsCount])
+VertexFormat createVertexFormat(const u32(&elements)[ElementsCount])
 {
 	VertexFormat result;
 	for (u32 i = 0; i < ElementsCount; ++i)
@@ -86,22 +92,28 @@ constexpr VertexFormat createVertexFormat(const u32(&elements)[ElementsCount])
 //	Predefined vertex formats
 
 /// Vertex format with position only
-constexpr const VertexFormat VERTEX_FORMAT_POS3 = createVertexFormat({ 3 });
+const VertexFormat VERTEX_FORMAT_POS3 = createVertexFormat({ 3 });
+
+/// Vertex format with position and texture coordinates
+const VertexFormat VERTEX_FORMAT_POS3_TEX2 = createVertexFormat({ 3, 2 });
 
 /// Vertex format with position and color
-constexpr const VertexFormat VERTEX_FORMAT_POS3_COLOR4 = createVertexFormat({ 3, 4 });
+const VertexFormat VERTEX_FORMAT_POS3_COLOR4 = createVertexFormat({ 3, 4 });
+
+/// Vertex format with position and texture coordinates
+const VertexFormat VERTEX_FORMAT_POS3_COLOR4_TEX2 = createVertexFormat({ 3, 4, 2 });
 
 /// Vertex format with position and normal
-constexpr const VertexFormat VERTEX_FORMAT_POS3_NORM3 = createVertexFormat({ 3, 3 });
+const VertexFormat VERTEX_FORMAT_POS3_NORM3 = createVertexFormat({ 3, 3 });
 
 /// Vertex format with position, normal and color
-constexpr const VertexFormat VERTEX_FORMAT_POS3_NORM3_COLOR4 = createVertexFormat({ 3, 3, 4 });
+const VertexFormat VERTEX_FORMAT_POS3_NORM3_COLOR4 = createVertexFormat({ 3, 3, 4 });
 
 /// Vertex format with position, normal and texture coordinates
-constexpr const VertexFormat VERTEX_FORMAT_POS3_NORM3_TEX2 = createVertexFormat({ 3, 3, 2 });
+const VertexFormat VERTEX_FORMAT_POS3_NORM3_TEX2 = createVertexFormat({ 3, 3, 2 });
 
 /// Vertex format with position, normal, color and texture coordinates
-constexpr const VertexFormat VERTEX_FORMAT_POS3_NORM3_COLOR4_TEX2 = createVertexFormat({ 3, 3, 4, 2 });
+const VertexFormat VERTEX_FORMAT_POS3_NORM3_COLOR4_TEX2 = createVertexFormat({ 3, 3, 4, 2 });
 
 // End of the namespace gltut
 }

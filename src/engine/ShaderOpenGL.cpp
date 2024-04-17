@@ -92,30 +92,35 @@ void ShaderOpenGL::setBool(const char* name, bool value) noexcept
 void ShaderOpenGL::setInt(const char* name, int value) noexcept
 {
 	GLTUT_ASSERT_STRING(name);
+	use();
 	glUniform1i(glGetUniformLocation(mProgram, name), value);
 }
 
 void ShaderOpenGL::setFloat(const char* name, float value) noexcept
 {
 	GLTUT_ASSERT_STRING(name);
+	use();
 	glUniform1f(glGetUniformLocation(mProgram, name), value);
 }
 
 void ShaderOpenGL::setVec2(const char* name, float x, float y) noexcept
 {
 	GLTUT_ASSERT_STRING(name);
+	use();
 	glUniform2f(glGetUniformLocation(mProgram, name), x, y);
 }
 
 void ShaderOpenGL::setVec3(const char* name, float x, float y, float z) noexcept
 {
 	GLTUT_ASSERT_STRING(name);
+	use();
 	glUniform3f(glGetUniformLocation(mProgram, name), x, y, z);
 }
 
 void ShaderOpenGL::setVec4(const char* name, float x, float y, float z, float w) noexcept
 {
 	GLTUT_ASSERT_STRING(name);
+	use();
 	glUniform4f(glGetUniformLocation(mProgram, name), x, y, z, w);
 }
 

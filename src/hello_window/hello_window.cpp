@@ -8,12 +8,13 @@ int main()
 	{
 		return -1;
 	}
-	engine->getWindow()->setTitle("Hello Window");
-	engine->getWindow()->showFPS(true);
+	
+	auto* window = engine->getWindow();
+	window->setTitle("Hello Window");
+	window->showFPS(true);
 
 	while (engine->update())
 	{
-		// Do nothing
 	}
 	delete engine;
 	return 0;
