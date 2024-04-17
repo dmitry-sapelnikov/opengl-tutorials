@@ -7,6 +7,7 @@ namespace gltut
 //	Global classes
 MeshC::MeshC(
 	Renderer& renderer,
+	VertexFormat vertexFormat,
 	float* vertices,
 	u32 vertexCount,
 	u32* indices,
@@ -32,7 +33,7 @@ MeshC::MeshC(
 		&mIndices[0],
 		static_cast<u32>(mIndices.size()));
 
-	mVAO = mRenderer.allocateVertexArray(mVBO, mEBO);
+	mVAO = mRenderer.allocateVertexArray(vertexFormat, mVBO, mEBO);
 }
 
 MeshC::~MeshC()

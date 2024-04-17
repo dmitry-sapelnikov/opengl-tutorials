@@ -62,6 +62,9 @@
     <ClInclude Include="..\..\src\engine\File.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\engine\VertexFormat.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\engine\MeshC.cpp">

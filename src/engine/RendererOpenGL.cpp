@@ -5,6 +5,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "engine/core/Check.h"
+#include "engine/VertexFormat.h"
 #include "ShaderOpenGL.h"
 #include "File.h"
 
@@ -64,6 +65,7 @@ void RendererOpenGL::freeBuffer(unsigned buffer) noexcept
 }
 
 u32 RendererOpenGL::allocateVertexArray(
+	VertexFormat vertexFormat,
 	unsigned vertexBuffer,
 	unsigned indexBuffer) noexcept
 {
@@ -78,15 +80,27 @@ u32 RendererOpenGL::allocateVertexArray(
 	setVertexBuffer(vertexBuffer);
 	setIndexBuffer(indexBuffer);
 
-	glVertexAttribPointer(
-		0,
-		3,
-		GL_FLOAT,
-		GL_FALSE,
-		3 * sizeof(float),
-		nullptr);
+	const u32 stride = vertexFormat.getTotalSizeInBytes();
+	size_t offset = 0;
+	for (u32 i = 0; i < VertexFormat::MAX_VERTEX_COMPONENTS; ++i)
+	{
+		if (vertexFormat.getComponentSize(i) == 0)
+		{
+			break;
+		}
 
-	glEnableVertexAttribArray(0);
+		glVertexAttribPointer(
+			i,
+			vertexFormat.getComponentSize(i),
+			GL_FLOAT,
+			GL_FALSE,
+			stride,
+			reinterpret_cast<const void*>(offset));
+
+		glEnableVertexAttribArray(i);
+
+		offset += vertexFormat.getComponentSizeInBytes(i);
+	}
 
 	glBindVertexArray(0);
 

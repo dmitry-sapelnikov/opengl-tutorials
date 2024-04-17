@@ -36,6 +36,7 @@ int main()
 
 	auto* scene = engine->getScene();
 	if (!scene->createMesh(
+		gltut::VERTEX_FORMAT_POS3,
 		vertices1,
 		sizeof(vertices1) / sizeof(float),
 		indices,
@@ -46,6 +47,7 @@ int main()
 	}
 
 	if (!scene->createMesh(
+		gltut::VERTEX_FORMAT_POS3,
 		vertices2,
 		sizeof(vertices2) / sizeof(float),
 		indices,

@@ -48,6 +48,7 @@ SceneC::~SceneC() noexcept
 }
 
 Mesh* SceneC::createMesh(
+	VertexFormat vertexFormat,
 	float* vertices,
 	u32 vertexCount,
 	u32* indices,
@@ -57,6 +58,7 @@ Mesh* SceneC::createMesh(
 	{
 		return &mMeshes.emplace_back(
 			mRenderer,
+			vertexFormat,
 			vertices,
 			vertexCount,
 			indices,

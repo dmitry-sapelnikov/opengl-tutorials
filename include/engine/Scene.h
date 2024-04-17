@@ -3,6 +3,7 @@
 
 // Includes
 #include "Mesh.h"
+#include "VertexFormat.h"
 
 namespace gltut
 {
@@ -19,6 +20,7 @@ public:
 		\return The mesh if it was created successfully, nullptr otherwise
 	*/
 	virtual Mesh* createMesh(
+		VertexFormat vertexFormat,
 		float* vertices,
 		u32 vertexCount,
 		u32* indices,

@@ -20,6 +20,7 @@ public:
 	~SceneC() noexcept final;
 
 	Mesh* createMesh(
+		VertexFormat vertexFormat,
 		float* vertices,
 		u32 vertexCount,
 		u32* indices,

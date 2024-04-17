@@ -16,6 +16,7 @@ public:
 	/// Constructor
 	MeshC(
 		Renderer& renderer,
+		VertexFormat vertexFormat,
 		float* vertices,
 		u32 vertexCount,
 		u32* indices,
