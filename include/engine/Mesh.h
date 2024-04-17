@@ -3,6 +3,7 @@
 
 // Includes
 #include "engine/core/Types.h"
+#include "Shader.h"
 
 namespace gltut
 {
@@ -17,11 +18,11 @@ public:
 	/// Renders the mesh
 	virtual void render() const noexcept = 0;
 
-	///	Retuns the shader program
-	virtual unsigned getShaderProgram() const noexcept = 0;
+	///	Returns the shader
+	virtual Shader* getShader() const noexcept = 0;
 
-	/// Sets a shader program
-	virtual void setShaderProgram(unsigned program) noexcept = 0;
+	/// Sets a shader
+	virtual void setShader(Shader* shader) noexcept = 0;
 };
 
 // End of the namespace gltut

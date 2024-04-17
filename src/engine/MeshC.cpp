@@ -7,6 +7,7 @@ namespace gltut
 //	Global classes
 MeshC::MeshC(
 	Renderer& renderer,
+	VertexFormat vertexFormat,
 	float* vertices,
 	u32 vertexCount,
 	u32* indices,
@@ -32,7 +33,7 @@ MeshC::MeshC(
 		&mIndices[0],
 		static_cast<u32>(mIndices.size()));
 
-	mVAO = mRenderer.allocateVertexArray(mVBO, mEBO);
+	mVAO = mRenderer.allocateVertexArray(vertexFormat, mVBO, mEBO);
 }
 
 MeshC::~MeshC()
@@ -44,23 +45,23 @@ MeshC::~MeshC()
 
 void MeshC::render() const noexcept
 {
-	if (mShaderProgram != 0)
+	if (mShader != 0)
 	{
-		mRenderer.setShaderProgram(mShaderProgram);
+		mShader->use();
 	}
 	mRenderer.setVertexArray(mVAO);
 	mRenderer.drawIndexedTriangles(static_cast<u32>(mIndices.size()));
 	mRenderer.setVertexArray(0);
 }
 
-unsigned MeshC::getShaderProgram() const noexcept
+Shader* MeshC::getShader() const noexcept
 {
-	return mShaderProgram;
+	return mShader;
 }
 
-void MeshC::setShaderProgram(unsigned shaderProgram) noexcept
+void MeshC::setShader(Shader* shader) noexcept
 {
-	mShaderProgram = shaderProgram;
+	mShader = shader;
 }
 
 // End of the namespace gltut

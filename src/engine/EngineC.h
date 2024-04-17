@@ -3,17 +3,18 @@
 
 // Includes
 #include <memory>
+#include "engine/core/NonCopyable.h"
 #include "engine/Engine.h"
 #include "engine/Renderer.h"
+
 
 namespace gltut
 {
 // Global classes
 class WindowC;
-class SceneC;
 
 /// Implementation of the Engine class
-class EngineC final : public Engine
+class EngineC final : public Engine, public NonCopyable
 {
 public:
 	/// Constructor

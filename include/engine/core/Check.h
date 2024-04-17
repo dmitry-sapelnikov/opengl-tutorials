@@ -8,6 +8,13 @@
 /// Assert macro
 #define GLTUT_ASSERT(condition) assert(condition)
 
+/// Assert that a string is not empty
+inline void GLTUT_ASSERT_STRING(const char* string)
+{
+	string;
+	assert(strlen(string) > 0);
+}
+
 #define GLTUT_CHECK(condition, message)\
 if (!(condition))\
 {\

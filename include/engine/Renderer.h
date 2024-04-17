@@ -3,6 +3,8 @@
 
 // Includes
 #include "core/Types.h"
+#include "Shader.h"
+#include "VertexFormat.h"
 
 namespace gltut
 {
@@ -30,7 +32,10 @@ public:
 	virtual void freeBuffer(unsigned buffer) noexcept = 0;
 
 	/// Allocates a vertex array
-	virtual unsigned allocateVertexArray(unsigned vertexBuffer, unsigned indexBuffer) noexcept = 0;
+	virtual unsigned allocateVertexArray(
+		VertexFormat vertexFormat,
+		unsigned vertexBuffer,
+		unsigned indexBuffer) noexcept = 0;
 
 	/// Frees a vertex array
 	virtual void freeVertexArray(unsigned vertexArray) noexcept = 0;
@@ -47,22 +52,18 @@ public:
 	/// Draws the indexed triangles
 	virtual void drawIndexedTriangles(u32 indicesCount) noexcept = 0;
 
-	/// Creates a shader program
-	virtual unsigned createShaderProgram(
+	/// Creates a shader from strings
+	virtual Shader* createShader(
 		const char* vertexShader,
 		const char* fragmentShader) noexcept = 0;
 
-	/// Returns the current shader program
-	virtual unsigned getShaderProgram() const noexcept = 0;
+	/// Creates a shader from files
+	virtual Shader* loadShader(
+		const char* vertexShaderPath,
+		const char* fragmentShaderPath) noexcept = 0;
 
-	/**
-		\brief Sets a shader program
-		\note Repetitive calls does not degrade performance
-	*/
-	virtual void setShaderProgram(unsigned program) noexcept = 0;
-
-	/// Frees a shader program
-	virtual void freeShaderProgram(unsigned program) noexcept = 0;
+	/// Removes a shader
+	virtual void removeShader(Shader* shader) noexcept = 0;
 };
 
 // End of the namespace gltut

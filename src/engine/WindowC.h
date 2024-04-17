@@ -4,6 +4,7 @@
 // Includes
 #include <string>
 #include <functional>
+#include "engine/core/NonCopyable.h"
 #include "engine/Window.h"
 
 struct GLFWwindow;
@@ -11,7 +12,7 @@ struct GLFWwindow;
 namespace gltut
 {
 
-class WindowC final : public Window
+class WindowC final : public Window, public NonCopyable
 {
 public:
 	///	Resize callback
@@ -41,19 +42,29 @@ public:
 	bool shouldClose() const noexcept;
 
 private:
-	friend void framebufferSizeCallback(GLFWwindow* window, int width, int height);
+	/// The callback function for the window resize event
+	friend void framebufferSizeCallback(
+		GLFWwindow* window,
+		int width,
+		int height);
 
+	/// The GLFW window
+	GLFWwindow* mWindow = nullptr;
+
+	/// The window title
 	std::string mTitle;
 
+	/// The resize callback
 	ResizeCallback mResizeCallback;
 
+	/// The vertical synchronization flag
 	bool mShowFPS = false;
 
+	/// The number of frames passed since the last FPS update
 	unsigned long mFrames = 0;
 
+	/// The time passed since the last FPS update
 	double mTime = 0.0;
-
-	GLFWwindow* mWindow = nullptr;
 };
 
 // End of the namespace gltut

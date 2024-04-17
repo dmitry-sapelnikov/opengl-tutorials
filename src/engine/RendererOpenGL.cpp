@@ -1,11 +1,13 @@
 // Includes
 #include "RendererOpenGL.h"
 
-#include <stdexcept>
+#include <iostream>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "engine/core/Check.h"
-#include "Shaders.h"
+#include "engine/VertexFormat.h"
+#include "ShaderOpenGL.h"
+#include "File.h"
 
 namespace gltut
 {
@@ -63,6 +65,7 @@ void RendererOpenGL::freeBuffer(unsigned buffer) noexcept
 }
 
 u32 RendererOpenGL::allocateVertexArray(
+	VertexFormat vertexFormat,
 	unsigned vertexBuffer,
 	unsigned indexBuffer) noexcept
 {
@@ -77,15 +80,27 @@ u32 RendererOpenGL::allocateVertexArray(
 	setVertexBuffer(vertexBuffer);
 	setIndexBuffer(indexBuffer);
 
-	glVertexAttribPointer(
-		0,
-		3,
-		GL_FLOAT,
-		GL_FALSE,
-		3 * sizeof(float),
-		nullptr);
+	const u32 stride = vertexFormat.getTotalSizeInBytes();
+	size_t offset = 0;
+	for (u32 i = 0; i < VertexFormat::MAX_VERTEX_COMPONENTS; ++i)
+	{
+		if (vertexFormat.getComponentSize(i) == 0)
+		{
+			break;
+		}
 
-	glEnableVertexAttribArray(0);
+		glVertexAttribPointer(
+			i,
+			vertexFormat.getComponentSize(i),
+			GL_FLOAT,
+			GL_FALSE,
+			stride,
+			reinterpret_cast<const void*>(offset));
+
+		glEnableVertexAttribArray(i);
+
+		offset += vertexFormat.getComponentSizeInBytes(i);
+	}
 
 	glBindVertexArray(0);
 
@@ -119,32 +134,65 @@ void RendererOpenGL::drawIndexedTriangles(u32 indicesCount) noexcept
 	glDrawElements(GL_TRIANGLES, indicesCount, GL_UNSIGNED_INT, nullptr);
 }
 
-unsigned RendererOpenGL::createShaderProgram(
+Shader* RendererOpenGL::createShader(
 	const char* vertexShader,
 	const char* fragmentShader) noexcept
 {
-	unsigned result = gltut::createShaderProgram(vertexShader, fragmentShader);
-	GLTUT_ASSERT(result != 0);
-	return result;
-}
-
-unsigned RendererOpenGL::getShaderProgram() const noexcept
-{
-	return mShaderProgram;
-}
-
-void RendererOpenGL::setShaderProgram(unsigned program) noexcept
-{
-	if (program != mShaderProgram)
+	try
 	{
-		glUseProgram(program);
-		mShaderProgram = program;
+		mShaders.emplace_back(
+			std::make_unique<ShaderOpenGL>(vertexShader, fragmentShader));
+	}
+	catch (const std::exception& e)
+	{
+		std::cerr << e.what() << std::endl;
+		return nullptr;
+	}
+	return mShaders.back().get();
+}
+
+Shader* RendererOpenGL::loadShader(
+	const char* vertexShaderPath,
+	const char* fragmentShaderPath) noexcept
+{
+	try
+	{
+		const auto vertexSource = readFileToString(vertexShaderPath);
+		const auto fragmentSource = readFileToString(fragmentShaderPath);
+		return createShader(
+			vertexSource.c_str(),
+			fragmentSource.c_str());
+	}
+	catch (const std::exception& e)
+	{
+		std::cerr << e.what() << std::endl;
+		return nullptr;
 	}
 }
 
-void RendererOpenGL::freeShaderProgram(unsigned program) noexcept
+void RendererOpenGL::removeShader(Shader* shader) noexcept
 {
-	glDeleteProgram(program);
+	if (shader == nullptr)
+	{
+		return;
+	}
+
+	auto findResult = std::find_if(
+		mShaders.begin(),
+		mShaders.end(),
+		[&shader](const auto& s)
+		{
+			return s.get() == shader;
+		});
+
+	if (findResult != mShaders.end())
+	{
+		mShaders.erase(findResult);
+	}
+	else
+	{
+		std::cerr << "Failed to remove the shader" << std::endl;
+	}
 }
 
 // End of the namespace gltut

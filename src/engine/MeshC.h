@@ -4,17 +4,19 @@
 // Includes
 #include "engine/Mesh.h"
 #include "engine/Renderer.h"
+#include "engine/core/NonCopyable.h"
 #include <vector>
 
 namespace gltut
 {
 
-class MeshC final : public Mesh
+class MeshC final : public Mesh, public NonCopyable
 {
 public:
 	/// Constructor
 	MeshC(
 		Renderer& renderer,
+		VertexFormat vertexFormat,
 		float* vertices,
 		u32 vertexCount,
 		u32* indices,
@@ -26,11 +28,11 @@ public:
 	/// Renders the mesh
 	void render() const noexcept final;
 
-	/// Returns the shader program
-	unsigned getShaderProgram() const noexcept final;
+	///	Returns the shader
+	Shader* getShader() const noexcept final;
 
-	///	Sets the shader program
-	void setShaderProgram(unsigned shaderProgram) noexcept final;
+	/// Sets a shader
+	void setShader(Shader* shader) noexcept final;
 
 private:
 	/// The renderer
@@ -51,8 +53,8 @@ private:
 	/// The element buffer object
 	unsigned mEBO = 0;
 
-	/// Shader program
-	unsigned mShaderProgram = 0;
+	/// The shader
+	Shader* mShader = nullptr;
 };
 
 // End of the namespace gltut
