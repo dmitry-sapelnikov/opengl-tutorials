@@ -69,7 +69,10 @@ int main()
 	}
 	catch (const std::exception& e)
 	{
-		std::cerr << "An exception occurred: " << e.what() << std::endl;
+		std::cerr << "An ERROR occurred: " << e.what() << std::endl;
+		// Wait for the user to close the console window
+		std::cin.get();
+
 		delete engine;
 		return -1;
 	}
