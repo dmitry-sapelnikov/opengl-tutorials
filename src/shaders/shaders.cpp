@@ -18,10 +18,11 @@ int main()
 		engine->getWindow()->setTitle("Shaders");
 		engine->getWindow()->showFPS(true);
 
-		std::array<float, 9> vertices = {
-			-0.5f, -0.5f, 0.0f,
-			 0.5f, -0.5f, 0.0f,
-			 0.0f,  0.5f, 0.0f
+		float vertices[] = {
+			// positions         // colors
+			 0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f, 1.0f,   // bottom right
+			-0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f, 1.0f,   // bottom left
+			 0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f, 1.0f   // top 
 		};
 
 		std::array<unsigned, 3> indices = {  // note that we start from 0!
@@ -30,8 +31,9 @@ int main()
 
 		auto* scene = engine->getScene();
 		auto* mesh = scene->createMesh(
-			vertices.data(),
-			gltut::int32(vertices.size()),
+			gltut::VERTEX_FORMAT_POS3_COLOR4,
+			vertices,
+			gltut::int32(sizeof(vertices) / sizeof(float)),
 			indices.data(),
 			gltut::int32(indices.size()));
 
@@ -40,17 +42,21 @@ int main()
 		gltut::Shader* shader = engine->getRenderer()->createShader(
 			"#version 330 core\n"
 			"layout (location = 0) in vec3 aPos;\n"
+			"layout (location = 1) in vec4 aColor;\n"
+			"out vec4 ourColor;\n"
 			"void main()\n"
 			"{\n"
 			"	gl_Position = vec4(aPos, 1.0);\n"
+			"	ourColor = aColor;\n"
 			"}",
 
 			"#version 330 core\n"
+			"in vec4 ourColor;\n"
 			"out vec4 FragColor;\n"
-			"uniform vec4 ourColor;"
+			"uniform float colorScale;"
 			"void main()\n"
 			"{\n"
-			"	FragColor = ourColor;\n"
+			"	FragColor = colorScale * ourColor;\n"
 			"}");
 
 		GLTUT_CHECK(shader != 0, "Failed to create shader program")
@@ -61,9 +67,9 @@ int main()
 			float time = std::chrono::duration<float>(
 				std::chrono::steady_clock::now().time_since_epoch()).count();
 
-			float greenValue = (std::sin(time) / 2.0f) + 0.5f;
+			float colorScale = (std::sin(time) / 2.0f) + 0.5f;
 			shader->use();
-			shader->setVec4("ourColor", 0.0f, greenValue, 0.0f, 1.0f);
+			shader->setFloat("colorScale", colorScale);
 
 			if (!engine->update())
 			{
