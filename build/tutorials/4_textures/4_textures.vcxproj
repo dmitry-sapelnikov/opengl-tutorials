@@ -11,21 +11,26 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\hello_window\hello_window.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\engine\engine.vcxproj">
+    <ProjectReference Include="..\..\engine\engine.vcxproj">
       <Project>{311fac3f-ab40-49e8-8c3f-34270879cdf4}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\glad\glad.vcxproj">
+    <ProjectReference Include="..\..\glad\glad.vcxproj">
       <Project>{695877f5-161d-454d-9d58-ed32450a1ca0}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\tutorials\4_textures\4_textures.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\src\tutorials\4_textures\shader.fs" />
+    <None Include="..\..\..\src\tutorials\4_textures\shader.vs" />
+    <None Include="copy_assets.targets" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{5eef80b1-5bd5-47de-818f-478012942e7c}</ProjectGuid>
-    <RootNamespace>hellowindow</RootNamespace>
+    <ProjectGuid>{234E1CE3-6531-4566-8777-76DE6AFB0E10}</ProjectGuid>
+    <RootNamespace>4_textures</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -55,12 +60,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>..\bin\$(Configuration)-$(Platform)\$(ProjectName)\</OutDir>
-    <IntDir>..\temp\$(Configuration)-$(Platform)\$(ProjectName)\</IntDir>
+    <OutDir>..\..\bin\$(Configuration)-$(Platform)\$(ProjectName)\</OutDir>
+    <IntDir>..\..\temp\$(Configuration)-$(Platform)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>..\bin\$(Configuration)-$(Platform)\$(ProjectName)\</OutDir>
-    <IntDir>..\temp\$(Configuration)-$(Platform)\$(ProjectName)\</IntDir>
+    <OutDir>..\..\bin\$(Configuration)-$(Platform)\$(ProjectName)\</OutDir>
+    <IntDir>..\..\temp\$(Configuration)-$(Platform)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -68,13 +73,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>../../include/;../../extern/glfw/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../../include/;../../../extern/glfw/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;..\..\extern\glfw\lib\debug\glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;..\..\..\extern\glfw\lib\debug\glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -85,7 +90,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>../../include/;../../extern/glfw/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../../include/;../../../extern/glfw/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -93,10 +98,11 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;..\..\extern\glfw\lib\release\glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;..\..\..\extern\glfw\lib\release\glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="copy_assets.targets" />
   </ImportGroup>
 </Project>

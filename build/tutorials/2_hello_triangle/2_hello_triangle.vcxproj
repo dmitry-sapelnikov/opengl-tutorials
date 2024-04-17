@@ -11,6 +11,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\src\tutorials\2_hello_triangle\2_hello_triangle.cpp" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\engine\engine.vcxproj">
       <Project>{311fac3f-ab40-49e8-8c3f-34270879cdf4}</Project>
     </ProjectReference>
@@ -18,19 +21,11 @@
       <Project>{695877f5-161d-454d-9d58-ed32450a1ca0}</Project>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\..\src\tutorials\textures\textures.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\..\src\tutorials\textures\shader.fs" />
-    <None Include="..\..\..\src\tutorials\textures\shader.vs" />
-    <None Include="copy_assets.targets" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{234E1CE3-6531-4566-8777-76DE6AFB0E10}</ProjectGuid>
-    <RootNamespace>textures</RootNamespace>
+    <ProjectGuid>{4E8DF3D9-9841-41EA-A035-D18E8B48AAB1}</ProjectGuid>
+    <RootNamespace>2_hello_triangle</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -103,6 +98,5 @@
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="copy_assets.targets" />
   </ImportGroup>
 </Project>

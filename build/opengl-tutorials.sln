@@ -5,17 +5,17 @@ VisualStudioVersion = 17.9.34723.18
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "glad", "glad\glad.vcxproj", "{695877F5-161D-454D-9D58-ED32450A1CA0}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hello_window", "hello_window\hello_window.vcxproj", "{5EEF80B1-5BD5-47DE-818F-478012942E7C}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hello_triangle", "hello_triangle\hello_triangle.vcxproj", "{4E8DF3D9-9841-41EA-A035-D18E8B48AAB1}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "engine", "engine\engine.vcxproj", "{311FAC3F-AB40-49E8-8C3F-34270879CDF4}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "shaders", "shaders\shaders.vcxproj", "{7CBB86BC-DF8F-4822-A0F9-2430455F8BE2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tutorials", "tutorials", "{0397819A-9899-4953-AE17-B1F07ADBB3B9}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "textures", "tutorials\textures\textures.vcxproj", "{234E1CE3-6531-4566-8777-76DE6AFB0E10}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "1_hello_window", "tutorials\1_hello_window\1_hello_window.vcxproj", "{5EEF80B1-5BD5-47DE-818F-478012942E7C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "2_hello_triangle", "tutorials\2_hello_triangle\2_hello_triangle.vcxproj", "{4E8DF3D9-9841-41EA-A035-D18E8B48AAB1}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "3_shaders", "tutorials\3_shaders\3_shaders.vcxproj", "{7CBB86BC-DF8F-4822-A0F9-2430455F8BE2}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "4_textures", "tutorials\4_textures\4_textures.vcxproj", "{234E1CE3-6531-4566-8777-76DE6AFB0E10}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +27,10 @@ Global
 		{695877F5-161D-454D-9D58-ED32450A1CA0}.Debug|x64.Build.0 = Debug|x64
 		{695877F5-161D-454D-9D58-ED32450A1CA0}.Release|x64.ActiveCfg = Release|x64
 		{695877F5-161D-454D-9D58-ED32450A1CA0}.Release|x64.Build.0 = Release|x64
+		{311FAC3F-AB40-49E8-8C3F-34270879CDF4}.Debug|x64.ActiveCfg = Debug|x64
+		{311FAC3F-AB40-49E8-8C3F-34270879CDF4}.Debug|x64.Build.0 = Debug|x64
+		{311FAC3F-AB40-49E8-8C3F-34270879CDF4}.Release|x64.ActiveCfg = Release|x64
+		{311FAC3F-AB40-49E8-8C3F-34270879CDF4}.Release|x64.Build.0 = Release|x64
 		{5EEF80B1-5BD5-47DE-818F-478012942E7C}.Debug|x64.ActiveCfg = Debug|x64
 		{5EEF80B1-5BD5-47DE-818F-478012942E7C}.Debug|x64.Build.0 = Debug|x64
 		{5EEF80B1-5BD5-47DE-818F-478012942E7C}.Release|x64.ActiveCfg = Release|x64
@@ -35,10 +39,6 @@ Global
 		{4E8DF3D9-9841-41EA-A035-D18E8B48AAB1}.Debug|x64.Build.0 = Debug|x64
 		{4E8DF3D9-9841-41EA-A035-D18E8B48AAB1}.Release|x64.ActiveCfg = Release|x64
 		{4E8DF3D9-9841-41EA-A035-D18E8B48AAB1}.Release|x64.Build.0 = Release|x64
-		{311FAC3F-AB40-49E8-8C3F-34270879CDF4}.Debug|x64.ActiveCfg = Debug|x64
-		{311FAC3F-AB40-49E8-8C3F-34270879CDF4}.Debug|x64.Build.0 = Debug|x64
-		{311FAC3F-AB40-49E8-8C3F-34270879CDF4}.Release|x64.ActiveCfg = Release|x64
-		{311FAC3F-AB40-49E8-8C3F-34270879CDF4}.Release|x64.Build.0 = Release|x64
 		{7CBB86BC-DF8F-4822-A0F9-2430455F8BE2}.Debug|x64.ActiveCfg = Debug|x64
 		{7CBB86BC-DF8F-4822-A0F9-2430455F8BE2}.Debug|x64.Build.0 = Debug|x64
 		{7CBB86BC-DF8F-4822-A0F9-2430455F8BE2}.Release|x64.ActiveCfg = Release|x64
@@ -52,6 +52,9 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{5EEF80B1-5BD5-47DE-818F-478012942E7C} = {0397819A-9899-4953-AE17-B1F07ADBB3B9}
+		{4E8DF3D9-9841-41EA-A035-D18E8B48AAB1} = {0397819A-9899-4953-AE17-B1F07ADBB3B9}
+		{7CBB86BC-DF8F-4822-A0F9-2430455F8BE2} = {0397819A-9899-4953-AE17-B1F07ADBB3B9}
 		{234E1CE3-6531-4566-8777-76DE6AFB0E10} = {0397819A-9899-4953-AE17-B1F07ADBB3B9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
