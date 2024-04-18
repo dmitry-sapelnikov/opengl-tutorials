@@ -60,9 +60,8 @@ int main()
 			"}");
 
 		GLTUT_CHECK(shader != 0, "Failed to create shader program")
-		mesh->setShader(shader);
-
-		for (;;)
+		shader->use();
+		while (engine->update())
 		{
 			float time = std::chrono::duration<float>(
 				std::chrono::steady_clock::now().time_since_epoch()).count();
@@ -70,11 +69,7 @@ int main()
 			float colorScale = (std::sin(time) / 2.0f) + 0.5f;
 			shader->use();
 			shader->setFloat("colorScale", colorScale);
-
-			if (!engine->update())
-			{
-				break;
-			}
+			mesh->render();
 		}
 	}
 	catch (const std::exception& e)

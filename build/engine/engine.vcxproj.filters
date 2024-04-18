@@ -92,6 +92,18 @@
     <ClInclude Include="..\..\include\engine\math\Vector3.h">
       <Filter>include\math</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\engine\Material.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\MaterialC.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\SceneObject.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\SceneObjectC.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\engine\MeshC.cpp">
@@ -125,6 +137,12 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\engine\FPSCounter.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\MaterialC.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\SceneObjectC.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

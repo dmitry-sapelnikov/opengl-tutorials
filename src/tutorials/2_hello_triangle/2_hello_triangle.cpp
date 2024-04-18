@@ -3,6 +3,29 @@
 #include <string>
 #include "engine/Engine.h"
 
+namespace
+{
+
+// Vertex shader source code
+const char* VERTEX_SHADER_SOURCE_CODE =
+"#version 330 core\n"
+"layout(location = 0) in vec3 aPos;\n"
+"void main()\n"
+"{\n"
+"	gl_Position = vec4(aPos, 1.0);\n"
+"}";
+
+// Fragment shader source code
+const char* FRAGMENT_SHADER_SOURCE_CODE =
+"#version 330 core\n"
+"out vec4 FragColor;\n"
+"void main()\n"
+"{\n"
+"	FragColor = vec4(0.5f, 0.5f, 0.5f, 1.0f);\n"
+"}";
+
+}
+
 ///	The program entry point
 int main()
 {
@@ -52,9 +75,18 @@ int main()
 			sizeof(indices) / sizeof(unsigned));
 
 		GLTUT_CHECK(mesh2 != nullptr, "Failed to create mesh #2")
+		
+		auto* shader = engine->getRenderer()->createShader(
+			VERTEX_SHADER_SOURCE_CODE,
+			FRAGMENT_SHADER_SOURCE_CODE);
 
+		GLTUT_CHECK(shader != nullptr, "Failed to create shader")
+		
+		shader->use();
 		while (engine->update())
 		{
+			mesh1->render();
+			mesh2->render();
 		}
 	}
 	catch (const std::exception& e)

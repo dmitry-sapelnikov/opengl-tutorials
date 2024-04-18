@@ -29,18 +29,7 @@ public:
 	/// Renders the mesh
 	void render() const noexcept final;
 
-	///	Returns the shader
-	Shader* getShader() const noexcept final;
-
-	/// Sets a shader
-	void setShader(Shader* shader) noexcept final;
-
-	/// Sets a texture
-	void setTexture(Texture* texture, u32 slot) noexcept final;
-
 private:
-	static constexpr u32 TEXTURE_SLOTS = 16;
-
 	/// The renderer
 	Renderer& mRenderer;
 
@@ -58,12 +47,6 @@ private:
 
 	/// The element buffer object
 	unsigned mEBO = 0;
-
-	/// The shader
-	Shader* mShader = nullptr;
-
-	/// Texture slots
-	std::array<Texture*, TEXTURE_SLOTS> mTextures;
 };
 
 // End of the namespace gltut

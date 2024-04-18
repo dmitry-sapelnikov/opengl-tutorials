@@ -4,6 +4,7 @@
 // Includes
 #include <cassert>
 #include <stdexcept>
+#include <iostream>
 
 // Macros
 /// Assert macro

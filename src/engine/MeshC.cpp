@@ -15,12 +15,6 @@ MeshC::MeshC(
 
 	mRenderer(renderer)
 {
-	// Set texture slots to 0
-	for (u32 i = 0; i < TEXTURE_SLOTS; ++i)
-	{
-		mTextures[i] = 0;
-	}
-
 	GLTUT_ASSERT(vertices != nullptr);
 	GLTUT_ASSERT(vertexCount > 0);
 	GLTUT_ASSERT(vertexCount % vertexFormat.getTotalSize() == 0);
@@ -51,37 +45,9 @@ MeshC::~MeshC()
 
 void MeshC::render() const noexcept
 {
-	if (mShader != 0)
-	{
-		mShader->use();
-	}
-
-	for (u32 i = 0; i < TEXTURE_SLOTS; ++i)
-	{
-		if (mTextures[i] != 0)
-		{
-			mTextures[i]->bind(i);
-		}
-	}
 	mRenderer.setVertexArray(mVAO);
 	mRenderer.drawIndexedTriangles(static_cast<u32>(mIndices.size()));
 	mRenderer.setVertexArray(0);
-}
-
-Shader* MeshC::getShader() const noexcept
-{
-	return mShader;
-}
-
-void MeshC::setShader(Shader* shader) noexcept
-{
-	mShader = shader;
-}
-
-void MeshC::setTexture(Texture* texture, u32 slot) noexcept
-{
-	assert(slot < TEXTURE_SLOTS);
-	mTextures[slot] = texture;
 }
 
 // End of the namespace gltut

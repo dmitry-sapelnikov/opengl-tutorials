@@ -48,7 +48,6 @@ int main()
 		GLTUT_CHECK(shader != 0, "Failed to create shader program")
 		shader->setInt("texture1", 0);
 		shader->setInt("texture2", 1);
-		mesh->setShader(shader);
 
 		gltut::Texture* texture1 = engine->getRenderer()->loadTexture("assets/container.jpg");
 		GLTUT_CHECK(texture1 != nullptr, "Failed to load texture")
@@ -56,15 +55,15 @@ int main()
 		gltut::Texture* texture2 = engine->getRenderer()->loadTexture("assets/awesomeface.png");
 		GLTUT_CHECK(texture2 != nullptr, "Failed to load texture")
 
-		mesh->setTexture(texture1, 0);
-		mesh->setTexture(texture2, 1);
+		auto* material = scene->createMaterial(shader);
+		GLTUT_CHECK(material != nullptr, "Failed to create material")
+		material->setTexture(texture1, 0);
+		material->setTexture(texture2, 1);
 
-		for (;;)
+		material->use();
+		while (engine->update())
 		{
-			if (!engine->update())
-			{
-				break;
-			}
+			mesh->render();
 		}
 	}
 	catch (const std::exception& e)

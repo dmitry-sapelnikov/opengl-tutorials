@@ -32,19 +32,16 @@ namespace gltut
 SceneC::SceneC(Renderer& renderer) :
 	mRenderer(renderer)
 {
-	mDefaultShader = mRenderer.createShader(
-		VERTEX_SHADER_SOURCE_CODE,
-		FRAGMENT_SHADER_SOURCE_CODE);
-
-	GLTUT_CHECK(mDefaultShader != nullptr, "Failed to create the default scene shader");
-
 	// Set the background color
 	mRenderer.setClearColor(0.1f, 0.3f, 0.3f, 1.0f);
 }
 
-SceneC::~SceneC() noexcept
+Material* SceneC::createMaterial(Shader* shader) noexcept
 {
-	mRenderer.removeShader(mDefaultShader);
+	GLTUT_CATCH_ALL_BEGIN
+	return &mMaterials.emplace_back(shader);
+	GLTUT_CATCH_ALL_END("Cannot create a material")
+	return nullptr;
 }
 
 Mesh* SceneC::createMesh(
@@ -70,13 +67,22 @@ Mesh* SceneC::createMesh(
 	}
 }
 
+SceneObject* SceneC::createObject(
+	Mesh* mesh,
+	Material* material,
+	const Matrix4& transform) noexcept
+{
+	GLTUT_CATCH_ALL_BEGIN
+	return &mObjects.emplace_back(mRenderer, mesh, material, transform);
+	GLTUT_CATCH_ALL_END("Cannot create a scene object")
+	return nullptr;
+}
+
 void SceneC::render() noexcept
 {
-	mRenderer.clear();
-	for (const auto& mesh : mMeshes)
+	for (const auto& object : mObjects)
 	{
-		mDefaultShader->use();
-		mesh.render();
+		object.render();
 	}
 }
 

@@ -47,8 +47,8 @@ EngineC::~EngineC() noexcept
 
 bool EngineC::update() noexcept
 {
-	mScene->render();
 	mWindow->update();
+	mRenderer->clear();
 	return !mWindow->shouldClose();
 }
 
