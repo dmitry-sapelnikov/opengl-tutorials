@@ -22,8 +22,8 @@
     <ClCompile Include="..\..\..\src\tutorials\4_textures\4_textures.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\src\tutorials\4_textures\shader.fs" />
-    <None Include="..\..\..\src\tutorials\4_textures\shader.vs" />
+    <None Include="..\..\..\src\tutorials\4_textures\assets\shader.fs" />
+    <None Include="..\..\..\src\tutorials\4_textures\assets\shader.vs" />
     <None Include="copy_assets.targets" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
