@@ -24,6 +24,7 @@
     <ClInclude Include="..\..\include\engine\Window.h" />
     <ClInclude Include="..\..\src\engine\EngineC.h" />
     <ClInclude Include="..\..\src\engine\File.h" />
+    <ClInclude Include="..\..\src\engine\FPSCounter.h" />
     <ClInclude Include="..\..\src\engine\MeshC.h" />
     <ClInclude Include="..\..\src\engine\RendererBase.h" />
     <ClInclude Include="..\..\src\engine\RendererOpenGL.h" />
@@ -36,6 +37,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\src\engine\EngineC.cpp" />
     <ClCompile Include="..\..\src\engine\File.cpp" />
+    <ClCompile Include="..\..\src\engine\FPSCounter.cpp" />
     <ClCompile Include="..\..\src\engine\MeshC.cpp" />
     <ClCompile Include="..\..\src\engine\RendererBase.cpp" />
     <ClCompile Include="..\..\src\engine\RendererOpenGL.cpp" />

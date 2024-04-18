@@ -3,11 +3,14 @@
 
 // Includes
 #include <string>
+#include <memory>
 #include <functional>
 #include "engine/core/NonCopyable.h"
 #include "engine/Window.h"
+#include "FPSCounter.h"
 
 struct GLFWwindow;
+class FPSCounter;
 
 namespace gltut
 {
@@ -57,14 +60,8 @@ private:
 	/// The resize callback
 	ResizeCallback mResizeCallback;
 
-	/// The vertical synchronization flag
-	bool mShowFPS = false;
-
-	/// The number of frames passed since the last FPS update
-	unsigned long mFrames = 0;
-
-	/// The time passed since the last FPS update
-	double mTime = 0.0;
+	/// FPS counter
+	std::unique_ptr<FPSCounter> mFPSCounter;
 };
 
 // End of the namespace gltut

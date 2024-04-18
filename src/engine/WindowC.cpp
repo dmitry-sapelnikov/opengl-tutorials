@@ -1,7 +1,9 @@
 // Includes
 #include "WindowC.h"
+#include <iostream>
 #include "engine/core/Check.h"
 #include "GLFW/glfw3.h"
+
 
 namespace gltut
 {
@@ -32,8 +34,8 @@ WindowC::WindowC(
 
 	mResizeCallback(resizeCallback)
 {
-	GLTUT_ASSERT(width > 0);
-	GLTUT_ASSERT(height > 0);
+	GLTUT_CHECK(width > 0, "Window width must be greater than 0");
+	GLTUT_CHECK(height > 0, "Window height must be greater than 0");
 
 	mWindow = glfwCreateWindow(
 		width,
@@ -42,7 +44,7 @@ WindowC::WindowC(
 		nullptr,
 		nullptr);
 
-	GLTUT_ASSERT(mWindow != nullptr);
+	GLTUT_CHECK(mWindow != nullptr, "Failed to create GLFW window");
 	glfwMakeContextCurrent(mWindow);
 	glfwSetWindowUserPointer(mWindow, this);
 	enableVSync(false);
@@ -65,17 +67,20 @@ void WindowC::setTitle(const char* title) noexcept
 
 void WindowC::showFPS(bool show) noexcept
 {
-	if (show == mShowFPS)
-	{
-		return;
-	}
-
-	mShowFPS = show;
 	if (show)
 	{
-		mTime = glfwGetTime();
-		mFrames = 0;
+		if (mFPSCounter == nullptr)
+		{
+			GLTUT_CATCH_ALL_BEGIN
+			mFPSCounter = std::make_unique<FPSCounter>();
+			GLTUT_CATCH_ALL_END("Failed to show FPS")
+		}
 	}
+	else
+	{
+		mFPSCounter.reset();
+	}
+	
 }
 
 void WindowC::enableVSync(bool vSync) noexcept
@@ -100,17 +105,13 @@ void WindowC::update() noexcept
 	}
 
 	glfwSwapBuffers(mWindow);
-	if (mShowFPS)
+	if (mFPSCounter != nullptr)
 	{
-		++mFrames;
-		const double currentTime = glfwGetTime();
-		if (currentTime - mTime >= 1.0)
+		if (auto fps = mFPSCounter->tick())
 		{
 			glfwSetWindowTitle(
 				mWindow,
-				(mTitle + " [FPS: " + std::to_string(mFrames) + "]").c_str());
-			mFrames = 0;
-			mTime = currentTime;
+				(mTitle + " [FPS: " + std::to_string(fps) + "]").c_str());
 		}
 	}
 }

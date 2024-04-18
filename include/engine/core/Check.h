@@ -27,4 +27,20 @@ default:\
 	GLTUT_ASSERT(false && "Unexpected value of the switch variable: " #switchValue);\
 	break;
 
+
+#define GLTUT_CATCH_ALL_BEGIN \
+try\
+{
+
+#define GLTUT_CATCH_ALL_END(message)\
+}\
+catch (std::exception& e)\
+{\
+	std::cerr << message << ": " << e.what() << std::endl;\
+}\
+catch (...)\
+{\
+	std::cerr << message << std::endl;\
+}\
+
 #endif

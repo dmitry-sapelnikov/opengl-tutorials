@@ -77,6 +77,9 @@
     <ClInclude Include="..\..\src\engine\RendererBase.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\engine\FPSCounter.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\engine\MeshC.cpp">
@@ -107,6 +110,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\engine\RendererBase.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\FPSCounter.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
