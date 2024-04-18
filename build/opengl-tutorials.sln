@@ -17,6 +17,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "3_shaders", "tutorials\3_sh
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "4_textures", "tutorials\4_textures\4_textures.vcxproj", "{234E1CE3-6531-4566-8777-76DE6AFB0E10}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "0_pure_opengl_window", "tutorials\0_pure_opengl_window\0_pure_opengl_window.vcxproj", "{29708745-961B-4FA2-B531-7D05402198F0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -47,6 +49,10 @@ Global
 		{234E1CE3-6531-4566-8777-76DE6AFB0E10}.Debug|x64.Build.0 = Debug|x64
 		{234E1CE3-6531-4566-8777-76DE6AFB0E10}.Release|x64.ActiveCfg = Release|x64
 		{234E1CE3-6531-4566-8777-76DE6AFB0E10}.Release|x64.Build.0 = Release|x64
+		{29708745-961B-4FA2-B531-7D05402198F0}.Debug|x64.ActiveCfg = Debug|x64
+		{29708745-961B-4FA2-B531-7D05402198F0}.Debug|x64.Build.0 = Debug|x64
+		{29708745-961B-4FA2-B531-7D05402198F0}.Release|x64.ActiveCfg = Release|x64
+		{29708745-961B-4FA2-B531-7D05402198F0}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -56,6 +62,7 @@ Global
 		{4E8DF3D9-9841-41EA-A035-D18E8B48AAB1} = {0397819A-9899-4953-AE17-B1F07ADBB3B9}
 		{7CBB86BC-DF8F-4822-A0F9-2430455F8BE2} = {0397819A-9899-4953-AE17-B1F07ADBB3B9}
 		{234E1CE3-6531-4566-8777-76DE6AFB0E10} = {0397819A-9899-4953-AE17-B1F07ADBB3B9}
+		{29708745-961B-4FA2-B531-7D05402198F0} = {0397819A-9899-4953-AE17-B1F07ADBB3B9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6671FED5-F651-4A55-91AE-C9B03C9D54D5}
