@@ -15,6 +15,9 @@
     <ClInclude Include="..\..\include\engine\core\NonCopyable.h" />
     <ClInclude Include="..\..\include\engine\core\Types.h" />
     <ClInclude Include="..\..\include\engine\Engine.h" />
+    <ClInclude Include="..\..\include\engine\math\Constants.h" />
+    <ClInclude Include="..\..\include\engine\math\Matrix4.h" />
+    <ClInclude Include="..\..\include\engine\math\Vector3.h" />
     <ClInclude Include="..\..\include\engine\Mesh.h" />
     <ClInclude Include="..\..\include\engine\Renderer.h" />
     <ClInclude Include="..\..\include\engine\Scene.h" />

@@ -12,6 +12,9 @@
     <Filter Include="include\core">
       <UniqueIdentifier>{d88bcfc8-0879-4f22-81be-57ef5d2f2c22}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\math">
+      <UniqueIdentifier>{c2741001-398f-40e2-8b01-9445d1d5b84c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\engine\Mesh.h">
@@ -79,6 +82,15 @@
     </ClInclude>
     <ClInclude Include="..\..\src\engine\FPSCounter.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\math\Constants.h">
+      <Filter>include\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\math\Matrix4.h">
+      <Filter>include\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\math\Vector3.h">
+      <Filter>include\math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
