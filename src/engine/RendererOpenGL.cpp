@@ -123,7 +123,7 @@ void RendererOpenGL::removeMesh(u32 index) noexcept
 
 void RendererOpenGL::renderMesh(u32 index) const noexcept
 {
-	GLTUT_ASSERT(index < mVAOs.size());
+	GLTUT_ASSERT(index < mMeshBuffers.size());
 
 	const auto& buffer = mMeshBuffers[index];
 	GLTUT_ASSERT(buffer.isValid());

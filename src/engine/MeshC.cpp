@@ -21,7 +21,7 @@ MeshC::MeshC(
 
 	mVertices.assign(vertexData, vertexData + vertexCount * vertexFormat.getTotalSize());
 
-	GLTUT_ASSERT(indices != nullptr);
+	GLTUT_ASSERT(indexData != nullptr);
 	GLTUT_ASSERT(indexCount > 0);
 	GLTUT_ASSERT(indexCount % 3 == 0);
 	mIndices.assign(indexData, indexData + indexCount);
