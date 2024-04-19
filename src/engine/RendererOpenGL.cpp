@@ -2,7 +2,6 @@
 #include "RendererOpenGL.h"
 
 #include <iostream>
-#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "engine/core/Check.h"
 #include "engine/VertexFormat.h"
@@ -68,9 +67,75 @@ void RendererOpenGL::clear() noexcept
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
-u32 RendererOpenGL::allocateVertexBuffer(float* vertices, u32 count) noexcept
+u32 RendererOpenGL::addMesh(const Mesh& mesh) noexcept
 {
-	u32 vbo = 0;
+	const auto& vertexFormat = mesh.getVertexFormat();
+
+	const u32 vbo = allocateVertexBuffer(
+		mesh.getVertices(),
+		mesh.getVertexCount() * vertexFormat.getTotalSize());
+
+	const u32 ibo = allocateIndexBuffer(
+		mesh.getIndices(),
+		mesh.getIndexCount());
+
+	const u32 vao = allocateVertexArray(
+		vertexFormat,
+		vbo,
+		ibo);
+
+	GLTUT_CATCH_ALL_BEGIN
+	if (mFreeMeshIndices.empty())
+	{
+		mMeshBuffers.emplace_back(vbo, ibo, mesh.getIndexCount(), vao);
+		return static_cast<u32>(mMeshBuffers.size() - 1);
+	}
+	else
+	{
+		const u32 index = mFreeMeshIndices.back();
+		mFreeMeshIndices.pop_back();
+		mMeshBuffers[index] = { vbo, ibo, mesh.getIndexCount(), vao };
+		return index;
+	}
+	GLTUT_CATCH_ALL_END("Failed to add mesh")
+
+	return INVALID_MESH_INDEX;
+}
+
+void RendererOpenGL::removeMesh(u32 index) noexcept
+{
+	GLTUT_ASSERT(index < mMeshBuffers.size());
+
+	auto& buffer = mMeshBuffers[index];
+	GLTUT_ASSERT(buffer.isValid());
+
+	glDeleteVertexArrays(1, &buffer.vao);
+	glDeleteBuffers(1, &buffer.vertexBuffer);
+	glDeleteBuffers(1, &buffer.indexBuffer);
+
+	//	Reset the buffer to prevent accidental further use
+	buffer.reset();
+
+	GLTUT_CATCH_ALL_BEGIN
+		mFreeMeshIndices.emplace_back(index);
+	GLTUT_CATCH_ALL_END("Failed to remove mesh")
+}
+
+void RendererOpenGL::renderMesh(u32 index) const noexcept
+{
+	GLTUT_ASSERT(index < mVAOs.size());
+
+	const auto& buffer = mMeshBuffers[index];
+	GLTUT_ASSERT(buffer.isValid());
+
+	glBindVertexArray(buffer.vao);
+	glDrawElements(GL_TRIANGLES, buffer.indicesCount, GL_UNSIGNED_INT, nullptr);
+	glBindVertexArray(0);
+}
+
+GLuint RendererOpenGL::allocateVertexBuffer(float* vertices, u32 count) noexcept
+{
+	GLuint vbo = 0;
 	glGenBuffers(1, &vbo);
 	GLTUT_ASSERT(vbo != 0);
 
@@ -80,9 +145,9 @@ u32 RendererOpenGL::allocateVertexBuffer(float* vertices, u32 count) noexcept
 	return vbo;
 }
 
-u32 RendererOpenGL::allocateIndexBuffer(u32* indices, u32 count) noexcept
+GLuint RendererOpenGL::allocateIndexBuffer(u32* indices, u32 count) noexcept
 {
-	u32 ibo = 0;
+	GLuint ibo = 0;
 	glGenBuffers(1, &ibo);
 	GLTUT_ASSERT(ibo != 0);
 
@@ -92,26 +157,21 @@ u32 RendererOpenGL::allocateIndexBuffer(u32* indices, u32 count) noexcept
 	return ibo;
 }
 
-void RendererOpenGL::freeBuffer(unsigned buffer) noexcept
-{
-	glDeleteBuffers(1, &buffer);
-}
-
-u32 RendererOpenGL::allocateVertexArray(
+GLuint RendererOpenGL::allocateVertexArray(
 	VertexFormat vertexFormat,
-	unsigned vertexBuffer,
-	unsigned indexBuffer) noexcept
+	GLuint vertexBuffer,
+	GLuint indexBuffer) noexcept
 {
 	GLTUT_ASSERT(vertexBuffer != 0);
 	GLTUT_ASSERT(indexBuffer != 0);
 
-	u32 vao = 0;
+	GLuint vao = 0;
 	glGenVertexArrays(1, &vao);
 	GLTUT_ASSERT(vao != 0);
 
 	glBindVertexArray(vao);
-	setVertexBuffer(vertexBuffer);
-	setIndexBuffer(indexBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
 
 	const u32 stride = vertexFormat.getTotalSizeInBytes();
 	size_t offset = 0;
@@ -136,35 +196,10 @@ u32 RendererOpenGL::allocateVertexArray(
 	}
 
 	glBindVertexArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-	setVertexBuffer(0);
-	setIndexBuffer(0);
 	return vao;
-}
-
-void RendererOpenGL::freeVertexArray(unsigned array) noexcept
-{
-	glDeleteVertexArrays(1, &array);
-}
-
-void RendererOpenGL::setVertexBuffer(unsigned buffer) noexcept
-{
-	glBindBuffer(GL_ARRAY_BUFFER, buffer);
-}
-
-void RendererOpenGL::setIndexBuffer(unsigned buffer) noexcept
-{
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer);
-}
-
-void RendererOpenGL::setVertexArray(unsigned array) noexcept
-{
-	glBindVertexArray(array);
-}
-
-void RendererOpenGL::drawIndexedTriangles(u32 indicesCount) noexcept
-{
-	glDrawElements(GL_TRIANGLES, indicesCount, GL_UNSIGNED_INT, nullptr);
 }
 
 Shader* RendererOpenGL::createShader(

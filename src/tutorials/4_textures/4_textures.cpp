@@ -34,10 +34,10 @@ int main()
 		auto* scene = engine->getScene();
 		auto* mesh = scene->createMesh(
 			gltut::VERTEX_FORMAT_POS3_TEX2,
+			4,
 			vertices,
-			gltut::int32(sizeof(vertices) / sizeof(float)),
-			indices,
-			gltut::int32(sizeof(indices) / sizeof(gltut::u32)));
+			6,
+			indices);
 
 		GLTUT_CHECK(mesh != nullptr, "Failed to create mesh")
 
@@ -60,10 +60,9 @@ int main()
 		material->setTexture(texture1, 0);
 		material->setTexture(texture2, 1);
 
-		material->use();
+		scene->createObject(mesh, material);
 		while (engine->update())
 		{
-			mesh->render();
 		}
 	}
 	catch (const std::exception& e)

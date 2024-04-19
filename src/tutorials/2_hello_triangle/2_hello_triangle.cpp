@@ -60,19 +60,19 @@ int main()
 		auto* scene = engine->getScene();
 		auto* mesh1 = scene->createMesh(
 			gltut::VERTEX_FORMAT_POS3,
+			4,
 			vertices1,
-			sizeof(vertices1) / sizeof(float),
-			indices,
-			sizeof(indices) / sizeof(unsigned));
+			6,
+			indices);
 
 		GLTUT_CHECK(mesh1 != nullptr, "Failed to create mesh #1")
 
 		auto* mesh2 = scene->createMesh(
 			gltut::VERTEX_FORMAT_POS3,
+			4,
 			vertices2,
-			sizeof(vertices2) / sizeof(float),
-			indices,
-			sizeof(indices) / sizeof(unsigned));
+			6,
+			indices);
 
 		GLTUT_CHECK(mesh2 != nullptr, "Failed to create mesh #2")
 		
@@ -80,13 +80,13 @@ int main()
 			VERTEX_SHADER_SOURCE_CODE,
 			FRAGMENT_SHADER_SOURCE_CODE);
 
+		auto* material = scene->createMaterial(shader);
+		scene->createObject(mesh1, material);
+		scene->createObject(mesh2, material);
+
 		GLTUT_CHECK(shader != nullptr, "Failed to create shader")
-		
-		shader->use();
 		while (engine->update())
 		{
-			mesh1->render();
-			mesh2->render();
 		}
 	}
 	catch (const std::exception& e)

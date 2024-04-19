@@ -5,7 +5,7 @@
 #include "core/Types.h"
 #include "Shader.h"
 #include "Texture.h"
-#include "VertexFormat.h"
+#include "Mesh.h"
 
 namespace gltut
 {
@@ -29,30 +29,11 @@ public:
 	/// Allocates an index buffer
 	virtual unsigned allocateIndexBuffer(u32* indices, u32 count) noexcept = 0;
 
-	/// Frees a vertex/index buffer
-	virtual void freeBuffer(unsigned buffer) noexcept = 0;
-
 	/// Allocates a vertex array
 	virtual unsigned allocateVertexArray(
 		VertexFormat vertexFormat,
 		unsigned vertexBuffer,
 		unsigned indexBuffer) noexcept = 0;
-
-	/// Frees a vertex array
-	virtual void freeVertexArray(unsigned vertexArray) noexcept = 0;
-
-	/// Sets a vertex buffer
-	virtual void setVertexBuffer(unsigned buffer) noexcept = 0;
-
-	/// Sets an index buffer
-	virtual void setIndexBuffer(unsigned buffer) noexcept = 0;
-
-	/// Sets an vertex array
-	virtual void setVertexArray(unsigned vertexArray) noexcept = 0;
-
-	/// Draws the indexed triangles
-	virtual void drawIndexedTriangles(u32 indicesCount) noexcept = 0;
-
 	/// Creates a shader from strings
 	virtual Shader* createShader(
 		const char* vertexShader,

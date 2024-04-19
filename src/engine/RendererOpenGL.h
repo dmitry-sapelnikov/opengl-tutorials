@@ -6,6 +6,7 @@
 #include "RendererBase.h"
 #include <vector>
 #include <memory>
+#include <glad/glad.h>
 
 namespace gltut
 {
@@ -22,35 +23,14 @@ public:
 	/// Clears the screen
 	void clear() noexcept final;
 
-	/// Allocates a vertex buffer
-	unsigned allocateVertexBuffer(float* vertices, u32 count) noexcept final;
+	/// Adds a mesh
+	u32 addMesh(const Mesh& mesh) noexcept final;
 
-	/// Allocates an index buffer
-	unsigned allocateIndexBuffer(u32* indices, u32 count) noexcept final;
+	/// Removes a mesh
+	void removeMesh(u32 index) noexcept final;
 
-	/// Frees a vertex/index buffer
-	void freeBuffer(unsigned buffer) noexcept final;
-
-	/// Allocates a vertex array
-	unsigned allocateVertexArray(
-		VertexFormat vertexFormat,
-		unsigned vertexBuffer, 
-		unsigned indexBuffer) noexcept final;
-
-	/// Frees a vertex array
-	void freeVertexArray(unsigned vertexArray) noexcept final;
-
-	/// Sets a vertex buffer
-	void setVertexBuffer(unsigned buffer) noexcept final;
-
-	/// Sets an index buffer
-	void setIndexBuffer(unsigned buffer) noexcept final;
-
-	/// Sets an vertex array
-	void setVertexArray(unsigned vertexArray) noexcept final;
-
-	/// Draws the indexed triangles
-	void drawIndexedTriangles(u32 indicesCount) noexcept final;
+	/// Renders a mesh
+	void renderMesh(u32 index) const noexcept final;
 
 	/// Creates a shader
 	Shader* createShader(
@@ -76,11 +56,80 @@ public:
 	void removeTexture(Texture* texture) noexcept final;
 
 private:
+	struct MeshBuffers
+	{
+		/// The vertex buffer object
+		GLuint vertexBuffer;
+
+		/// The element buffer object
+		GLuint indexBuffer;
+
+		/// Number of indices
+		u32 indicesCount;
+
+		/// The vertex array object
+		GLuint vao;
+
+		MeshBuffers() noexcept
+		{
+			reset();
+		}
+
+		MeshBuffers(
+			GLuint vertexBuffer,
+			GLuint indexBuffer,
+			u32 indicesCount,
+			GLuint vao) :
+
+			vertexBuffer(vertexBuffer),
+			indexBuffer(indexBuffer),
+			indicesCount(indicesCount),
+			vao(vao)
+		{
+			GLTUT_CHECK(isValid(), "Invalid mesh buffers");
+		}
+
+		bool isValid() const noexcept
+		{
+			return 
+				vertexBuffer != 0 && 
+				indexBuffer != 0 &&
+				vao != 0 &&
+				indicesCount != 0;
+		}
+
+		void reset() noexcept
+		{
+			vertexBuffer = 0;
+			indexBuffer = 0;
+			indicesCount = 0;
+			vao = 0;
+		}
+	};
+
+	/// Allocates a vertex buffer
+	GLuint allocateVertexBuffer(float* vertices, u32 count) noexcept;
+
+	/// Allocates an index buffer
+	GLuint allocateIndexBuffer(u32* indices, u32 count) noexcept;
+
+	/// Allocates a vertex array
+	GLuint allocateVertexArray(
+		VertexFormat vertexFormat,
+		GLuint vertexBuffer,
+		GLuint indexBuffer) noexcept;
+
 	/// Shaders
 	std::vector<std::unique_ptr<Shader>> mShaders;
 
 	/// Textures
 	std::vector<std::unique_ptr<Texture>> mTextures;
+
+	/// Free mesh indices
+	std::vector<u32> mFreeMeshIndices;
+
+	/// Buffers for meshes
+	std::vector<MeshBuffers> mMeshBuffers;
 };
 
 // End of the namespace gltut

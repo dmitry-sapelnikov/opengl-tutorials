@@ -15,7 +15,6 @@ public:
 	/// Virtual destructor
 	virtual ~Scene() noexcept = default;
 
-
 	/**
 		\brief Creates a material
 		\param shader The shader
@@ -29,10 +28,10 @@ public:
 	*/
 	virtual Mesh* createMesh(
 		VertexFormat vertexFormat,
-		float* vertices,
 		u32 vertexCount,
-		u32* indices,
-		u32 indexCount) noexcept = 0;
+		float* vertexData,
+		u32 indexCount,
+		u32* indexData) noexcept = 0;
 
 	/// Creates a scene object
 	virtual SceneObject* createObject(

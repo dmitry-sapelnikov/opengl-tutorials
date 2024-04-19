@@ -5,7 +5,7 @@ namespace gltut
 {
 // Global classes
 SceneObjectC::SceneObjectC(
-	Renderer& renderer,
+	RendererBase& renderer,
 	Mesh* mesh,
 	Material* material,
 	const Matrix4& transform) noexcept :
@@ -56,7 +56,7 @@ void SceneObjectC::render() const noexcept
 
 	if (mMesh != nullptr)
 	{
-		mMesh->render();
+		mRenderer.renderMesh(mMesh->getIndexInRenderer());
 	}
 }
 

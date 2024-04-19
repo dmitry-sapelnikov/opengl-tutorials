@@ -5,7 +5,7 @@
 #include <deque>
 #include "engine/core/NonCopyable.h"
 #include "engine/Scene.h"
-#include "engine/Renderer.h"
+#include "RendererBase.h"
 #include "MaterialC.h"
 #include "MeshC.h"
 #include "SceneObjectC.h"
@@ -17,16 +17,16 @@ namespace gltut
 class SceneC final : public Scene, public NonCopyable
 {
 public:
-	SceneC(Renderer& renderer);
+	SceneC(RendererBase& renderer);
 
 	Material* createMaterial(Shader* shader) noexcept final;
 
 	Mesh* createMesh(
 		VertexFormat vertexFormat,
-		float* vertices,
 		u32 vertexCount,
-		u32* indices,
-		u32 indexCount) noexcept final;
+		float* vertexData,
+		u32 indexCount,
+		u32* indexData) noexcept final;
 
 	SceneObject* createObject(
 		Mesh* mesh,
@@ -37,7 +37,7 @@ public:
 
 private:
 	/// The renderer
-	Renderer& mRenderer;
+	RendererBase& mRenderer;
 
 	/// The materials
 	std::deque<MaterialC> mMaterials;

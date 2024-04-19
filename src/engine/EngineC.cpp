@@ -23,18 +23,20 @@ EngineC::EngineC(u32 windowWidth, u32 windowHeight)
 
 
 	auto resizeCallback = [this](u32 width, u32 height)
-		{
-			glViewport(0, 0, width, height);
-			mScene->render();
-		};
+	{
+		glViewport(0, 0, width, height);
+		mRenderer->clear();
+		mScene->render();
+	};
 
 	mWindow = std::make_unique<WindowC>(
 		windowWidth,
 		windowHeight,
 		resizeCallback);
 
-	mRenderer = std::make_unique<RendererOpenGL>();
-	mScene = std::make_unique<SceneC>(*mRenderer);
+	auto renderer = std::make_unique<RendererOpenGL>();
+	mScene = std::make_unique<SceneC>(*renderer);
+	mRenderer = std::move(renderer);
 }
 
 EngineC::~EngineC() noexcept
@@ -49,6 +51,7 @@ bool EngineC::update() noexcept
 {
 	mWindow->update();
 	mRenderer->clear();
+	mScene->render();
 	return !mWindow->shouldClose();
 }
 

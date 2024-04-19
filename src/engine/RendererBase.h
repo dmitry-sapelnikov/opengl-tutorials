@@ -12,8 +12,20 @@ namespace gltut
 class RendererBase : public Renderer, public NonCopyable
 {
 public:
+	/// Invalid mesh index
+	static constexpr u32 INVALID_MESH_INDEX = std::numeric_limits<u32>::max();
+
 	/// Loads a texture
 	Texture* loadTexture(const char* path) noexcept final;
+
+	/// Adds a mesh
+	virtual u32 addMesh(const Mesh& mesh) noexcept = 0;
+
+	/// Removes a mesh
+	virtual void removeMesh(u32 index) noexcept = 0;
+
+	/// Renders a mesh
+	virtual void renderMesh(u32 index) const noexcept = 0;
 };
 
 // End of the namespace gltut

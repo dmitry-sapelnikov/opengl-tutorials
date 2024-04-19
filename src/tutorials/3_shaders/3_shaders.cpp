@@ -30,14 +30,6 @@ int main()
 		};
 
 		auto* scene = engine->getScene();
-		auto* mesh = scene->createMesh(
-			gltut::VERTEX_FORMAT_POS3_COLOR4,
-			vertices,
-			gltut::int32(sizeof(vertices) / sizeof(float)),
-			indices.data(),
-			gltut::int32(indices.size()));
-
-		GLTUT_CHECK(mesh != nullptr, "Failed to create mesh")
 
 		gltut::Shader* shader = engine->getRenderer()->createShader(
 			"#version 330 core\n"
@@ -60,16 +52,27 @@ int main()
 			"}");
 
 		GLTUT_CHECK(shader != 0, "Failed to create shader program")
-		shader->use();
+		
+		auto* mesh = scene->createMesh(
+			gltut::VERTEX_FORMAT_POS3_COLOR4,
+			3,
+			vertices,
+			3,
+			indices.data());
+
+		GLTUT_CHECK(mesh != nullptr, "Failed to create mesh")
+
+		auto* material = scene->createMaterial(shader);
+		GLTUT_CHECK(material != nullptr, "Failed to create material")
+
+		scene->createObject(mesh, material);
 		while (engine->update())
 		{
 			float time = std::chrono::duration<float>(
 				std::chrono::steady_clock::now().time_since_epoch()).count();
 
 			float colorScale = (std::sin(time) / 2.0f) + 0.5f;
-			shader->use();
 			shader->setFloat("colorScale", colorScale);
-			mesh->render();
 		}
 	}
 	catch (const std::exception& e)

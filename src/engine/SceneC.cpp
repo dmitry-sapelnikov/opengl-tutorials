@@ -29,7 +29,7 @@ const char* FRAGMENT_SHADER_SOURCE_CODE =
 namespace gltut
 {
 
-SceneC::SceneC(Renderer& renderer) :
+SceneC::SceneC(RendererBase& renderer) :
 	mRenderer(renderer)
 {
 	// Set the background color
@@ -46,20 +46,20 @@ Material* SceneC::createMaterial(Shader* shader) noexcept
 
 Mesh* SceneC::createMesh(
 	VertexFormat vertexFormat,
-	float* vertices,
 	u32 vertexCount,
-	u32* indices,
-	u32 indexCount) noexcept
+	float* vertexData,
+	u32 indexCount,
+	u32* indexData) noexcept
 {
 	try
 	{
 		return &mMeshes.emplace_back(
 			mRenderer,
 			vertexFormat,
-			vertices,
 			vertexCount,
-			indices,
-			indexCount);
+			vertexData,
+			indexCount,
+			indexData);
 	}
 	catch (...)
 	{

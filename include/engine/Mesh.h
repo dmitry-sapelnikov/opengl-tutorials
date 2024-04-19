@@ -2,9 +2,7 @@
 #define OPENGL_TUTORIALS_MESH_H
 
 // Includes
-#include "engine/core/Types.h"
-#include "Shader.h"
-#include "Texture.h"
+#include "VertexFormat.h"
 
 namespace gltut
 {
@@ -16,8 +14,23 @@ public:
 	/// Virtual destructor
 	virtual ~Mesh() noexcept = default;
 
-	/// Renders the mesh
-	virtual void render() const noexcept = 0;
+	/// Returns the vertices (const version)
+	virtual float* getVertices() const noexcept = 0;
+
+	/// Returns the vertex count
+	virtual u32 getVertexCount() const noexcept = 0;
+
+	/// Returns the indices (const version)
+	virtual u32* getIndices() const noexcept = 0;
+
+	/// Returns the index count
+	virtual u32 getIndexCount() const noexcept = 0;
+
+	/// Returns the vertex format
+	virtual VertexFormat getVertexFormat() const noexcept = 0;
+
+	/// Returns the index in the renderer
+	virtual u32 getIndexInRenderer() const noexcept = 0;
 };
 
 // End of the namespace gltut

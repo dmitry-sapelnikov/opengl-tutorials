@@ -3,7 +3,7 @@
 
 // Includes
 #include "engine/SceneObject.h"
-#include "engine/Renderer.h"
+#include "RendererBase.h"
 #include "engine/core/NonCopyable.h"
 
 namespace gltut
@@ -14,7 +14,7 @@ class SceneObjectC final : public SceneObject, public NonCopyable
 {
 public:
 	SceneObjectC(
-		Renderer& renderer,
+		RendererBase& renderer,
 		Mesh* mesh,
 		Material* material,
 		const Matrix4& transform) noexcept;
@@ -42,7 +42,7 @@ public:
 
 private:
 	/// The renderer
-	Renderer& mRenderer;
+	RendererBase& mRenderer;
 
 	/// The mesh
 	Mesh* mMesh = nullptr;

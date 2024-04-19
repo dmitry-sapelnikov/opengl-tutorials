@@ -22,7 +22,7 @@ public:
 	static constexpr u32 MAX_VERTEX_COMPONENTS = (8 * sizeof(u64)) / COMPONENT_STRIDE;
 
 	///	Returns the number of float numbers in a vertex component
-	u32 getComponentSize(u32 index)
+	u32 getComponentSize(u32 index) const
 	{
 		GLTUT_ASSERT(index < MAX_VERTEX_COMPONENTS);
 		return (mFormat >> (index * COMPONENT_STRIDE)) & VERTEX_COMPONENT_MASK;
@@ -46,13 +46,13 @@ public:
 	}
 
 	///	Returns the size of a vertex component in bytes
-	u32 getComponentSizeInBytes(u32 index)
+	u32 getComponentSizeInBytes(u32 index) const
 	{
 		return getComponentSize(index) * sizeof(float);
 	}
 
 	///	Returns the total size of the vertex in float numbers
-	u32 getTotalSize()
+	u32 getTotalSize() const
 	{
 		u32 result = 0;
 		for (u32 i = 0; i < MAX_VERTEX_COMPONENTS; ++i)
@@ -63,7 +63,7 @@ public:
 	}
 
 	///	Returns the total size of the vertex in bytes
-	u32 getTotalSizeInBytes()
+	u32 getTotalSizeInBytes() const
 	{
 		return getTotalSize() * sizeof(float);
 	}

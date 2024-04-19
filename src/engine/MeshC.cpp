@@ -6,48 +6,36 @@ namespace gltut
 {
 //	Global classes
 MeshC::MeshC(
-	Renderer& renderer,
+	RendererBase& renderer,
 	VertexFormat vertexFormat,
-	float* vertices,
 	u32 vertexCount,
-	u32* indices,
-	u32 indexCount) :
+	float* vertexData,
+	u32 indexCount,
+	u32* indexData) :
 
-	mRenderer(renderer)
+	mRenderer(renderer),
+	mVertexFormat(vertexFormat)
 {
-	GLTUT_ASSERT(vertices != nullptr);
 	GLTUT_ASSERT(vertexCount > 0);
-	GLTUT_ASSERT(vertexCount % vertexFormat.getTotalSize() == 0);
-	mVertices.assign(vertices, vertices + vertexCount);
+	GLTUT_ASSERT(vertexData != nullptr);
+
+	mVertices.assign(vertexData, vertexData + vertexCount * vertexFormat.getTotalSize());
 
 	GLTUT_ASSERT(indices != nullptr);
 	GLTUT_ASSERT(indexCount > 0);
 	GLTUT_ASSERT(indexCount % 3 == 0);
-	mIndices.assign(indices, indices + indexCount);
+	mIndices.assign(indexData, indexData + indexCount);
 
-	mVBO = mRenderer.allocateVertexBuffer(
-		&mVertices[0],
-		static_cast<u32>(mVertices.size()));
-
-	mEBO = mRenderer.allocateIndexBuffer(
-		&mIndices[0],
-		static_cast<u32>(mIndices.size()));
-
-	mVAO = mRenderer.allocateVertexArray(vertexFormat, mVBO, mEBO);
+	mIndexInRenderer = mRenderer.addMesh(*this);
+	GLTUT_ASSERT(mIndexInRenderer != RendererBase::INVALID_MESH_INDEX);
 }
 
 MeshC::~MeshC()
 {
-	mRenderer.freeVertexArray(mVAO);
-	mRenderer.freeBuffer(mVBO);
-	mRenderer.freeBuffer(mEBO);
-}
-
-void MeshC::render() const noexcept
-{
-	mRenderer.setVertexArray(mVAO);
-	mRenderer.drawIndexedTriangles(static_cast<u32>(mIndices.size()));
-	mRenderer.setVertexArray(0);
+	if (mIndexInRenderer != RendererBase::INVALID_MESH_INDEX)
+	{
+		mRenderer.removeMesh(mIndexInRenderer);
+	}
 }
 
 // End of the namespace gltut
