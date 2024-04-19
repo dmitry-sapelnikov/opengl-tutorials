@@ -67,10 +67,10 @@ int main()
 		{
 			auto now = std::chrono::high_resolution_clock::now();
 			float time = std::chrono::duration<float>(now - start).count();
-			object->setTransform(gltut::Matrix4::transformMatrix(
-				{ 0.5f, 0.25f, 0.0f },
-				{ 0.0f, 0.0f, time },
-				{ 0.5f, 0.5f, 0.5 }));
+			object->setTransform(
+				gltut::Matrix4::rotationMatrix({ 0.0f, 0.0f, time }) *
+				gltut::Matrix4::translationMatrix({ 0.5f, 0.f, 0.f }) *
+				gltut::Matrix4::scaleMatrix({ 0.5f, 0.5f, 0.5 }));
 		}
 	}
 	catch (const std::exception& e)
