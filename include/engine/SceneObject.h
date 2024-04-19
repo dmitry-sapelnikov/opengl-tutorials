@@ -34,6 +34,12 @@ public:
 	/// Sets a material
 	virtual void setMaterial(Material* material) noexcept = 0;
 
+	/// Returns the name of the shader transform input
+	virtual const char* getShaderTransformInputName() const noexcept = 0;
+
+	/// Sets the name of the shader transform input
+	virtual void setShaderTransformInputName(const char* name) noexcept = 0;
+
 	/// Renders the object
 	virtual void render() const noexcept = 0;
 };

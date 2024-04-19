@@ -37,6 +37,12 @@ public:
 	/// Sets a material
 	void setMaterial(Material* material) noexcept final;
 
+	/// Returns the name of the shader transform input
+	virtual const char* getShaderTransformInputName() const noexcept final;
+
+	/// Sets the name of the shader transform input
+	virtual void setShaderTransformInputName(const char* name) noexcept final;
+
 	/// Renders the object
 	void render() const noexcept final;
 
@@ -49,6 +55,9 @@ private:
 
 	/// The material
 	Material* mMaterial = nullptr;
+
+	/// The shader transform input name
+	std::string mShaderTransformInputName = "transform";
 
 	/// The transform
 	Matrix4 mTransform = Matrix4::identity();
