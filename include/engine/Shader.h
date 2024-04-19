@@ -2,6 +2,7 @@
 #define OPENGL_TUTORIALS_SHADER_H
 
 // Includes
+#include "engine/core/Types.h"
 
 namespace gltut
 {
@@ -15,6 +16,9 @@ public:
 
 	/// Activates the shader
 	virtual void use() noexcept = 0;
+
+	/// Returns the location of a shader variable
+	virtual int32 getVariableLocation(const char* name) noexcept = 0;
 
 	/// Sets a boolean value to a shader variable
 	virtual void setBool(const char* name, bool value) noexcept = 0;
@@ -33,6 +37,9 @@ public:
 
 	/// Sets a 4D vector to a shader variable
 	virtual void setVec4(const char* name, float x, float y, float z, float w) noexcept = 0;
+
+	/// Sets a 4x4 matrix to a shader variable
+	virtual void setMat4(const char* name, const float* data) noexcept = 0;
 };
 
 // End of the namespace gltut

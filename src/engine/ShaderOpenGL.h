@@ -26,6 +26,9 @@ public:
 	/// Activates the shader
 	void use() noexcept final;
 
+	/// Returns the location of a shader variable
+	int32 getVariableLocation(const char* name) noexcept final;
+
 	/// Sets a boolean value to a shader variable
 	void setBool(const char* name, bool value) noexcept final;
 
@@ -44,7 +47,13 @@ public:
 	/// Sets a 4D vector to a shader variable
 	void setVec4(const char* name, float x, float y, float z, float w) noexcept final;
 
+	/// Sets a 4x4 matrix to a shader variable
+	void setMat4(const char* name, const float* data) noexcept final;
+
 private:
+	/// Gets the location of a shader variable with error checking
+	int getCheckedVariableLocation(const char* name) noexcept;
+
 	/// Shader program
 	unsigned mProgram = 0;
 };

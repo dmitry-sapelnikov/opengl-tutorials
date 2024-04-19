@@ -83,45 +83,53 @@ void ShaderOpenGL::use() noexcept
 	glUseProgram(mProgram);
 }
 
-void ShaderOpenGL::setBool(const char* name, bool value) noexcept
+int32 ShaderOpenGL::getVariableLocation(const char* name) noexcept
 {
 	GLTUT_ASSERT_STRING(name);
-	glUniform1i(glGetUniformLocation(mProgram, name), static_cast<int>(value));
+	use();
+	return glGetUniformLocation(mProgram, name);
+}
+
+void ShaderOpenGL::setBool(const char* name, bool value) noexcept
+{
+	glUniform1i(getCheckedVariableLocation(name), static_cast<int>(value));
 }
 
 void ShaderOpenGL::setInt(const char* name, int value) noexcept
 {
-	GLTUT_ASSERT_STRING(name);
-	use();
-	glUniform1i(glGetUniformLocation(mProgram, name), value);
+	glUniform1i(getCheckedVariableLocation(name), value);
 }
 
 void ShaderOpenGL::setFloat(const char* name, float value) noexcept
 {
-	GLTUT_ASSERT_STRING(name);
-	use();
-	glUniform1f(glGetUniformLocation(mProgram, name), value);
+	glUniform1f(getCheckedVariableLocation(name), value);
 }
 
 void ShaderOpenGL::setVec2(const char* name, float x, float y) noexcept
 {
-	GLTUT_ASSERT_STRING(name);
-	use();
-	glUniform2f(glGetUniformLocation(mProgram, name), x, y);
+	glUniform2f(getCheckedVariableLocation(name), x, y);
 }
 
 void ShaderOpenGL::setVec3(const char* name, float x, float y, float z) noexcept
 {
-	GLTUT_ASSERT_STRING(name);
-	use();
-	glUniform3f(glGetUniformLocation(mProgram, name), x, y, z);
+	glUniform3f(getCheckedVariableLocation(name), x, y, z);
 }
 
 void ShaderOpenGL::setVec4(const char* name, float x, float y, float z, float w) noexcept
 {
-	GLTUT_ASSERT_STRING(name);
-	use();
-	glUniform4f(glGetUniformLocation(mProgram, name), x, y, z, w);
+	glUniform4f(getCheckedVariableLocation(name), x, y, z, w);
+}
+
+void ShaderOpenGL::setMat4(const char* name, const float* data) noexcept
+{
+	glUniformMatrix4fv(getCheckedVariableLocation(name), 1, GL_FALSE, data);
+}
+
+int ShaderOpenGL::getCheckedVariableLocation(const char* name) noexcept
+{
+	const int location = getVariableLocation(name);
+	GLTUT_ASSERT(location != -1);
+	return location;
 }
 
 // End of the namespace gltut
