@@ -19,10 +19,10 @@ public:
 		float m20 = 0, float m21 = 0, float m22 = 0, float m23 = 0,
 		float m30 = 0, float m31 = 0, float m32 = 0, float m33 = 0) noexcept
 	{
-		m[0][0] = m00; m[0][1] = m01; m[0][2] = m02; m[0][3] = m03;
-		m[1][0] = m10; m[1][1] = m11; m[1][2] = m12; m[1][3] = m13;
-		m[2][0] = m20; m[2][1] = m21; m[2][2] = m22; m[2][3] = m23;
-		m[3][0] = m30; m[3][1] = m31; m[3][2] = m32; m[3][3] = m33;
+		m[0][0] = m00; m[1][0] = m01; m[2][0] = m02; m[3][0] = m03;
+		m[0][1] = m10; m[1][1] = m11; m[2][1] = m12; m[3][1] = m13;
+		m[0][2] = m20; m[1][2] = m21; m[2][2] = m22; m[3][2] = m23;
+		m[0][3] = m30; m[1][3] = m31; m[2][3] = m32; m[3][3] = m33;
 	}
 
 	// += operator
@@ -74,9 +74,9 @@ public:
 				float v = 0;
 				for (int k = 0; k < 4; k++)
 				{
-					v += m[i][k] * n.m[k][j];
+					v += m[k][i] * n.m[j][k];
 				}
-				result.m[i][j] = v;
+				result.m[j][i] = v;
 			}
 		}
 		return result;
@@ -86,11 +86,11 @@ public:
 	Vector3 operator*(const Vector3& v) const noexcept
 	{
 		Vector3 u(
-			m[0][0] * v.x + m[0][1] * v.y + m[0][2] * v.z + m[0][3],
-			m[1][0] * v.x + m[1][1] * v.y + m[1][2] * v.z + m[1][3],
-			m[2][0] * v.x + m[2][1] * v.y + m[2][2] * v.z + m[2][3]);
+			m[0][0] * v.x + m[1][0] * v.y + m[2][0] * v.z + m[3][0],
+			m[0][1] * v.x + m[1][1] * v.y + m[2][1] * v.z + m[3][1],
+			m[0][2] * v.x + m[1][2] * v.y + m[2][2] * v.z + m[3][2]);
 
-		float w = m[3][0] * v.x + m[3][1] * v.y + m[3][2] * v.z + m[3][3];
+		float w = m[0][3] * v.x + m[1][3] * v.y + m[2][3] * v.z + m[3][3];
 		return u / w;
 	}
 
@@ -117,10 +117,10 @@ public:
 	Matrix4 operator-() const noexcept
 	{
 		return {
-			-m[0][0], -m[0][1], -m[0][2], -m[0][3],
-			-m[1][0], -m[1][1], -m[1][2], -m[1][3],
-			-m[2][0], -m[2][1], -m[2][2], -m[2][3],
-			-m[3][0], -m[3][1], -m[3][2], -m[3][3] };
+			-m[0][0], -m[1][0], -m[2][0], -m[3][0],
+			-m[0][1], -m[1][1], -m[2][1], -m[3][1],
+			-m[0][2], -m[1][2], -m[2][2], -m[3][2],
+			-m[0][3], -m[1][3], -m[2][3], -m[3][3] };
 	}
 
 	/// Returns the transpose matrix
@@ -155,7 +155,7 @@ public:
 	float operator()(unsigned row, unsigned col) const noexcept
 	{
 		GLTUT_ASSERT(row < 4 && col < 4);
-		return m[row][col];
+		return m[col][row];
 	}
 
 	/// Returns the identity matrix
@@ -183,7 +183,7 @@ public:
 		unsigned height,
 		float fieldOfView) noexcept;
 private:
-	/// The matrix data
+	/// The matrix data in column-major order
 	float m[4][4];
 };
 
@@ -248,7 +248,7 @@ inline Matrix4 Matrix4::rotationMatrix(const Vector3& axisAngle) noexcept
 		1.f };
 }
 
-Matrix4 Matrix4::scaleMatrix(const Vector3& s) noexcept
+inline Matrix4 Matrix4::scaleMatrix(const Vector3& s) noexcept
 {
 	return {
 		s.x, 0.f, 0.f, 0.f,
@@ -257,7 +257,7 @@ Matrix4 Matrix4::scaleMatrix(const Vector3& s) noexcept
 		0.f, 0.f, 0.f, 1.f };
 }
 
-Matrix4 Matrix4::transformMatrix(
+inline Matrix4 Matrix4::transformMatrix(
 	const Vector3& position,
 	const Vector3& axisAngle,
 	const Vector3& scale) noexcept
