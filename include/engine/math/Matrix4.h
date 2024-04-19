@@ -85,7 +85,8 @@ public:
 	/// Matrix-vector multiplication operator
 	Vector3 operator*(const Vector3& v) const noexcept
 	{
-		Vector3 u(m[0][0] * v.x + m[0][1] * v.y + m[0][2] * v.z + m[0][3],
+		Vector3 u(
+			m[0][0] * v.x + m[0][1] * v.y + m[0][2] * v.z + m[0][3],
 			m[1][0] * v.x + m[1][1] * v.y + m[1][2] * v.z + m[1][3],
 			m[2][0] * v.x + m[2][1] * v.y + m[2][2] * v.z + m[2][3]);
 
@@ -110,19 +111,6 @@ public:
 	Matrix4 operator*(float f) const noexcept
 	{
 		return Matrix4(*this) *= f;
-	}
-
-	/// /= operator
-	Matrix4& operator/=(float f) noexcept
-	{
-		GLTUT_ASSERT(f > std::numeric_limits<float>::epsilon());
-		return operator*=(1.f / f);
-	}
-
-	/// /= operator
-	Matrix4 operator/(float f) const noexcept
-	{
-		return Matrix4(*this) /= f;
 	}
 
 	// - operator
@@ -177,7 +165,15 @@ public:
 	static Matrix4 translationMatrix(const Vector3& v) noexcept;
 
 	/// Returns a 4x4 rotation matrix
-	static Matrix4 rotationMatrix(const Vector3& axis, float angle) noexcept;
+	static Matrix4 rotationMatrix(const Vector3& axisAngle) noexcept;
+
+	/// Returns a 4x4 scale matrix
+	static Matrix4 scaleMatrix(const Vector3& s) noexcept;
+
+	static Matrix4 transformMatrix(
+		const Vector3& position,
+		const Vector3& axisAngle = { 0.0f, 0.0f, 0.0f },
+		const Vector3& scale = { 1.f, 1.f, 1.f }) noexcept;
 
 	/// Returns a 4x4 perspective projection matrix
 	static Matrix4 perspectiveProjectionMatrix(
@@ -186,7 +182,6 @@ public:
 		unsigned width,
 		unsigned height,
 		float fieldOfView) noexcept;
-
 private:
 	/// The matrix data
 	float m[4][4];
@@ -220,8 +215,15 @@ inline Matrix4 Matrix4::translationMatrix(const Vector3& v) noexcept
 }
 
 /// Returns a 4x4 rotation matrix
-inline Matrix4 Matrix4::rotationMatrix(const Vector3& axis, float angle) noexcept
+inline Matrix4 Matrix4::rotationMatrix(const Vector3& axisAngle) noexcept
 {
+	const float angle = axisAngle.length();
+	if (angle < std::numeric_limits<float>::epsilon())
+	{
+		return identity();
+	}
+	const Vector3 axis = axisAngle * (1.f / angle);
+
 	const float sinA = std::sin(angle);
 	const float cosA = std::cos(angle);
 	return {
@@ -244,6 +246,26 @@ inline Matrix4 Matrix4::rotationMatrix(const Vector3& axis, float angle) noexcep
 		0.f,
 		0.f,
 		1.f };
+}
+
+Matrix4 Matrix4::scaleMatrix(const Vector3& s) noexcept
+{
+	return {
+		s.x, 0.f, 0.f, 0.f,
+		0.f, s.y, 0.f, 0.f,
+		0.f, 0.f, s.z, 0.f,
+		0.f, 0.f, 0.f, 1.f };
+}
+
+Matrix4 Matrix4::transformMatrix(
+	const Vector3& position,
+	const Vector3& axisAngle,
+	const Vector3& scale) noexcept
+{
+	return
+		translationMatrix(position) *
+		rotationMatrix(axisAngle) *
+		scaleMatrix(scale);
 }
 
 /// Returns a 4x4 perspective projection matrix
