@@ -19,6 +19,7 @@
     <ClInclude Include="..\..\include\engine\math\Angles.h" />
     <ClInclude Include="..\..\include\engine\math\Constants.h" />
     <ClInclude Include="..\..\include\engine\math\Matrix4.h" />
+    <ClInclude Include="..\..\include\engine\math\Rng.h" />
     <ClInclude Include="..\..\include\engine\math\Vector3.h" />
     <ClInclude Include="..\..\include\engine\Mesh.h" />
     <ClInclude Include="..\..\include\engine\MeshCreation.h" />
