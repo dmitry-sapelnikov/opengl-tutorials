@@ -15,7 +15,7 @@ int main()
 		engine = gltut::createEngine(1024, 768);
 		GLTUT_CHECK(engine != nullptr, "Failed to create engine")
 
-		engine->getWindow()->setTitle("Textures");
+		engine->getWindow()->setTitle("Transformations");
 		engine->getWindow()->showFPS(true);
 
 		float vertices[] = {
