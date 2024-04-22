@@ -55,6 +55,9 @@ RendererOpenGL::RendererOpenGL()
 	GLint currentProgram = 0;
 	glGetIntegerv(GL_CURRENT_PROGRAM, &currentProgram);
 	GLTUT_ASSERT(currentProgram == 0);
+
+	// Enable depth testing
+	glEnable(GL_DEPTH_TEST);
 }
 
 void RendererOpenGL::setClearColor(float r, float g, float b, float a) noexcept
@@ -64,7 +67,7 @@ void RendererOpenGL::setClearColor(float r, float g, float b, float a) noexcept
 
 void RendererOpenGL::clear() noexcept
 {
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 u32 RendererOpenGL::addMesh(const Mesh& mesh) noexcept
