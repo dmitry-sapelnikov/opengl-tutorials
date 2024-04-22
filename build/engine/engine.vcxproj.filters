@@ -104,6 +104,9 @@
     <ClInclude Include="..\..\src\engine\SceneObjectC.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\engine\MeshCreation.h">
+      <Filter>include</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\engine\math\Angles.h">
       <Filter>include\math</Filter>
     </ClInclude>
@@ -146,6 +149,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\engine\SceneObjectC.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\MeshCreation.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
