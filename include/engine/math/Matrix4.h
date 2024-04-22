@@ -2,7 +2,7 @@
 #define OPENGL_TUTORIALS_MATRIX4_H
 
 // Includes
-#include "Constants.h"
+#include "Angles.h"
 #include "Vector3.h"
 
 namespace gltut
@@ -274,12 +274,12 @@ inline Matrix4 Matrix4::perspectiveProjectionMatrix(
 	float farDistance,
 	unsigned width,
 	unsigned height,
-	float fieldOfView) noexcept
+	float fieldOfViewDegrees) noexcept
 {
 	// Compute the aspect ratio
 	float aspect = float(width) / float(height);
 
-	const float top = nearDistance * std::tan((fieldOfView / 2.f) * (PI / 180.f));
+	const float top = nearDistance * std::tan(toRadians(fieldOfViewDegrees / 2.f));
 	const float bottom = -top;
 	const float left = bottom * aspect;
 	const float right = top * aspect;
