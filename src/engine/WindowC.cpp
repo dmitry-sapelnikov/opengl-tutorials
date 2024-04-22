@@ -88,6 +88,17 @@ void WindowC::enableVSync(bool vSync) noexcept
 	glfwSwapInterval(vSync ? 1 : 0);
 }
 
+void WindowC::getSize(u32& width, u32& height) const noexcept
+{
+	int intWidth = 0;
+	int intHeight = 0;
+	glfwGetFramebufferSize(mWindow, &intWidth, &intHeight);
+	GLTUT_ASSERT(intWidth > 0);
+	GLTUT_ASSERT(intHeight > 0);
+	width = static_cast<u32>(intWidth);
+	height = static_cast<u32>(intHeight);
+}
+
 bool WindowC::shouldClose() const noexcept
 {
 	return glfwWindowShouldClose(mWindow) != 0;

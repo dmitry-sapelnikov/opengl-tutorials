@@ -38,6 +38,9 @@ public:
 	/// Enables or disables vertical synchronization
 	void enableVSync(bool vSync) noexcept final;
 
+	/// Returns the size of the window in pixels
+	void getSize(u32& width, u32& height) const noexcept final;
+
 	///	Updates the window
 	void update() noexcept;
 
