@@ -29,7 +29,11 @@ const char* FRAGMENT_SHADER_SOURCE_CODE =
 namespace gltut
 {
 
-SceneC::SceneC(RendererBase& renderer) :
+SceneC::SceneC(
+	WindowC& window,
+	RendererBase& renderer) :
+
+	mWindow(window),
 	mRenderer(renderer)
 {
 	// Set the background color
@@ -73,15 +77,81 @@ SceneObject* SceneC::createObject(
 	const Matrix4& transform) noexcept
 {
 	GLTUT_CATCH_ALL_BEGIN
-	return &mObjects.emplace_back(mRenderer, mesh, material, transform);
+		return &mObjects.emplace_back(mRenderer, mesh, material, transform);
 	GLTUT_CATCH_ALL_END("Cannot create a scene object")
 	return nullptr;
+}
+
+Camera* SceneC::createCamera(
+	const Vector3& position,
+	const Vector3& target,
+	const Vector3& up,
+	float fovDegrees,
+	float nearPlane,
+	float farPlan,
+	const float* aspectRatio) noexcept
+{
+	GLTUT_CATCH_ALL_BEGIN
+		auto* camera = &mCameras.emplace_back(
+			mWindow,
+			position,
+			target,
+			up,
+			fovDegrees,
+			nearPlane,
+			farPlan,
+			aspectRatio);
+
+		if (mActiveCamera == nullptr)
+		{
+			mActiveCamera = camera;
+		}
+		return camera;
+	GLTUT_CATCH_ALL_END("Cannot create a camera")
+
+	return nullptr;
+}
+
+Camera* SceneC::getActiveCamera() const noexcept
+{
+	return mActiveCamera;
+}
+
+void SceneC::setActiveCamera(Camera* camera) noexcept
+{
+	mActiveCamera = camera;
 }
 
 void SceneC::render() noexcept
 {
 	for (const auto& object : mObjects)
 	{
+		if (mActiveCamera != nullptr)
+		{
+			auto* shader = object.getMaterial() != nullptr ?
+				object.getMaterial()->getShader() :
+				nullptr;
+
+			if (shader != nullptr)
+			{
+				const auto& viewMatrix = mActiveCamera->getView().getMatrix();
+				const auto& projectionMatrix = mActiveCamera->getProjection().getMatrix();
+
+				if (shader->getViewMatrixName() != nullptr)
+				{
+					shader->setMat4(
+						shader->getViewMatrixName(),
+						viewMatrix.data());
+				}
+
+				if (shader->getProjectionMatrixName() != nullptr)
+				{
+					shader->setMat4(
+						shader->getProjectionMatrixName(),
+						projectionMatrix.data());
+				}
+			}
+		}
 		object.render();
 	}
 }

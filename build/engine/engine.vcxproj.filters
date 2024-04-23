@@ -113,6 +113,18 @@
     <ClInclude Include="..\..\include\engine\math\Rng.h">
       <Filter>include\math</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\engine\Camera.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\CameraC.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\ShaderC.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\WindowResizeCallback.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\engine\MeshC.cpp">
@@ -155,6 +167,12 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\engine\MeshCreation.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\CameraC.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\ShaderC.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

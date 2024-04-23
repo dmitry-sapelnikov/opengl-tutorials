@@ -9,6 +9,7 @@
 #include "MaterialC.h"
 #include "MeshC.h"
 #include "SceneObjectC.h"
+#include "CameraC.h"
 
 namespace gltut
 {
@@ -17,7 +18,9 @@ namespace gltut
 class SceneC final : public Scene, public NonCopyable
 {
 public:
-	SceneC(RendererBase& renderer);
+	SceneC(
+		WindowC& window,
+		RendererBase& renderer);
 
 	Material* createMaterial(Shader* shader) noexcept final;
 
@@ -33,9 +36,25 @@ public:
 		Material* material,
 		const Matrix4& transform = Matrix4::identity()) noexcept final;
 
+	Camera* createCamera(
+		const Vector3& position,
+		const Vector3& target,
+		const Vector3& up,
+		float fovDegrees,
+		float nearPlane,
+		float farPlane,
+		const float* aspectRatio = nullptr) noexcept final;
+
+	Camera* getActiveCamera() const noexcept final;
+
+	void setActiveCamera(Camera* camera) noexcept final;
+
 	void render() noexcept final;
 
 private:
+	/// The window
+	WindowC& mWindow;
+
 	/// The renderer
 	RendererBase& mRenderer;
 
@@ -47,6 +66,12 @@ private:
 
 	/// The scene objects
 	std::deque<SceneObjectC> mObjects;
+
+	///	The cameras
+	std::deque<CameraC> mCameras;
+
+	/// The active camera
+	Camera* mActiveCamera = nullptr;
 };
 
 // End of the namespace gltut
