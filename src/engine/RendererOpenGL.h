@@ -2,11 +2,11 @@
 #define OPENGL_TUTORIALS_RENDERER_OPEN_GL_H
 
 // Includes
-#include "engine/core/NonCopyable.h"
-#include "RendererBase.h"
 #include <vector>
 #include <memory>
 #include <glad/glad.h>
+
+#include "RendererBase.h"
 
 namespace gltut
 {
@@ -54,6 +54,9 @@ public:
 
 	/// Removes a texture
 	void removeTexture(Texture* texture) noexcept final;
+
+	/// Called when the window is resized
+	void onResize(u32 width, u32 height) noexcept final;
 
 private:
 	struct MeshBuffers

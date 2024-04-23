@@ -8,6 +8,7 @@
 #include "engine/core/NonCopyable.h"
 #include "engine/Window.h"
 #include "FPSCounter.h"
+#include "WindowResizeCallback.h"
 
 struct GLFWwindow;
 class FPSCounter;
@@ -15,16 +16,11 @@ class FPSCounter;
 namespace gltut
 {
 
+/// Implementation of the Window class
 class WindowC final : public Window, public NonCopyable
 {
 public:
-	///	Resize callback
-	using ResizeCallback = std::function<void(u32, u32)>;
-
-	WindowC(
-		u32 width,
-		u32 height,
-		ResizeCallback resizeCallback);
+	WindowC(u32 width, u32 height);
 
 	/// Virtual destructor
 	~WindowC() noexcept final;
@@ -47,6 +43,12 @@ public:
 	/// Returns if the window should close
 	bool shouldClose() const noexcept;
 
+	/// Adds a resize callback
+	void addResizeCallback(WindowResizeCallback* callback) noexcept;
+
+	/// Removes a resize callback. Does nothing if the callback is not found
+	void removeResizeCallback(WindowResizeCallback* callback) noexcept;
+
 private:
 	/// The callback function for the window resize event
 	friend void framebufferSizeCallback(
@@ -60,8 +62,8 @@ private:
 	/// The window title
 	std::string mTitle;
 
-	/// The resize callback
-	ResizeCallback mResizeCallback;
+	/// Resize callbacks
+	std::vector<WindowResizeCallback*> mResizeCallbacks;
 
 	/// FPS counter
 	std::unique_ptr<FPSCounter> mFPSCounter;

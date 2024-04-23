@@ -4,12 +4,13 @@
 // Includes
 #include "engine/core/NonCopyable.h"
 #include "engine/Renderer.h"
+#include "WindowResizeCallback.h"
 
 namespace gltut
 {
 
 /// Renderer base class
-class RendererBase : public Renderer, public NonCopyable
+class RendererBase : public Renderer, public WindowResizeCallback, public NonCopyable
 {
 public:
 	/// Invalid mesh index
@@ -26,6 +27,9 @@ public:
 
 	/// Renders a mesh
 	virtual void renderMesh(u32 index) const noexcept = 0;
+	
+	/// Resize callback
+	void onResize(u32, u32) noexcept override;
 };
 
 // End of the namespace gltut

@@ -273,5 +273,11 @@ void RendererOpenGL::removeTexture(Texture* texture) noexcept
 	removeElement(mTextures, texture, "Texture");
 }
 
+void RendererOpenGL::onResize(u32 width, u32 height) noexcept
+{
+	glViewport(0, 0, width, height);
+	RendererBase::onResize(width, height);
+}
+
 // End of the namespace gltut
 }

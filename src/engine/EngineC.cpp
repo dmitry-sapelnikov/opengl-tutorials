@@ -21,21 +21,17 @@ EngineC::EngineC(u32 windowWidth, u32 windowHeight)
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-
-	auto resizeCallback = [this](u32 width, u32 height)
-	{
-		glViewport(0, 0, width, height);
-		mRenderer->clear();
-		mScene->render();
-	};
-
 	mWindow = std::make_unique<WindowC>(
 		windowWidth,
-		windowHeight,
-		resizeCallback);
+		windowHeight);
 
 	auto renderer = std::make_unique<RendererOpenGL>();
-	mScene = std::make_unique<SceneC>(*renderer);
+
+	//	First add the renderer as a resize callback, then add the engine
+	mWindow->addResizeCallback(renderer.get());
+	mWindow->addResizeCallback(this);
+
+	mScene = std::make_unique<SceneC>(*mWindow , *renderer);
 	mRenderer = std::move(renderer);
 }
 
@@ -68,6 +64,11 @@ Renderer* EngineC::getRenderer() noexcept
 Scene* EngineC::getScene() noexcept
 {
 	return mScene.get();
+}
+
+void EngineC::onResize(u32 width, u32 height) noexcept
+{
+	mScene->render();
 }
 
 // Global functions

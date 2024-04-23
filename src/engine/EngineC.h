@@ -6,15 +6,12 @@
 #include "engine/core/NonCopyable.h"
 #include "engine/Engine.h"
 #include "engine/Renderer.h"
-
+#include "WindowC.h"
 
 namespace gltut
 {
-// Global classes
-class WindowC;
-
 /// Implementation of the Engine class
-class EngineC final : public Engine, public NonCopyable
+class EngineC final : public Engine, public WindowResizeCallback, public NonCopyable
 {
 public:
 	/// Constructor
@@ -27,13 +24,16 @@ public:
 	bool update() noexcept final;
 
 	///	Returns the window
-	virtual Window* getWindow() noexcept final;
+	Window* getWindow() noexcept final;
 
 	/// Returns the renderer
-	virtual Renderer* getRenderer() noexcept final;
+	Renderer* getRenderer() noexcept final;
 
 	/// Returns the scene
-	virtual Scene* getScene() noexcept final;
+	Scene* getScene() noexcept final;
+
+	/// Called when the window is resized
+	void onResize(u32 width, u32 height) noexcept final;
 
 private:
 	/// The window

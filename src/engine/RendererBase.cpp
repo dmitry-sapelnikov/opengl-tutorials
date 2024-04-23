@@ -23,5 +23,10 @@ Texture* RendererBase::loadTexture(const char* imagePath) noexcept
 	return result;
 }
 
+void RendererBase::onResize(u32, u32) noexcept
+{
+	clear();
+}
+
 // End of the namespace gltut
 }

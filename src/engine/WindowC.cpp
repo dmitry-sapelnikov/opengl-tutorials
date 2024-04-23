@@ -17,11 +17,14 @@ static void framebufferSizeCallback(
 	WindowC* engineWindow = static_cast<WindowC*>(
 		glfwGetWindowUserPointer(window));
 
+	u32 uWidth = static_cast<u32>(width);
+	u32 uHeight = static_cast<u32>(height);
 	if (engineWindow)
 	{
-		engineWindow->mResizeCallback(
-			static_cast<u32>(width),
-			static_cast<u32>(height));
+		for (auto callback : engineWindow->mResizeCallbacks)
+		{
+			callback->onResize(uWidth, uHeight);
+		}
 		engineWindow->update();
 	}
 }
@@ -29,10 +32,7 @@ static void framebufferSizeCallback(
 // Global classes
 WindowC::WindowC(
 	u32 width,
-	u32 height,
-	ResizeCallback resizeCallback) :
-
-	mResizeCallback(resizeCallback)
+	u32 height)
 {
 	GLTUT_CHECK(width > 0, "Window width must be greater than 0");
 	GLTUT_CHECK(height > 0, "Window height must be greater than 0");
@@ -102,6 +102,32 @@ void WindowC::getSize(u32& width, u32& height) const noexcept
 bool WindowC::shouldClose() const noexcept
 {
 	return glfwWindowShouldClose(mWindow) != 0;
+}
+
+void WindowC::addResizeCallback(WindowResizeCallback* callback) noexcept
+{
+	GLTUT_ASSERT(callback != nullptr);
+	GLTUT_ASSERT(std::find(
+		mResizeCallbacks.begin(),
+		mResizeCallbacks.end(),
+		callback) == mResizeCallbacks.end());
+
+	GLTUT_CATCH_ALL_BEGIN
+		mResizeCallbacks.push_back(callback);
+	GLTUT_CATCH_ALL_END("Failed to add a resize callback")
+}
+
+void WindowC::removeResizeCallback(WindowResizeCallback* callback) noexcept
+{
+	auto findResult = std::find(
+		mResizeCallbacks.begin(),
+		mResizeCallbacks.end(),
+		callback);
+
+	if (findResult != mResizeCallbacks.end())
+	{
+		mResizeCallbacks.erase(findResult);
+	}
 }
 
 void WindowC::update() noexcept
