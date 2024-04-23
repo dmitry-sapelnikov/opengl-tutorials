@@ -29,9 +29,9 @@ public:
 	virtual Mesh* createMesh(
 		VertexFormat vertexFormat,
 		u32 vertexCount,
-		float* vertexData,
+		const float* vertexData,
 		u32 indexCount,
-		u32* indexData) noexcept = 0;
+		const u32* indexData) noexcept = 0;
 
 	/// Creates a scene object
 	virtual SceneObject* createObject(

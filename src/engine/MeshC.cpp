@@ -9,9 +9,9 @@ MeshC::MeshC(
 	RendererBase& renderer,
 	VertexFormat vertexFormat,
 	u32 vertexCount,
-	float* vertexData,
+	const float* vertexData,
 	u32 indexCount,
-	u32* indexData) :
+	const u32* indexData) :
 
 	mRenderer(renderer),
 	mVertexFormat(vertexFormat)

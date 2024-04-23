@@ -24,9 +24,9 @@ public:
 	Mesh* createMesh(
 		VertexFormat vertexFormat,
 		u32 vertexCount,
-		float* vertexData,
+		const float* vertexData,
 		u32 indexCount,
-		u32* indexData) noexcept final;
+		const u32* indexData) noexcept final;
 
 	SceneObject* createObject(
 		Mesh* mesh,

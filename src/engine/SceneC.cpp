@@ -47,9 +47,9 @@ Material* SceneC::createMaterial(Shader* shader) noexcept
 Mesh* SceneC::createMesh(
 	VertexFormat vertexFormat,
 	u32 vertexCount,
-	float* vertexData,
+	const float* vertexData,
 	u32 indexCount,
-	u32* indexData) noexcept
+	const u32* indexData) noexcept
 {
 	try
 	{
