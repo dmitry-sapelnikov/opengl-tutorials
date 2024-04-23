@@ -128,9 +128,17 @@ struct Vector3
 		return *this / length();
 	}
 
+	/// Returns if the vector is exactly zero
 	bool isZero() const
 	{
 		return (x == 0.f && y == 0.f && z == 0.f);
+	}
+
+	/// Returns if the vector's length <= FLOAT_EPSILON
+	bool isNearZero() const
+	{
+		constexpr float esp = std::numeric_limits<float>::epsilon();
+		return lengthSquared() <= esp * esp;
 	}
 
 	/// Returns the squared length of the vector
