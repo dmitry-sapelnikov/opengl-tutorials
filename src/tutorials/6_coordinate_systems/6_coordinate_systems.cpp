@@ -35,6 +35,7 @@ int main()
 		GLTUT_CHECK(shader != 0, "Failed to create shader program")
 		shader->setInt("texture1", 0);
 		shader->setInt("texture2", 1);
+		shader->setModelMatrixName("model");
 
 		gltut::Texture* texture1 = engine->getRenderer()->loadTexture("assets/container.jpg");
 		GLTUT_CHECK(texture1 != nullptr, "Failed to load texture")

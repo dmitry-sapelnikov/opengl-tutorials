@@ -46,6 +46,7 @@ int main()
 			"assets/shader.fs");
 
 		GLTUT_CHECK(shader != 0, "Failed to create shader program")
+		shader->setModelMatrixName("model");
 		shader->setInt("texture1", 0);
 		shader->setInt("texture2", 1);
 

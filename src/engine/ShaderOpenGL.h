@@ -3,13 +3,12 @@
 
 // Includes
 #include <string>
-#include "engine/Shader.h"
-#include "engine/core/NonCopyable.h"
+#include "ShaderC.h"
 
 namespace gltut
 {
 
-class ShaderOpenGL final : public Shader, public NonCopyable
+class ShaderOpenGL final : public ShaderC
 {
 public:
 	/**

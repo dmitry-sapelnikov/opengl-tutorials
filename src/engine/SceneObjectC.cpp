@@ -47,26 +47,16 @@ void SceneObjectC::setMaterial(Material* material) noexcept
 	mMaterial = material;
 }
 
-const char* SceneObjectC::getShaderTransformInputName() const noexcept
-{
-	return mShaderTransformInputName.c_str();
-}
-
-void SceneObjectC::setShaderTransformInputName(const char* name) noexcept
-{
-	mShaderTransformInputName = name;
-}
-
 void SceneObjectC::render() const noexcept
 {
 	if (mMaterial != nullptr)
 	{
 		mMaterial->use();
-		if (mMaterial->getShader() != nullptr &&
-			!mShaderTransformInputName.empty())
+		auto* shader = mMaterial->getShader();
+		if (shader != nullptr && shader->getModelMatrixName() != nullptr)
 		{
 			mMaterial->getShader()->setMat4(
-				mShaderTransformInputName.c_str(),
+				shader->getModelMatrixName(),
 				mTransform.data());
 		}
 	}
