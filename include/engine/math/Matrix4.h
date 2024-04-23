@@ -175,6 +175,12 @@ public:
 		const Vector3& axisAngle = { 0.0f, 0.0f, 0.0f },
 		const Vector3& scale = { 1.f, 1.f, 1.f }) noexcept;
 
+	/// Returns a 4x4 look-at matrix
+	static Matrix4 lookAtMatrix(
+		const Vector3& position,
+		const Vector3& target,
+		const Vector3& up) noexcept;
+
 	/// Returns a 4x4 perspective projection matrix
 	static Matrix4 perspectiveProjectionMatrix(
 		float fieldOfViewDegrees,
@@ -268,7 +274,22 @@ inline Matrix4 Matrix4::transformMatrix(
 		scaleMatrix(scale);
 }
 
-/// Returns a 4x4 perspective projection matrix
+inline Matrix4 Matrix4::lookAtMatrix(
+	const Vector3& position,
+	const Vector3& target,
+	const Vector3& up) noexcept
+{
+	const Vector3 zAxis = (position - target).normalize();
+	const Vector3 xAxis = up.cross(zAxis).normalize();
+	const Vector3 yAxis = zAxis.cross(xAxis);
+
+	return {
+		xAxis.x, yAxis.x, zAxis.x, position.x,
+		xAxis.y, yAxis.y, zAxis.y, position.y,
+		xAxis.z, yAxis.z, zAxis.z, position.z,
+		0.f, 0.f, 0.f, 1.f };
+}
+
 inline Matrix4 Matrix4::perspectiveProjectionMatrix(
 	float fieldOfViewDegrees,
 	float aspectRatio,
