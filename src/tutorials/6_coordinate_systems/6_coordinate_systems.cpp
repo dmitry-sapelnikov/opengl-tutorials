@@ -69,11 +69,10 @@ int main()
 		{
 			engine->getWindow()->getSize(windowWidth, windowHeight);
 			const gltut::Matrix4 projection = gltut::Matrix4::perspectiveProjectionMatrix(
+				45.0f,
+				static_cast<float>(windowWidth) / static_cast<float>(windowHeight),
 				0.1f,
-				100.0f,
-				windowWidth,
-				windowHeight,
-				45.0f);
+				100.0f);
 			shader->setMat4("projection", projection.data());
 
 			auto now = std::chrono::high_resolution_clock::now();

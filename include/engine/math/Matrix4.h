@@ -177,11 +177,11 @@ public:
 
 	/// Returns a 4x4 perspective projection matrix
 	static Matrix4 perspectiveProjectionMatrix(
-		float near,
-		float far,
-		unsigned width,
-		unsigned height,
-		float fieldOfView) noexcept;
+		float fieldOfViewDegrees,
+		float aspectRatio,
+		float nearDistance,
+		float farDistance) noexcept;
+
 private:
 	/// The matrix data in column-major order
 	float m[4][4];
@@ -270,19 +270,20 @@ inline Matrix4 Matrix4::transformMatrix(
 
 /// Returns a 4x4 perspective projection matrix
 inline Matrix4 Matrix4::perspectiveProjectionMatrix(
+	float fieldOfViewDegrees,
+	float aspectRatio,
 	float nearDistance,
-	float farDistance,
-	unsigned width,
-	unsigned height,
-	float fieldOfViewDegrees) noexcept
+	float farDistance) noexcept
 {
-	// Compute the aspect ratio
-	float aspect = float(width) / float(height);
+	GLTUT_ASSERT(fieldOfViewDegrees > FLOAT_EPSILON);
+	GLTUT_ASSERT(aspectRatio > FLOAT_EPSILON);
+	GLTUT_ASSERT(nearDistance > FLOAT_EPSILON);
+	GLTUT_ASSERT(farDistance > nearDistance);
 
 	const float top = nearDistance * std::tan(toRadians(fieldOfViewDegrees / 2.f));
 	const float bottom = -top;
-	const float left = bottom * aspect;
-	const float right = top * aspect;
+	const float left = bottom * aspectRatio;
+	const float right = top * aspectRatio;
 
 	const float fx = 2.f * nearDistance / (right - left);
 	const float fy = 2.f * nearDistance / (top - bottom);
