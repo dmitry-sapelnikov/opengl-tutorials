@@ -15,7 +15,7 @@ class RendererOpenGL final : public RendererBase
 {
 public:
 	/// Constructor
-	RendererOpenGL();
+	RendererOpenGL(void* deviceContext);
 
 	/// Sets the clear color
 	void setClearColor(float r, float g, float b, float a) noexcept final;
@@ -54,6 +54,9 @@ public:
 
 	/// Removes a texture
 	void removeTexture(Texture* texture) noexcept final;
+
+	/// Enables or disables vertical synchronization
+	void enableVSync(bool vSync) noexcept final;
 
 	/// Called when the window is resized
 	void onResize(u32 width, u32 height) noexcept final;
@@ -121,6 +124,9 @@ private:
 		VertexFormat vertexFormat,
 		GLuint vertexBuffer,
 		GLuint indexBuffer) noexcept;
+
+	///	The window
+	void* mDeviceContext;
 
 	/// Shaders
 	std::vector<std::unique_ptr<Shader>> mShaders;

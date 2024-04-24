@@ -2,7 +2,9 @@
 #include "RendererOpenGL.h"
 
 #include <iostream>
-#include <GLFW/glfw3.h>
+#undef APIENTRY
+#include <Windows.h>
+
 #include "engine/core/Check.h"
 #include "engine/VertexFormat.h"
 #include "ShaderOpenGL.h"
@@ -10,9 +12,12 @@
 #include "stb_image.h"
 #include "File.h"
 
-
 namespace gltut
 {
+
+// Define the function pointer type
+typedef BOOL(WINAPI* PFNWGLSWAPINTERVALEXTPROC)(int interval);
+
 // Local functions
 template <typename T>
 void removeElement(
@@ -44,11 +49,31 @@ void removeElement(
 }
 
 // Global classes
-RendererOpenGL::RendererOpenGL()
+RendererOpenGL::RendererOpenGL(void* deviceContext) :
+	mDeviceContext(deviceContext)
 {
-	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+	GLTUT_CHECK(mDeviceContext != nullptr, "Device context is null")
+
+	HDC hdc = static_cast<HDC>(mDeviceContext);
+
+	PIXELFORMATDESCRIPTOR pfd = {};
+	pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
+	pfd.nVersion = 1;
+	pfd.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;
+	pfd.iPixelType = PFD_TYPE_RGBA;
+	pfd.cColorBits = 32;
+	int pixelFormat = ChoosePixelFormat(hdc, &pfd);
+	
+	GLTUT_CHECK(SetPixelFormat(hdc, pixelFormat, &pfd), "Failed to set the pixel format");
+
+	HGLRC hglrc = wglCreateContext(hdc);
+	GLTUT_CHECK(hglrc != nullptr, "Failed to create the OpenGL context");
+	GLTUT_CHECK(wglMakeCurrent(hdc, hglrc), "Failed to make the OpenGL context current");
+
+	// Load GLAD
+	if (!gladLoadGL())
 	{
-		throw std::runtime_error("Failed to initialize GLAD");
+		GLTUT_CHECK(false, "Failed to load GLAD");
 	}
 
 	//	Check that the current shader program is 0
@@ -58,6 +83,9 @@ RendererOpenGL::RendererOpenGL()
 
 	// Enable depth testing
 	glEnable(GL_DEPTH_TEST);
+
+	// Disable VSync
+	enableVSync(false);
 }
 
 void RendererOpenGL::setClearColor(float r, float g, float b, float a) noexcept
@@ -277,6 +305,14 @@ void RendererOpenGL::onResize(u32 width, u32 height) noexcept
 {
 	glViewport(0, 0, width, height);
 	RendererBase::onResize(width, height);
+}
+
+void RendererOpenGL::enableVSync(bool vSync) noexcept
+{
+	PFNWGLSWAPINTERVALEXTPROC wglSwapIntervalEXT =
+		(PFNWGLSWAPINTERVALEXTPROC)wglGetProcAddress("wglSwapIntervalEXT");
+	GLTUT_ASSERT(wglSwapIntervalEXT != nullptr);
+	wglSwapIntervalEXT(vSync ? 1 : 0);
 }
 
 // End of the namespace gltut

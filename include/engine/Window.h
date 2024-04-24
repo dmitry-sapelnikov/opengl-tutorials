@@ -19,9 +19,6 @@ public:
 	/// Shows frames per second (FPS) in the window title
 	virtual void showFPS(bool show) noexcept = 0;
 
-	/// Enables or disables the vertical synchronization
-	virtual void enableVSync(bool vSync) noexcept = 0;
-
 	/// Returns the size of the window in pixels
 	virtual void getSize(u32& width, u32& height) const noexcept = 0;
 };
