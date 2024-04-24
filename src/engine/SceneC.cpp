@@ -30,7 +30,7 @@ namespace gltut
 {
 
 SceneC::SceneC(
-	WindowC& window,
+	Window& window,
 	RendererBase& renderer) :
 
 	mWindow(window),

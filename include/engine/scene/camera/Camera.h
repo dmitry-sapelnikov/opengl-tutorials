@@ -3,6 +3,7 @@
 
 // Includes
 #include "engine/math/Matrix4.h"
+#include "engine/Window.h"
 
 namespace gltut
 {
@@ -42,6 +43,9 @@ class CameraProjection
 public:
 	/// Virtual destructor
 	virtual ~CameraProjection() noexcept = default;
+
+	/// Returns the window associated with the camera
+	virtual Window* getWindow() const noexcept = 0;
 
 	/// Returns the projection matrix
 	virtual const Matrix4& getMatrix() const noexcept = 0;

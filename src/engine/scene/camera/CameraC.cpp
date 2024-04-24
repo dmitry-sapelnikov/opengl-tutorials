@@ -24,7 +24,7 @@ void CameraViewC::update() noexcept
 }
 
 CameraProjectionC::CameraProjectionC(
-	WindowC& window,
+	Window& window,
 	float fov,
 	float nearPlane,
 	float farPlane,

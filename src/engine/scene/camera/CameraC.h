@@ -5,8 +5,7 @@
 #include <optional>
 #include "engine/core/Check.h"
 #include "engine/core/NonCopyable.h"
-#include "engine/Camera.h"
-#include "WindowC.h"
+#include "engine/scene/camera/Camera.h"
 
 namespace gltut
 {
@@ -89,13 +88,19 @@ class CameraProjectionC : public CameraProjection, public EventHandler, public N
 public:
 	/// Constructor
 	CameraProjectionC(
-		WindowC& window,
+		Window& window,
 		float fov,
 		float nearPlane,
 		float farPlane,
 		const float* aspectRatio);
 
 	~CameraProjectionC() noexcept final;
+
+	///	Returns the window associated with the camera
+	Window* getWindow() const noexcept final
+	{
+		return &mWindow;
+	}
 
 	/// Returns the projection matrix
 	const Matrix4& getMatrix() const noexcept final
@@ -171,7 +176,7 @@ private:
 	void update() noexcept;
 
 	/// The window
-	WindowC& mWindow;
+	Window& mWindow;
 
 	/// The field of view, in degrees
 	float mFov;
@@ -195,7 +200,7 @@ class CameraC : public Camera, public NonCopyable
 public:
 	/// Constructor
 	CameraC(
-		WindowC& window,
+		Window& window,
 		const Vector3& position,
 		const Vector3& target,
 		const Vector3& up,
