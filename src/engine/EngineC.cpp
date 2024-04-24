@@ -6,30 +6,22 @@
 #include "RendererOpenGL.h"
 #include <stdexcept>
 #include <iostream>
-#include <GLFW/glfw3.h>
 
 namespace gltut
 {
 // Global classes
 EngineC::EngineC(u32 windowWidth, u32 windowHeight)
 {
-	if (glfwInit() != GLFW_TRUE)
-	{
-		throw std::runtime_error("Failed to initialize GLFW");
-	}
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
 	mWindow = std::make_unique<WindowC>(
 		windowWidth,
 		windowHeight);
 
-	auto renderer = std::make_unique<RendererOpenGL>();
+	auto renderer = std::make_unique<RendererOpenGL>(
+		mWindow->getDeviceContext());
 
-	//	First add the renderer as a resize callback, then add the engine
-	mWindow->addResizeCallback(renderer.get());
-	mWindow->addResizeCallback(this);
+	//	First add the renderer as a handler, then the engine
+	mWindow->addEventHandler(renderer.get());
+	mWindow->addEventHandler(this);
 
 	mScene = std::make_unique<SceneC>(*mWindow , *renderer);
 	mRenderer = std::move(renderer);
@@ -37,18 +29,17 @@ EngineC::EngineC(u32 windowWidth, u32 windowHeight)
 
 EngineC::~EngineC() noexcept
 {
-	mScene.reset();
-	mRenderer.reset();
-	mWindow.reset();
-	glfwTerminate();
 }
 
 bool EngineC::update() noexcept
 {
-	mWindow->update();
+	if (!mWindow->update())
+	{
+		return false;
+	}
 	mRenderer->clear();
 	mScene->render();
-	return !mWindow->shouldClose();
+	return true;
 }
 
 Window* EngineC::getWindow() noexcept
@@ -66,9 +57,12 @@ Scene* EngineC::getScene() noexcept
 	return mScene.get();
 }
 
-void EngineC::onResize(u32 width, u32 height) noexcept
+void EngineC::onEvent(const Event& event) noexcept
 {
-	mScene->render();
+	if (event.type == Event::Type::WINDOW_RESIZE)
+	{
+		mScene->render();
+	}
 }
 
 // Global functions

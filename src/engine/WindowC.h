@@ -5,16 +5,19 @@
 #include <string>
 #include <memory>
 #include <functional>
+
 #include "engine/core/NonCopyable.h"
 #include "engine/Window.h"
 #include "FPSCounter.h"
-#include "WindowResizeCallback.h"
 
 struct GLFWwindow;
 class FPSCounter;
 
 namespace gltut
 {
+
+///	Forward declarations
+class WindowCallback;
 
 /// Implementation of the Window class
 class WindowC final : public Window, public NonCopyable
@@ -31,39 +34,45 @@ public:
 	/// Shows frames per second (FPS) in the window title
 	void showFPS(bool show) noexcept final;
 
-	/// Enables or disables vertical synchronization
-	void enableVSync(bool vSync) noexcept final;
-
 	/// Returns the size of the window in pixels
 	void getSize(u32& width, u32& height) const noexcept final;
 
-	///	Updates the window
-	void update() noexcept;
+	/// Adds an event handler
+	void addEventHandler(EventHandler* handler) noexcept final;
 
-	/// Returns if the window should close
-	bool shouldClose() const noexcept;
+	/// Removes an event handler. Does nothing if the handler is not found.
+	void removeEventHandler(EventHandler* handler) noexcept final;
 
-	/// Adds a resize callback
-	void addResizeCallback(WindowResizeCallback* callback) noexcept;
+	/**
+		\brief Updates the window
+		\return True if the window is still open, false if the window is closed
+	*/
+	bool update() noexcept;
 
-	/// Removes a resize callback. Does nothing if the callback is not found
-	void removeResizeCallback(WindowResizeCallback* callback) noexcept;
+	/// Returns the device context
+	void* getDeviceContext() const noexcept
+	{
+		return mDeviceContext;
+	}
 
 private:
-	/// The callback function for the window resize event
-	friend void framebufferSizeCallback(
-		GLFWwindow* window,
-		int width,
-		int height);
+	/// WindowCallback is a friend class
+	friend class WindowCallback;
 
-	/// The GLFW window
-	GLFWwindow* mWindow = nullptr;
+	/// Cleans up the window resources
+	void cleanup() noexcept;
 
-	/// The window title
-	std::string mTitle;
+	/// The window
+	void* mWindow = nullptr;
 
-	/// Resize callbacks
-	std::vector<WindowResizeCallback*> mResizeCallbacks;
+	/// The device context
+	void* mDeviceContext = nullptr;
+
+	/// Helper class to invoke callbacks
+	std::unique_ptr<WindowCallback> mCallback;
+
+	/// Event handlers
+	std::vector<EventHandler*> mEventHandlers;
 
 	/// FPS counter
 	std::unique_ptr<FPSCounter> mFPSCounter;

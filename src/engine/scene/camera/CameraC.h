@@ -5,8 +5,7 @@
 #include <optional>
 #include "engine/core/Check.h"
 #include "engine/core/NonCopyable.h"
-#include "engine/Camera.h"
-#include "WindowC.h"
+#include "engine/scene/camera/Camera.h"
 
 namespace gltut
 {
@@ -84,18 +83,24 @@ private:
 };
 
 /// Implementation of the camera projection
-class CameraProjectionC : public CameraProjection, public WindowResizeCallback, public NonCopyable
+class CameraProjectionC : public CameraProjection, public EventHandler, public NonCopyable
 {
 public:
 	/// Constructor
 	CameraProjectionC(
-		WindowC& window,
+		Window& window,
 		float fov,
 		float nearPlane,
 		float farPlane,
 		const float* aspectRatio);
 
 	~CameraProjectionC() noexcept final;
+
+	///	Returns the window associated with the camera
+	Window* getWindow() const noexcept final
+	{
+		return &mWindow;
+	}
 
 	/// Returns the projection matrix
 	const Matrix4& getMatrix() const noexcept final
@@ -158,9 +163,12 @@ public:
 	void setAspectRatio(const float* aspectRatio) noexcept final;
 
 	/// Called when the window is resized
-	void onResize(u32, u32) noexcept final
+	void onEvent(const Event& event) noexcept final
 	{
-		update();
+		if (event.type == Event::Type::WINDOW_RESIZE)
+		{
+			update();
+		}
 	}
 
 private:
@@ -168,7 +176,7 @@ private:
 	void update() noexcept;
 
 	/// The window
-	WindowC& mWindow;
+	Window& mWindow;
 
 	/// The field of view, in degrees
 	float mFov;
@@ -192,7 +200,7 @@ class CameraC : public Camera, public NonCopyable
 public:
 	/// Constructor
 	CameraC(
-		WindowC& window,
+		Window& window,
 		const Vector3& position,
 		const Vector3& target,
 		const Vector3& up,

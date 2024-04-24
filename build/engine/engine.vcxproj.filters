@@ -15,6 +15,18 @@
     <Filter Include="include\math">
       <UniqueIdentifier>{c2741001-398f-40e2-8b01-9445d1d5b84c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\scene">
+      <UniqueIdentifier>{28d11844-3267-4376-896f-3f3531335234}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\scene\camera">
+      <UniqueIdentifier>{28ef97d2-7e92-4736-a081-58d8570ee1e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\scene">
+      <UniqueIdentifier>{f7bd98b8-c376-4369-a8d2-9655be339fbd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\scene\camera">
+      <UniqueIdentifier>{b95f5d55-2fdd-4e4a-93cb-9929f5f559bd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\engine\Mesh.h">
@@ -113,17 +125,23 @@
     <ClInclude Include="..\..\include\engine\math\Rng.h">
       <Filter>include\math</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\engine\Camera.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\engine\CameraC.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\engine\ShaderC.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\engine\WindowResizeCallback.h">
-      <Filter>src</Filter>
+    <ClInclude Include="..\..\include\engine\Event.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\Keycodes.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\EventHandler.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\scene\camera\Camera.h">
+      <Filter>include\scene\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\scene\camera\CameraC.h">
+      <Filter>src\scene\camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -169,11 +187,11 @@
     <ClCompile Include="..\..\src\engine\MeshCreation.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\engine\CameraC.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\engine\ShaderC.cpp">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\scene\camera\CameraC.cpp">
+      <Filter>src\scene\camera</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

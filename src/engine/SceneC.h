@@ -9,7 +9,7 @@
 #include "MaterialC.h"
 #include "MeshC.h"
 #include "SceneObjectC.h"
-#include "CameraC.h"
+#include "scene/camera/CameraC.h"
 
 namespace gltut
 {
@@ -19,7 +19,7 @@ class SceneC final : public Scene, public NonCopyable
 {
 public:
 	SceneC(
-		WindowC& window,
+		Window& window,
 		RendererBase& renderer);
 
 	Material* createMaterial(Shader* shader) noexcept final;
@@ -53,7 +53,7 @@ public:
 
 private:
 	/// The window
-	WindowC& mWindow;
+	Window& mWindow;
 
 	/// The renderer
 	RendererBase& mRenderer;

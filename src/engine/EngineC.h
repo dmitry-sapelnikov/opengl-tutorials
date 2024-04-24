@@ -11,7 +11,7 @@
 namespace gltut
 {
 /// Implementation of the Engine class
-class EngineC final : public Engine, public WindowResizeCallback, public NonCopyable
+class EngineC final : public Engine, public EventHandler, public NonCopyable
 {
 public:
 	/// Constructor
@@ -33,7 +33,7 @@ public:
 	Scene* getScene() noexcept final;
 
 	/// Called when the window is resized
-	void onResize(u32 width, u32 height) noexcept final;
+	void onEvent(const Event& event) noexcept final;
 
 private:
 	/// The window

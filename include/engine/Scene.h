@@ -4,7 +4,7 @@
 // Includes
 #include "SceneObject.h"
 #include "VertexFormat.h"
-#include "Camera.h"
+#include "engine/scene/camera/Camera.h"
 
 namespace gltut
 {
