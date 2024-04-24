@@ -122,8 +122,14 @@
     <ClInclude Include="..\..\src\engine\ShaderC.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\engine\WindowResizeCallback.h">
-      <Filter>src</Filter>
+    <ClInclude Include="..\..\include\engine\Event.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\Keycodes.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\EventHandler.h">
+      <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

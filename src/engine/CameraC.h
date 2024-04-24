@@ -84,7 +84,7 @@ private:
 };
 
 /// Implementation of the camera projection
-class CameraProjectionC : public CameraProjection, public WindowResizeCallback, public NonCopyable
+class CameraProjectionC : public CameraProjection, public EventHandler, public NonCopyable
 {
 public:
 	/// Constructor
@@ -158,9 +158,12 @@ public:
 	void setAspectRatio(const float* aspectRatio) noexcept final;
 
 	/// Called when the window is resized
-	void onResize(u32, u32) noexcept final
+	void onEvent(const Event& event) noexcept final
 	{
-		update();
+		if (event.type == Event::Type::WINDOW_RESIZE)
+		{
+			update();
+		}
 	}
 
 private:

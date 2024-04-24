@@ -10,7 +10,7 @@ namespace gltut
 {
 
 //	Local classes
-class WindowCallback
+class WindowCallback : public EventHandler
 {
 public:
 	WindowCallback(WindowC& window) noexcept
@@ -18,61 +18,172 @@ public:
 	{
 	}
 
-	/// The callback function for the window resize event
-	void onResize(int width, int height) noexcept
+	void onEvent(const Event& event) noexcept override
 	{
-		GLTUT_ASSERT(width > 0);
-		GLTUT_ASSERT(height > 0);
-
-		u32 uWidth = static_cast<u32>(width);
-		u32 uHeight = static_cast<u32>(height);
-
-		for (auto callback : mWindow.mResizeCallbacks)
+		for (auto callback : mWindow.mEventHandlers)
 		{
-			callback->onResize(uWidth, uHeight);
+			callback->onEvent(event);
 		}
+	}
+
+	void swapBuffers() noexcept
+	{
+		SwapBuffers((HDC)mWindow.mDeviceContext);
 	}
 
 private:
 	WindowC& mWindow;
 };
 
-namespace
-{
 //	Local constants
 //	Window class name
-constexpr const wchar_t* WINDOW_CLASS_NAME = L"OpenGLWindow";
+static constexpr const wchar_t* WINDOW_CLASS_NAME = L"OpenGLWindow";
 
 // Local functions
 /// Retrieves the WindowCallback object from the window handle
-WindowCallback* getWindowCallback(HWND hwnd)
+static WindowCallback* getWindowCallback(HWND hwnd)
 {
 	return reinterpret_cast<WindowCallback*>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
 }
 
 /// The window procedure
-LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+static LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	switch (uMsg)
+	switch (message)
 	{
-	case WM_CLOSE:
-		PostQuitMessage(0);
-		break;
+	case WM_MOUSEMOVE:
+	case WM_LBUTTONDOWN:
+	case WM_LBUTTONUP:
+	case WM_RBUTTONDOWN:
+	case WM_RBUTTONUP:
+	case WM_MBUTTONDOWN:
+	case WM_MBUTTONUP:
+	case WM_MOUSEWHEEL:
+	{
+		gltut::Event event;
+		event.type = gltut::Event::Type::MOUSE;
+		event.mouse.x = LOWORD(lParam);
+		event.mouse.y = HIWORD(lParam);
 
-	case WM_SIZE:
-		if (auto* callback = getWindowCallback(hwnd))
+		switch (message)
 		{
-			callback->onResize(LOWORD(lParam), HIWORD(lParam));
+		case WM_MOUSEMOVE:
+			event.mouse.type = gltut::Event::MouseEvent::Type::MOVE;
+			break;
+
+		case WM_LBUTTONDOWN:
+			event.mouse.type = gltut::Event::MouseEvent::Type::LEFT_BUTTON_DOWN;
+			break;
+
+		case WM_LBUTTONUP:
+			event.mouse.type = gltut::Event::MouseEvent::Type::LEFT_BUTTON_UP;
+			break;
+
+		case WM_RBUTTONDOWN:
+			event.mouse.type = gltut::Event::MouseEvent::Type::RIGHT_BUTTON_DOWN;
+			break;
+
+		case WM_RBUTTONUP:
+			event.mouse.type = gltut::Event::MouseEvent::Type::RIGHT_BUTTON_UP;
+			break;
+
+		case WM_MBUTTONDOWN:
+			event.mouse.type = gltut::Event::MouseEvent::Type::MIDDLE_BUTTON_DOWN;
+			break;
+
+		case WM_MBUTTONUP:
+			event.mouse.type = gltut::Event::MouseEvent::Type::MIDDLE_BUTTON_UP;
+			break;
+
+		case WM_MOUSEWHEEL:
+		{
+			event.mouse.type = gltut::Event::MouseEvent::Type::WHEEL;
+			/// Here is the fix for the mouse position when the mouse wheel is scrolled.
+			POINT p = { 0, 0 };
+			ClientToScreen(hWnd, &p);
+			event.mouse.x -= p.x;
+			event.mouse.y -= p.y;
+			event.mouse.wheel = static_cast<float>HIWORD(wParam) / WHEEL_DELTA;
 		}
 		break;
 
+		GLTUT_UNEXPECTED_SWITCH_DEFAULT_CASE(message)
+		}
+
+		getWindowCallback(hWnd)->onEvent(event);
+	}
+	break;
+
+	case WM_SYSKEYDOWN:
+	case WM_SYSKEYUP:
+	case WM_KEYDOWN:
+	case WM_KEYUP:
+	{
+		BYTE allKeys[256];
+
+		gltut::Event event;
+		event.type = gltut::Event::Type::KEYBOARD;
+		event.keyboard.key = (gltut::KeyCode)wParam;
+		event.keyboard.pressedDown = (message == WM_KEYDOWN || message == WM_SYSKEYDOWN);
+
+		const UINT MY_MAPVK_VSC_TO_VK_EX = 3; // MAPVK_VSC_TO_VK_EX should be in SDK according to MSDN, but isn't in mine.
+		if (event.keyboard.key == gltut::KeyCode::SHIFT)
+		{
+			// this will fail on systems before windows NT/2000/XP, not sure _what_ will return there instead.
+			event.keyboard.key = (gltut::KeyCode)MapVirtualKey(((lParam >> 16) & 255), MY_MAPVK_VSC_TO_VK_EX);
+		}
+		if (event.keyboard.key == gltut::KeyCode::CONTROL)
+		{
+			event.keyboard.key = (gltut::KeyCode)MapVirtualKey(((lParam >> 16) & 255), MY_MAPVK_VSC_TO_VK_EX);
+			// some keyboards will just return LEFT for both - left and right keys. So also check extend bit.
+			if (lParam & 0x1000000)
+				event.keyboard.key = gltut::KeyCode::RCONTROL;
+		}
+		if (event.keyboard.key == gltut::KeyCode::MENU)
+		{
+			event.keyboard.key = (gltut::KeyCode)MapVirtualKey(((lParam >> 16) & 255), MY_MAPVK_VSC_TO_VK_EX);
+			if (lParam & 0x1000000)
+				event.keyboard.key = gltut::KeyCode::RMENU;
+		}
+
+		const bool getKeyboardResult = GetKeyboardState(allKeys);
+		GLTUT_ASSERT(getKeyboardResult);
+
+		event.keyboard.shift = ((allKeys[VK_SHIFT] & 0x80) != 0);
+		event.keyboard.control = ((allKeys[VK_CONTROL] & 0x80) != 0);
+
+		// allow composing characters like '@' with Alt Gr on non-US keyboards
+		if ((allKeys[VK_MENU] & 0x80) != 0)
+		{
+			event.keyboard.control = false;
+		}
+
+		getWindowCallback(hWnd)->onEvent(event);
+	}
+	break;
+
+	case WM_SIZE:
+	{
+		Event event;
+		event.type = Event::Type::WINDOW_RESIZE;
+		event.windowResize.width = LOWORD(lParam);
+		event.windowResize.height = HIWORD(lParam);
+		auto* callback = getWindowCallback(hWnd);
+		callback->onEvent(event);
+		callback->swapBuffers();
+	}
+	break;
+
+	case WM_DESTROY:
+	{
+		PostQuitMessage(0);
+	}
+	break;
+
 	default:
-		return DefWindowProcW(hwnd, uMsg, wParam, lParam);
+		return DefWindowProc(hWnd, message, wParam, lParam);
 	}
 	return 0;
-}
-
-// End of the anonymous namespace
 }
 
 // Global classes
@@ -136,7 +247,7 @@ void WindowC::showFPS(bool show) noexcept
 		if (mFPSCounter == nullptr)
 		{
 			GLTUT_CATCH_ALL_BEGIN
-			mFPSCounter = std::make_unique<FPSCounter>();
+				mFPSCounter = std::make_unique<FPSCounter>();
 			GLTUT_CATCH_ALL_END("Failed to show FPS")
 		}
 	}
@@ -161,29 +272,29 @@ void WindowC::getSize(u32& width, u32& height) const noexcept
 	height = static_cast<u32>(intHeight);
 }
 
-void WindowC::addResizeCallback(WindowResizeCallback* callback) noexcept
+void WindowC::addEventHandler(EventHandler* handler) noexcept
 {
-	GLTUT_ASSERT(callback != nullptr);
+	GLTUT_ASSERT(handler != nullptr);
 	GLTUT_ASSERT(std::find(
-		mResizeCallbacks.begin(),
-		mResizeCallbacks.end(),
-		callback) == mResizeCallbacks.end());
+		mEventHandlers.begin(),
+		mEventHandlers.end(),
+		handler) == mEventHandlers.end());
 
 	GLTUT_CATCH_ALL_BEGIN
-		mResizeCallbacks.push_back(callback);
-	GLTUT_CATCH_ALL_END("Failed to add a resize callback")
+		mEventHandlers.push_back(handler);
+	GLTUT_CATCH_ALL_END("Failed to add an event handler")
 }
 
-void WindowC::removeResizeCallback(WindowResizeCallback* callback) noexcept
+void WindowC::removeEventHandler(EventHandler* handler) noexcept
 {
 	auto findResult = std::find(
-		mResizeCallbacks.begin(),
-		mResizeCallbacks.end(),
-		callback);
+		mEventHandlers.begin(),
+		mEventHandlers.end(),
+		handler);
 
-	if (findResult != mResizeCallbacks.end())
+	if (findResult != mEventHandlers.end())
 	{
-		mResizeCallbacks.erase(findResult);
+		mEventHandlers.erase(findResult);
 	}
 }
 

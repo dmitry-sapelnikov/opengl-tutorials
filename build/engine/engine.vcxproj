@@ -16,6 +16,9 @@
     <ClInclude Include="..\..\include\engine\core\NonCopyable.h" />
     <ClInclude Include="..\..\include\engine\core\Types.h" />
     <ClInclude Include="..\..\include\engine\Engine.h" />
+    <ClInclude Include="..\..\include\engine\Event.h" />
+    <ClInclude Include="..\..\include\engine\EventHandler.h" />
+    <ClInclude Include="..\..\include\engine\Keycodes.h" />
     <ClInclude Include="..\..\include\engine\Material.h" />
     <ClInclude Include="..\..\include\engine\math\Angles.h" />
     <ClInclude Include="..\..\include\engine\math\Constants.h" />
@@ -46,7 +49,6 @@
     <ClInclude Include="..\..\src\engine\stb_image.h" />
     <ClInclude Include="..\..\src\engine\TextureOpenGL.h" />
     <ClInclude Include="..\..\src\engine\WindowC.h" />
-    <ClInclude Include="..\..\src\engine\WindowResizeCallback.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\engine\CameraC.cpp" />

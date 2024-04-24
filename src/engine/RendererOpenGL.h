@@ -58,9 +58,6 @@ public:
 	/// Enables or disables vertical synchronization
 	void enableVSync(bool vSync) noexcept final;
 
-	/// Called when the window is resized
-	void onResize(u32 width, u32 height) noexcept final;
-
 private:
 	struct MeshBuffers
 	{
@@ -124,6 +121,9 @@ private:
 		VertexFormat vertexFormat,
 		GLuint vertexBuffer,
 		GLuint indexBuffer) noexcept;
+
+	/// Called when the window is resized
+	void onResize(u32 width, u32 height) noexcept final;
 
 	///	The window
 	void* mDeviceContext;

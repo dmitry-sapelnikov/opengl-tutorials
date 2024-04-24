@@ -19,9 +19,9 @@ EngineC::EngineC(u32 windowWidth, u32 windowHeight)
 	auto renderer = std::make_unique<RendererOpenGL>(
 		mWindow->getDeviceContext());
 
-	//	First add the renderer as a resize callback, then add the engine
-	mWindow->addResizeCallback(renderer.get());
-	mWindow->addResizeCallback(this);
+	//	First add the renderer as a handler, then the engine
+	mWindow->addEventHandler(renderer.get());
+	mWindow->addEventHandler(this);
 
 	mScene = std::make_unique<SceneC>(*mWindow , *renderer);
 	mRenderer = std::move(renderer);
@@ -57,9 +57,12 @@ Scene* EngineC::getScene() noexcept
 	return mScene.get();
 }
 
-void EngineC::onResize(u32 width, u32 height) noexcept
+void EngineC::onEvent(const Event& event) noexcept
 {
-	mScene->render();
+	if (event.type == Event::Type::WINDOW_RESIZE)
+	{
+		mScene->render();
+	}
 }
 
 // Global functions

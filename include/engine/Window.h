@@ -2,7 +2,8 @@
 #define OPENGL_TUTORIALS_WINDOW_H
 
 // Includes
-#include "Core/Types.h"
+#include "engine/Core/Types.h"
+#include "engine/EventHandler.h"
 
 namespace gltut
 {
@@ -21,6 +22,13 @@ public:
 
 	/// Returns the size of the window in pixels
 	virtual void getSize(u32& width, u32& height) const noexcept = 0;
+
+	/// Adds an event handler
+	virtual void addEventHandler(EventHandler* handler) noexcept = 0;
+
+	/// Removes an event handler. Does nothing if the handler is not found.
+	virtual void removeEventHandler(EventHandler* handler) noexcept = 0;
+
 };
 
 // End of the namespace gltut

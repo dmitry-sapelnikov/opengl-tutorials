@@ -47,12 +47,12 @@ CameraProjectionC::CameraProjectionC(
 
 CameraProjectionC::~CameraProjectionC() noexcept
 {
-	mWindow.removeResizeCallback(this);
+	mWindow.removeEventHandler(this);
 }
 
 void CameraProjectionC::setAspectRatio(const float* aspectRatio) noexcept
 {
-	mWindow.removeResizeCallback(this);
+	mWindow.removeEventHandler(this);
 
 	if (aspectRatio != nullptr)
 	{
@@ -61,7 +61,7 @@ void CameraProjectionC::setAspectRatio(const float* aspectRatio) noexcept
 	else
 	{
 		mAspectRatio.reset();
-		mWindow.addResizeCallback(this);
+		mWindow.addEventHandler(this);
 	}
 	update();
 }

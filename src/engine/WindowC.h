@@ -9,7 +9,6 @@
 #include "engine/core/NonCopyable.h"
 #include "engine/Window.h"
 #include "FPSCounter.h"
-#include "WindowResizeCallback.h"
 
 struct GLFWwindow;
 class FPSCounter;
@@ -38,17 +37,17 @@ public:
 	/// Returns the size of the window in pixels
 	void getSize(u32& width, u32& height) const noexcept final;
 
+	/// Adds an event handler
+	void addEventHandler(EventHandler* handler) noexcept final;
+
+	/// Removes an event handler. Does nothing if the handler is not found.
+	void removeEventHandler(EventHandler* handler) noexcept final;
+
 	/**
 		\brief Updates the window
 		\return True if the window is still open, false if the window is closed
 	*/
 	bool update() noexcept;
-
-	/// Adds a resize callback
-	void addResizeCallback(WindowResizeCallback* callback) noexcept;
-
-	/// Removes a resize callback. Does nothing if the callback is not found
-	void removeResizeCallback(WindowResizeCallback* callback) noexcept;
 
 	/// Returns the device context
 	void* getDeviceContext() const noexcept
@@ -72,8 +71,8 @@ private:
 	/// Helper class to invoke callbacks
 	std::unique_ptr<WindowCallback> mCallback;
 
-	/// Resize callbacks
-	std::vector<WindowResizeCallback*> mResizeCallbacks;
+	/// Event handlers
+	std::vector<EventHandler*> mEventHandlers;
 
 	/// FPS counter
 	std::unique_ptr<FPSCounter> mFPSCounter;
