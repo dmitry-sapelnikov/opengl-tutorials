@@ -418,14 +418,14 @@ inline Matrix4 Matrix4::lookAtMatrix(
 	const Vector3& target,
 	const Vector3& up) noexcept
 {
-	const Vector3 zAxis = (position - target).normalize();
-	const Vector3 xAxis = up.cross(zAxis).normalize();
-	const Vector3 yAxis = zAxis.cross(xAxis);
-
+	// Row-major gluLookAt 
+	const Vector3 f = (target - position).normalize();
+	const Vector3 s = f.cross(up).normalize();
+	const Vector3 u = s.cross(f);
 	return {
-		xAxis.x, yAxis.x, zAxis.x, position.x,
-		xAxis.y, yAxis.y, zAxis.y, position.y,
-		xAxis.z, yAxis.z, zAxis.z, position.z,
+		s.x, s.y, s.z, -s.dot(position),
+		u.x, u.y, u.z, -u.dot(position),
+		-f.x, -f.y, -f.z, f.dot(position),
 		0.f, 0.f, 0.f, 1.f };
 }
 
