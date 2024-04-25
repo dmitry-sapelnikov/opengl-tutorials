@@ -25,6 +25,9 @@ public:
 		float targetMinDistance,
 		float targetMaxDistance);
 
+	///	Destructor
+	~MouseCameraControllerC() noexcept final;
+
 	/// Returns the camera
 	Camera& getCamera() noexcept final
 	{

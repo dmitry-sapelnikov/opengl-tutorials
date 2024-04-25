@@ -56,6 +56,13 @@ MouseCameraControllerC::MouseCameraControllerC(
 	const Vector3 spherical = getSphericalCoordinates(mPosition - mTarget);
 	mRotation = { spherical.y, spherical.z, 0.0F };
 	mCurrentZoom = spherical.x;
+
+	mCamera.getProjection().getWindow()->addEventHandler(this);
+}
+
+MouseCameraControllerC::~MouseCameraControllerC() noexcept
+{
+	mCamera.getProjection().getWindow()->removeEventHandler(this);
 }
 
 void MouseCameraControllerC::updateCamera() noexcept
