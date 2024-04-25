@@ -101,7 +101,9 @@ static LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 			POINT p = { 0, 0 };
 			ClientToScreen(hWnd, &p);
 			event.mouse.position -= { p.x, p.y };
-			event.mouse.wheel = static_cast<float>HIWORD(wParam) / WHEEL_DELTA;
+			event.mouse.wheel = 
+				static_cast<float>(static_cast<short>(HIWORD(wParam))) / 
+				static_cast<float>(WHEEL_DELTA);
 		}
 		break;
 
