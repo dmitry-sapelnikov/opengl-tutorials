@@ -143,6 +143,12 @@
     <ClInclude Include="..\..\src\engine\scene\camera\CameraC.h">
       <Filter>src\scene\camera</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\engine\scene\camera\CameraController.h">
+      <Filter>include\scene\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\scene\camera\MouseCameraController.h">
+      <Filter>include\scene\camera</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\engine\math\Point2.h">
       <Filter>include\math</Filter>
     </ClInclude>
@@ -194,6 +200,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\engine\scene\camera\CameraC.cpp">
+      <Filter>src\scene\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\scene\camera\MouseCameraController.cpp">
       <Filter>src\scene\camera</Filter>
     </ClCompile>
   </ItemGroup>

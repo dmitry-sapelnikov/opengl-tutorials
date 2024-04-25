@@ -31,6 +31,7 @@
     <ClInclude Include="..\..\include\engine\Scene.h" />
     <ClInclude Include="..\..\include\engine\SceneObject.h" />
     <ClInclude Include="..\..\include\engine\scene\camera\Camera.h" />
+    <ClInclude Include="..\..\include\engine\scene\camera\CameraController.h" />
     <ClInclude Include="..\..\include\engine\Shader.h" />
     <ClInclude Include="..\..\include\engine\Texture.h" />
     <ClInclude Include="..\..\include\engine\VertexFormat.h" />

@@ -43,9 +43,9 @@ SceneC::SceneC(
 Material* SceneC::createMaterial(Shader* shader) noexcept
 {
 	GLTUT_CATCH_ALL_BEGIN
-	return &mMaterials.emplace_back(shader);
+		return &mMaterials.emplace_back(shader);
 	GLTUT_CATCH_ALL_END("Cannot create a material")
-	return nullptr;
+		return nullptr;
 }
 
 Mesh* SceneC::createMesh(
@@ -79,7 +79,7 @@ SceneObject* SceneC::createObject(
 	GLTUT_CATCH_ALL_BEGIN
 		return &mObjects.emplace_back(mRenderer, mesh, material, transform);
 	GLTUT_CATCH_ALL_END("Cannot create a scene object")
-	return nullptr;
+		return nullptr;
 }
 
 Camera* SceneC::createCamera(
@@ -102,14 +102,14 @@ Camera* SceneC::createCamera(
 			farPlan,
 			aspectRatio);
 
-		if (mActiveCamera == nullptr)
-		{
-			mActiveCamera = camera;
-		}
-		return camera;
+	if (mActiveCamera == nullptr)
+	{
+		mActiveCamera = camera;
+	}
+	return camera;
 	GLTUT_CATCH_ALL_END("Cannot create a camera")
 
-	return nullptr;
+		return nullptr;
 }
 
 Camera* SceneC::getActiveCamera() const noexcept
@@ -120,6 +120,33 @@ Camera* SceneC::getActiveCamera() const noexcept
 void SceneC::setActiveCamera(Camera* camera) noexcept
 {
 	mActiveCamera = camera;
+}
+
+void SceneC::addCameraController(CameraController* controller) noexcept
+{
+	GLTUT_ASSERT(controller != nullptr);
+	mCameraControllers.push_back(controller);
+}
+
+void SceneC::removesCameraController(CameraController* controller) noexcept
+{
+	auto it = std::find(
+		mCameraControllers.begin(),
+		mCameraControllers.end(),
+		controller);
+
+	if (it != mCameraControllers.end())
+	{
+		mCameraControllers.erase(it);
+	}
+}
+
+void SceneC::update() noexcept
+{
+	for (auto* controller : mCameraControllers)
+	{
+		controller->updateCamera();
+	}
 }
 
 void SceneC::render() noexcept

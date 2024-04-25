@@ -49,7 +49,13 @@ public:
 
 	void setActiveCamera(Camera* camera) noexcept final;
 
-	void render() noexcept final;
+	void addCameraController(CameraController* controller) noexcept final;
+
+	void removesCameraController(CameraController* controller) noexcept final;
+
+	void update() noexcept;
+
+	void render() noexcept;
 
 private:
 	/// The window
@@ -69,6 +75,9 @@ private:
 
 	///	The cameras
 	std::deque<CameraC> mCameras;
+
+	/// The camera controllers
+	std::vector<CameraController*> mCameraControllers;
 
 	/// The active camera
 	Camera* mActiveCamera = nullptr;

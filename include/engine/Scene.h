@@ -5,6 +5,7 @@
 #include "SceneObject.h"
 #include "VertexFormat.h"
 #include "engine/scene/camera/Camera.h"
+#include "engine/scene/camera/CameraController.h"
 
 namespace gltut
 {
@@ -48,6 +49,19 @@ public:
 		const float* aspectRatio = nullptr) noexcept = 0;
 
 	/**
+		\brief Adds a camera controller to the scene
+		\param controller The controller
+	*/
+	virtual void addCameraController(CameraController* controller) noexcept = 0;
+
+	/**
+		\brief Removes a camera controller from the scene
+		Does nothing if the controller is not in the scene
+		\param controller The controller
+	*/
+	virtual void removesCameraController(CameraController* controller) noexcept = 0;
+
+	/**
 		\brief Creates a material
 		\param shader The shader
 		\return The material if it was created successfully, nullptr otherwise
@@ -70,9 +84,6 @@ public:
 		Mesh* mesh,
 		Material* material,
 		const Matrix4& transform = Matrix4::identity()) noexcept = 0;
-
-	/// Renders the scene
-	virtual void render() noexcept = 0;
 };
 
 // End of the namespace gltut

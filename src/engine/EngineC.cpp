@@ -38,6 +38,7 @@ bool EngineC::update() noexcept
 		return false;
 	}
 	mRenderer->clear();
+	mScene->update();
 	mScene->render();
 	return true;
 }
