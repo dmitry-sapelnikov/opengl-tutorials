@@ -83,14 +83,14 @@ struct Vector3
 	// / operator
 	Vector3 operator/(float f) const noexcept
 	{
-		GLTUT_ASSERT(!isNearZero(f));
+		GLTUT_ASSERT(!gltut::isNearZero(f));
 		return operator*(1.f / f);
 	}
 
 	// /= operator
 	Vector3& operator/=(float f) noexcept
 	{
-		GLTUT_ASSERT(!isNearZero(f));
+		GLTUT_ASSERT(!gltut::isNearZero(f));
 		return operator*=(1.f / f);
 	}
 
