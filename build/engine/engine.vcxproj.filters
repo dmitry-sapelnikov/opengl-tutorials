@@ -119,7 +119,7 @@
     <ClInclude Include="..\..\include\engine\MeshCreation.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\engine\math\Angles.h">
+    <ClInclude Include="..\..\include\engine\math\Functions.h">
       <Filter>include\math</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\engine\math\Rng.h">

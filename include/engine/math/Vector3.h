@@ -3,7 +3,7 @@
 
 // Libraries
 #include "engine/core/Check.h"
-#include <cmath>
+#include "engine/math/Functions.h"
 
 namespace gltut
 {
@@ -16,26 +16,33 @@ struct Vector3
 	float z;
 
 	// Constructor
-	Vector3(float x = 0.f, float y = 0.f, float z = 0.f)
-		: x(x), y(y), z(z)
+	Vector3(
+		float x = 0.f,
+		float y = 0.f,
+		float z = 0.f) noexcept :
+
+		x(x),
+		y(y),
+		z(z)
 	{
 	}
 
 	// Constructor
-	Vector3(const Vector3& vector) : x(vector.x),
+	Vector3(const Vector3& vector) noexcept :
+		x(vector.x),
 		y(vector.y),
 		z(vector.z)
 	{
 	}
 
 	// + operator
-	Vector3 operator+(const Vector3& v) const
+	Vector3 operator+(const Vector3& v) const noexcept
 	{
 		return { x + v.x, y + v.y, z + v.z };
 	}
 
 	// += operator
-	Vector3& operator+=(const Vector3& v)
+	Vector3& operator+=(const Vector3& v) noexcept
 	{
 		x += v.x;
 		y += v.y;
@@ -44,13 +51,13 @@ struct Vector3
 	}
 
 	// - operator
-	Vector3 operator-(const Vector3& v) const
+	Vector3 operator-(const Vector3& v) const noexcept
 	{
 		return { x - v.x, y - v.y, z - v.z };
 	}
 
 	// -= operator
-	Vector3& operator-=(const Vector3& v)
+	Vector3& operator-=(const Vector3& v) noexcept
 	{
 		x -= v.x;
 		y -= v.y;
@@ -59,7 +66,7 @@ struct Vector3
 	}
 
 	// *= operator
-	Vector3& operator*=(float f)
+	Vector3& operator*=(float f) noexcept
 	{
 		x *= f;
 		y *= f;
@@ -68,47 +75,47 @@ struct Vector3
 	}
 
 	// * operator
-	Vector3 operator*(float f) const
+	Vector3 operator*(float f) const noexcept
 	{
 		return { f * x, f * y, f * z };
 	}
 
 	// / operator
-	Vector3 operator/(float f) const
+	Vector3 operator/(float f) const noexcept
 	{
-		GLTUT_ASSERT(f > std::numeric_limits<float>::epsilon());
+		GLTUT_ASSERT(!isNearZero(f));
 		return operator*(1.f / f);
 	}
 
 	// /= operator
-	Vector3& operator/=(float f)
+	Vector3& operator/=(float f) noexcept
 	{
-		GLTUT_ASSERT(f > std::numeric_limits<float>::epsilon());
+		GLTUT_ASSERT(!isNearZero(f));
 		return operator*=(1.f / f);
 	}
 
 	// - operator
-	Vector3 operator-() const
+	Vector3 operator-() const noexcept
 	{
 		return { -x, -y, -z };
 	}
 
 	// [] operator
-	float& operator[](unsigned i)
+	float& operator[](unsigned i) noexcept
 	{
 		GLTUT_ASSERT(i < 3);
 		return (&x)[i];
 	}
 
 	// [] operator
-	const float& operator[](unsigned i) const
+	const float& operator[](unsigned i) const noexcept
 	{
 		GLTUT_ASSERT(i < 3);
 		return (&x)[i];
 	}
 
 	// Cross product operator
-	Vector3 cross(const Vector3& v) const
+	Vector3 cross(const Vector3& v) const noexcept
 	{
 		return {
 			y * v.z - z * v.y,
@@ -117,38 +124,43 @@ struct Vector3
 	}
 
 	// Dot product operator
-	float dot(const Vector3& v) const
+	float dot(const Vector3& v) const noexcept
 	{
 		return x * v.x + y * v.y + z * v.z;
 	}
 
 	// Normalize the vector and return it
-	Vector3 normalize()
+	Vector3& normalize() noexcept
+	{
+		return operator/=(length());
+	}
+
+	// Return the normalized vector
+	Vector3 getNormalized() const noexcept
 	{
 		return *this / length();
 	}
 
 	/// Returns if the vector is exactly zero
-	bool isZero() const
+	bool isZero() const noexcept
 	{
 		return (x == 0.f && y == 0.f && z == 0.f);
 	}
 
 	/// Returns if the vector's length <= FLOAT_EPSILON
-	bool isNearZero() const
+	bool isNearZero() const noexcept
 	{
-		constexpr float esp = std::numeric_limits<float>::epsilon();
-		return lengthSquared() <= esp * esp;
+		return lengthSquared() <= FLOAT_EPSILON * FLOAT_EPSILON;
 	}
 
 	/// Returns the squared length of the vector
-	float lengthSquared() const
+	float lengthSquared() const noexcept
 	{
 		return x * x + y * y + z * z;
 	}
 
 	//// Returns the length of the vector
-	float length() const
+	float length() const noexcept
 	{
 		return sqrt(lengthSquared());
 	}
@@ -160,7 +172,7 @@ struct Vector3
 };
 
 /// Scalar-vector multiplication
-inline Vector3 operator*(float s, const Vector3& v)
+inline Vector3 operator*(float s, const Vector3& v) noexcept
 {
 	return v * s;
 }
