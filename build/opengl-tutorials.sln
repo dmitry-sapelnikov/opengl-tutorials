@@ -23,6 +23,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "5_transformations", "tutori
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "6_coordinate_systems", "tutorials\6_coordinate_systems\6_coordinate_systems.vcxproj", "{C99E0527-887E-4BEF-80C2-B66B7DE75061}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "7_camera", "tutorials\7_camera\7_camera.vcxproj", "{B9FE0B5E-A06B-4876-B203-EECD34668FB5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -65,6 +67,10 @@ Global
 		{C99E0527-887E-4BEF-80C2-B66B7DE75061}.Debug|x64.Build.0 = Debug|x64
 		{C99E0527-887E-4BEF-80C2-B66B7DE75061}.Release|x64.ActiveCfg = Release|x64
 		{C99E0527-887E-4BEF-80C2-B66B7DE75061}.Release|x64.Build.0 = Release|x64
+		{B9FE0B5E-A06B-4876-B203-EECD34668FB5}.Debug|x64.ActiveCfg = Debug|x64
+		{B9FE0B5E-A06B-4876-B203-EECD34668FB5}.Debug|x64.Build.0 = Debug|x64
+		{B9FE0B5E-A06B-4876-B203-EECD34668FB5}.Release|x64.ActiveCfg = Release|x64
+		{B9FE0B5E-A06B-4876-B203-EECD34668FB5}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -77,6 +83,7 @@ Global
 		{29708745-961B-4FA2-B531-7D05402198F0} = {0397819A-9899-4953-AE17-B1F07ADBB3B9}
 		{B5A55EDA-78DF-4938-A2AE-BF46A8DFC48C} = {0397819A-9899-4953-AE17-B1F07ADBB3B9}
 		{C99E0527-887E-4BEF-80C2-B66B7DE75061} = {0397819A-9899-4953-AE17-B1F07ADBB3B9}
+		{B9FE0B5E-A06B-4876-B203-EECD34668FB5} = {0397819A-9899-4953-AE17-B1F07ADBB3B9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6671FED5-F651-4A55-91AE-C9B03C9D54D5}

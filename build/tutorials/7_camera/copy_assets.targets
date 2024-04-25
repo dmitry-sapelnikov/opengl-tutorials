@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Assets Include="$(MSBuildThisFileDirectory)..\..\..\src\tutorials\7_camera\assets\*.*" />
+  </ItemGroup>
+  <Target Name="CopyAssets">
+    <Copy SourceFiles="@(Assets)" DestinationFolder="$(OutDir)\assets"/>
+  </Target>
+  <PropertyGroup>
+    <BuildDependsOn>CopyAssets;$(BuildDependsOn)</BuildDependsOn>
+  </PropertyGroup>
+</Project>
