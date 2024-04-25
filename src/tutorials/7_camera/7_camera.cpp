@@ -7,6 +7,7 @@
 #include "engine/Engine.h"
 #include "engine/MeshCreation.h"
 #include "engine/Math/Rng.h"
+#include "engine/scene/camera/MouseCameraController.h"
 
 static const size_t BOX_COUNT = 100;
 static const float POSITION_RANGE = 5.0f;
@@ -69,6 +70,11 @@ int main()
 			45.0f,
 			0.1f,
 			100.0f);
+
+		std::unique_ptr<gltut::CameraController> controller(
+			gltut::createMouseCameraController(*camera));
+		GLTUT_CHECK(controller.get() != nullptr, "Failed to create camera controller");
+		engine->getScene()->addCameraController(controller.get());
 
 		auto start = std::chrono::high_resolution_clock::now();
 		while (engine->update())
