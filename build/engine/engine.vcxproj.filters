@@ -143,6 +143,9 @@
     <ClInclude Include="..\..\src\engine\scene\camera\CameraC.h">
       <Filter>src\scene\camera</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\engine\math\Point2.h">
+      <Filter>include\math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\engine\MeshC.cpp">
