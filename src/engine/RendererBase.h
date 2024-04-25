@@ -33,7 +33,7 @@ public:
 
 private:
 	/// Called when the window is resized
-	virtual void onResize(u32 width, u32 height) noexcept = 0;
+	virtual void onResize(const Point2u& size) noexcept = 0;
 };
 
 // End of the namespace gltut

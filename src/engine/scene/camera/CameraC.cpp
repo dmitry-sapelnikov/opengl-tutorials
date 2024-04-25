@@ -71,11 +71,9 @@ void CameraProjectionC::update() noexcept
 	float aspectRatio = 0.0f;
 	if (!mAspectRatio.has_value())
 	{
-		u32 width = 0;
-		u32 height = 0;
-		mWindow.getSize(width, height);
-		GLTUT_ASSERT(height != 0);
-		aspectRatio = static_cast<float>(width) / static_cast<float>(height);
+		const Point2u size = mWindow.getSize();
+		GLTUT_ASSERT(size.y != 0);
+		aspectRatio = static_cast<float>(size.x) / static_cast<float>(size.y);
 	}
 	else
 	{

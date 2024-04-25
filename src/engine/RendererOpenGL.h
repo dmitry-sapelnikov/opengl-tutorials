@@ -123,7 +123,7 @@ private:
 		GLuint indexBuffer) noexcept;
 
 	/// Called when the window is resized
-	void onResize(u32 width, u32 height) noexcept final;
+	void onResize(const Point2u& size) noexcept final;
 
 	///	The window
 	void* mDeviceContext;

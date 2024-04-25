@@ -3,6 +3,7 @@
 
 // Includes
 #include "engine/Core/Types.h"
+#include "engine/Math/Point2.h"
 #include "engine/EventHandler.h"
 
 namespace gltut
@@ -21,7 +22,7 @@ public:
 	virtual void showFPS(bool show) noexcept = 0;
 
 	/// Returns the size of the window in pixels
-	virtual void getSize(u32& width, u32& height) const noexcept = 0;
+	virtual Point2u getSize() const noexcept = 0;
 
 	/// Adds an event handler
 	virtual void addEventHandler(EventHandler* handler) noexcept = 0;

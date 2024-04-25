@@ -28,7 +28,7 @@ void RendererBase::onEvent(const Event& event) noexcept
 	if (event.type == Event::Type::WINDOW_RESIZE)
 	{
 		clear();
-		onResize(event.windowResize.width, event.windowResize.height);
+		onResize(event.windowResize.size);
 	}
 }
 

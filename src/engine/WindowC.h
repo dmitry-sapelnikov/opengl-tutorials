@@ -35,7 +35,7 @@ public:
 	void showFPS(bool show) noexcept final;
 
 	/// Returns the size of the window in pixels
-	void getSize(u32& width, u32& height) const noexcept final;
+	Point2u getSize() const noexcept final;
 
 	/// Adds an event handler
 	void addEventHandler(EventHandler* handler) noexcept final;

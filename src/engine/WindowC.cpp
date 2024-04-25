@@ -62,8 +62,7 @@ static LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 	{
 		gltut::Event event;
 		event.type = gltut::Event::Type::MOUSE;
-		event.mouse.x = LOWORD(lParam);
-		event.mouse.y = HIWORD(lParam);
+		event.mouse.position = { LOWORD(lParam), HIWORD(lParam) };
 
 		switch (message)
 		{
@@ -101,8 +100,7 @@ static LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 			/// Here is the fix for the mouse position when the mouse wheel is scrolled.
 			POINT p = { 0, 0 };
 			ClientToScreen(hWnd, &p);
-			event.mouse.x -= p.x;
-			event.mouse.y -= p.y;
+			event.mouse.position -= { p.x, p.y };
 			event.mouse.wheel = static_cast<float>HIWORD(wParam) / WHEEL_DELTA;
 		}
 		break;
@@ -166,8 +164,7 @@ static LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 	{
 		Event event;
 		event.type = Event::Type::WINDOW_RESIZE;
-		event.windowResize.width = LOWORD(lParam);
-		event.windowResize.height = HIWORD(lParam);
+		event.windowResize.size = { LOWORD(lParam), HIWORD(lParam) };
 		auto* callback = getWindowCallback(hWnd);
 		callback->onEvent(event);
 		callback->swapBuffers();
@@ -257,7 +254,7 @@ void WindowC::showFPS(bool show) noexcept
 	}
 }
 
-void WindowC::getSize(u32& width, u32& height) const noexcept
+Point2u WindowC::getSize() const noexcept
 {
 	RECT rect = {};
 	const bool result = GetClientRect((HWND)mWindow, &rect);
@@ -268,8 +265,7 @@ void WindowC::getSize(u32& width, u32& height) const noexcept
 
 	GLTUT_ASSERT(intWidth > 0);
 	GLTUT_ASSERT(intHeight > 0);
-	width = static_cast<u32>(intWidth);
-	height = static_cast<u32>(intHeight);
+	return { static_cast<u32>(intWidth), static_cast<u32>(intHeight) };
 }
 
 void WindowC::addEventHandler(EventHandler* handler) noexcept
