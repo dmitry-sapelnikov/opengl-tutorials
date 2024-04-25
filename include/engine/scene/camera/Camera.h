@@ -101,6 +101,12 @@ public:
 	virtual CameraProjection& getProjection() noexcept = 0;
 };
 
+/// Returns a 3d ray which would go through the 2d screen coodinates
+/// The ray starts from the camera position
+Vector3 screenToCameraRay(
+	const Point2i& screenPoint,
+	const Camera& camera);
+
 // End of the namespace gltut
 }
 
