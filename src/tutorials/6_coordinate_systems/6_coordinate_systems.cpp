@@ -63,15 +63,15 @@ int main()
 		gltut::Matrix4 view = gltut::Matrix4::translationMatrix({ 0.0f, 0.0f, -20.0f });
 		shader->setMat4("view", view.data());
 
-		auto start = std::chrono::high_resolution_clock::now();
-		gltut::u32 windowWidth = 0;
-		gltut::u32 windowHeight = 0;
+		auto start = std::chrono::high_resolution_clock::now();\
 		while (engine->update())
 		{
-			engine->getWindow()->getSize(windowWidth, windowHeight);
+			const gltut::Point2u size = engine->getWindow()->getSize();
+			GLTUT_CHECK(size.y != 0, "Invalid window size")
+
 			const gltut::Matrix4 projection = gltut::Matrix4::perspectiveProjectionMatrix(
 				45.0f,
-				static_cast<float>(windowWidth) / static_cast<float>(windowHeight),
+				static_cast<float>(size.x) / static_cast<float>(size.y),
 				0.1f,
 				100.0f);
 			shader->setMat4("projection", projection.data());

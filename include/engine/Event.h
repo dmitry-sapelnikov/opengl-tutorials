@@ -2,7 +2,7 @@
 #define OPENGL_TUTORIALS_EVENT_H
 
 // Includes
-#include "engine/Core/Types.h"
+#include "engine/math/Point2.h"
 #include "engine/Keycodes.h"
 
 namespace gltut
@@ -15,6 +15,9 @@ struct Event
 	/// Enumeration for all event types there are.
 	enum class Type
 	{
+		/// None
+		NONE = 0,
+		
 		/// Mouse event.
 		MOUSE,
 
@@ -30,6 +33,12 @@ struct Event
 	{
 		enum class Type
 		{
+			/// None
+			NONE = 0,
+
+			/// The mouse changed its position.
+			MOVE,
+
 			/// Left mouse button was pressed down.
 			LEFT_BUTTON_DOWN,
 
@@ -49,10 +58,7 @@ struct Event
 			MIDDLE_BUTTON_UP,
 
 			/// The mouse wheel was scrolled
-			WHEEL,
-
-			/// The mouse changed its position.
-			MOVE
+			WHEEL
 		};
 
 		/// Mouse buttons
@@ -64,23 +70,20 @@ struct Event
 		};
 
 		/// Event type
-		Type type;
+		Type type = Type::NONE;
 
-		/// x-position of the mouse cursor
-		int32 x;
-
-		/// y-position of the mouse cursor
-		int32 y;
+		/// Position of the mouse cursor
+		Point2i position{ 0, 0 };
 
 		/// mouse wheel delta, often 1.0 or -1.0, but can have other values < 0.f or > 0.f;
 		/** Only valid if event was EMIE_MOUSE_WHEEL */
-		float wheel;
+		float wheel = 0.f;
 
 		/// A bit map of button states
-		u32 buttonStates;
+		u32 buttonStates = 0;
 
 		/// Returns if a button is pressed
-		bool isPressed(Button button) const
+		bool isPressed(Button button) const noexcept
 		{ 
 			return buttonStates & (1 << static_cast<u32>(button));
 		}
@@ -90,38 +93,32 @@ struct Event
 	struct KeyboardEvent
 	{
 		/// Key which has been pressed or released
-		KeyCode key;
+		KeyCode key = KeyCode::NONE;
 
 		/// If not true, then the key was left up
-		bool pressedDown;
+		bool pressedDown = false;
 
 		/// True if shift was also pressed
-		bool shift;
+		bool shift = false;
 
 		/// True if ctrl was also pressed
-		bool control;
+		bool control = false;
 	};
 
 	/// Any kind of window resize event
 	struct WindowResizeEvent
 	{
-		/// New width of the window
-		u32 width;
-
-		/// New height of the window
-		u32 height;
+		Point2u size;
 	};
 
 	/// Event type
-	Type type;
+	Type type = Type::NONE;
 
-	/// Union of all possible events
-	union
-	{
-		struct MouseEvent mouse;
-		struct KeyboardEvent keyboard;
-		struct WindowResizeEvent windowResize;
-	};
+	MouseEvent mouse;
+
+	KeyboardEvent keyboard;
+
+	WindowResizeEvent windowResize;
 };
 
 // End of the namespace gltut
