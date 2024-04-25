@@ -177,6 +177,15 @@ inline Vector3 operator*(float s, const Vector3& v) noexcept
 	return v * s;
 }
 
+///	Returns the spherical coordinates of a vector in order (distance, azimuth, inclination)
+inline Vector3 getSphericalCoordinates(const Vector3& v) noexcept
+{
+	const float distance = v.length();
+	return isNearZero(distance) ?
+		Vector3{ 0.f, 0.f, 0.f } :
+		Vector3{ distance, std::atan2(v.y, v.x), std::acos(v.z / distance) };
+}
+
 // End of the namespace gltut
 }
 
