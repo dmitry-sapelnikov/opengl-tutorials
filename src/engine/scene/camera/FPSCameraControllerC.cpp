@@ -1,4 +1,5 @@
 //	Includes
+#include <algorithm>
 #include "FPSCameraControllerC.h"
 #include "engine/core/Check.h"
 
@@ -26,54 +27,103 @@ void FPSCameraControllerC::updateCamera(
 	u64,
 	u32 timeDeltaMs) noexcept
 {
-	auto& camera = getCamera();
-	auto& view = camera.getView();
-
 	Vector3 movement(
 		static_cast<float>(right) - static_cast<float>(left),
 		0.0f,
-		static_cast<float>(back) - static_cast<float>(front));
+		static_cast<float>(front) - static_cast<float>(back));
 
-	if (movement.isZero())
+	/*if (movement.isZero() && !mLeftMouseButtonPressed && !mMouseDrag)
 	{
 		return;
-	}
-	
-	movement.normalize();
-	movement *= mTranslationSpeed * (timeDeltaMs / 1000.0F);
-	const auto newPosition = view.getPosition() + movement;
-	const auto newTarget = view.getTarget() + movement;
+	}*/
 
-	view.setPosition(newPosition);
-	view.setTarget(newTarget);
+	auto& camera = getCamera();
+	auto& view = camera.getView();
+
+	auto direction = view.getDirection();
+	auto right = view.getRight();
+	//if (mLeftMouseButtonPressed)
+	//{
+	//	//if (!mMouseDrag)
+	//	{
+	//		mStartMousePosition = mMousePosition;
+	//		mInitialCameraDirection = direction;
+	//		mMouseDrag = true;
+	//	}
+	//	else
+	//	{
+			const auto delta = mMousePosition - mStartMousePosition;
+			const float yaw = -delta.x * mMouseSensitivity;
+			const float pitch = std::clamp(delta.y * mMouseSensitivity, -89.0f, 89.0f);
+
+			Matrix4 yawRotation = Matrix4::rotationMatrix(view.getUp() * toRadians(yaw));
+			direction = yawRotation * mInitialCameraDirection;
+			right = direction.cross(view.getUp()).normalize();
+
+			Matrix4 pitchRotation = Matrix4::rotationMatrix(-right * toRadians(pitch));
+			direction = pitchRotation * direction;
+	/*	}
+	}
+	else
+	{
+		mMouseDrag = false;
+	}*/
+
+	if (!movement.isZero())
+	{
+		movement.normalize();
+		movement *= mTranslationSpeed * (timeDeltaMs / 1000.0F);
+		view.setPosition(view.getPosition() + movement.x * right + movement.z * direction);
+	}
+	view.setTarget(view.getPosition() + direction);
 }
 
 void FPSCameraControllerC::onEvent(const Event& event) noexcept
 {
-	if (event.type == Event::Type::KEYBOARD)
+	switch (event.type)
+	{
+	case Event::Type::KEYBOARD:
 	{
 		// Using WASD keys for movement
 		switch (event.keyboard.key)
 		{
-			case KeyCode::W:
-				front = event.keyboard.pressedDown;
-				break;
+		case KeyCode::W:
+			front = event.keyboard.pressedDown;
+			break;
 
-			case KeyCode::S:
-				back = event.keyboard.pressedDown;
-				break;
+		case KeyCode::S:
+			back = event.keyboard.pressedDown;
+			break;
 
-			case KeyCode::A:
-				left = event.keyboard.pressedDown;
-				break;
+		case KeyCode::A:
+			left = event.keyboard.pressedDown;
+			break;
 
-			case KeyCode::D:
-				right = event.keyboard.pressedDown;
-				break;
+		case KeyCode::D:
+			right = event.keyboard.pressedDown;
+			break;
 
-			default:
-				break;
+		default:
+			break;
 		}
+	}
+	break;
+
+	case Event::Type::MOUSE:
+	{
+		mLeftMouseButtonPressed = event.mouse.buttons.left;
+		mMousePosition = event.mouse.position;
+		if (mFirstMouseMove)
+		{
+			mStartMousePosition = mMousePosition;
+			mFirstMouseMove = false;
+			mInitialCameraDirection = mCamera.getView().getDirection();
+		}
+	}
+	break;
+
+	default:
+		break;
 	}
 }
 

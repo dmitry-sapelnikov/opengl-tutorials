@@ -44,11 +44,24 @@ private:
 
 	///	Translation speed
 	float mTranslationSpeed;
+	float mMouseSensitivity = 0.1f;
 
 	bool front = false;
 	bool back = false;
 	bool left = false;
 	bool right = false;
+
+	bool mLeftMouseButtonPressed = false;
+
+	Point2i mStartMousePosition;
+
+	Vector3 mInitialCameraDirection;
+
+	Point2i mMousePosition;
+
+	bool mMouseDrag = false;
+
+	bool mFirstMouseMove = true;
 };
 
 //	End of the namespace irr::scene

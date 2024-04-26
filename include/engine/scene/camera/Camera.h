@@ -35,6 +35,16 @@ public:
 
 	/// Sets the up vector of the camera
 	virtual void setUp(const Vector3& up) noexcept = 0;
+
+	Vector3 getDirection() const noexcept
+	{
+		return (getTarget() - getPosition()).normalize();
+	}
+
+	Vector3 getRight() const noexcept
+	{
+		return getDirection().cross(getUp()).normalize();
+	}
 };
 
 /// The class represents a camera projection
