@@ -101,8 +101,8 @@ Vector3 screenToCameraRay(
 
 	// Convert the screen point to the normalized device coordinates (NDC)
 	const Vector3 ndc(
-		(2.0f * windowSize.x) / windowSize.x - 1.0f,
-		1.0f - (2.0f * windowSize.y) / windowSize.y,
+		(2.0f * screenPoint.x) / windowSize.x - 1.0f,
+		1.0f - (2.0f * screenPoint.y) / windowSize.y,
 		0.0f);
 
 	Matrix4 viewProjection = projection.getMatrix() * view.getMatrix();
