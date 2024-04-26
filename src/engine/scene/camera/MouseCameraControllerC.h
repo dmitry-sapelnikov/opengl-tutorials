@@ -41,9 +41,6 @@ public:
 	virtual void onEvent(const Event& event) noexcept final;
 
 private:
-	///	Checks if a specific mouse button is pressed
-	bool isMouseButtonDown(Event::MouseEvent::Button button) noexcept;
-
 	/// The camera
 	Camera& mCamera;
 
@@ -95,8 +92,7 @@ private:
 	///	Mouse position in the screen coordinates
 	Point2i mMousePosition;
 
-	///	Table of pressed mouse buttons
-	bool mMouseButtons[3]{false, false, false};
+	Event::MouseEvent::Buttons mMouseButtons;
 };
 
 //	End of the namespace irr::scene

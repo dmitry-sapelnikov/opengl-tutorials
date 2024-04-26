@@ -74,7 +74,7 @@ void MouseCameraControllerC::updateCamera() noexcept
 	Vector3 rotation = mRotation;
 
 	//	Rotation 
-	if (isMouseButtonDown(Event::MouseEvent::Button::LEFT))
+	if (mMouseButtons.left)
 	{
 		if (!mRotating)
 		{
@@ -97,7 +97,7 @@ void MouseCameraControllerC::updateCamera() noexcept
 	}
 
 	//	Translation
-	if (isMouseButtonDown(Event::MouseEvent::Button::MIDDLE))
+	if (mMouseButtons.middle)
 	{
 		if (!mTranslating)
 		{
@@ -174,10 +174,7 @@ void MouseCameraControllerC::onEvent(const Event& event) noexcept
 	}
 
 	mMousePosition = event.mouse.position;
-	for (size_t i = 0; i < 3; ++i)
-	{
-		mMouseButtons[i] = event.mouse.isPressed(static_cast<Event::MouseEvent::Button>(i));
-	}
+	mMouseButtons = event.mouse.buttons;
 
 	if (event.mouse.type == Event::MouseEvent::Type::WHEEL)
 	{
@@ -190,13 +187,6 @@ void MouseCameraControllerC::onEvent(const Event& event) noexcept
 			mTargetMinDistance,
 			mTargetMaxDistance);
 	}
-}
-
-bool MouseCameraControllerC::isMouseButtonDown(Event::MouseEvent::Button button) noexcept
-{
-	u32 index = static_cast<u32>(button);
-	GLTUT_ASSERT(index < 3);
-	return mMouseButtons[index];
 }
 
 //	Global functions

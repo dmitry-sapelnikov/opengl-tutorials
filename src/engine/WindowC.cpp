@@ -63,6 +63,9 @@ static LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 		gltut::Event event;
 		event.type = gltut::Event::Type::MOUSE;
 		event.mouse.position = { LOWORD(lParam), HIWORD(lParam) };
+		event.mouse.buttons.left = (wParam & MK_LBUTTON) != 0;
+		event.mouse.buttons.right = (wParam & MK_RBUTTON) != 0;
+		event.mouse.buttons.middle = (wParam & MK_MBUTTON) != 0;
 
 		switch (message)
 		{
