@@ -3,6 +3,7 @@
 
 // Includes
 #include <deque>
+#include <chrono>
 #include "engine/core/NonCopyable.h"
 #include "engine/Scene.h"
 #include "RendererBase.h"
@@ -81,6 +82,12 @@ private:
 
 	/// The active camera
 	Camera* mActiveCamera = nullptr;
+
+	/// Creation time
+	std::chrono::time_point<std::chrono::high_resolution_clock> mCreationTime;
+
+	/// The last update time
+	std::chrono::time_point<std::chrono::high_resolution_clock> mLastUpdateTime;
 };
 
 // End of the namespace gltut

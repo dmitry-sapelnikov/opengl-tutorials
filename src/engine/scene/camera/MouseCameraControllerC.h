@@ -35,7 +35,9 @@ public:
 	}
 
 	/// Updates the camera
-	virtual void updateCamera() noexcept final;
+	virtual void updateCamera(
+		u64 timeMs,
+		u32 timeDeltaMs) noexcept final;
 
 	///	Event handler
 	virtual void onEvent(const Event& event) noexcept final;

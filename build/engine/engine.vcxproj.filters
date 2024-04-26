@@ -152,8 +152,8 @@
     <ClInclude Include="..\..\src\engine\scene\camera\MouseCameraControllerC.h">
       <Filter>src\scene\camera</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\engine\scene\camera\MouseCameraController.h">
-      <Filter>include\scene\camera</Filter>
+    <ClInclude Include="..\..\src\engine\scene\camera\FPSCameraControllerC.h">
+      <Filter>src\scene\camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -206,6 +206,9 @@
       <Filter>src\scene\camera</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\engine\scene\camera\MouseCameraControllerC.cpp">
+      <Filter>src\scene\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\scene\camera\FPSCameraControllerC.cpp">
       <Filter>src\scene\camera</Filter>
     </ClCompile>
   </ItemGroup>

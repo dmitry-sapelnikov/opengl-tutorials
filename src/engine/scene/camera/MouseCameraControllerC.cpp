@@ -65,7 +65,7 @@ MouseCameraControllerC::~MouseCameraControllerC() noexcept
 	mCamera.getProjection().getWindow()->removeEventHandler(this);
 }
 
-void MouseCameraControllerC::updateCamera() noexcept
+void MouseCameraControllerC::updateCamera(u64, u32) noexcept
 {
 	auto& camera = getCamera();
 	auto& view = camera.getView();
