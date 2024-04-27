@@ -177,13 +177,30 @@ inline Vector3 operator*(float s, const Vector3& v) noexcept
 	return v * s;
 }
 
-///	Returns the spherical coordinates of a vector in order (distance, azimuth, inclination)
-inline Vector3 getSphericalCoordinates(const Vector3& v) noexcept
+/**
+	\brief Returns the distance, azimuth, and inclination of the vector,
+	the angles are in radians.
+*/
+inline Vector3 getDistanceAzimuthInclination(const Vector3 & v) noexcept
 {
 	const float distance = v.length();
 	return isNearZero(distance) ?
 		Vector3{ 0.f, 0.f, 0.f } :
-		Vector3{ distance, std::atan2(v.y, v.x), std::acos(v.z / distance) };
+		Vector3{ distance, std::atan2(v.y, v.x), std::asin(v.z / distance) };
+}
+
+/**
+	\brief Sets the distance, azimuth, and inclination to a vector,
+	the angles are in radians.
+*/
+inline Vector3 setDistanceAzimuthInclination(const Vector3& dai) noexcept
+{
+	const float d = dai.x;
+	const float cosInclination = std::cos(dai.z);
+	return Vector3 {
+		d * std::cos(dai.y) * cosInclination,
+		d * std::sin(dai.y) * cosInclination,
+		d * std::sin(dai.z) };
 }
 
 // End of the namespace gltut

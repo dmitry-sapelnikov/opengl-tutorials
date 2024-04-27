@@ -53,7 +53,7 @@ MouseCameraControllerC::MouseCameraControllerC(
 	mPosition = view.getPosition();
 	mTarget = view.getTarget();
 
-	const Vector3 spherical = getSphericalCoordinates(mPosition - mTarget);
+	const Vector3 spherical = getDistanceAzimuthInclination(mPosition - mTarget);
 	mRotation = { spherical.y, spherical.z, 0.0F };
 	mCurrentZoom = spherical.x;
 
