@@ -110,7 +110,7 @@ Vector3 screenToCameraRay(
 	bool inverted = viewProjection.getInverse(viewProjectionInv);
 	GLTUT_ASSERT(inverted);
 
-	return (viewProjectionInv * ndc).getNormalized();
+	return (viewProjectionInv * ndc - view.getPosition()).getNormalized();
 }
 
 // End of the namespace gltut
