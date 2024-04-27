@@ -62,6 +62,12 @@ struct Point2
 	{
 		return { -x, -y };
 	}
+
+	/// Checks if the point is zero
+	bool isZero() const
+	{
+		return x == 0 && y == 0;
+	}
 };
 
 /// Unsigned 32-bit point
