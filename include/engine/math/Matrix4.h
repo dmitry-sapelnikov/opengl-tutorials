@@ -142,6 +142,16 @@ public:
 		return { col[0], col[1], col[2] };
 	}
 
+	/// Sets the axis at the specified index
+	void setAxis(u32 i, const Vector3& v) noexcept
+	{
+		GLTUT_ASSERT(i < 3);
+		auto& col = m[i];
+		col[0] = v.x;
+		col[1] = v.y;
+		col[2] = v.z;
+	}
+
 	/// Sets the matrix to the identity matrix
 	Matrix4& setToIdentity() noexcept
 	{
