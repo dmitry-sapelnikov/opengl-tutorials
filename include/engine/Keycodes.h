@@ -1,5 +1,5 @@
-#ifndef __IRR_CODES_H_INCLUDED__
-#define __IRR_CODES_H_INCLUDED__
+#ifndef GLTUT_KEYCODES_H
+#define GLTUT_KEYCODES_H
 
 namespace gltut
 {

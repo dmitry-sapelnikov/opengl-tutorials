@@ -97,7 +97,7 @@ private:
 	Event::MouseEvent::Buttons mMouseButtons;
 };
 
-//	End of the namespace irr::scene
+//	End of the namespace gltut
 }
 
 #endif

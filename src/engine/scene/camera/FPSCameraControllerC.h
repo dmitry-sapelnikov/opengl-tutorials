@@ -64,7 +64,7 @@ private:
 	bool mFirstMouseMove = true;
 };
 
-//	End of the namespace irr::scene
+//	End of the namespace gltut
 }
 
 #endif
