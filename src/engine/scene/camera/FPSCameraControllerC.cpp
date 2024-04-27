@@ -26,8 +26,10 @@ FPSCameraControllerC::FPSCameraControllerC(
 	auto* window = mCamera.getProjection().getWindow();
 	window->addEventHandler(this);
 
-	mPrevMousePosition = window->getCursorPosition();
+	const auto windowSize = window->getSize();
+	mPrevMousePosition = { (int32)windowSize.x / 2, (int32)windowSize.y / 2 };
 	mMousePosition = mPrevMousePosition;
+	window->setCursorPosition(mPrevMousePosition);
 
 	const auto& view = mCamera.getView();
 	const Vector3 up = view.getUp();
@@ -66,7 +68,8 @@ void FPSCameraControllerC::updateCamera(
 		mPrevMousePosition = mMousePosition;
 	}
 
-	if (mMoveRight - mMoveLeft + mMoveFront - mMoveBack != 0)
+	if (mMoveRight - mMoveLeft != 0 ||
+		mMoveFront - mMoveBack != 0)
 	{
 		Vector3 movement(
 			static_cast<float>(mMoveRight - mMoveLeft),
