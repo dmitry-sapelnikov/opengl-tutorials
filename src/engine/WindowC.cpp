@@ -9,6 +9,12 @@
 namespace gltut
 {
 
+#define CALL_WINAPI_WITH_ASSERT(apiCall) \
+{\
+	const auto apiCallResult = (apiCall);\
+	GLTUT_ASSERT(apiCallResult);\
+}
+
 //	Local classes
 class WindowCallback : public EventHandler
 {
@@ -318,7 +324,7 @@ bool WindowC::update() noexcept
 		return false;
 	}
 
-	SwapBuffers((HDC)mDeviceContext);
+	CALL_WINAPI_WITH_ASSERT(SwapBuffers((HDC)mDeviceContext));
 
 	if (mFPSCounter != nullptr)
 	{
