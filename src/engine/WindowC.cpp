@@ -305,6 +305,21 @@ void WindowC::removeEventHandler(EventHandler* handler) noexcept
 	}
 }
 
+Point2i WindowC::getCursorPosition() const noexcept
+{
+	POINT point;
+	CALL_WINAPI_WITH_ASSERT(GetCursorPos(&point));
+	CALL_WINAPI_WITH_ASSERT(ScreenToClient((HWND)mWindow, &point));
+	return { point.x, point.y };
+}
+
+void WindowC::setCursorPosition(const Point2i& position) noexcept
+{
+	POINT point = { position.x, position.y };
+	CALL_WINAPI_WITH_ASSERT(ClientToScreen((HWND)mWindow, &point));
+	CALL_WINAPI_WITH_ASSERT(SetCursorPos(point.x, point.y));
+}
+
 bool WindowC::update() noexcept
 {
 	MSG msg;

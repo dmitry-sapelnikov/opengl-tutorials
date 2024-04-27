@@ -30,6 +30,11 @@ public:
 	/// Removes an event handler. Does nothing if the handler is not found.
 	virtual void removeEventHandler(EventHandler* handler) noexcept = 0;
 
+	/// Returns the current cursor position
+	virtual Point2i getCursorPosition() const noexcept = 0;
+
+	/// Sets the cursor position
+	virtual void setCursorPosition(const Point2i& position) noexcept = 0;
 };
 
 // End of the namespace gltut
