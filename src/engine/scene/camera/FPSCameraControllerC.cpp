@@ -5,17 +5,38 @@
 
 namespace gltut
 {
-
 //	Global classes
 FPSCameraControllerC::FPSCameraControllerC(
 	Camera& camera,
-	float translationSpeed) :
+	float translationSpeed,
+	float mouseSensitivity) :
 
 	mCamera(camera),
-	mTranslationSpeed(translationSpeed)
+	mTranslationSpeed(translationSpeed),
+	mMouseSensitivity(mouseSensitivity)
 {
-	GLTUT_CHECK(mTranslationSpeed > 0.0F, "The translation speed must be positive");
-	mCamera.getProjection().getWindow()->addEventHandler(this);
+	GLTUT_CHECK(
+		mTranslationSpeed > 0.0F,
+		"The translation speed must be positive");
+
+	GLTUT_CHECK(
+		mMouseSensitivity > 0.0F,
+		"The mouse sensitivity must be positive");
+
+	auto* window = mCamera.getProjection().getWindow();
+	window->addEventHandler(this);
+
+	mPrevMousePosition = window->getCursorPosition();
+	mMousePosition = mPrevMousePosition;
+
+	const auto& view = mCamera.getView();
+	const Vector3 up = view.getUp();
+	const Vector3 right = view.getRight();
+	const Vector3 front = up.cross(right).normalize();
+
+	mPitchYawBasis.setAxis(0, front);
+	mPitchYawBasis.setAxis(1, right);
+	mPitchYawBasis.setAxis(2, up);
 }
 
 FPSCameraControllerC::~FPSCameraControllerC() noexcept
@@ -27,55 +48,39 @@ void FPSCameraControllerC::updateCamera(
 	u64,
 	u32 timeDeltaMs) noexcept
 {
-	Vector3 movement(
-		static_cast<float>(right) - static_cast<float>(left),
-		0.0f,
-		static_cast<float>(front) - static_cast<float>(back));
-
-	/*if (movement.isZero() && !mLeftMouseButtonPressed && !mMouseDrag)
+	auto& view = mCamera.getView();
+	const Point2i mouseDelta = mMousePosition - mPrevMousePosition;
+	if (!mouseDelta.isZero())
 	{
-		return;
-	}*/
+		mYaw += mouseDelta.x * mMouseSensitivity;
+		// The pitch is inverted because the mouse Y-axis is inverted
+		mPitch -= mouseDelta.y * mMouseSensitivity;
 
-	auto& camera = getCamera();
-	auto& view = camera.getView();
+		// Clamp the pitch to prevent the camera from flipping
+		mPitch = std::clamp(mPitch, -89.0f, 89.0f);
+		const Vector3 localDir = setDistanceAzimuthInclination(
+			{ 1.0f, toRadians(mYaw), toRadians(mPitch) });
 
-	auto direction = view.getDirection();
-	auto right = view.getRight();
-	//if (mLeftMouseButtonPressed)
-	//{
-	//	//if (!mMouseDrag)
-	//	{
-	//		mStartMousePosition = mMousePosition;
-	//		mInitialCameraDirection = direction;
-	//		mMouseDrag = true;
-	//	}
-	//	else
-	//	{
-			const auto delta = mMousePosition - mStartMousePosition;
-			const float yaw = -delta.x * mMouseSensitivity;
-			const float pitch = std::clamp(delta.y * mMouseSensitivity, -89.0f, 89.0f);
-
-			Matrix4 yawRotation = Matrix4::rotationMatrix(view.getUp() * toRadians(yaw));
-			direction = yawRotation * mInitialCameraDirection;
-			right = direction.cross(view.getUp()).normalize();
-
-			Matrix4 pitchRotation = Matrix4::rotationMatrix(-right * toRadians(pitch));
-			direction = pitchRotation * direction;
-	/*	}
+		const Vector3 direction = mPitchYawBasis * localDir;
+		view.setTarget(view.getPosition() + direction);
+		mPrevMousePosition = mMousePosition;
 	}
-	else
-	{
-		mMouseDrag = false;
-	}*/
 
-	if (!movement.isZero())
+	if (mMoveRight - mMoveLeft + mMoveFront - mMoveBack != 0)
 	{
+		Vector3 movement(
+			static_cast<float>(mMoveRight - mMoveLeft),
+			static_cast<float>(mMoveFront - mMoveBack));
 		movement.normalize();
-		movement *= mTranslationSpeed * (timeDeltaMs / 1000.0F);
-		view.setPosition(view.getPosition() + movement.x * right + movement.z * direction);
+		movement *= mTranslationSpeed * (timeDeltaMs / 1000.0f);
+
+		const Vector3 positionDelta =
+			view.getRight() * movement.x +
+			view.getDirection() * movement.y;
+
+		view.setPosition(view.getPosition() + positionDelta);
+		view.setTarget(view.getTarget() + positionDelta);
 	}
-	view.setTarget(view.getPosition() + direction);
 }
 
 void FPSCameraControllerC::onEvent(const Event& event) noexcept
@@ -83,46 +88,28 @@ void FPSCameraControllerC::onEvent(const Event& event) noexcept
 	switch (event.type)
 	{
 	case Event::Type::KEYBOARD:
-	{
-		// Using WASD keys for movement
 		switch (event.keyboard.key)
 		{
 		case KeyCode::W:
-			front = event.keyboard.pressedDown;
+			mMoveFront = event.keyboard.pressedDown;
 			break;
 
 		case KeyCode::S:
-			back = event.keyboard.pressedDown;
+			mMoveBack = event.keyboard.pressedDown;
 			break;
 
 		case KeyCode::A:
-			left = event.keyboard.pressedDown;
+			mMoveLeft = event.keyboard.pressedDown;
 			break;
 
 		case KeyCode::D:
-			right = event.keyboard.pressedDown;
-			break;
-
-		default:
+			mMoveRight = event.keyboard.pressedDown;
 			break;
 		}
-	}
-	break;
+		break;
 
 	case Event::Type::MOUSE:
-	{
-		mLeftMouseButtonPressed = event.mouse.buttons.left;
 		mMousePosition = event.mouse.position;
-		if (mFirstMouseMove)
-		{
-			mStartMousePosition = mMousePosition;
-			mFirstMouseMove = false;
-			mInitialCameraDirection = mCamera.getView().getDirection();
-		}
-	}
-	break;
-
-	default:
 		break;
 	}
 }
@@ -130,14 +117,15 @@ void FPSCameraControllerC::onEvent(const Event& event) noexcept
 //	Global functions
 CameraController* createFPSCameraController(
 	Camera& camera,
-	float translationSpeed) noexcept
+	float translationSpeed,
+	float mouseSensitivity) noexcept
 {
 	GLTUT_CATCH_ALL_BEGIN
 		return new FPSCameraControllerC(
 			camera,
-			translationSpeed);
-
-	GLTUT_CATCH_ALL_END("Cannot create a FPS camera controller")
+			translationSpeed,
+			mouseSensitivity);
+	GLTUT_CATCH_ALL_END("Cannot create a FPS camera controller");
 	return nullptr;
 }
 

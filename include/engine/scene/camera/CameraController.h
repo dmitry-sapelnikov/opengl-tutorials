@@ -27,7 +27,8 @@ public:
 /// Creates a FPS camera controller
 CameraController* createFPSCameraController(
 	Camera& camera,
-	float translationSpeed) noexcept;
+	float translationSpeed,
+	float mouseSensitivity) noexcept;
 
 /// Creates a mouse camera controller
 CameraController* createMouseCameraController(

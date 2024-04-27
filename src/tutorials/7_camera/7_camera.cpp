@@ -71,7 +71,7 @@ int main()
 			100.0f);
 
 		std::unique_ptr<gltut::CameraController> controller(
-			gltut::createFPSCameraController(*camera, 20.0F));
+			gltut::createFPSCameraController(*camera, 20.0f, 0.1f));
 		GLTUT_CHECK(controller.get() != nullptr, "Failed to create camera controller");
 		engine->getScene()->addCameraController(controller.get());
 

@@ -2,7 +2,6 @@
 #define GLTUT_MOUSE_FPS_CONTROLLER_C_H
 
 //	Includes
-#include <array>
 #include "engine/core/NonCopyable.h"
 #include "engine/scene/camera/CameraController.h"
 
@@ -19,7 +18,9 @@ public:
 	/// Constructor
 	FPSCameraControllerC(
 		Camera& camera,
-		float translationSpeed);
+		float translationSpeed,
+		float mouseSensitivity);
+
 
 	///	Destructor
 	~FPSCameraControllerC() noexcept final;
@@ -42,26 +43,38 @@ private:
 	/// The camera
 	Camera& mCamera;
 
-	///	Translation speed
+	///	Translation speed, units per second
 	float mTranslationSpeed;
-	float mMouseSensitivity = 0.1f;
 
-	bool front = false;
-	bool back = false;
-	bool left = false;
-	bool right = false;
+	///	Mouse sensitivity, degrees per pixel
+	float mMouseSensitivity;
 
-	bool mLeftMouseButtonPressed = false;
+	///	Front movement flag
+	bool mMoveFront = false;
 
-	Point2i mStartMousePosition;
+	///	Back movement flag
+	bool mMoveBack = false;
 
-	Vector3 mInitialCameraDirection;
+	///	Left movement flag
+	bool mMoveLeft = false;
 
+	///	Right movement flag
+	bool mMoveRight = false;
+
+	/// The current mouse position
 	Point2i mMousePosition;
 
-	bool mMouseDrag = false;
+	/// The previous mouse position
+	Point2i mPrevMousePosition;
 
-	bool mFirstMouseMove = true;
+	/// The camera's yaw, in degrees
+	float mYaw = 0.0F;
+
+	/// The camera's pitch, in degrees
+	float mPitch = 0.0F;
+
+	/// The basis for the pitch and yaw
+	Matrix4 mPitchYawBasis = Matrix4::identity();
 };
 
 //	End of the namespace gltut
