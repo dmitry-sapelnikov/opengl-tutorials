@@ -8,7 +8,11 @@
 
 // Macros
 /// Assert macro
+#ifdef NDEBUG
+#define GLTUT_ASSERT(condition) (void)(condition)
+#else
 #define GLTUT_ASSERT(condition) assert(condition)
+#endif
 
 /// Assert that a string is not empty
 inline void GLTUT_ASSERT_STRING(const char* string)
