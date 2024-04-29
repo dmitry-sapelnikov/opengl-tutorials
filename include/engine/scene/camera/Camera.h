@@ -109,13 +109,33 @@ public:
 
 	/// Returns the projection (non-const)
 	virtual CameraProjection& getProjection() noexcept = 0;
+
+	/// Returns the projection-view matrix
+	Matrix4 getProjectionView() const noexcept
+	{
+		return getProjection().getMatrix() * getView().getMatrix();
+	}
+
+	/// Returns the inverted projection-view matrix
+	Matrix4 getProjectionViewInverse() const noexcept
+	{
+		Matrix4 result;
+		const bool inverted = getProjectionView().getInverse(result);
+		GLTUT_ASSERT(inverted);
+		return result;
+	}
 };
 
-/// Returns a 3d ray which would go through the 2d screen coodinates
-/// The ray starts from the camera position
+// Global functions
+/**
+	\brief Returns a 3d ray which would go through the 2d screen coodinates
+	The ray starts at the camera position and ends at the far plane
+*/
 Vector3 screenToCameraRay(
 	const Point2i& screenPoint,
-	const Camera& camera);
+	const Point2u& windowSize,
+	const Vector3& cameraPosition,
+	const Matrix4& cameraProjectionViewInverse);
 
 // End of the namespace gltut
 }

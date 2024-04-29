@@ -90,12 +90,10 @@ void CameraProjectionC::update() noexcept
 //	Global functions
 Vector3 screenToCameraRay(
 	const Point2i& screenPoint,
-	const Camera& camera)
+	const Point2u& windowSize,
+	const Vector3& cameraPosition,
+	const Matrix4& cameraProjectionViewInverse)
 {
-	const CameraView& view = camera.getView();
-	const CameraProjection& projection = camera.getProjection();
-
-	const Point2u windowSize = projection.getWindow()->getSize();
 	GLTUT_ASSERT(windowSize.x != 0);
 	GLTUT_ASSERT(windowSize.y != 0);
 
@@ -103,14 +101,8 @@ Vector3 screenToCameraRay(
 	const Vector3 ndc(
 		(2.0f * screenPoint.x) / windowSize.x - 1.0f,
 		1.0f - (2.0f * screenPoint.y) / windowSize.y,
-		0.0f);
-
-	Matrix4 viewProjection = projection.getMatrix() * view.getMatrix();
-	Matrix4 viewProjectionInv;
-	bool inverted = viewProjection.getInverse(viewProjectionInv);
-	GLTUT_ASSERT(inverted);
-
-	return (viewProjectionInv * ndc - view.getPosition()).getNormalized();
+		1.0f);
+	return cameraProjectionViewInverse * ndc - cameraPosition;
 }
 
 // End of the namespace gltut

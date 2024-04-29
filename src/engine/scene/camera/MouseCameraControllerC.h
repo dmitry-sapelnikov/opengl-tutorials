@@ -19,9 +19,8 @@ public:
 	/// Constructor
 	MouseCameraControllerC(
 		Camera& camera,
-		float rotationSpeed,
+		float mouseSpeed,
 		float zoomSpeed,
-		float translationSpeed,
 		float targetMinDistance,
 		float targetMaxDistance);
 
@@ -46,11 +45,8 @@ private:
 	/// The camera
 	Camera& mCamera;
 
-	///	Translation speed
-	float mTranslationSpeed;
-
 	///	Rotation speed
-	float mRotationSpeed;
+	float mMouseSpeed;
 
 	///	Zoom speed
 	float mZoomSpeed;
@@ -59,16 +55,25 @@ private:
 	Vector3 mPosition;
 
 	///	Camera target
-	Vector3 mTarget;
+	Vector3 mInitialTarget;
 
-	///	Old camera target
-	Vector3 mOldTarget;
+	///	Camera position
+	Vector3 mInitialPosition;
 
-	///	Value of the rotation about the X and Y axes
-	Vector3 mRotation;
+	Point2u mWindowSize;
 
-	///	Camera up vector
-	Vector3 mUpVector;
+	Matrix4 mProjectionViewInv;
+
+	Vector3 mDragStart;
+
+	/// The camera's yaw, in degrees
+	float mYaw = 0.0F;
+
+	/// The camera's pitch, in degrees
+	float mPitch = 0.0F;
+
+	/// The basis for the pitch and yaw
+	Matrix4 mPitchYawBasis = Matrix4::identity();
 
 	///	Min allowed distance to the camera target
 	float mTargetMinDistance = 0.1f;
@@ -82,14 +87,13 @@ private:
 	///	Translation process flag
 	bool mTranslating = false;
 
-	///	Rotation start point in the screen coordinates
-	Point2i mRotateStart;
-
 	///	Translation start point in the screen coordinates
-	Point2i mTranslateStart;
+	Point2i mMouseStart;
+
+	float mPrevZoom = 0.0f;
 
 	///	Current zoom value
-	float mCurrentZoom = 100.0f;
+	float mCurrentZoom = 0.0f;
 
 	///	Mouse position in the screen coordinates
 	Point2i mMousePosition;

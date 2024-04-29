@@ -33,9 +33,8 @@ CameraController* createFPSCameraController(
 /// Creates a mouse camera controller
 CameraController* createMouseCameraController(
 	Camera& camera,
-	float rotationSpeed = 100.0f,
+	float rotationSpeed = 0.1f,
 	float zoomSpeed = 100.0f,
-	float translationSpeed = 100.0f,
 	float targetMinDistance = 1.0f,
 	float targetMaxDistance = 100.0f) noexcept;
 

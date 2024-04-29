@@ -1,61 +1,45 @@
 //	Includes
 #include "MouseCameraControllerC.h"
-
 #include <algorithm>
 #include "engine/core/Check.h"
 
 namespace gltut
 {
-
-namespace
-{
-//	Local functions
-///	Returns the rotation offset from a pixel offset
-Vector3 getRotationOffset(const Point2i& pixelOffset)
-{
-	static constexpr float ROTATION_OFFSET_SCALE = 0.002F;
-	return
-	{
-		static_cast<float>(pixelOffset.x) * ROTATION_OFFSET_SCALE,
-		static_cast<float>(pixelOffset.y) * ROTATION_OFFSET_SCALE,
-		0.0f
-	};
-}
-
-// End of anonymous namespace
-}
-
 //	Global classes
 MouseCameraControllerC::MouseCameraControllerC(
 	Camera& camera,
-	float rotationSpeed,
+	float mouseSpeed,
 	float zoomSpeed,
-	float translationSpeed,
 	float targetMinDistance,
 	float targetMaxDistance) :
 
 	mCamera(camera),
-	mRotationSpeed(rotationSpeed),
+	mMouseSpeed(mouseSpeed),
 	mZoomSpeed(zoomSpeed),
-	mTranslationSpeed(translationSpeed),
 	mTargetMinDistance(targetMinDistance),
-	mTargetMaxDistance(targetMaxDistance),
-	mUpVector(camera.getView().getUp())
+	mTargetMaxDistance(targetMaxDistance)
 {
-	GLTUT_CHECK(mRotationSpeed > 0.0F, "The rotation speed must be positive");
+	GLTUT_CHECK(mMouseSpeed > 0.0F, "The rotation speed must be positive");
 	GLTUT_CHECK(mZoomSpeed > 0.0F, "The zoom speed must be positive");
-	GLTUT_CHECK(mTranslationSpeed > 0.0F, "The translation speed must be positive");
 	GLTUT_CHECK(mTargetMinDistance > 0.0F, "The minimum target distance must be positive");
 	GLTUT_CHECK(mTargetMaxDistance > mTargetMinDistance, 
 		"The maximum target distance must be greater than the minimum target distance");
 
 	const auto& view = camera.getView();
-	mPosition = view.getPosition();
-	mTarget = view.getTarget();
+	mPrevZoom = std::clamp(
+		(view.getPosition() - view.getTarget()).length(),
+		mTargetMinDistance,
+		mTargetMaxDistance);
 
-	const Vector3 spherical = getDistanceAzimuthInclination(mPosition - mTarget);
-	mRotation = { spherical.y, spherical.z, 0.0F };
-	mCurrentZoom = spherical.x;
+	mCurrentZoom = mPrevZoom;
+
+	const Vector3 up = view.getUp();
+	const Vector3 right = view.getRight();
+	const Vector3 front = up.cross(right).normalize();
+
+	mPitchYawBasis.setAxis(0, front);
+	mPitchYawBasis.setAxis(1, right);
+	mPitchYawBasis.setAxis(2, up);
 
 	mCamera.getProjection().getWindow()->addEventHandler(this);
 }
@@ -70,29 +54,45 @@ void MouseCameraControllerC::updateCamera(u64, u32) noexcept
 	auto& camera = getCamera();
 	auto& view = camera.getView();
 
-	//	Rotation values
-	Vector3 rotation = mRotation;
+	//	Zoom
+	if (mPrevZoom != mCurrentZoom)
+	{
+		view.setPosition(view.getTarget() - view.getDirection() * mCurrentZoom);
+		mPrevZoom = mCurrentZoom;
+	}
 
-	//	Rotation 
+	//	Rotation
 	if (mMouseButtons.left)
 	{
 		if (!mRotating)
 		{
-			mRotateStart = mMousePosition;
+			mMouseStart = mMousePosition;
 			mRotating = true;
-			rotation = mRotation;
 		}
 		else
 		{
-			const auto mouseDelta = mRotateStart - mMousePosition;
-			rotation -= getRotationOffset(mouseDelta) * mRotationSpeed;
+			const Point2i mouseDelta = mMousePosition - mMouseStart;
+
+			mYaw += mouseDelta.x * mMouseSpeed;
+
+			// The pitch is inverted because the mouse Y-axis is inverted
+			mPitch -= mouseDelta.y * mMouseSpeed;
+
+			// Clamp the pitch to prevent the camera from flipping
+			mPitch = std::clamp(mPitch, -89.0f, 89.0f);
+
+			const Vector3 localDir = setDistanceAzimuthInclination(
+				{ 1.0f, toRadians(mYaw), toRadians(mPitch) });
+
+			const Vector3 direction = mPitchYawBasis * localDir;
+			view.setPosition(view.getTarget() - direction * mCurrentZoom);
+
+			mMouseStart = mMousePosition;
+			return;
 		}
 	}
-	else if (mRotating)
+	else
 	{
-		const auto mouseDelta = mRotateStart - mMousePosition;
-		mRotation -= getRotationOffset(mouseDelta) * mRotationSpeed;
-		rotation = mRotation;
 		mRotating = false;
 	}
 
@@ -101,69 +101,35 @@ void MouseCameraControllerC::updateCamera(u64, u32) noexcept
 	{
 		if (!mTranslating)
 		{
-			mTranslateStart = mMousePosition;
+			mMouseStart = mMousePosition;
 			mTranslating = true;
-			mOldTarget = mTarget;
+			mInitialTarget = view.getTarget();
+			mInitialPosition = view.getPosition();
+			mProjectionViewInv = camera.getProjectionViewInverse();
+			mWindowSize = camera.getProjection().getWindow()->getSize();
+			mDragStart = screenToCameraRay(mMouseStart, mWindowSize, mInitialPosition, mProjectionViewInv);
 		}
 		else
 		{
-			const auto startPoint = screenToCameraRay(mTranslateStart, camera);
-			const auto endPoint = screenToCameraRay(mMousePosition, camera);
-
-			const Vector3 cameraDirection = mPosition - mTarget;
-
-			const auto targetDelta =
-				(startPoint - endPoint) *
-				(cameraDirection.length() / camera.getProjection().getFarPlane()) *
-				(mTranslationSpeed / 100.0F);
-
-			mTarget = mOldTarget + targetDelta;
+			const Vector3 currentDrag = screenToCameraRay(
+				mMousePosition,
+				mWindowSize,
+				mInitialPosition,
+				mProjectionViewInv);
+			
+			const Vector3 distance = mInitialTarget - mInitialPosition;
+			const float proj = distance.dot(currentDrag);
+			GLTUT_ASSERT(proj > 0.0F);
+			const Vector3 deltaWorld = (distance.lengthSquared() / proj) * (mDragStart - currentDrag);
+			view.setTarget(mInitialTarget + deltaWorld);
+			view.setPosition(mInitialPosition + deltaWorld);
 		}
+		return;
 	}
-	else if (mTranslating)
+	else
 	{
 		mTranslating = false;
 	}
-
-	mPosition.x = mCurrentZoom + mTarget.x;
-	mPosition.y = mTarget.y;
-	mPosition.z = mTarget.z;
-
-	const auto& viewMatrix = view.getMatrix();
-	{
-		Matrix4 rotation1 = Matrix4::rotationAboutPoint(viewMatrix.getAxis(1) * toRadians(rotation.y), mTarget);
-		Matrix4 rotation2 = Matrix4::rotationAboutPoint(viewMatrix.getAxis(0) * toRadians(rotation.x), mTarget);
-		mPosition = rotation2 * (rotation1 * mPosition);
-	}
-
-	// Correct a possible rotation error
-	Vector3 up = mUpVector;
-	{
-		const Matrix4 rotation1 =
-			Matrix4::rotationMatrix(viewMatrix.getAxis(1) * toRadians(-rotation.y));
-
-		const Matrix4 rotation2 =
-			Matrix4::rotationMatrix(viewMatrix.getAxis(0) * toRadians(-rotation.x + 180.0F));
-
-		up = rotation2 * (rotation1 * up);
-		up.normalize();
-	}
-
-	//	If the up and direction vectors are the same, correct the up vector
-	Vector3 direction = mTarget - mPosition;
-	direction.normalize();
-
-	float projection = direction.dot(up);
-	if ((projection > -1.0001F && projection < -0.9999F) ||
-		(projection < 1.0001F && projection >  0.9999F))
-	{
-		up.x += 1.0F;
-		up.normalize();
-	}
-
-	view.setUp(up);
-	view.setTarget(mTarget);
-	view.setPosition(mPosition);
 }
 
 void MouseCameraControllerC::onEvent(const Event& event) noexcept
@@ -194,7 +160,6 @@ CameraController* createMouseCameraController(
 	Camera& camera,
 	float rotationSpeed,
 	float zoomSpeed,
-	float translationSpeed,
 	float targetMinDistance,
 	float targetMaxDistance) noexcept
 {
@@ -203,7 +168,6 @@ CameraController* createMouseCameraController(
 			camera,
 			rotationSpeed,
 			zoomSpeed,
-			translationSpeed,
 			targetMinDistance,
 			targetMaxDistance);
 
