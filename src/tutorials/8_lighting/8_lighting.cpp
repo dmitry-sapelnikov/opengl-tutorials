@@ -39,6 +39,7 @@ int main()
 		GLTUT_CHECK(boxMaterial != nullptr, "Failed to create box material");
 
 		auto* box = scene->createObject(mesh, boxMaterial);
+		box->setTransform(gltut::Matrix4::identity());
 
 		auto* lightShader = engine->getRenderer()->loadShader(
 			"assets/shader.vs",
