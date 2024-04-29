@@ -27,13 +27,13 @@ public:
 /// Creates a FPS camera controller
 CameraController* createFPSCameraController(
 	Camera& camera,
-	float translationSpeed,
-	float mouseSensitivity) noexcept;
+	float translationSpeed = 1.0f,
+	float mouseSensitivity = 0.2f) noexcept;
 
 /// Creates a mouse camera controller
 CameraController* createMouseCameraController(
 	Camera& camera,
-	float rotationSpeed = 0.1f,
+	float rotationSpeed = 0.2f,
 	float zoomSpeed = 100.0f,
 	float targetMinDistance = 1.0f,
 	float targetMaxDistance = 100.0f) noexcept;

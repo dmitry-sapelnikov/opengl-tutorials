@@ -24,7 +24,6 @@ FPSCameraControllerC::FPSCameraControllerC(
 		"The mouse sensitivity must be positive");
 
 	auto* window = mCamera.getProjection().getWindow();
-	window->addEventHandler(this);
 
 	const auto windowSize = window->getSize();
 	mPrevMousePosition = { (int32)windowSize.x / 2, (int32)windowSize.y / 2 };
@@ -39,6 +38,17 @@ FPSCameraControllerC::FPSCameraControllerC(
 	mPitchYawBasis.setAxis(0, front);
 	mPitchYawBasis.setAxis(1, right);
 	mPitchYawBasis.setAxis(2, up);
+
+	Matrix4 pitchYawBasisInv;
+	const bool inverted = mPitchYawBasis.getInverse(pitchYawBasisInv);
+	GLTUT_CHECK(inverted, "Failed to invert the pitch-yaw basis matrix");
+	const Vector3 directionLocal = pitchYawBasisInv * view.getDirection();
+	const Vector3 distanceAzimuthInclination =
+		getDistanceAzimuthInclination(directionLocal);
+	mYaw = toDegrees(distanceAzimuthInclination.y);
+	mPitch = toDegrees(distanceAzimuthInclination.z);
+
+	window->addEventHandler(this);
 }
 
 FPSCameraControllerC::~FPSCameraControllerC() noexcept
