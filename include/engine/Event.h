@@ -62,11 +62,11 @@ struct Event
 		};
 
 		/// Mouse buttons
-		enum class Button : u32
+		struct Buttons
 		{
-			LEFT = 0,
-			RIGHT,
-			MIDDLE
+			bool left= false;
+			bool right = false;
+			bool middle = false;
 		};
 
 		/// Event type
@@ -79,14 +79,8 @@ struct Event
 		/** Only valid if event was EMIE_MOUSE_WHEEL */
 		float wheel = 0.f;
 
-		/// A bit map of button states
-		u32 buttonStates = 0;
-
-		/// Returns if a button is pressed
-		bool isPressed(Button button) const noexcept
-		{ 
-			return buttonStates & (1 << static_cast<u32>(button));
-		}
+		/// Button states
+		Buttons buttons;
 	};
 
 	/// Any kind of keyboard event.

@@ -87,5 +87,23 @@ void CameraProjectionC::update() noexcept
 		mFarPlane);
 }
 
+//	Global functions
+Vector3 screenToCameraRay(
+	const Point2i& screenPoint,
+	const Point2u& windowSize,
+	const Vector3& cameraPosition,
+	const Matrix4& cameraProjectionViewInverse)
+{
+	GLTUT_ASSERT(windowSize.x != 0);
+	GLTUT_ASSERT(windowSize.y != 0);
+
+	// Convert the screen point to the normalized device coordinates (NDC)
+	const Vector3 ndc(
+		(2.0f * screenPoint.x) / windowSize.x - 1.0f,
+		1.0f - (2.0f * screenPoint.y) / windowSize.y,
+		1.0f);
+	return cameraProjectionViewInverse * ndc - cameraPosition;
+}
+
 // End of the namespace gltut
 }

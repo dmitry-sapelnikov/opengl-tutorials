@@ -6,6 +6,7 @@
 #include "engine/core/NonCopyable.h"
 #include "engine/Engine.h"
 #include "engine/Renderer.h"
+#include "SceneC.h"
 #include "WindowC.h"
 
 namespace gltut
@@ -43,7 +44,7 @@ private:
 	std::unique_ptr<Renderer> mRenderer;
 
 	/// The scene
-	std::unique_ptr<Scene> mScene;
+	std::unique_ptr<SceneC> mScene;
 };
 
 // End of the namespace gltut

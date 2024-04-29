@@ -36,7 +36,7 @@ public:
 	///	Generates a random float in the range [lowerLimit, upperLimit)
 	float nextFloat(float lowerLimit, float upperLimit) noexcept
 	{
-		GLTUT_ASSERT(lowerLimit < upperLimit);
+		GLTUT_ASSERT(lowerLimit <= upperLimit);
 		return std::lerp(lowerLimit, upperLimit, nextFloat());
 	}
 

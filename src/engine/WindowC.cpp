@@ -9,6 +9,12 @@
 namespace gltut
 {
 
+#define CALL_WINAPI_WITH_ASSERT(apiCall) \
+{\
+	const auto apiCallResult = (apiCall);\
+	GLTUT_ASSERT(apiCallResult);\
+}
+
 //	Local classes
 class WindowCallback : public EventHandler
 {
@@ -63,6 +69,9 @@ static LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 		gltut::Event event;
 		event.type = gltut::Event::Type::MOUSE;
 		event.mouse.position = { LOWORD(lParam), HIWORD(lParam) };
+		event.mouse.buttons.left = (wParam & MK_LBUTTON) != 0;
+		event.mouse.buttons.right = (wParam & MK_RBUTTON) != 0;
+		event.mouse.buttons.middle = (wParam & MK_MBUTTON) != 0;
 
 		switch (message)
 		{
@@ -101,7 +110,9 @@ static LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 			POINT p = { 0, 0 };
 			ClientToScreen(hWnd, &p);
 			event.mouse.position -= { p.x, p.y };
-			event.mouse.wheel = static_cast<float>HIWORD(wParam) / WHEEL_DELTA;
+			event.mouse.wheel = 
+				static_cast<float>(static_cast<short>(HIWORD(wParam))) / 
+				static_cast<float>(WHEEL_DELTA);
 		}
 		break;
 
@@ -294,6 +305,21 @@ void WindowC::removeEventHandler(EventHandler* handler) noexcept
 	}
 }
 
+Point2i WindowC::getCursorPosition() const noexcept
+{
+	POINT point;
+	CALL_WINAPI_WITH_ASSERT(GetCursorPos(&point));
+	CALL_WINAPI_WITH_ASSERT(ScreenToClient((HWND)mWindow, &point));
+	return { point.x, point.y };
+}
+
+void WindowC::setCursorPosition(const Point2i& position) noexcept
+{
+	POINT point = { position.x, position.y };
+	CALL_WINAPI_WITH_ASSERT(ClientToScreen((HWND)mWindow, &point));
+	CALL_WINAPI_WITH_ASSERT(SetCursorPos(point.x, point.y));
+}
+
 bool WindowC::update() noexcept
 {
 	MSG msg;
@@ -313,7 +339,7 @@ bool WindowC::update() noexcept
 		return false;
 	}
 
-	SwapBuffers((HDC)mDeviceContext);
+	CALL_WINAPI_WITH_ASSERT(SwapBuffers((HDC)mDeviceContext));
 
 	if (mFPSCounter != nullptr)
 	{

@@ -43,6 +43,12 @@ public:
 	/// Removes an event handler. Does nothing if the handler is not found.
 	void removeEventHandler(EventHandler* handler) noexcept final;
 
+	/// Returns the current cursor position
+	Point2i getCursorPosition() const noexcept final;
+
+	/// Sets the cursor position
+	void setCursorPosition(const Point2i& position) noexcept final;
+
 	/**
 		\brief Updates the window
 		\return True if the window is still open, false if the window is closed

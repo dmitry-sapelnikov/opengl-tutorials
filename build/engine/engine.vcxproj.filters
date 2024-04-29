@@ -119,7 +119,7 @@
     <ClInclude Include="..\..\include\engine\MeshCreation.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\engine\math\Angles.h">
+    <ClInclude Include="..\..\include\engine\math\Functions.h">
       <Filter>include\math</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\engine\math\Rng.h">
@@ -143,8 +143,17 @@
     <ClInclude Include="..\..\src\engine\scene\camera\CameraC.h">
       <Filter>src\scene\camera</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\engine\scene\camera\CameraController.h">
+      <Filter>include\scene\camera</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\engine\math\Point2.h">
       <Filter>include\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\scene\camera\MouseCameraControllerC.h">
+      <Filter>src\scene\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\scene\camera\FPSCameraControllerC.h">
+      <Filter>src\scene\camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -194,6 +203,12 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\engine\scene\camera\CameraC.cpp">
+      <Filter>src\scene\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\scene\camera\MouseCameraControllerC.cpp">
+      <Filter>src\scene\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\scene\camera\FPSCameraControllerC.cpp">
       <Filter>src\scene\camera</Filter>
     </ClCompile>
   </ItemGroup>

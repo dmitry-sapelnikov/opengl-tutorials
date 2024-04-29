@@ -19,7 +19,7 @@
     <ClInclude Include="..\..\include\engine\EventHandler.h" />
     <ClInclude Include="..\..\include\engine\Keycodes.h" />
     <ClInclude Include="..\..\include\engine\Material.h" />
-    <ClInclude Include="..\..\include\engine\math\Angles.h" />
+    <ClInclude Include="..\..\include\engine\math\Functions.h" />
     <ClInclude Include="..\..\include\engine\math\Constants.h" />
     <ClInclude Include="..\..\include\engine\math\Matrix4.h" />
     <ClInclude Include="..\..\include\engine\math\Rng.h" />
@@ -31,6 +31,7 @@
     <ClInclude Include="..\..\include\engine\Scene.h" />
     <ClInclude Include="..\..\include\engine\SceneObject.h" />
     <ClInclude Include="..\..\include\engine\scene\camera\Camera.h" />
+    <ClInclude Include="..\..\include\engine\scene\camera\CameraController.h" />
     <ClInclude Include="..\..\include\engine\Shader.h" />
     <ClInclude Include="..\..\include\engine\Texture.h" />
     <ClInclude Include="..\..\include\engine\VertexFormat.h" />
@@ -45,6 +46,8 @@
     <ClInclude Include="..\..\src\engine\SceneC.h" />
     <ClInclude Include="..\..\src\engine\SceneObjectC.h" />
     <ClInclude Include="..\..\src\engine\scene\camera\CameraC.h" />
+    <ClInclude Include="..\..\src\engine\scene\camera\FPSCameraControllerC.h" />
+    <ClInclude Include="..\..\src\engine\scene\camera\MouseCameraControllerC.h" />
     <ClInclude Include="..\..\src\engine\ShaderC.h" />
     <ClInclude Include="..\..\src\engine\ShaderOpenGL.h" />
     <ClInclude Include="..\..\src\engine\stb_image.h" />
@@ -63,6 +66,8 @@
     <ClCompile Include="..\..\src\engine\SceneC.cpp" />
     <ClCompile Include="..\..\src\engine\SceneObjectC.cpp" />
     <ClCompile Include="..\..\src\engine\scene\camera\CameraC.cpp" />
+    <ClCompile Include="..\..\src\engine\scene\camera\FPSCameraControllerC.cpp" />
+    <ClCompile Include="..\..\src\engine\scene\camera\MouseCameraControllerC.cpp" />
     <ClCompile Include="..\..\src\engine\ShaderC.cpp" />
     <ClCompile Include="..\..\src\engine\ShaderOpenGL.cpp" />
     <ClCompile Include="..\..\src\engine\stb_image.cpp" />

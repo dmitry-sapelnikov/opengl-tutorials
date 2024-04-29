@@ -2,8 +2,9 @@
 #define OPENGL_TUTORIALS_MATRIX4_H
 
 // Includes
-#include "Angles.h"
-#include "Vector3.h"
+#include "engine/Core/Types.h"
+#include "engine/Math/Functions.h"
+#include "engine/Math/Vector3.h"
 
 namespace gltut
 {
@@ -133,6 +134,24 @@ public:
 			m[0][3], m[1][3], m[2][3], m[3][3] };
 	}
 
+	/// Returns the axis at the specified index
+	Vector3 getAxis(u32 i) const noexcept
+	{
+		GLTUT_ASSERT(i < 3);
+		const auto& col = m[i];
+		return { col[0], col[1], col[2] };
+	}
+
+	/// Sets the axis at the specified index
+	void setAxis(u32 i, const Vector3& v) noexcept
+	{
+		GLTUT_ASSERT(i < 3);
+		auto& col = m[i];
+		col[0] = v.x;
+		col[1] = v.y;
+		col[2] = v.z;
+	}
+
 	/// Sets the matrix to the identity matrix
 	Matrix4& setToIdentity() noexcept
 	{
@@ -152,11 +171,25 @@ public:
 	}
 
 	/// Returns the element at the specified row and column
-	float operator()(unsigned row, unsigned col) const noexcept
+	float operator()(u32 row, u32 col) const noexcept
 	{
 		GLTUT_ASSERT(row < 4 && col < 4);
 		return m[col][row];
 	}
+
+	/// Returns the element at the specified row and column
+	float& operator()(u32 row, u32 col) noexcept
+	{
+		GLTUT_ASSERT(row < 4 && col < 4);
+		return m[col][row];
+	}
+
+	/**
+		\brief Computes the inverse of the matrix
+		\param out The inverse matrix
+		\return true if the matrix is invertible, false otherwise
+	*/
+	bool getInverse(Matrix4& out) const;
 
 	/// Returns the identity matrix
 	static Matrix4 identity() noexcept;
@@ -166,6 +199,9 @@ public:
 
 	/// Returns a 4x4 rotation matrix
 	static Matrix4 rotationMatrix(const Vector3& axisAngle) noexcept;
+
+	/// Returns a 4x4 rotation matrix about a point
+	static Matrix4 rotationAboutPoint(const Vector3& axisAngle, const Vector3& point) noexcept;
 
 	/// Returns a 4x4 scale matrix
 	static Matrix4 scaleMatrix(const Vector3& s) noexcept;
@@ -192,6 +228,109 @@ private:
 	/// The matrix data in column-major order
 	float m[4][4];
 };
+
+//	Inline methods
+inline bool Matrix4::getInverse(Matrix4& out) const
+{
+	const auto& M = *this;
+
+	float d =
+		(M(0, 0) * M(1, 1) - M(0, 1) * M(1, 0)) * (M(2, 2) * M(3, 3) - M(2, 3) * M(3, 2)) -
+		(M(0, 0) * M(1, 2) - M(0, 2) * M(1, 0)) * (M(2, 1) * M(3, 3) - M(2, 3) * M(3, 1)) +
+		(M(0, 0) * M(1, 3) - M(0, 3) * M(1, 0)) * (M(2, 1) * M(3, 2) - M(2, 2) * M(3, 1)) +
+		(M(0, 1) * M(1, 2) - M(0, 2) * M(1, 1)) * (M(2, 0) * M(3, 3) - M(2, 3) * M(3, 0)) -
+		(M(0, 1) * M(1, 3) - M(0, 3) * M(1, 1)) * (M(2, 0) * M(3, 2) - M(2, 2) * M(3, 0)) +
+		(M(0, 2) * M(1, 3) - M(0, 3) * M(1, 2)) * (M(2, 0) * M(3, 1) - M(2, 1) * M(3, 0));
+
+	if (std::abs(d) < FLOAT_EPSILON)
+	{
+		return false;
+	}
+
+	d = 1.f / d;
+
+	out(0, 0) = d * (
+		M(1, 1) * (M(2, 2) * M(3, 3) - M(2, 3) * M(3, 2)) +
+		M(1, 2) * (M(2, 3) * M(3, 1) - M(2, 1) * M(3, 3)) +
+		M(1, 3) * (M(2, 1) * M(3, 2) - M(2, 2) * M(3, 1)));
+
+	out(0, 1) = d * (
+		M(2, 1) * (M(0, 2) * M(3, 3) - M(0, 3) * M(3, 2)) +
+		M(2, 2) * (M(0, 3) * M(3, 1) - M(0, 1) * M(3, 3)) +
+		M(2, 3) * (M(0, 1) * M(3, 2) - M(0, 2) * M(3, 1)));
+
+	out(0, 2) = d * (
+		M(3, 1) * (M(0, 2) * M(1, 3) - M(0, 3) * M(1, 2)) +
+		M(3, 2) * (M(0, 3) * M(1, 1) - M(0, 1) * M(1, 3)) +
+		M(3, 3) * (M(0, 1) * M(1, 2) - M(0, 2) * M(1, 1)));
+
+	out(0, 3) = d * (
+		M(0, 1) * (M(1, 3) * M(2, 2) - M(1, 2) * M(2, 3)) +
+		M(0, 2) * (M(1, 1) * M(2, 3) - M(1, 3) * M(2, 1)) +
+		M(0, 3) * (M(1, 2) * M(2, 1) - M(1, 1) * M(2, 2)));
+
+	out(1, 0) = d * (
+		M(1, 2) * (M(2, 0) * M(3, 3) - M(2, 3) * M(3, 0)) +
+		M(1, 3) * (M(2, 2) * M(3, 0) - M(2, 0) * M(3, 2)) +
+		M(1, 0) * (M(2, 3) * M(3, 2) - M(2, 2) * M(3, 3)));
+
+	out(1, 1) = d * (
+		M(2, 2) * (M(0, 0) * M(3, 3) - M(0, 3) * M(3, 0)) +
+		M(2, 3) * (M(0, 2) * M(3, 0) - M(0, 0) * M(3, 2)) +
+		M(2, 0) * (M(0, 3) * M(3, 2) - M(0, 2) * M(3, 3)));
+
+	out(1, 2) = d * (
+		M(3, 2) * (M(0, 0) * M(1, 3) - M(0, 3) * M(1, 0)) +
+		M(3, 3) * (M(0, 2) * M(1, 0) - M(0, 0) * M(1, 2)) +
+		M(3, 0) * (M(0, 3) * M(1, 2) - M(0, 2) * M(1, 3)));
+
+	out(1, 3) = d * (
+		M(0, 2) * (M(1, 3) * M(2, 0) - M(1, 0) * M(2, 3)) +
+		M(0, 3) * (M(1, 0) * M(2, 2) - M(1, 2) * M(2, 0)) +
+		M(0, 0) * (M(1, 2) * M(2, 3) - M(1, 3) * M(2, 2)));
+
+	out(2, 0) = d * (
+		M(1, 3) * (M(2, 0) * M(3, 1) - M(2, 1) * M(3, 0)) +
+		M(1, 0) * (M(2, 1) * M(3, 3) - M(2, 3) * M(3, 1)) +
+		M(1, 1) * (M(2, 3) * M(3, 0) - M(2, 0) * M(3, 3)));
+
+	out(2, 1) = d * (
+		M(2, 3) * (M(0, 0) * M(3, 1) - M(0, 1) * M(3, 0)) +
+		M(2, 0) * (M(0, 1) * M(3, 3) - M(0, 3) * M(3, 1)) +
+		M(2, 1) * (M(0, 3) * M(3, 0) - M(0, 0) * M(3, 3)));
+
+	out(2, 2) = d * (
+		M(3, 3) * (M(0, 0) * M(1, 1) - M(0, 1) * M(1, 0)) +
+		M(3, 0) * (M(0, 1) * M(1, 3) - M(0, 3) * M(1, 1)) +
+		M(3, 1) * (M(0, 3) * M(1, 0) - M(0, 0) * M(1, 3)));
+
+	out(2, 3) = d * (
+		M(0, 3) * (M(1, 1) * M(2, 0) - M(1, 0) * M(2, 1)) +
+		M(0, 0) * (M(1, 3) * M(2, 1) - M(1, 1) * M(2, 3)) +
+		M(0, 1) * (M(1, 0) * M(2, 3) - M(1, 3) * M(2, 0)));
+
+	out(3, 0) = d * (
+		M(1, 0) * (M(2, 2) * M(3, 1) - M(2, 1) * M(3, 2)) +
+		M(1, 1) * (M(2, 0) * M(3, 2) - M(2, 2) * M(3, 0)) +
+		M(1, 2) * (M(2, 1) * M(3, 0) - M(2, 0) * M(3, 1)));
+
+	out(3, 1) = d * (
+		M(2, 0) * (M(0, 2) * M(3, 1) - M(0, 1) * M(3, 2)) +
+		M(2, 1) * (M(0, 0) * M(3, 2) - M(0, 2) * M(3, 0)) +
+		M(2, 2) * (M(0, 1) * M(3, 0) - M(0, 0) * M(3, 1)));
+
+	out(3, 2) = d * (
+		M(3, 0) * (M(0, 2) * M(1, 1) - M(0, 1) * M(1, 2)) +
+		M(3, 1) * (M(0, 0) * M(1, 2) - M(0, 2) * M(1, 0)) +
+		M(3, 2) * (M(0, 1) * M(1, 0) - M(0, 0) * M(1, 1)));
+
+	out(3, 3) = d * (
+		M(0, 0) * (M(1, 1) * M(2, 2) - M(1, 2) * M(2, 1)) +
+		M(0, 1) * (M(1, 2) * M(2, 0) - M(1, 0) * M(2, 2)) +
+		M(0, 2) * (M(1, 0) * M(2, 1) - M(1, 1) * M(2, 0)));
+
+	return true;
+}
 
 // Global functions
 // * operator
@@ -254,6 +393,16 @@ inline Matrix4 Matrix4::rotationMatrix(const Vector3& axisAngle) noexcept
 		1.f };
 }
 
+inline Matrix4 Matrix4::rotationAboutPoint(
+	const Vector3& axisAngle,
+	const Vector3& point) noexcept
+{
+	return
+		translationMatrix(point) *
+		rotationMatrix(axisAngle) *
+		translationMatrix(-point);
+}
+
 inline Matrix4 Matrix4::scaleMatrix(const Vector3& s) noexcept
 {
 	return {
@@ -279,14 +428,14 @@ inline Matrix4 Matrix4::lookAtMatrix(
 	const Vector3& target,
 	const Vector3& up) noexcept
 {
-	const Vector3 zAxis = (position - target).normalize();
-	const Vector3 xAxis = up.cross(zAxis).normalize();
-	const Vector3 yAxis = zAxis.cross(xAxis);
-
+	// Row-major gluLookAt 
+	const Vector3 f = (target - position).normalize();
+	const Vector3 s = f.cross(up).normalize();
+	const Vector3 u = s.cross(f);
 	return {
-		xAxis.x, yAxis.x, zAxis.x, position.x,
-		xAxis.y, yAxis.y, zAxis.y, position.y,
-		xAxis.z, yAxis.z, zAxis.z, position.z,
+		s.x, s.y, s.z, -s.dot(position),
+		u.x, u.y, u.z, -u.dot(position),
+		-f.x, -f.y, -f.z, f.dot(position),
 		0.f, 0.f, 0.f, 1.f };
 }
 
