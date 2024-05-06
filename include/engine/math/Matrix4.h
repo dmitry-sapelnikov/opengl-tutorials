@@ -195,9 +195,6 @@ public:
 	/// Returns a 4x4 rotation matrix
 	static Matrix4 rotationMatrix(const Vector3& axisAngle) noexcept;
 
-	/// Returns a 4x4 rotation matrix about a point
-	static Matrix4 rotationAboutPoint(const Vector3& axisAngle, const Vector3& point) noexcept;
-
 	/// Returns a 4x4 scale matrix
 	static Matrix4 scaleMatrix(const Vector3& s) noexcept;
 
@@ -384,16 +381,6 @@ inline Matrix4 Matrix4::rotationMatrix(const Vector3& axisAngle) noexcept
 		0.f,
 		0.f,
 		1.f };
-}
-
-inline Matrix4 Matrix4::rotationAboutPoint(
-	const Vector3& axisAngle,
-	const Vector3& point) noexcept
-{
-	return
-		translationMatrix(point) *
-		rotationMatrix(axisAngle) *
-		translationMatrix(-point);
 }
 
 inline Matrix4 Matrix4::scaleMatrix(const Vector3& s) noexcept
