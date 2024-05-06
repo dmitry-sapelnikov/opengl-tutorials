@@ -26,5 +26,12 @@ void ShaderC::setProjectionMatrixName(const char* name) noexcept
 	GLTUT_CATCH_ALL_END("Setting of the projection matrix name failed")
 }
 
+void ShaderC::setNormalMatrixName(const char* name) noexcept
+{
+	GLTUT_CATCH_ALL_BEGIN
+		mNormalMatrixName = name;
+	GLTUT_CATCH_ALL_END("Setting of the normal matrix name failed")
+}
+
 // End of the namespace gltut
 }

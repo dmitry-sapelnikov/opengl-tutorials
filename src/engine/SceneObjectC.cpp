@@ -59,6 +59,13 @@ void SceneObjectC::render() const noexcept
 				shader->getModelMatrixName(),
 				mTransform.data());
 		}
+
+		if (shader != nullptr && shader->getNormalMatrixName() != nullptr)
+		{
+			mMaterial->getShader()->setMat3(
+				shader->getNormalMatrixName(),
+				getNormalMatrix(mTransform.getMatrix3()).data());
+		}
 	}
 
 	if (mMesh != nullptr)

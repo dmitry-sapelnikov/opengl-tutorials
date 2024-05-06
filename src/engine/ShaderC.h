@@ -33,6 +33,13 @@ public:
 
 	void setProjectionMatrixName(const char* name) noexcept final;
 
+	const char* getNormalMatrixName() const noexcept final
+	{
+		return mNormalMatrixName.empty() ? nullptr : mNormalMatrixName.c_str();
+	}
+
+	void setNormalMatrixName(const char* name) noexcept final;
+
 private:
 	/// The model matrix name
 	std::string mModelMatrixName;
@@ -42,6 +49,9 @@ private:
 
 	/// The projection matrix name
 	std::string mProjectionMatrixName;
+
+	/// The normal matrix name
+	std::string mNormalMatrixName;
 };
 
 // End of the namespace gltut

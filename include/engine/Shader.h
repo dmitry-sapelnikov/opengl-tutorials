@@ -38,6 +38,9 @@ public:
 	/// Sets a 4D vector to a shader variable
 	virtual void setVec4(const char* name, float x, float y, float z, float w) noexcept = 0;
 
+	/// Sets a 3x3 matrix to a shader variable
+	virtual void setMat3(const char* name, const float* data) noexcept = 0;
+
 	/// Sets a 4x4 matrix to a shader variable
 	virtual void setMat4(const char* name, const float* data) noexcept = 0;
 
@@ -58,6 +61,12 @@ public:
 
 	/// Sets the name of the projection matrix variable
 	virtual void setProjectionMatrixName(const char* name) noexcept = 0;
+
+	/// Returns the name of the normal matrix variable
+	virtual const char* getNormalMatrixName() const noexcept = 0;
+
+	/// Sets the name of the normal matrix variable
+	virtual void setNormalMatrixName(const char* name) noexcept = 0;
 };
 
 // End of the namespace gltut
