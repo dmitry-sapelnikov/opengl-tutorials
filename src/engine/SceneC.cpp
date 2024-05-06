@@ -128,20 +128,24 @@ void SceneC::setActiveCamera(Camera* camera) noexcept
 void SceneC::addCameraController(CameraController* controller) noexcept
 {
 	GLTUT_ASSERT(controller != nullptr);
-	mCameraControllers.push_back(controller);
+	GLTUT_CATCH_ALL_BEGIN
+		mCameraControllers.push_back(controller);
+	GLTUT_CATCH_ALL_END("Cannot add a camera controller")
 }
 
 void SceneC::removesCameraController(CameraController* controller) noexcept
 {
-	auto it = std::find(
-		mCameraControllers.begin(),
-		mCameraControllers.end(),
-		controller);
+	GLTUT_CATCH_ALL_BEGIN
+		auto it = std::find(
+			mCameraControllers.begin(),
+			mCameraControllers.end(),
+			controller);
 
-	if (it != mCameraControllers.end())
-	{
-		mCameraControllers.erase(it);
-	}
+		if (it != mCameraControllers.end())
+		{
+			mCameraControllers.erase(it);
+		}
+	GLTUT_CATCH_ALL_END("Cannot remove a camera controller")
 }
 
 void SceneC::update() noexcept
