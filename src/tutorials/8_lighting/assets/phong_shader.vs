@@ -7,6 +7,7 @@ out vec3 normal;
 
 uniform mat4 model;
 uniform mat4 view;
+uniform vec3 viewPos;
 uniform mat4 projection;
 uniform mat3 normalMat;
 
@@ -14,5 +15,5 @@ void main()
 {
 	gl_Position = projection * view * model * vec4(inPos, 1.0f);
 	pos = vec3(model * vec4(inPos, 1.0f));
-	normal = normalize(normalMat * inNormal);
+	normal = normalMat * inNormal;
 }

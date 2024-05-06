@@ -9,7 +9,7 @@
 
 namespace
 {
-	const gltut::Vector3 LIGHT_POSITION = { 2.0, 3.0f, 5.0f };
+	const gltut::Vector3 LIGHT_POSITION = { 0.0, 10.0f, 20.0f };
 }
 
 ///	The program entry point
@@ -33,7 +33,7 @@ int main()
 		GLTUT_CHECK(phongShader, "Failed to create phong shader program");
 
 		phongShader->setVec3("lightPos", LIGHT_POSITION.x, LIGHT_POSITION.y, LIGHT_POSITION.z);
-		phongShader->setVec3("lightColor", 1.0f, 1.0f, 1.0f);
+		phongShader->setVec3("lightColor", 0.8f, 0.8f, 0.8f);
 		phongShader->setVec3("objectColor", 1.0f, 0.5f, 0.31f);
 		phongShader->setModelMatrixName("model");
 		phongShader->setProjectionMatrixName("projection");
@@ -88,8 +88,11 @@ int main()
 			const gltut::Vector3 rotation = {time, 0.0f, 0.0f};
 			object->setTransform(gltut::Matrix4::transformMatrix(
 				{ 0.0f, 0.0f, 0.0f },
-				rotation,
-				{ 1.0f, 2.0f, 1.0f }));
+				{ 0.0f, 0.0f, 0.0f },
+				{ 2.0f, 5.0f, 2.0f }));
+
+			const gltut::Vector3 viewPos = camera->getView().getPosition();
+			phongShader->setVec3("viewPos", viewPos.x, viewPos.y, viewPos.z);
 
 			if (!engine->update())
 			{
