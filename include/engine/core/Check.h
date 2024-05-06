@@ -48,4 +48,18 @@ catch (...)\
 	std::cerr << message << std::endl;\
 }\
 
+#define GLTUT_APPLICATION_CATCH \
+catch (const std::exception& e)\
+{\
+	std::cerr << "An ERROR occurred: " << e.what() << std::endl;\
+	std::cin.get();\
+	return 1;\
+}\
+catch (...)\
+{\
+	std::cerr << "An ERROR occurred" << std::endl;\
+	std::cin.get();\
+	return 1;\
+}
+
 #endif
