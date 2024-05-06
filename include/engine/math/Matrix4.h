@@ -2,9 +2,7 @@
 #define OPENGL_TUTORIALS_MATRIX4_H
 
 // Includes
-#include "engine/Core/Types.h"
-#include "engine/Math/Functions.h"
-#include "engine/Math/Vector3.h"
+#include "engine/Math/Matrix3.h"
 
 namespace gltut
 {
@@ -185,6 +183,31 @@ public:
 	}
 
 	Matrix4 getInverse() const;
+
+	/// Checks if the matrix is near zero
+	bool isNearZero() const noexcept
+	{
+		for (int i = 0; i < 4; i++)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				if (!gltut::isNearZero(m[i][j]))
+				{
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
+	/// Extracts the top-left 3x3 matrix
+	Matrix3 getMatrix3() const noexcept
+	{
+		return {
+			m[0][0], m[1][0], m[2][0],
+			m[0][1], m[1][1], m[2][1],
+			m[0][2], m[1][2], m[2][2] };
+	}
 
 	/// Returns the identity matrix
 	static Matrix4 identity() noexcept;
