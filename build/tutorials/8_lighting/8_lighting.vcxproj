@@ -19,9 +19,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\src\tutorials\8_lighting\assets\box_shader.fs" />
+    <None Include="..\..\..\src\tutorials\8_lighting\assets\phong_shader.fs" />
     <None Include="..\..\..\src\tutorials\8_lighting\assets\light_shader.fs" />
-    <None Include="..\..\..\src\tutorials\8_lighting\assets\shader.vs" />
+    <None Include="..\..\..\src\tutorials\8_lighting\assets\phong_shader.vs" />
+    <None Include="..\..\..\src\tutorials\8_lighting\assets\light_shader.vs" />
     <None Include="copy_assets.targets" />
   </ItemGroup>
   <ItemGroup>

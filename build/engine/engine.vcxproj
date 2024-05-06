@@ -21,6 +21,7 @@
     <ClInclude Include="..\..\include\engine\Material.h" />
     <ClInclude Include="..\..\include\engine\math\Functions.h" />
     <ClInclude Include="..\..\include\engine\math\Constants.h" />
+    <ClInclude Include="..\..\include\engine\math\Matrix3.h" />
     <ClInclude Include="..\..\include\engine\math\Matrix4.h" />
     <ClInclude Include="..\..\include\engine\math\Rng.h" />
     <ClInclude Include="..\..\include\engine\math\Point2.h" />

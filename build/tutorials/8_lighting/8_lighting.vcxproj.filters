@@ -2,8 +2,10 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <None Include="copy_assets.targets" />
-    <None Include="..\..\..\src\tutorials\8_lighting\assets\box_shader.fs" />
-    <None Include="..\..\..\src\tutorials\8_lighting\assets\shader.vs" />
+    <None Include="..\..\..\src\tutorials\8_lighting\assets\phong_shader.fs" />
+    <None Include="..\..\..\src\tutorials\8_lighting\assets\phong_shader.vs" />
+    <None Include="..\..\..\src\tutorials\8_lighting\assets\light_shader.fs" />
+    <None Include="..\..\..\src\tutorials\8_lighting\assets\light_shader.vs" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\tutorials\8_lighting\8_lighting.cpp" />

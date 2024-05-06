@@ -155,6 +155,9 @@
     <ClInclude Include="..\..\src\engine\scene\camera\FPSCameraControllerC.h">
       <Filter>src\scene\camera</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\engine\math\Matrix3.h">
+      <Filter>include\math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\engine\MeshC.cpp">
