@@ -46,6 +46,9 @@ public:
 	/// Sets a 4D vector to a shader variable
 	void setVec4(const char* name, float x, float y, float z, float w) noexcept final;
 
+	/// Sets a 3x3 matrix to a shader variable
+	void setMat3(const char* name, const float* data) noexcept final;
+
 	/// Sets a 4x4 matrix to a shader variable
 	void setMat4(const char* name, const float* data) noexcept final;
 

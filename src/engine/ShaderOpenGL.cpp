@@ -120,6 +120,11 @@ void ShaderOpenGL::setVec4(const char* name, float x, float y, float z, float w)
 	glUniform4f(getCheckedVariableLocation(name), x, y, z, w);
 }
 
+void ShaderOpenGL::setMat3(const char* name, const float* data) noexcept
+{
+	glUniformMatrix3fv(getCheckedVariableLocation(name), 1, GL_FALSE, data);
+}
+
 void ShaderOpenGL::setMat4(const char* name, const float* data) noexcept
 {
 	glUniformMatrix4fv(getCheckedVariableLocation(name), 1, GL_FALSE, data);
