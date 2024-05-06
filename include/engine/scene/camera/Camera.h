@@ -119,10 +119,7 @@ public:
 	/// Returns the inverted projection-view matrix
 	Matrix4 getProjectionViewInverse() const noexcept
 	{
-		Matrix4 result;
-		const bool inverted = getProjectionView().getInverse(result);
-		GLTUT_ASSERT(inverted);
-		return result;
+		return getProjectionView().getInverse();
 	}
 };
 

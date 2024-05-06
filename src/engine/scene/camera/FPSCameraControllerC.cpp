@@ -39,9 +39,7 @@ FPSCameraControllerC::FPSCameraControllerC(
 	mPitchYawBasis.setAxis(1, right);
 	mPitchYawBasis.setAxis(2, up);
 
-	Matrix4 pitchYawBasisInv;
-	const bool inverted = mPitchYawBasis.getInverse(pitchYawBasisInv);
-	GLTUT_CHECK(inverted, "Failed to invert the pitch-yaw basis matrix");
+	Matrix4 pitchYawBasisInv = mPitchYawBasis.getInverse();
 	const Vector3 directionLocal = pitchYawBasisInv * view.getDirection();
 	const Vector3 distanceAzimuthInclination =
 		getDistanceAzimuthInclination(directionLocal);

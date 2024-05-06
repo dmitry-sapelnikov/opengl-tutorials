@@ -184,12 +184,7 @@ public:
 		return m[col][row];
 	}
 
-	/**
-		\brief Computes the inverse of the matrix
-		\param out The inverse matrix
-		\return true if the matrix is invertible, false otherwise
-	*/
-	bool getInverse(Matrix4& out) const;
+	Matrix4 getInverse() const;
 
 	/// Returns the identity matrix
 	static Matrix4 identity() noexcept;
@@ -230,7 +225,7 @@ private:
 };
 
 //	Inline methods
-inline bool Matrix4::getInverse(Matrix4& out) const
+inline Matrix4 Matrix4::getInverse() const
 {
 	const auto& M = *this;
 
@@ -242,13 +237,11 @@ inline bool Matrix4::getInverse(Matrix4& out) const
 		(M(0, 1) * M(1, 3) - M(0, 3) * M(1, 1)) * (M(2, 0) * M(3, 2) - M(2, 2) * M(3, 0)) +
 		(M(0, 2) * M(1, 3) - M(0, 3) * M(1, 2)) * (M(2, 0) * M(3, 1) - M(2, 1) * M(3, 0));
 
-	if (std::abs(d) < FLOAT_EPSILON)
-	{
-		return false;
-	}
+	GLTUT_ASSERT(std::abs(d) >= FLOAT_EPSILON);
 
 	d = 1.f / d;
 
+	Matrix4 out;
 	out(0, 0) = d * (
 		M(1, 1) * (M(2, 2) * M(3, 3) - M(2, 3) * M(3, 2)) +
 		M(1, 2) * (M(2, 3) * M(3, 1) - M(2, 1) * M(3, 3)) +
@@ -329,7 +322,7 @@ inline bool Matrix4::getInverse(Matrix4& out) const
 		M(0, 1) * (M(1, 2) * M(2, 0) - M(1, 0) * M(2, 2)) +
 		M(0, 2) * (M(1, 0) * M(2, 1) - M(1, 1) * M(2, 0)));
 
-	return true;
+	return out;
 }
 
 // Global functions
