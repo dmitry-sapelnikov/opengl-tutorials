@@ -19,7 +19,7 @@ namespace gltut
 	\note The mesh is created with the following vertex format:
 	VertexFormat::VERTEX_FORMAT_POS3_NORM3_TEX2
 
-	\note Negative dimentions produce an inverted mesh
+	\note Negative dimensions produce an inverted mesh
 */
 Mesh* createBoxMesh(Scene& scene, float width, float height, float depth) noexcept;
 
