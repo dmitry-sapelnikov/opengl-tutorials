@@ -37,25 +37,28 @@
     <ClInclude Include="..\..\include\engine\Texture.h" />
     <ClInclude Include="..\..\include\engine\VertexFormat.h" />
     <ClInclude Include="..\..\include\engine\Window.h" />
+    <ClInclude Include="..\..\src\engine\backends\opengl\RendererOpenGL.h" />
+    <ClInclude Include="..\..\src\engine\backends\opengl\ShaderOpenGL.h" />
+    <ClInclude Include="..\..\src\engine\backends\opengl\TextureOpenGL.h" />
     <ClInclude Include="..\..\src\engine\EngineC.h" />
     <ClInclude Include="..\..\src\engine\File.h" />
     <ClInclude Include="..\..\src\engine\FPSCounter.h" />
     <ClInclude Include="..\..\src\engine\MaterialC.h" />
     <ClInclude Include="..\..\src\engine\MeshC.h" />
     <ClInclude Include="..\..\src\engine\RendererBase.h" />
-    <ClInclude Include="..\..\src\engine\RendererOpenGL.h" />
     <ClInclude Include="..\..\src\engine\SceneC.h" />
     <ClInclude Include="..\..\src\engine\SceneObjectC.h" />
     <ClInclude Include="..\..\src\engine\scene\camera\CameraC.h" />
     <ClInclude Include="..\..\src\engine\scene\camera\FPSCameraControllerC.h" />
     <ClInclude Include="..\..\src\engine\scene\camera\MouseCameraControllerC.h" />
     <ClInclude Include="..\..\src\engine\ShaderC.h" />
-    <ClInclude Include="..\..\src\engine\ShaderOpenGL.h" />
     <ClInclude Include="..\..\src\engine\stb_image.h" />
-    <ClInclude Include="..\..\src\engine\TextureOpenGL.h" />
     <ClInclude Include="..\..\src\engine\WindowC.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\engine\backends\opengl\RendererOpenGL.cpp" />
+    <ClCompile Include="..\..\src\engine\backends\opengl\ShaderOpenGL.cpp" />
+    <ClCompile Include="..\..\src\engine\backends\opengl\TextureOpenGL.cpp" />
     <ClCompile Include="..\..\src\engine\EngineC.cpp" />
     <ClCompile Include="..\..\src\engine\File.cpp" />
     <ClCompile Include="..\..\src\engine\FPSCounter.cpp" />
@@ -63,16 +66,13 @@
     <ClCompile Include="..\..\src\engine\MeshC.cpp" />
     <ClCompile Include="..\..\src\engine\MeshCreation.cpp" />
     <ClCompile Include="..\..\src\engine\RendererBase.cpp" />
-    <ClCompile Include="..\..\src\engine\RendererOpenGL.cpp" />
     <ClCompile Include="..\..\src\engine\SceneC.cpp" />
     <ClCompile Include="..\..\src\engine\SceneObjectC.cpp" />
     <ClCompile Include="..\..\src\engine\scene\camera\CameraC.cpp" />
     <ClCompile Include="..\..\src\engine\scene\camera\FPSCameraControllerC.cpp" />
     <ClCompile Include="..\..\src\engine\scene\camera\MouseCameraControllerC.cpp" />
     <ClCompile Include="..\..\src\engine\ShaderC.cpp" />
-    <ClCompile Include="..\..\src\engine\ShaderOpenGL.cpp" />
     <ClCompile Include="..\..\src\engine\stb_image.cpp" />
-    <ClCompile Include="..\..\src\engine\TextureOpenGL.cpp" />
     <ClCompile Include="..\..\src\engine\WindowC.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

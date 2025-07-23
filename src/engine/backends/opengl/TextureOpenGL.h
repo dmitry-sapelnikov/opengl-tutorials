@@ -3,9 +3,9 @@
 
 // Includes
 #include <string>
-#include "engine/Texture.h"
 #include "engine/core/NonCopyable.h"
 #include "engine/core/Types.h"
+#include "engine/Texture.h"
 
 namespace gltut
 {

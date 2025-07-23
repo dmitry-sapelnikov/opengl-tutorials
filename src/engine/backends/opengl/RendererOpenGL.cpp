@@ -9,8 +9,8 @@
 #include "engine/VertexFormat.h"
 #include "ShaderOpenGL.h"
 #include "TextureOpenGL.h"
-#include "stb_image.h"
-#include "File.h"
+
+#include "../../File.h"
 
 namespace gltut
 {

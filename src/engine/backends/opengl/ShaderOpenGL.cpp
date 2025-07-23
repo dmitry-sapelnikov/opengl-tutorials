@@ -78,7 +78,7 @@ ShaderOpenGL::~ShaderOpenGL() noexcept
 	glDeleteProgram(mProgram);
 }
 
-void ShaderOpenGL::use() noexcept
+void ShaderOpenGL::activate() const noexcept
 {
 	glUseProgram(mProgram);
 }
@@ -86,7 +86,7 @@ void ShaderOpenGL::use() noexcept
 int32 ShaderOpenGL::getVariableLocation(const char* name) noexcept
 {
 	GLTUT_ASSERT_STRING(name);
-	use();
+	activate();
 	return glGetUniformLocation(mProgram, name);
 }
 

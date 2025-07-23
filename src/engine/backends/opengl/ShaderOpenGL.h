@@ -3,7 +3,8 @@
 
 // Includes
 #include <string>
-#include "ShaderC.h"
+#include <unordered_map>
+#include "../../ShaderC.h"
 
 namespace gltut
 {
@@ -23,12 +24,9 @@ public:
 	~ShaderOpenGL() noexcept final;
 
 	/// Activates the shader
-	void use() noexcept final;
+	void activate() const noexcept final;
 
-	/// Returns the location of a shader variable
-	int32 getVariableLocation(const char* name) noexcept final;
-
-	/// Sets a boolean value to a shader variable
+	/// Sets an bool value to a shader variable
 	void setBool(const char* name, bool value) noexcept final;
 
 	/// Sets an integer value to a shader variable
@@ -53,11 +51,17 @@ public:
 	void setMat4(const char* name, const float* data) noexcept final;
 
 private:
+	/// Returns the location of a shader variable
+	int32 getVariableLocation(const char* name) noexcept;
+
 	/// Gets the location of a shader variable with error checking
 	int getCheckedVariableLocation(const char* name) noexcept;
 
 	/// Shader program
 	unsigned mProgram = 0;
+
+	/// Cached variable locations
+	std::unordered_map<std::string, int> mVariableLocations;
 };
 
 // End of the namespace gltut
