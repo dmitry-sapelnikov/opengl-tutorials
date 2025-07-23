@@ -245,6 +245,13 @@ public:
 		float nearDistance,
 		float farDistance) noexcept;
 
+	/// Returns a 4x4 orthographic projection matrix
+	static Matrix4 orthographicProjectionMatrix(
+		float width,
+		float height,
+		float nearDistance,
+		float farDistance) noexcept;
+
 private:
 	/// The matrix data in column-major order
 	float m[4][4];
@@ -475,6 +482,30 @@ inline Matrix4 Matrix4::perspectiveProjectionMatrix(
 		0.f, fy, 0.f, 0.f,
 		0.f, 0.f, fz, fw,
 		0.f, 0.f, -1.f, 0.f };
+}
+
+inline Matrix4 Matrix4::orthographicProjectionMatrix(
+	float width,
+	float height,
+	float nearDistance,
+	float farDistance) noexcept
+{
+	GLTUT_ASSERT(width > FLOAT_EPSILON);
+	GLTUT_ASSERT(height > FLOAT_EPSILON);
+	GLTUT_ASSERT(nearDistance > FLOAT_EPSILON);
+	GLTUT_ASSERT(farDistance > nearDistance);
+
+	const float fx = 2.f / width;
+	const float fy = 2.f / height;
+	const float fz = -2.f / (farDistance - nearDistance);
+	const float fw = -(farDistance + nearDistance) / (farDistance - nearDistance);
+
+	// Compute the projection matrix
+	return {
+		fx, 0.f, 0.f, 0.f,
+		0.f, fy, 0.f, 0.f,
+		0.f, 0.f, fz, fw,
+		0.f, 0.f, 0.f, 1.f };
 }
 
 // End of the namespace gltut
