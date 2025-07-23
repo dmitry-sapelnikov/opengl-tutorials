@@ -29,7 +29,7 @@ public:
 	virtual void setTexture(Texture* texture, u32 slot) noexcept = 0;
 
 	/// Use the material
-	virtual void use() noexcept = 0;
+	virtual void activate() noexcept = 0;
 };
 
 // End of the namespace gltut

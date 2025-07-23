@@ -28,7 +28,7 @@ public:
 	void setTexture(Texture* texture, u32 slot) noexcept final;
 
 	/// Use the material
-	void use() noexcept final;
+	void activate() noexcept final;
 
 private:
 	/// The number of texture slots

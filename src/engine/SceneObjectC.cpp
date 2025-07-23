@@ -51,7 +51,7 @@ void SceneObjectC::render() const noexcept
 {
 	if (mMaterial != nullptr)
 	{
-		mMaterial->use();
+		mMaterial->activate();
 		auto* shader = mMaterial->getShader();
 		if (shader != nullptr && shader->getModelMatrixName() != nullptr)
 		{

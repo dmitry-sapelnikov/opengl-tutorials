@@ -15,7 +15,7 @@ public:
 	virtual ~Shader() noexcept = default;
 
 	/// Activates the shader
-	virtual void use() noexcept = 0;
+	virtual void activate() const noexcept = 0;
 
 	/// Returns the location of a shader variable
 	virtual int32 getVariableLocation(const char* name) noexcept = 0;

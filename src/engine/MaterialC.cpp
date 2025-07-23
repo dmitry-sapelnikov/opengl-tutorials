@@ -36,11 +36,11 @@ void MaterialC::setTexture(Texture* texture, u32 slot) noexcept
 	mTextures[slot] = texture;
 }
 
-void MaterialC::use() noexcept
+void MaterialC::activate() noexcept
 {
 	if (mShader != nullptr)
 	{
-		mShader->use();
+		mShader->activate();
 	}
 
 	for (u32 i = 0; i < TEXTURE_SLOTS; ++i)
