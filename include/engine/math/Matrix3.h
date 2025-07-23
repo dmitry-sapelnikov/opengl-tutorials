@@ -24,6 +24,12 @@ public:
 		m[0][2] = m20; m[1][2] = m21; m[2][2] = m22;
 	}
 
+	// Data constructor
+	Matrix3(const float* data)
+	{
+		std::memcpy(m, data, 9 * sizeof(float));
+	}
+
 	// += operator
 	Matrix3& operator+=(const Matrix3& n) noexcept
 	{
