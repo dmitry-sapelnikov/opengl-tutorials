@@ -53,7 +53,7 @@ public:
 
 	void addCameraController(CameraController* controller) noexcept final;
 
-	void removesCameraController(CameraController* controller) noexcept final;
+	void removeCameraController(CameraController* controller) noexcept final;
 
 	void update() noexcept;
 

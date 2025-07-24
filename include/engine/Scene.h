@@ -59,7 +59,7 @@ public:
 		Does nothing if the controller is not in the scene
 		\param controller The controller
 	*/
-	virtual void removesCameraController(CameraController* controller) noexcept = 0;
+	virtual void removeCameraController(CameraController* controller) noexcept = 0;
 
 	/**
 		\brief Creates a material

@@ -133,7 +133,7 @@ void SceneC::addCameraController(CameraController* controller) noexcept
 	GLTUT_CATCH_ALL_END("Cannot add a camera controller")
 }
 
-void SceneC::removesCameraController(CameraController* controller) noexcept
+void SceneC::removeCameraController(CameraController* controller) noexcept
 {
 	GLTUT_CATCH_ALL_BEGIN
 		auto it = std::find(
@@ -184,16 +184,23 @@ void SceneC::render() noexcept
 			const auto& viewMatrix = mActiveCamera->getView().getMatrix();
 			const auto& projectionMatrix = mActiveCamera->getProjection().getMatrix();
 
-			if (const char* viewMatrixName = shader->getMatrixName(Shader::Matrix::VIEW);
+			if (const char* viewMatrixName = shader->getSceneParameterName(Shader::SceneParameter::VIEW);
 				viewMatrixName != nullptr)
 			{
 				shader->setMat4(viewMatrixName, viewMatrix.data());
 			}
 
-			if (const char* projectionMatrixName = shader->getMatrixName(Shader::Matrix::PROJECTION);
+			if (const char* projectionMatrixName = shader->getSceneParameterName(Shader::SceneParameter::PROJECTION);
 				projectionMatrixName != nullptr)
 			{
 				shader->setMat4(projectionMatrixName, projectionMatrix.data());
+			}
+
+			if (const char* viewPositionName = shader->getSceneParameterName(Shader::SceneParameter::VIEW_POSITION);
+				viewPositionName != nullptr)
+			{
+				const Vector3& viewPosition = mActiveCamera->getView().getPosition();
+				shader->setVec3(viewPositionName, viewPosition.x, viewPosition.y, viewPosition.z);
 			}
 		}
 		object.render();
