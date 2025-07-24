@@ -52,7 +52,7 @@ public:
 		const u8* data,
 		u32 width,
 		u32 height,
-		u32 channels) noexcept = 0;
+		u32 channelCount) noexcept = 0;
 
 	/// Loads a texture
 	virtual Texture* loadTexture(const char* path) noexcept = 0;

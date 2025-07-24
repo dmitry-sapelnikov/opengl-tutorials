@@ -50,7 +50,7 @@ public:
 		const u8* data,
 		u32 width,
 		u32 height,
-		u32 channels) noexcept final;
+		u32 channelCount) noexcept final;
 
 	/// Removes a texture
 	void removeTexture(Texture* texture) noexcept final;

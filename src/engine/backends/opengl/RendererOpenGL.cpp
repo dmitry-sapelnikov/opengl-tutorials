@@ -278,7 +278,7 @@ Texture* RendererOpenGL::createTexture(
 	const u8* data,
 	u32 width,
 	u32 height,
-	u32 channels) noexcept
+	u32 channelCount) noexcept
 {
 	try
 	{
@@ -286,7 +286,7 @@ Texture* RendererOpenGL::createTexture(
 			data,
 			width,
 			height,
-			channels));
+			channelCount));
 		return mTextures.back().get();
 	}
 	catch (const std::exception& e)

@@ -21,7 +21,7 @@ public:
 		const u8* data,
 		u32 width,
 		u32 height,
-		u32 dataChannelsCount);
+		u32 datachannelCount);
 
 	/// Destructor
 	~TextureOpenGL() noexcept final;

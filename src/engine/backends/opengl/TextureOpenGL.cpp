@@ -11,13 +11,13 @@ TextureOpenGL::TextureOpenGL(
 	const u8* data,
 	u32 width,
 	u32 height,
-	u32 dataChannelsCount)
+	u32 datachannelCount)
 {
 	GLTUT_CHECK(data != nullptr, "Texture data is null")
 	GLTUT_CHECK(width > 0, "Texture width is 0")
 	GLTUT_CHECK(height > 0, "Texture height is 0")
 	GLTUT_CHECK(
-		dataChannelsCount == 3 || dataChannelsCount == 4,
+		datachannelCount == 3 || datachannelCount == 4,
 		"Texture data channels count must be 3 or 4")
 
 	glGenTextures(1, &mTexture);
@@ -35,11 +35,11 @@ TextureOpenGL::TextureOpenGL(
 	glTexImage2D(
 		GL_TEXTURE_2D,
 		0,
-		dataChannelsCount == 3 ? GL_RGB : GL_RGBA,
+		datachannelCount == 3 ? GL_RGB : GL_RGBA,
 		width,
 		height,
 		0,
-		dataChannelsCount == 3 ? GL_RGB : GL_RGBA,
+		datachannelCount == 3 ? GL_RGB : GL_RGBA,
 		GL_UNSIGNED_BYTE,
 		data);
 	glGenerateMipmap(GL_TEXTURE_2D);
