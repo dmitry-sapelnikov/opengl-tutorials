@@ -92,36 +92,43 @@ int32 ShaderOpenGL::getParameterLocation(const char* name) const noexcept
 
 void ShaderOpenGL::setInt(int32 location, int value) noexcept
 {
+	activate();
 	glUniform1i(location, value);
 }
 
 void ShaderOpenGL::setFloat(int32 location, float value) noexcept
 {
+	activate();
 	glUniform1f(location, value);
 }
 
 void ShaderOpenGL::setVec2(int32 location, float x, float y) noexcept
 {
+	activate();
 	glUniform2f(location, x, y);
 }
 
 void ShaderOpenGL::setVec3(int32 location, float x, float y, float z) noexcept
 {
+	activate();
 	glUniform3f(location, x, y, z);
 }
 
 void ShaderOpenGL::setVec4(int32 location, float x, float y, float z, float w) noexcept
 {
+	activate();
 	glUniform4f(location, x, y, z, w);
 }
 
 void ShaderOpenGL::setMat3(int32 location, const float* data) noexcept
 {
+	activate();
 	glUniformMatrix3fv(location, 1, GL_FALSE, data);
 }
 
 void ShaderOpenGL::setMat4(int32 location, const float* data) noexcept
 {
+	activate();
 	glUniformMatrix4fv(location, 1, GL_FALSE, data);
 }
 
