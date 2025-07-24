@@ -6,11 +6,11 @@
 #include <Windows.h>
 
 #include "engine/core/Check.h"
-#include "engine/VertexFormat.h"
+#include "engine/renderer/VertexFormat.h"
 #include "ShaderOpenGL.h"
 #include "TextureOpenGL.h"
 
-#include "../../File.h"
+#include "../../../core/File.h"
 
 namespace gltut
 {

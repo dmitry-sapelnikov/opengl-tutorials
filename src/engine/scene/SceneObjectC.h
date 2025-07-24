@@ -2,9 +2,9 @@
 #define OPENGL_TUTORIALS_SCENE_OJBECT_C_H
 
 // Includes
-#include "engine/SceneObject.h"
-#include "RendererBase.h"
 #include "engine/core/NonCopyable.h"
+#include "engine/scene/SceneObject.h"
+#include "../renderer/RendererBase.h"
 
 namespace gltut
 {

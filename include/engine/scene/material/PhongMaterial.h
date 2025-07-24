@@ -2,8 +2,8 @@
 #define OPENGL_TUTORIALS_PHONG_MATERIAL_H
 
 // Includes
-#include "engine/Renderer.h"
-#include "Material.h"
+#include "engine/renderer/Renderer.h"
+#include "engine/scene/material/Material.h"
 
 namespace gltut
 {

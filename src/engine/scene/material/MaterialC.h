@@ -3,9 +3,8 @@
 
 // Includes
 #include "engine/core/NonCopyable.h"
-#include "engine/material/Material.h"
-
-#include "../shader/ShaderArguments.h"
+#include "engine/scene/material/Material.h"
+#include "../../renderer/shader/ShaderArguments.h"
 
 namespace gltut
 {

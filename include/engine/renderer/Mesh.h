@@ -2,7 +2,7 @@
 #define OPENGL_TUTORIALS_MESH_H
 
 // Includes
-#include "VertexFormat.h"
+#include "engine/renderer/VertexFormat.h"
 
 namespace gltut
 {

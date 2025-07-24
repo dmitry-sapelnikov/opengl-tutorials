@@ -2,9 +2,9 @@
 #define OPENGL_TUTORIALS_ISCENE_H
 
 // Includes
-#include "SceneObject.h"
-#include "VertexFormat.h"
-#include "engine/scene/camera/Camera.h"
+#include "engine/renderer/Mesh.h"
+#include "engine/scene/SceneObject.h"
+#include "engine/scene/material/Material.h"
 #include "engine/scene/camera/CameraController.h"
 
 namespace gltut

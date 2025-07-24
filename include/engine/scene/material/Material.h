@@ -2,8 +2,8 @@
 #define OPENGL_TUTORIALS_MATERIAL_H
 
 // Includes
-#include "../shader/Shader.h"
-#include "../texture/Texture.h"
+#include "engine/renderer/shader/Shader.h"
+#include "engine/renderer/Texture.h"
 
 namespace gltut
 {

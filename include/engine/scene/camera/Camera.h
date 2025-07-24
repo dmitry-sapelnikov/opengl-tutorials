@@ -3,7 +3,7 @@
 
 // Includes
 #include "engine/math/Matrix4.h"
-#include "engine/Window.h"
+#include "engine/window/Window.h"
 
 namespace gltut
 {

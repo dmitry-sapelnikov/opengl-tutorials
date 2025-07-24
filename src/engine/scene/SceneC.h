@@ -5,13 +5,14 @@
 #include <deque>
 #include <chrono>
 #include "engine/core/NonCopyable.h"
-#include "engine/Scene.h"
+#include "engine/scene/Scene.h"
 
-#include "./scene/camera/CameraC.h"
+#include "../renderer/RendererBase.h"
+#include "../renderer/mesh/MeshC.h"
+
+#include "./camera/CameraC.h"
 #include "./material/MaterialC.h"
-#include "MeshC.h"
 #include "SceneObjectC.h"
-#include "RendererBase.h"
 
 namespace gltut
 {

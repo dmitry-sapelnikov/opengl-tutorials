@@ -2,9 +2,9 @@
 #define OPENGL_TUTORIALS_SCENE_OBJECT_H
 
 // Includes
-#include "Mesh.h"
-#include "./material/Material.h"
-#include "./engine/math/Matrix4.h"
+#include "engine/math/Matrix4.h"
+#include "engine/renderer/Mesh.h"
+#include "engine/scene/material/Material.h"
 
 namespace gltut
 {

@@ -2,11 +2,11 @@
 #define OPENGL_TUTORIALS_MESH_C_H
 
 // Includes
-#include "engine/Mesh.h"
 #include "engine/core/NonCopyable.h"
+#include "engine/renderer/Mesh.h"
 #include <array>
 #include <vector>
-#include "RendererBase.h"
+#include "../RendererBase.h"
 
 namespace gltut
 {

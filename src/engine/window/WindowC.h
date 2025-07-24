@@ -7,7 +7,7 @@
 #include <functional>
 
 #include "engine/core/NonCopyable.h"
-#include "engine/Window.h"
+#include "engine/window/Window.h"
 #include "FPSCounter.h"
 
 struct GLFWwindow;

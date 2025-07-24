@@ -4,8 +4,9 @@
 // Includes
 #include <unordered_map>
 #include "engine/core/NonCopyable.h"
-#include "engine/Renderer.h"
-#include "engine/EventHandler.h"
+#include "engine/renderer/Renderer.h"
+#include "engine/renderer/Mesh.h"
+#include "engine/window/EventHandler.h"
 
 namespace gltut
 {

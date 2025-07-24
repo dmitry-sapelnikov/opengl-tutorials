@@ -3,11 +3,11 @@
 #include <chrono>
 #include <iostream>
 #include <string>
-#include "engine/core/Check.h"
-#include "engine/Engine.h"
-#include "engine/MeshCreation.h"
 
-#include "engine/material/PhongMaterial.h"
+#include "engine/core/Check.h"
+#include "engine/scene/MeshCreation.h"
+#include "engine/scene/material/PhongMaterial.h"
+#include "engine/Engine.h"
 
 namespace
 {

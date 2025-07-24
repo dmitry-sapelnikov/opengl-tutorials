@@ -3,7 +3,7 @@
 
 // Includes
 #include "engine/math/Point2.h"
-#include "engine/Keycodes.h"
+#include "engine/window/Keycodes.h"
 
 namespace gltut
 {

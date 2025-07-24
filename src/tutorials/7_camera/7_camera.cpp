@@ -3,10 +3,11 @@
 #include <chrono>
 #include <iostream>
 #include <string>
+
 #include "engine/core/Check.h"
+#include "engine/math/Rng.h"
+#include "engine/scene/MeshCreation.h"
 #include "engine/Engine.h"
-#include "engine/MeshCreation.h"
-#include "engine/Math/Rng.h"
 
 static const size_t BOX_COUNT = 100;
 static const float POSITION_RANGE = 5.0f;

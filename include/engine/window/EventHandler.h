@@ -2,7 +2,7 @@
 #define OPENGL_TUTORIALS_EVENT_HANDLER_H
 
 // Includes
-#include "engine/Event.h"
+#include "engine/window/Event.h"
 
 namespace gltut
 {

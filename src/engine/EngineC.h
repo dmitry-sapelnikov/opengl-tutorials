@@ -5,9 +5,8 @@
 #include <memory>
 #include "engine/core/NonCopyable.h"
 #include "engine/Engine.h"
-#include "engine/Renderer.h"
-#include "SceneC.h"
-#include "WindowC.h"
+#include "scene/SceneC.h"
+#include "window/WindowC.h"
 
 namespace gltut
 {

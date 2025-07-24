@@ -2,9 +2,9 @@
 #define OPENGL_TUTORIALS_WINDOW_H
 
 // Includes
-#include "engine/Core/Types.h"
-#include "engine/Math/Point2.h"
-#include "engine/EventHandler.h"
+#include "engine/core/Types.h"
+#include "engine/math/Point2.h"
+#include "engine/window/EventHandler.h"
 
 namespace gltut
 {

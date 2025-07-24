@@ -2,7 +2,7 @@
 #include "SceneC.h"
 #include <stdexcept>
 #include "engine/core/Check.h"
-#include "MeshC.h"
+#include "../renderer/mesh/MeshC.h"
 
 namespace
 {

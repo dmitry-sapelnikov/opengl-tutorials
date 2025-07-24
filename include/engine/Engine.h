@@ -2,9 +2,9 @@
 #define OPENGL_TUTORIALS_ENGINE_H
 
 // Includes
-#include "Window.h"
-#include "Scene.h"
-#include "Renderer.h"
+#include "engine/window/Window.h"
+#include "engine/renderer/Renderer.h"
+#include "engine/scene/Scene.h"
 
 namespace gltut
 {

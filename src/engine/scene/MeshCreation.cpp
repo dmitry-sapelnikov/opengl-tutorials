@@ -1,5 +1,5 @@
 // Includes
-#include "engine/MeshCreation.h"
+#include "engine/scene/MeshCreation.h"
 #include <array>
 #include <vector>
 

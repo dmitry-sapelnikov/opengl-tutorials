@@ -1,7 +1,7 @@
 // Includes
 #include "RendererBase.h"
 #include <iostream>
-#include "stb_image.h"
+#include "./texture/stb_image.h"
 
 namespace gltut
 {
