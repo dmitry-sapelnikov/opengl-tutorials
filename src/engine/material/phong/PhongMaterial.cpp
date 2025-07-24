@@ -65,7 +65,7 @@ void main()
 	vec3 ambient = lightColor * texture(ambientSampler, texCoord).rgb;
 
 	// Diffuse
-	vec3 lightDir = normalize(lightPos);
+	vec3 lightDir = normalize(lightPos - pos);
 	vec3 diffuse = max(0.0f, dot(norm, lightDir)) * lightColor * texture(diffuseSampler, texCoord).rgb;
 
 	// Specular
