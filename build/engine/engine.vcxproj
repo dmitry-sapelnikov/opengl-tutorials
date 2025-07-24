@@ -19,6 +19,7 @@
     <ClInclude Include="..\..\include\engine\EventHandler.h" />
     <ClInclude Include="..\..\include\engine\Keycodes.h" />
     <ClInclude Include="..\..\include\engine\material\Material.h" />
+    <ClInclude Include="..\..\include\engine\material\PhongMaterial.h" />
     <ClInclude Include="..\..\include\engine\math\Functions.h" />
     <ClInclude Include="..\..\include\engine\math\Constants.h" />
     <ClInclude Include="..\..\include\engine\math\Matrix3.h" />
@@ -66,6 +67,7 @@
     <ClCompile Include="..\..\src\engine\File.cpp" />
     <ClCompile Include="..\..\src\engine\FPSCounter.cpp" />
     <ClCompile Include="..\..\src\engine\material\MaterialC.cpp" />
+    <ClCompile Include="..\..\src\engine\material\phong\PhongMaterial.cpp" />
     <ClCompile Include="..\..\src\engine\MeshC.cpp" />
     <ClCompile Include="..\..\src\engine\MeshCreation.cpp" />
     <ClCompile Include="..\..\src\engine\RendererBase.cpp" />

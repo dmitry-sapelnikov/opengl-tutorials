@@ -48,6 +48,9 @@
     <Filter Include="src\backends\opengl">
       <UniqueIdentifier>{57832752-d3fd-4ca4-97df-ff1084f6852e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\material\phong">
+      <UniqueIdentifier>{861b4e7c-73e2-4227-b223-d1d81b98db01}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\engine\Mesh.h">
@@ -191,6 +194,9 @@
     <ClInclude Include="..\..\src\engine\backends\opengl\RendererOpenGL.h">
       <Filter>src\backends\opengl</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\engine\material\PhongMaterial.h">
+      <Filter>include\material</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\engine\MeshC.cpp">
@@ -252,6 +258,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\engine\backends\opengl\RendererOpenGL.cpp">
       <Filter>src\backends\opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\material\phong\PhongMaterial.cpp">
+      <Filter>src\material\phong</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
