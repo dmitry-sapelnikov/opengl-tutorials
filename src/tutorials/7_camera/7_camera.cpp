@@ -35,9 +35,9 @@ int main()
 		GLTUT_CHECK(shader != 0, "Failed to create shader program")
 		shader->setInt("texture1", 0);
 		shader->setInt("texture2", 1);
-		shader->setMatrixName(gltut::Shader::Matrix::MODEL, "model");
-		shader->setMatrixName(gltut::Shader::Matrix::VIEW, "view");
-		shader->setMatrixName(gltut::Shader::Matrix::PROJECTION, "projection");
+		shader->setSceneParameterName(gltut::Shader::SceneParameter::MODEL, "model");
+		shader->setSceneParameterName(gltut::Shader::SceneParameter::VIEW, "view");
+		shader->setSceneParameterName(gltut::Shader::SceneParameter::PROJECTION, "projection");
 
 		gltut::Texture* texture1 = engine->getRenderer()->loadTexture("assets/container.jpg");
 		GLTUT_CHECK(texture1 != nullptr, "Failed to load texture")

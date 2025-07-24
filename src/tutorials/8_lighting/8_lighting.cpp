@@ -60,9 +60,9 @@ int main()
 			"assets/light_shader.vs",
 			"assets/light_shader.fs");
 		GLTUT_CHECK(lightShader, "Failed to create light shader program");
-		lightShader->setMatrixName(gltut::Shader::Matrix::MODEL, "model");
-		lightShader->setMatrixName(gltut::Shader::Matrix::VIEW, "view");
-		lightShader->setMatrixName(gltut::Shader::Matrix::PROJECTION, "projection");
+		lightShader->setSceneParameterName(gltut::Shader::SceneParameter::MODEL, "model");
+		lightShader->setSceneParameterName(gltut::Shader::SceneParameter::VIEW, "view");
+		lightShader->setSceneParameterName(gltut::Shader::SceneParameter::PROJECTION, "projection");
 
 		auto* lightMaterial = scene->createMaterial(lightShader);
 		GLTUT_CHECK(lightMaterial, "Failed to create light material");
@@ -99,10 +99,6 @@ int main()
 				{ 0.0f, 0.0f, 0.0f },
 				{ 0.0f, 0.0f, 0.0f },
 				{ 2.0f, 2.0f, 2.0f }));
-
-			const gltut::Vector3 viewPos = camera->getView().getPosition();
-			phongShader->setVec3("viewPos", viewPos.x, viewPos.y, viewPos.z);
-
 			if (!engine->update())
 			{
 				break;

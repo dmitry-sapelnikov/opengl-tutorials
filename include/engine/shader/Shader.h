@@ -13,21 +13,27 @@ class Shader: public ShaderParameters
 {
 public:
 	/// Enum of standard matrices
-	enum class Matrix
+	enum class SceneParameter
 	{
+		// Model matrix
 		MODEL = 0,
+		/// View matrix
 		VIEW,
+		/// Projection matrix
 		PROJECTION,
+		/// Normal matrix
 		NORMAL,
+		/// View position
+		VIEW_POSITION,
 		/// Total number of standard matrices
 		TOTAL_COUNT
 	};
 
-	/// Returns the name of standard matrix variable
-	virtual const char* getMatrixName(Matrix matrix) const noexcept = 0;
+	/// Returns the name of a scene parameter
+	virtual const char* getSceneParameterName(SceneParameter parameter) const noexcept = 0;
 
-	/// Sets the name of the standard matrix variable
-	virtual void setMatrixName(Matrix matrix, const char* name) noexcept = 0;
+	/// Sets the name of a scene parameter
+	virtual void setSceneParameterName(SceneParameter parameter, const char* name) noexcept = 0;
 
 	/// Activates the shader
 	virtual void activate() const noexcept = 0;

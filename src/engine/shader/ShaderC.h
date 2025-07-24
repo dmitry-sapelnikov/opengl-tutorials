@@ -12,15 +12,15 @@ namespace gltut
 class ShaderC : public Shader, public NonCopyable
 {
 public:
-	/// Returns the name of standard matrix variable
-	const char* getMatrixName(Matrix matrix) const noexcept final;
+	/// Returns the name of a scene parameter
+	const char* getSceneParameterName(SceneParameter parameter) const noexcept final;
 
-	/// Sets the name of the standard matrix variable
-	void setMatrixName(Matrix matrix, const char* name) noexcept final;
+	/// Sets the name of a scene parameter
+	void setSceneParameterName(SceneParameter parameter, const char* name) noexcept final;
 
 private:
-	/// Names of standard matrix variables
-	std::array<std::string, static_cast<size_t>(Matrix::TOTAL_COUNT)> mMatrixNames;
+	/// Names of scene parameters
+	std::array<std::string, static_cast<size_t>(SceneParameter::TOTAL_COUNT)> mSceneParameterNames;
 };
 
 // End of the namespace gltut

@@ -56,13 +56,13 @@ void SceneObjectC::render() const noexcept
 		if (Shader* shader = mMaterial->getShader();
 			shader != nullptr)
 		{
-			if (const char* modelMatrixName = shader->getMatrixName(Shader::Matrix::MODEL);
+			if (const char* modelMatrixName = shader->getSceneParameterName(Shader::SceneParameter::MODEL);
 				modelMatrixName != nullptr)
 			{
 				shader->setMat4(modelMatrixName, mTransform.data());
 			}
 
-			if (const char* normalMatrixName = shader->getMatrixName(Shader::Matrix::NORMAL);
+			if (const char* normalMatrixName = shader->getSceneParameterName(Shader::SceneParameter::NORMAL);
 				normalMatrixName != nullptr)
 			{
 				shader->setMat3(

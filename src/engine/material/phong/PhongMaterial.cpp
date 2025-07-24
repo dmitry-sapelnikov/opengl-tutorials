@@ -89,10 +89,11 @@ Shader* createPhongShader(Renderer& renderer) noexcept
 		return nullptr;
 	}
 
-	result->setMatrixName(Shader::Matrix::MODEL, "model");
-	result->setMatrixName(Shader::Matrix::VIEW, "view");
-	result->setMatrixName(Shader::Matrix::PROJECTION, "projection");
-	result->setMatrixName(Shader::Matrix::NORMAL, "normalMat");
+	result->setSceneParameterName(Shader::SceneParameter::MODEL, "model");
+	result->setSceneParameterName(Shader::SceneParameter::VIEW, "view");
+	result->setSceneParameterName(Shader::SceneParameter::PROJECTION, "projection");
+	result->setSceneParameterName(Shader::SceneParameter::NORMAL, "normalMat");
+	result->setSceneParameterName(Shader::SceneParameter::VIEW_POSITION, "viewPos");
 
 	result->setInt("ambientSampler", 0);
 	result->setInt("diffuseSampler", 1);
