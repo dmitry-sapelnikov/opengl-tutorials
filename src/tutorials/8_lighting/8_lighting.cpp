@@ -7,6 +7,8 @@
 #include "engine/Engine.h"
 #include "engine/MeshCreation.h"
 
+#include "engine/material/PhongMaterial.h"
+
 namespace
 {
 	const gltut::Vector3 LIGHT_POSITION = { 0.0, 10.0f, 20.0f };
@@ -24,25 +26,24 @@ int main()
 		engine->getWindow()->showFPS(true);
 
 		auto* scene = engine->getScene();
-		auto* mesh = gltut::createSphereMesh(*scene, 1.0f, 10);//gltut::createBoxMesh(*scene, 1.0f, 1.0f, 1.0f);
+		auto* mesh = gltut::createSphereMesh(*scene, 1.0f, 10);
 		GLTUT_CHECK(mesh, "Failed to create mesh");
 
-		gltut::Shader* phongShader = engine->getRenderer()->loadShader(
-			"assets/phong_shader.vs",
-			"assets/phong_shader.fs");
+		gltut::Shader* phongShader = gltut::createPhongShader(*engine->getRenderer());
 		GLTUT_CHECK(phongShader, "Failed to create Phong shader program");
 
 		phongShader->setVec3("lightPos", LIGHT_POSITION.x, LIGHT_POSITION.y, LIGHT_POSITION.z);
 		phongShader->setVec3("lightColor", 0.8f, 0.8f, 0.8f);
-		phongShader->setVec3("objectColor", 1.0f, 0.5f, 0.31f);
-
-		phongShader->setMatrixName(gltut::Shader::Matrix::MODEL, "model");
-		phongShader->setMatrixName(gltut::Shader::Matrix::VIEW, "view");
-		phongShader->setMatrixName(gltut::Shader::Matrix::PROJECTION, "projection");
-		phongShader->setMatrixName(gltut::Shader::Matrix::NORMAL, "normalMat");
+		
+		gltut::Texture* diffuseTexture = engine->getRenderer()->loadTexture("assets/container.jpg");
+		GLTUT_CHECK(diffuseTexture, "Failed to create diffuse texture");
 
 		auto* phongMaterial = scene->createMaterial(phongShader);
 		GLTUT_CHECK(phongMaterial, "Failed to create Phong material");
+
+		gltut::setPhongMaterialParameters(
+			*phongMaterial,
+			diffuseTexture);
 
 		auto* object = scene->createObject(mesh, phongMaterial);
 		GLTUT_CHECK(object, "Failed to create object");
@@ -89,7 +90,7 @@ int main()
 			object->setTransform(gltut::Matrix4::transformMatrix(
 				{ 0.0f, 0.0f, 0.0f },
 				{ 0.0f, 0.0f, 0.0f },
-				{ 2.0f, 5.0f, 2.0f }));
+				{ 2.0f, 2.0f, 2.0f }));
 
 			const gltut::Vector3 viewPos = camera->getView().getPosition();
 			phongShader->setVec3("viewPos", viewPos.x, viewPos.y, viewPos.z);
