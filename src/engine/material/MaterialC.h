@@ -2,9 +2,10 @@
 #define OPENGL_TUTORIALS_MATERIAL_C_H
 
 // Includes
-#include <array>
 #include "engine/core/NonCopyable.h"
-#include "engine/Material.h"
+#include "engine/material/Material.h"
+
+#include "../shader/ShaderArguments.h"
 
 namespace gltut
 {
@@ -13,13 +14,19 @@ class MaterialC final : public Material, public NonCopyable
 {
 public:
 	/// Constructor
-	MaterialC(Shader* shader) noexcept;
+	explicit MaterialC(Shader* shader) noexcept;
 
-	///	Returns the assigned shader
-	Shader* getShader() const noexcept final;
+	/// Return the shader
+	virtual Shader* getShader() const noexcept final;
 
-	/// Sets a shader
+	/// Sets the shader
 	void setShader(Shader* shader) noexcept final;
+
+	/// Returns the shader controller
+	ShaderParameters* getShaderArguments() final
+	{
+		return &mShaderArguments;
+	}
 
 	/// Returns the texture associated with the specified slot
 	Texture* getTexture(u32 slot) const noexcept final;
@@ -28,14 +35,17 @@ public:
 	void setTexture(Texture* texture, u32 slot) noexcept final;
 
 	/// Use the material
-	void activate() noexcept final;
+	void activate() const noexcept final;
 
 private:
+	/// Binds the textures
+	void bindTextures() const noexcept;
+
+	/// The shader arguments
+	ShaderArguments mShaderArguments;
+
 	/// The number of texture slots
 	static constexpr u32 TEXTURE_SLOTS = 16;
-
-	/// The shader
-	Shader* mShader = nullptr;
 
 	/// Texture slots
 	std::array<Texture*, TEXTURE_SLOTS> mTextures;

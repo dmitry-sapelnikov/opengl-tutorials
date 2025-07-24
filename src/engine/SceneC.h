@@ -6,11 +6,12 @@
 #include <chrono>
 #include "engine/core/NonCopyable.h"
 #include "engine/Scene.h"
-#include "RendererBase.h"
-#include "MaterialC.h"
+
+#include "./scene/camera/CameraC.h"
+#include "./material/MaterialC.h"
 #include "MeshC.h"
 #include "SceneObjectC.h"
-#include "scene/camera/CameraC.h"
+#include "RendererBase.h"
 
 namespace gltut
 {

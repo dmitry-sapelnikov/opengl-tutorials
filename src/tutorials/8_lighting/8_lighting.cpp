@@ -30,18 +30,19 @@ int main()
 		gltut::Shader* phongShader = engine->getRenderer()->loadShader(
 			"assets/phong_shader.vs",
 			"assets/phong_shader.fs");
-		GLTUT_CHECK(phongShader, "Failed to create phong shader program");
+		GLTUT_CHECK(phongShader, "Failed to create Phong shader program");
 
 		phongShader->setVec3("lightPos", LIGHT_POSITION.x, LIGHT_POSITION.y, LIGHT_POSITION.z);
 		phongShader->setVec3("lightColor", 0.8f, 0.8f, 0.8f);
 		phongShader->setVec3("objectColor", 1.0f, 0.5f, 0.31f);
-		phongShader->setModelMatrixName("model");
-		phongShader->setProjectionMatrixName("projection");
-		phongShader->setViewMatrixName("view");
-		phongShader->setNormalMatrixName("normalMat");
+
+		phongShader->setMatrixName(gltut::Shader::Matrix::MODEL, "model");
+		phongShader->setMatrixName(gltut::Shader::Matrix::VIEW, "view");
+		phongShader->setMatrixName(gltut::Shader::Matrix::PROJECTION, "projection");
+		phongShader->setMatrixName(gltut::Shader::Matrix::NORMAL, "normalMat");
 
 		auto* phongMaterial = scene->createMaterial(phongShader);
-		GLTUT_CHECK(phongMaterial, "Failed to create phong material");
+		GLTUT_CHECK(phongMaterial, "Failed to create Phong material");
 
 		auto* object = scene->createObject(mesh, phongMaterial);
 		GLTUT_CHECK(object, "Failed to create object");
@@ -50,10 +51,9 @@ int main()
 			"assets/light_shader.vs",
 			"assets/light_shader.fs");
 		GLTUT_CHECK(lightShader, "Failed to create light shader program");
-
-		lightShader->setModelMatrixName("model");
-		lightShader->setProjectionMatrixName("projection");
-		lightShader->setViewMatrixName("view");
+		lightShader->setMatrixName(gltut::Shader::Matrix::MODEL, "model");
+		lightShader->setMatrixName(gltut::Shader::Matrix::VIEW, "view");
+		lightShader->setMatrixName(gltut::Shader::Matrix::PROJECTION, "projection");
 
 		auto* lightMaterial = scene->createMaterial(lightShader);
 		GLTUT_CHECK(lightMaterial, "Failed to create light material");

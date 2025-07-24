@@ -52,19 +52,23 @@ void SceneObjectC::render() const noexcept
 	if (mMaterial != nullptr)
 	{
 		mMaterial->activate();
-		auto* shader = mMaterial->getShader();
-		if (shader != nullptr && shader->getModelMatrixName() != nullptr)
+		
+		if (Shader* shader = mMaterial->getShader();
+			shader != nullptr)
 		{
-			mMaterial->getShader()->setMat4(
-				shader->getModelMatrixName(),
-				mTransform.data());
-		}
+			if (const char* modelMatrixName = shader->getMatrixName(Shader::Matrix::MODEL);
+				modelMatrixName != nullptr)
+			{
+				shader->setMat4(modelMatrixName, mTransform.data());
+			}
 
-		if (shader != nullptr && shader->getNormalMatrixName() != nullptr)
-		{
-			mMaterial->getShader()->setMat3(
-				shader->getNormalMatrixName(),
-				getNormalMatrix(mTransform.getMatrix3()).data());
+			if (const char* normalMatrixName = shader->getMatrixName(Shader::Matrix::NORMAL);
+				normalMatrixName != nullptr)
+			{
+				shader->setMat3(
+					normalMatrixName,
+					getNormalMatrix(mTransform.getMatrix3()).data());
+			}
 		}
 	}
 

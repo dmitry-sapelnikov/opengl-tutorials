@@ -6,7 +6,8 @@ namespace gltut
 {
 //	Global classes
 MaterialC::MaterialC(Shader* shader) noexcept :
-	mShader(shader)
+	mShaderArguments(shader),
+	mTextures()
 {
 	for (u32 i = 0; i < TEXTURE_SLOTS; ++i)
 	{
@@ -16,12 +17,12 @@ MaterialC::MaterialC(Shader* shader) noexcept :
 
 Shader* MaterialC::getShader() const noexcept
 {
-	return mShader;
+	return mShaderArguments.getShader();
 }
 
 void MaterialC::setShader(Shader* shader) noexcept
 {
-	mShader = shader;
+	mShaderArguments.setShader(shader);
 }
 
 Texture* MaterialC::getTexture(u32 slot) const noexcept
@@ -36,13 +37,17 @@ void MaterialC::setTexture(Texture* texture, u32 slot) noexcept
 	mTextures[slot] = texture;
 }
 
-void MaterialC::activate() noexcept
+void MaterialC::activate() const noexcept
 {
-	if (mShader != nullptr)
+	if (mShaderArguments.getShader() != nullptr)
 	{
-		mShader->activate();
+		mShaderArguments.activate();
 	}
+	bindTextures();
+}
 
+void MaterialC::bindTextures() const noexcept
+{
 	for (u32 i = 0; i < TEXTURE_SLOTS; ++i)
 	{
 		if (mTextures[i] != nullptr)

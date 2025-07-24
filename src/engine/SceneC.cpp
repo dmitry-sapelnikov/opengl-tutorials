@@ -48,7 +48,7 @@ Material* SceneC::createMaterial(Shader* shader) noexcept
 	GLTUT_CATCH_ALL_BEGIN
 		return &mMaterials.emplace_back(shader);
 	GLTUT_CATCH_ALL_END("Cannot create a material")
-		return nullptr;
+	return nullptr;
 }
 
 Mesh* SceneC::createMesh(
@@ -174,30 +174,26 @@ void SceneC::render() noexcept
 {
 	for (const auto& object : mObjects)
 	{
-		if (mActiveCamera != nullptr)
+		if (mActiveCamera != nullptr && 
+			object.getMaterial() != nullptr && 
+			object.getMaterial()->getShader() != nullptr)
 		{
-			auto* shader = object.getMaterial() != nullptr ?
-				object.getMaterial()->getShader() :
-				nullptr;
+			auto* shader = object.getMaterial()->getShader();
+			shader->activate();
 
-			if (shader != nullptr)
+			const auto& viewMatrix = mActiveCamera->getView().getMatrix();
+			const auto& projectionMatrix = mActiveCamera->getProjection().getMatrix();
+
+			if (const char* viewMatrixName = shader->getMatrixName(Shader::Matrix::VIEW);
+				viewMatrixName != nullptr)
 			{
-				const auto& viewMatrix = mActiveCamera->getView().getMatrix();
-				const auto& projectionMatrix = mActiveCamera->getProjection().getMatrix();
+				shader->setMat4(viewMatrixName, viewMatrix.data());
+			}
 
-				if (shader->getViewMatrixName() != nullptr)
-				{
-					shader->setMat4(
-						shader->getViewMatrixName(),
-						viewMatrix.data());
-				}
-
-				if (shader->getProjectionMatrixName() != nullptr)
-				{
-					shader->setMat4(
-						shader->getProjectionMatrixName(),
-						projectionMatrix.data());
-				}
+			if (const char* projectionMatrixName = shader->getMatrixName(Shader::Matrix::PROJECTION);
+				projectionMatrixName != nullptr)
+			{
+				shader->setMat4(projectionMatrixName, projectionMatrix.data());
 			}
 		}
 		object.render();

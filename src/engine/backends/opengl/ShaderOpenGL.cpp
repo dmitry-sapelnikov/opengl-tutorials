@@ -83,59 +83,48 @@ void ShaderOpenGL::activate() const noexcept
 	glUseProgram(mProgram);
 }
 
-int32 ShaderOpenGL::getVariableLocation(const char* name) noexcept
+int32 ShaderOpenGL::getParameterLocation(const char* name) const noexcept
 {
 	GLTUT_ASSERT_STRING(name);
 	activate();
 	return glGetUniformLocation(mProgram, name);
 }
 
-void ShaderOpenGL::setBool(const char* name, bool value) noexcept
+void ShaderOpenGL::setInt(int32 location, int value) noexcept
 {
-	glUniform1i(getCheckedVariableLocation(name), static_cast<int>(value));
+	glUniform1i(location, value);
 }
 
-void ShaderOpenGL::setInt(const char* name, int value) noexcept
+void ShaderOpenGL::setFloat(int32 location, float value) noexcept
 {
-	glUniform1i(getCheckedVariableLocation(name), value);
+	glUniform1f(location, value);
 }
 
-void ShaderOpenGL::setFloat(const char* name, float value) noexcept
+void ShaderOpenGL::setVec2(int32 location, float x, float y) noexcept
 {
-	glUniform1f(getCheckedVariableLocation(name), value);
+	glUniform2f(location, x, y);
 }
 
-void ShaderOpenGL::setVec2(const char* name, float x, float y) noexcept
+void ShaderOpenGL::setVec3(int32 location, float x, float y, float z) noexcept
 {
-	glUniform2f(getCheckedVariableLocation(name), x, y);
+	glUniform3f(location, x, y, z);
 }
 
-void ShaderOpenGL::setVec3(const char* name, float x, float y, float z) noexcept
+void ShaderOpenGL::setVec4(int32 location, float x, float y, float z, float w) noexcept
 {
-	glUniform3f(getCheckedVariableLocation(name), x, y, z);
+	glUniform4f(location, x, y, z, w);
 }
 
-void ShaderOpenGL::setVec4(const char* name, float x, float y, float z, float w) noexcept
+void ShaderOpenGL::setMat3(int32 location, const float* data) noexcept
 {
-	glUniform4f(getCheckedVariableLocation(name), x, y, z, w);
+	glUniformMatrix3fv(location, 1, GL_FALSE, data);
 }
 
-void ShaderOpenGL::setMat3(const char* name, const float* data) noexcept
+void ShaderOpenGL::setMat4(int32 location, const float* data) noexcept
 {
-	glUniformMatrix3fv(getCheckedVariableLocation(name), 1, GL_FALSE, data);
+	glUniformMatrix4fv(location, 1, GL_FALSE, data);
 }
 
-void ShaderOpenGL::setMat4(const char* name, const float* data) noexcept
-{
-	glUniformMatrix4fv(getCheckedVariableLocation(name), 1, GL_FALSE, data);
-}
-
-int ShaderOpenGL::getCheckedVariableLocation(const char* name) noexcept
-{
-	const int location = getVariableLocation(name);
-	GLTUT_ASSERT(location != -1);
-	return location;
-}
 
 // End of the namespace gltut
 }

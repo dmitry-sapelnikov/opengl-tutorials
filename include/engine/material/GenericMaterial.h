@@ -3,14 +3,14 @@
 
 // Includes
 #include "engine/core/Types.h"
-#include "Shader.h"
-#include "Texture.h"
+#include "../Shader.h"
+#include "../Texture.h"
 
 namespace gltut
 {
 
 /// The class represents a material
-class Material
+class GenericMaterial
 {
 public:
 	/// Virtual destructor

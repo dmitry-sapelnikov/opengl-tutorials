@@ -5,7 +5,7 @@
 #include <string>
 #include "engine/core/NonCopyable.h"
 #include "engine/core/Types.h"
-#include "engine/Texture.h"
+#include "engine/texture/Texture.h"
 
 namespace gltut
 {

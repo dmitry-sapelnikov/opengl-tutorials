@@ -2,10 +2,10 @@
 #define OPENGL_TUTORIALS_RENDERER_H
 
 // Includes
-#include "core/Types.h"
-#include "Shader.h"
-#include "Texture.h"
-#include "Mesh.h"
+#include "./core/Types.h"
+#include "./shader/Shader.h"
+#include "./texture/Texture.h"
+#include "./Mesh.h"
 
 namespace gltut
 {

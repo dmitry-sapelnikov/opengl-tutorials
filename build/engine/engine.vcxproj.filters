@@ -27,6 +27,21 @@
     <Filter Include="src\scene\camera">
       <UniqueIdentifier>{b95f5d55-2fdd-4e4a-93cb-9929f5f559bd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\material">
+      <UniqueIdentifier>{a30279c0-8237-45ec-8325-a98bddb13c75}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\material">
+      <UniqueIdentifier>{2f02fdae-060a-422c-aae0-5b6c7f1d061b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\shader">
+      <UniqueIdentifier>{8891593a-1811-4b87-ae19-31bbc8aa6e58}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\shader">
+      <UniqueIdentifier>{845e0f90-0779-4a0f-a1f7-227fd9ba8a50}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\texture">
+      <UniqueIdentifier>{5e021e90-1e15-483e-962c-540e81e7c1ce}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\backends">
       <UniqueIdentifier>{35c0e97a-b797-4a8e-8223-861dda6c5040}</UniqueIdentifier>
     </Filter>
@@ -68,9 +83,6 @@
     <ClInclude Include="..\..\include\engine\core\Check.h">
       <Filter>include\core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\engine\Shader.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\engine\core\NonCopyable.h">
       <Filter>include\core</Filter>
     </ClInclude>
@@ -78,9 +90,6 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\engine\VertexFormat.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\engine\Texture.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\engine\stb_image.h">
@@ -101,12 +110,6 @@
     <ClInclude Include="..\..\include\engine\math\Vector3.h">
       <Filter>include\math</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\engine\Material.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\engine\MaterialC.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\engine\SceneObject.h">
       <Filter>include</Filter>
     </ClInclude>
@@ -121,9 +124,6 @@
     </ClInclude>
     <ClInclude Include="..\..\include\engine\math\Rng.h">
       <Filter>include\math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\engine\ShaderC.h">
-      <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\engine\Event.h">
       <Filter>include</Filter>
@@ -155,13 +155,40 @@
     <ClInclude Include="..\..\include\engine\math\Matrix3.h">
       <Filter>include\math</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\engine\backends\opengl\RendererOpenGL.h">
+    <ClInclude Include="..\..\include\engine\material\Material.h">
+      <Filter>include\material</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\material\MaterialC.h">
+      <Filter>src\material</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\shader\ShaderArguments.h">
+      <Filter>src\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\shader\Shader.h">
+      <Filter>include\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\shader\ShaderParameters.h">
+      <Filter>include\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\texture\Texture.h">
+      <Filter>include\texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\texture\TexturesController.h">
+      <Filter>include\texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\backends\opengl\ShaderOpenGL.h">
       <Filter>src\backends\opengl</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\engine\backends\opengl\ShaderOpenGL.h">
       <Filter>src\backends\opengl</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\engine\backends\opengl\TextureOpenGL.h">
+      <Filter>src\backends\opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\shader\ShaderC.h">
+      <Filter>src\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\backends\opengl\RendererOpenGL.h">
       <Filter>src\backends\opengl</Filter>
     </ClInclude>
   </ItemGroup>
@@ -190,16 +217,10 @@
     <ClCompile Include="..\..\src\engine\FPSCounter.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\engine\MaterialC.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\engine\SceneObjectC.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\engine\MeshCreation.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\engine\ShaderC.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\engine\scene\camera\CameraC.cpp">
@@ -211,13 +232,25 @@
     <ClCompile Include="..\..\src\engine\scene\camera\FPSCameraControllerC.cpp">
       <Filter>src\scene\camera</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\engine\backends\opengl\RendererOpenGL.cpp">
+    <ClCompile Include="..\..\src\engine\material\MaterialC.cpp">
+      <Filter>src\material</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\shader\ShaderArguments.cpp">
+      <Filter>src\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\backends\opengl\ShaderOpenGL.cpp">
       <Filter>src\backends\opengl</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\engine\backends\opengl\ShaderOpenGL.cpp">
       <Filter>src\backends\opengl</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\engine\backends\opengl\TextureOpenGL.cpp">
+      <Filter>src\backends\opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\shader\ShaderC.cpp">
+      <Filter>src\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\backends\opengl\RendererOpenGL.cpp">
       <Filter>src\backends\opengl</Filter>
     </ClCompile>
   </ItemGroup>

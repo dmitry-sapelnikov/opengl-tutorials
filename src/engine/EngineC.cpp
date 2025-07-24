@@ -1,11 +1,11 @@
 // Includes
-#include "EngineC.h"
-
-#include "WindowC.h"
-#include "SceneC.h"
-#include "RendererOpenGL.h"
 #include <stdexcept>
 #include <iostream>
+
+#include "backends/opengl/RendererOpenGL.h"
+#include "EngineC.h"
+#include "SceneC.h"
+#include "WindowC.h"
 
 namespace gltut
 {
