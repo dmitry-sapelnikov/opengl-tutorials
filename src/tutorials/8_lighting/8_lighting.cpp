@@ -12,6 +12,7 @@
 namespace
 {
 	const gltut::Vector3 LIGHT_POSITION = { 0.0, 10.0f, 20.0f };
+	const gltut::Vector3 LIGHT_COLOR = { 1.0, 1.0f, 1.0f };
 }
 
 ///	The program entry point
@@ -33,15 +34,15 @@ int main()
 		GLTUT_CHECK(phongShader, "Failed to create Phong shader program");
 
 		phongShader->setVec3("lightPos", LIGHT_POSITION.x, LIGHT_POSITION.y, LIGHT_POSITION.z);
-		phongShader->setVec3("lightColor", 0.8f, 0.8f, 0.8f);
+		phongShader->setVec3("lightColor", LIGHT_COLOR.x, LIGHT_COLOR.y, LIGHT_COLOR.z);
 		
-		gltut::Texture* ambientTexture = engine->getRenderer()->createSolidColorTexture(0.1f, 0.1f, 0.1f, 1.0f);
+		gltut::Texture* ambientTexture = engine->getRenderer()->createSolidColorTexture(0.1f, 0.1f, 0.1f);
 		GLTUT_CHECK(ambientTexture, "Failed to create ambient texture");
 
-		gltut::Texture* diffuseTexture = engine->getRenderer()->loadTexture("assets/container.jpg");
+		gltut::Texture* diffuseTexture = engine->getRenderer()->loadTexture("assets/container2.png");
 		GLTUT_CHECK(diffuseTexture, "Failed to create diffuse texture");
 
-		gltut::Texture* specularTexture = engine->getRenderer()->createSolidColorTexture(1.0f, 1.0f, 1.0f, 1.0f);
+		gltut::Texture* specularTexture = engine->getRenderer()->loadTexture("assets/container2_specular.png");
 		GLTUT_CHECK(specularTexture, "Failed to create specular texture");
 
 		auto* phongMaterial = scene->createMaterial(phongShader);
@@ -68,11 +69,11 @@ int main()
 		GLTUT_CHECK(lightMaterial, "Failed to create light material");
 
 		auto* light = scene->createObject(mesh, lightMaterial);
+		GLTUT_CHECK(light, "Failed to create light object");
 		light->setTransform(gltut::Matrix4::transformMatrix(
 			LIGHT_POSITION,
 			{ 0.0f, 0.0f, 0.0f },
 			{ 0.2f, 0.2f, 0.2f }));
-		GLTUT_CHECK(light, "Failed to create light object");
 
 		gltut::Camera* camera = engine->getScene()->createCamera(
 			{ -2.0f, 2.0f, 6.0f },
