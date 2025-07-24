@@ -35,15 +35,23 @@ int main()
 		phongShader->setVec3("lightPos", LIGHT_POSITION.x, LIGHT_POSITION.y, LIGHT_POSITION.z);
 		phongShader->setVec3("lightColor", 0.8f, 0.8f, 0.8f);
 		
+		gltut::Texture* ambientTexture = engine->getRenderer()->createSolidColorTexture(0.1f, 0.1f, 0.1f, 1.0f);
+		GLTUT_CHECK(ambientTexture, "Failed to create ambient texture");
+
 		gltut::Texture* diffuseTexture = engine->getRenderer()->loadTexture("assets/container.jpg");
 		GLTUT_CHECK(diffuseTexture, "Failed to create diffuse texture");
+
+		gltut::Texture* specularTexture = engine->getRenderer()->createSolidColorTexture(1.0f, 1.0f, 1.0f, 1.0f);
+		GLTUT_CHECK(specularTexture, "Failed to create specular texture");
 
 		auto* phongMaterial = scene->createMaterial(phongShader);
 		GLTUT_CHECK(phongMaterial, "Failed to create Phong material");
 
 		gltut::setPhongMaterialParameters(
 			*phongMaterial,
-			diffuseTexture);
+			ambientTexture,
+			diffuseTexture,
+			specularTexture);
 
 		auto* object = scene->createObject(mesh, phongMaterial);
 		GLTUT_CHECK(object, "Failed to create object");

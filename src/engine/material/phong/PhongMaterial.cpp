@@ -8,19 +8,23 @@ namespace gltut
 // Vertex shader source code for Phong shading
 static const char* PHONG_VERTEX_SHADER = R"(
 #version 330 core
-layout (location = 0) in vec3 inPos;
-layout (location = 1) in vec3 inNormal;
-layout (location = 2) in vec2 inTexCoord;
 
-out vec3 pos;
-out vec3 normal;
-out vec2 texCoord;
-
+// Uniforms
 uniform mat4 model;
 uniform mat4 view;
 uniform vec3 viewPos;
 uniform mat4 projection;
 uniform mat3 normalMat;
+
+// Inputs
+layout (location = 0) in vec3 inPos;
+layout (location = 1) in vec3 inNormal;
+layout (location = 2) in vec2 inTexCoord;
+
+// Outputs
+out vec3 pos;
+out vec3 normal;
+out vec2 texCoord;
 
 void main()
 {
@@ -34,39 +38,43 @@ void main()
 static const char* PHONG_FRAGMENT_SHADER = R"(
 #version 330 core
 
-in vec3 pos;
-in vec3 normal;
+// Uniforms
+uniform sampler2D ambientSampler;
+uniform sampler2D diffuseSampler;
+uniform sampler2D specularSampler;
 
-in vec2 texCoord;
-
-out vec4 outColor;
-
-uniform sampler2D objectColorSampler;
+uniform float shininess;
 
 uniform vec3 lightColor;
-
 uniform vec3 lightPos;
 uniform vec3 viewPos;
 
-uniform float shininess;
+// Inputs
+in vec3 pos;
+in vec3 normal;
+in vec2 texCoord;
+
+// Outputs
+out vec4 outColor;
 
 void main()
 {
 	vec3 norm = normalize(normal);
 
-	float ambientStrength = 0.2f;
-	vec3 ambient = ambientStrength * lightColor;
+	// Ambient
+	vec3 ambient = lightColor * texture(ambientSampler, texCoord).rgb;
 
-	vec3 lightDirection = normalize(lightPos - pos);
-	vec3 diffuse = max(0.0f, dot(norm, lightDirection)) * lightColor;
+	// Diffuse
+	vec3 lightDir = normalize(lightPos);
+	vec3 diffuse = max(0.0f, dot(norm, lightDir)) * lightColor * texture(diffuseSampler, texCoord).rgb;
 
-	float specularStrength = 0.5;
+	// Specular
 	vec3 viewDir = normalize(viewPos - pos);
-	vec3 reflectDir = reflect(-lightDirection, norm);
+	vec3 reflectDir = reflect(-lightDir, norm);
 	float spec = pow(max(dot(viewDir, reflectDir), 0.0), shininess);
-	vec3 specular = specularStrength * spec * lightColor;
+	vec3 specular = spec * lightColor * texture(specularSampler, texCoord).rgb;
 
-	outColor =  vec4((ambient + diffuse + specular) * texture(objectColorSampler, texCoord).rgb, 1.0f);
+	outColor = vec4(ambient + diffuse + specular, 1.0f);
 })";
 
 // Default shininess value
@@ -85,6 +93,10 @@ Shader* createPhongShader(Renderer& renderer) noexcept
 	result->setMatrixName(Shader::Matrix::VIEW, "view");
 	result->setMatrixName(Shader::Matrix::PROJECTION, "projection");
 	result->setMatrixName(Shader::Matrix::NORMAL, "normalMat");
+
+	result->setInt("ambientSampler", 0);
+	result->setInt("diffuseSampler", 1);
+	result->setInt("specularSampler", 2);
 	result->setFloat("shininess", DEFAULT_SHINESS);
 
 	return result;
@@ -92,13 +104,13 @@ Shader* createPhongShader(Renderer& renderer) noexcept
 
 void setPhongMaterialParameters(
 	Material& material,
-	Texture* diffuse,
 	Texture* ambient,
+	Texture* diffuse,
 	Texture* specular,
 	float shininess) noexcept
 {
-	material.setTexture(diffuse, 0);
-	material.setTexture(ambient, 1);
+	material.setTexture(ambient, 0);
+	material.setTexture(diffuse, 1);
 	material.setTexture(specular, 2);
 	material.getShaderArguments()->setFloat("shininess", shininess);
 }

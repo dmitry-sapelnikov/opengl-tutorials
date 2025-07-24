@@ -21,8 +21,8 @@ Shader* createPhongShader(Renderer& renderer) noexcept;
 /// Sets the Phong material parameters
 void setPhongMaterialParameters(
 	Material& material,
-	Texture* diffuse = nullptr,
 	Texture* ambient = nullptr,
+	Texture* diffuse = nullptr,
 	Texture* specular = nullptr,
 	float shininess = 32.0f) noexcept;
 
