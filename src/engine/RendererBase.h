@@ -2,6 +2,7 @@
 #define OPENGL_TUTORIALS_RENDERER_BASE_H
 
 // Includes
+#include <unordered_map>
 #include "engine/core/NonCopyable.h"
 #include "engine/Renderer.h"
 #include "engine/EventHandler.h"
@@ -19,6 +20,13 @@ public:
 	/// Loads a texture
 	Texture* loadTexture(const char* path) noexcept final;
 
+	/// Creates a solid color texture
+	Texture* createSolidColorTexture(
+		float r,
+		float g,
+		float b,
+		float a = 1.0f) noexcept final;
+
 	/// Adds a mesh
 	virtual u32 addMesh(const Mesh& mesh) noexcept = 0;
 
@@ -34,6 +42,9 @@ public:
 private:
 	/// Called when the window is resized
 	virtual void onResize(const Point2u& size) noexcept = 0;
+
+	/// Solid color textures
+	std::unordered_map<u32, Texture*> mSolidColorTextures;
 };
 
 // End of the namespace gltut
