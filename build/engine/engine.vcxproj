@@ -22,30 +22,30 @@
     <ClInclude Include="..\..\include\engine\math\Rng.h" />
     <ClInclude Include="..\..\include\engine\math\Point2.h" />
     <ClInclude Include="..\..\include\engine\math\Vector3.h" />
-    <ClInclude Include="..\..\include\engine\renderer\Mesh.h" />
+    <ClInclude Include="..\..\include\engine\renderer\mesh\Mesh.h" />
+    <ClInclude Include="..\..\include\engine\renderer\mesh\VertexFormat.h" />
     <ClInclude Include="..\..\include\engine\renderer\Renderer.h" />
     <ClInclude Include="..\..\include\engine\renderer\shader\Shader.h" />
     <ClInclude Include="..\..\include\engine\renderer\shader\ShaderParameters.h" />
     <ClInclude Include="..\..\include\engine\renderer\Texture.h" />
-    <ClInclude Include="..\..\include\engine\renderer\VertexFormat.h" />
     <ClInclude Include="..\..\include\engine\scene\camera\Camera.h" />
     <ClInclude Include="..\..\include\engine\scene\camera\CameraController.h" />
     <ClInclude Include="..\..\include\engine\scene\material\GenericMaterial.h" />
     <ClInclude Include="..\..\include\engine\scene\material\Material.h" />
     <ClInclude Include="..\..\include\engine\scene\material\PhongMaterial.h" />
-    <ClInclude Include="..\..\include\engine\scene\MeshCreation.h" />
     <ClInclude Include="..\..\include\engine\scene\Scene.h" />
     <ClInclude Include="..\..\include\engine\scene\SceneObject.h" />
+    <ClInclude Include="..\..\include\engine\utils\MeshCreation.h" />
     <ClInclude Include="..\..\include\engine\window\Event.h" />
     <ClInclude Include="..\..\include\engine\window\EventHandler.h" />
     <ClInclude Include="..\..\include\engine\window\Keycodes.h" />
     <ClInclude Include="..\..\include\engine\window\Window.h" />
     <ClInclude Include="..\..\src\engine\core\File.h" />
     <ClInclude Include="..\..\src\engine\EngineC.h" />
+    <ClInclude Include="..\..\src\engine\renderer\backends\opengl\MeshOpenGL.h" />
     <ClInclude Include="..\..\src\engine\renderer\backends\opengl\RendererOpenGL.h" />
     <ClInclude Include="..\..\src\engine\renderer\backends\opengl\ShaderOpenGL.h" />
     <ClInclude Include="..\..\src\engine\renderer\backends\opengl\TextureOpenGL.h" />
-    <ClInclude Include="..\..\src\engine\renderer\mesh\MeshC.h" />
     <ClInclude Include="..\..\src\engine\renderer\RendererBase.h" />
     <ClInclude Include="..\..\src\engine\renderer\shader\ShaderArguments.h" />
     <ClInclude Include="..\..\src\engine\renderer\shader\ShaderC.h" />
@@ -63,10 +63,10 @@
   <ItemGroup>
     <ClCompile Include="..\..\src\engine\core\File.cpp" />
     <ClCompile Include="..\..\src\engine\EngineC.cpp" />
+    <ClCompile Include="..\..\src\engine\renderer\backends\opengl\MeshOpenGL.cpp" />
     <ClCompile Include="..\..\src\engine\renderer\backends\opengl\RendererOpenGL.cpp" />
     <ClCompile Include="..\..\src\engine\renderer\backends\opengl\ShaderOpenGL.cpp" />
     <ClCompile Include="..\..\src\engine\renderer\backends\opengl\TextureOpenGL.cpp" />
-    <ClCompile Include="..\..\src\engine\renderer\mesh\MeshC.cpp" />
     <ClCompile Include="..\..\src\engine\renderer\RendererBase.cpp" />
     <ClCompile Include="..\..\src\engine\renderer\shader\ShaderArguments.cpp" />
     <ClCompile Include="..\..\src\engine\renderer\shader\ShaderC.cpp" />
@@ -76,9 +76,9 @@
     <ClCompile Include="..\..\src\engine\scene\camera\MouseCameraControllerC.cpp" />
     <ClCompile Include="..\..\src\engine\scene\material\MaterialC.cpp" />
     <ClCompile Include="..\..\src\engine\scene\material\phong\PhongMaterial.cpp" />
-    <ClCompile Include="..\..\src\engine\scene\MeshCreation.cpp" />
     <ClCompile Include="..\..\src\engine\scene\SceneC.cpp" />
     <ClCompile Include="..\..\src\engine\scene\SceneObjectC.cpp" />
+    <ClCompile Include="..\..\src\engine\utils\MeshCreation.cpp" />
     <ClCompile Include="..\..\src\engine\window\FPSCounter.cpp" />
     <ClCompile Include="..\..\src\engine\window\WindowC.cpp" />
   </ItemGroup>

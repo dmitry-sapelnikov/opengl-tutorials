@@ -2,7 +2,6 @@
 #define OPENGL_TUTORIALS_ISCENE_H
 
 // Includes
-#include "engine/renderer/Mesh.h"
 #include "engine/scene/SceneObject.h"
 #include "engine/scene/material/Material.h"
 #include "engine/scene/camera/CameraController.h"
@@ -67,17 +66,6 @@ public:
 		\return The material if it was created successfully, nullptr otherwise
 	*/
 	virtual Material* createMaterial(Shader* shader) noexcept = 0;
-
-	/**
-		\brief Creates a mesh
-		\return The mesh if it was created successfully, nullptr otherwise
-	*/
-	virtual Mesh* createMesh(
-		VertexFormat vertexFormat,
-		u32 vertexCount,
-		const float* vertexData,
-		u32 indexCount,
-		const u32* indexData) noexcept = 0;
 
 	/// Creates a scene object
 	virtual SceneObject* createObject(

@@ -2,7 +2,7 @@
 #define OPENGL_TUTORIALS_MESH_CREATION_H
 
 // Includes
-#include "Scene.h"
+#include "engine/renderer/Renderer.h"
 
 namespace gltut
 {
@@ -21,7 +21,7 @@ namespace gltut
 
 	\note Negative dimensions produce an inverted mesh
 */
-Mesh* createBoxMesh(Scene& scene, float width, float height, float depth) noexcept;
+Mesh* createBoxMesh(Renderer& renderer, float width, float height, float depth) noexcept;
 
 /**
 	\brief Creates a sphere mesh with smooth normals
@@ -37,7 +37,7 @@ Mesh* createBoxMesh(Scene& scene, float width, float height, float depth) noexce
 
 	\note Negative radius produces an inverted mesh
 */
-Mesh* createSphereMesh(Scene& scene, float radius, u32 subdivisions) noexcept;
+Mesh* createSphereMesh(Renderer& renderer, float radius, u32 subdivisions) noexcept;
 
 // End of the namespace gltut
 }

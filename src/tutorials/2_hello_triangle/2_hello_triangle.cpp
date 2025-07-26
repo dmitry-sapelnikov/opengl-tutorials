@@ -57,8 +57,9 @@ int main()
 			1, 2, 3   // second Triangle
 		};
 
+		auto* renderer = engine->getRenderer();
 		auto* scene = engine->getScene();
-		auto* mesh1 = scene->createMesh(
+		auto* mesh1 = renderer->createMesh(
 			gltut::VERTEX_FORMAT_POS3,
 			4,
 			vertices1,
@@ -67,7 +68,7 @@ int main()
 
 		GLTUT_CHECK(mesh1 != nullptr, "Failed to create mesh #1")
 
-		auto* mesh2 = scene->createMesh(
+		auto* mesh2 = renderer->createMesh(
 			gltut::VERTEX_FORMAT_POS3,
 			4,
 			vertices2,
@@ -76,7 +77,7 @@ int main()
 
 		GLTUT_CHECK(mesh2 != nullptr, "Failed to create mesh #2")
 		
-		auto* shader = engine->getRenderer()->createShader(
+		auto* shader = renderer->createShader(
 			VERTEX_SHADER_SOURCE_CODE,
 			FRAGMENT_SHADER_SOURCE_CODE);
 

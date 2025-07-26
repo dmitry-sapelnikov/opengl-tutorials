@@ -3,9 +3,9 @@
 
 // Includes
 #include "engine/core/Types.h"
+#include "engine/renderer/mesh/Mesh.h"
 #include "engine/renderer/shader/Shader.h"
 #include "engine/renderer/Texture.h"
-#include "engine/renderer/VertexFormat.h"
 
 namespace gltut
 {
@@ -23,17 +23,16 @@ public:
 	/// Clears the screen
 	virtual void clear() noexcept = 0;
 
-	/// Allocates a vertex buffer
-	virtual unsigned allocateVertexBuffer(float* vertices, u32 count) noexcept = 0;
-
-	/// Allocates an index buffer
-	virtual unsigned allocateIndexBuffer(u32* indices, u32 count) noexcept = 0;
-
-	/// Allocates a vertex array
-	virtual unsigned allocateVertexArray(
+	/// Creates a mesh
+	virtual Mesh* createMesh(
 		VertexFormat vertexFormat,
-		unsigned vertexBuffer,
-		unsigned indexBuffer) noexcept = 0;
+		u32 vertexCount,
+		const float* vertices,
+		u32 indexCount,
+		const u32* indices) noexcept = 0;
+
+	/// Removes a mesh
+	virtual void removeMesh(Mesh* mesh) noexcept = 0;
 
 	/// Creates a shader from strings
 	virtual Shader* createShader(

@@ -66,8 +66,14 @@
     <Filter Include="src\scene\material\phong">
       <UniqueIdentifier>{1cbfed58-929b-4e69-8f56-1b40e2d4d4b9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\renderer\mesh">
-      <UniqueIdentifier>{a222b578-b52b-4be1-8023-da1e6cbac3e6}</UniqueIdentifier>
+    <Filter Include="include\renderer\mesh">
+      <UniqueIdentifier>{7b7e2a01-d409-4e63-bdcf-3793738c8d14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\utils">
+      <UniqueIdentifier>{a2a96b07-6b0b-4374-81e8-a3fcfbf667fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\utils">
+      <UniqueIdentifier>{1aa5c8fd-c1c9-498e-a282-c3765e8ddb43}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -143,9 +149,6 @@
     <ClInclude Include="..\..\include\engine\window\EventHandler.h">
       <Filter>include\window</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\engine\renderer\VertexFormat.h">
-      <Filter>include\renderer</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\engine\renderer\Renderer.h">
       <Filter>include\renderer</Filter>
     </ClInclude>
@@ -209,14 +212,17 @@
     <ClInclude Include="..\..\src\engine\scene\material\phong\PhongMaterial.h">
       <Filter>src\scene\material\phong</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\engine\renderer\Mesh.h">
-      <Filter>include\renderer</Filter>
+    <ClInclude Include="..\..\src\engine\renderer\backends\opengl\MeshOpenGL.h">
+      <Filter>src\renderer\backends\opengl</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\engine\scene\MeshCreation.h">
-      <Filter>include\scene</Filter>
+    <ClInclude Include="..\..\include\engine\renderer\mesh\Mesh.h">
+      <Filter>include\renderer\mesh</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\engine\renderer\mesh\MeshC.h">
-      <Filter>src\renderer\mesh</Filter>
+    <ClInclude Include="..\..\include\engine\renderer\mesh\VertexFormat.h">
+      <Filter>include\renderer\mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\utils\MeshCreation.h">
+      <Filter>include\utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -277,11 +283,11 @@
     <ClCompile Include="..\..\src\engine\scene\material\phong\PhongMaterial.cpp">
       <Filter>src\scene\material\phong</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\engine\renderer\mesh\MeshC.cpp">
-      <Filter>src\renderer\mesh</Filter>
+    <ClCompile Include="..\..\src\engine\renderer\backends\opengl\MeshOpenGL.cpp">
+      <Filter>src\renderer\backends\opengl</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\engine\scene\MeshCreation.cpp">
-      <Filter>src\scene</Filter>
+    <ClCompile Include="..\..\src\engine\utils\MeshCreation.cpp">
+      <Filter>src\utils</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

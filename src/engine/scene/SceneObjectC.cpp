@@ -74,7 +74,7 @@ void SceneObjectC::render() const noexcept
 
 	if (mMesh != nullptr)
 	{
-		mRenderer.renderMesh(mMesh->getIndexInRenderer());
+		mMesh->render();
 	}
 }
 

@@ -5,8 +5,8 @@
 #include <string>
 
 #include "engine/core/Check.h"
-#include "engine/scene/MeshCreation.h"
 #include "engine/scene/material/PhongMaterial.h"
+#include "engine/utils/MeshCreation.h"
 #include "engine/Engine.h"
 
 namespace
@@ -26,23 +26,24 @@ int main()
 		engine->getWindow()->setTitle("Lighting");
 		engine->getWindow()->showFPS(true);
 
+		auto* renderer = engine->getRenderer();
 		auto* scene = engine->getScene();
-		auto* mesh = gltut::createSphereMesh(*scene, 1.0f, 10);
+		auto* mesh = gltut::createSphereMesh(*renderer, 1.0f, 10);
 		GLTUT_CHECK(mesh, "Failed to create mesh");
 
-		gltut::Shader* phongShader = gltut::createPhongShader(*engine->getRenderer());
+		gltut::Shader* phongShader = gltut::createPhongShader(*renderer);
 		GLTUT_CHECK(phongShader, "Failed to create Phong shader program");
 
 		phongShader->setVec3("lightPos", LIGHT_POSITION.x, LIGHT_POSITION.y, LIGHT_POSITION.z);
 		phongShader->setVec3("lightColor", LIGHT_COLOR.x, LIGHT_COLOR.y, LIGHT_COLOR.z);
 		
-		gltut::Texture* ambientTexture = engine->getRenderer()->createSolidColorTexture(0.1f, 0.1f, 0.1f);
+		gltut::Texture* ambientTexture = renderer->createSolidColorTexture(0.1f, 0.1f, 0.1f);
 		GLTUT_CHECK(ambientTexture, "Failed to create ambient texture");
 
-		gltut::Texture* diffuseTexture = engine->getRenderer()->loadTexture("assets/container2.png");
+		gltut::Texture* diffuseTexture = renderer->loadTexture("assets/container2.png");
 		GLTUT_CHECK(diffuseTexture, "Failed to create diffuse texture");
 
-		gltut::Texture* specularTexture = engine->getRenderer()->loadTexture("assets/container2_specular.png");
+		gltut::Texture* specularTexture = renderer->loadTexture("assets/container2_specular.png");
 		GLTUT_CHECK(specularTexture, "Failed to create specular texture");
 
 		auto* phongMaterial = scene->createMaterial(phongShader);
@@ -57,7 +58,7 @@ int main()
 		auto* object = scene->createObject(mesh, phongMaterial);
 		GLTUT_CHECK(object, "Failed to create object");
 
-		auto* lightShader = engine->getRenderer()->loadShader(
+		auto* lightShader = renderer->loadShader(
 			"assets/light_shader.vs",
 			"assets/light_shader.fs");
 		GLTUT_CHECK(lightShader, "Failed to create light shader program");

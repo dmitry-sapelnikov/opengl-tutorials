@@ -3,7 +3,7 @@
 
 // Includes
 #include "engine/math/Matrix4.h"
-#include "engine/renderer/Mesh.h"
+#include "engine/renderer/mesh/Mesh.h"
 #include "engine/scene/material/Material.h"
 
 namespace gltut

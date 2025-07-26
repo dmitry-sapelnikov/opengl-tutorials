@@ -1,5 +1,5 @@
 // Includes
-#include "engine/material/PhongMaterial.h"
+#include "engine/scene/material/PhongMaterial.h"
 
 namespace gltut
 {

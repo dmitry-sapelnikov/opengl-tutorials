@@ -8,7 +8,6 @@
 #include "engine/scene/Scene.h"
 
 #include "../renderer/RendererBase.h"
-#include "../renderer/mesh/MeshC.h"
 
 #include "./camera/CameraC.h"
 #include "./material/MaterialC.h"
@@ -26,13 +25,6 @@ public:
 		RendererBase& renderer);
 
 	Material* createMaterial(Shader* shader) noexcept final;
-
-	Mesh* createMesh(
-		VertexFormat vertexFormat,
-		u32 vertexCount,
-		const float* vertexData,
-		u32 indexCount,
-		const u32* indexData) noexcept final;
 
 	SceneObject* createObject(
 		Mesh* mesh,
@@ -69,9 +61,6 @@ private:
 
 	/// The materials
 	std::deque<MaterialC> mMaterials;
-
-	/// The meshes
-	std::deque<MeshC> mMeshes;
 
 	/// The scene objects
 	std::deque<SceneObjectC> mObjects;

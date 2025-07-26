@@ -29,9 +29,10 @@ int main()
 			0, 1, 2,  // first Triangle
 		};
 
+		auto* renderer = engine->getRenderer();
 		auto* scene = engine->getScene();
 
-		gltut::Shader* shader = engine->getRenderer()->createShader(
+		gltut::Shader* shader = renderer->createShader(
 			"#version 330 core\n"
 			"layout (location = 0) in vec3 aPos;\n"
 			"layout (location = 1) in vec4 aColor;\n"
@@ -53,7 +54,7 @@ int main()
 
 		GLTUT_CHECK(shader != 0, "Failed to create shader program")
 		
-		auto* mesh = scene->createMesh(
+		auto* mesh = renderer->createMesh(
 			gltut::VERTEX_FORMAT_POS3_COLOR4,
 			3,
 			vertices,

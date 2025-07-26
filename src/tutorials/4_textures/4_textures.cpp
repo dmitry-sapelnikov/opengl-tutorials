@@ -31,8 +31,10 @@ int main()
 			 1, 2, 3  // second triangle
 		};
 
+		auto* renderer = engine->getRenderer();
 		auto* scene = engine->getScene();
-		auto* mesh = scene->createMesh(
+
+		auto* mesh = renderer->createMesh(
 			gltut::VERTEX_FORMAT_POS3_TEX2,
 			4,
 			vertices,
@@ -41,7 +43,7 @@ int main()
 
 		GLTUT_CHECK(mesh != nullptr, "Failed to create mesh")
 
-		gltut::Shader* shader = engine->getRenderer()->loadShader(
+		gltut::Shader* shader = renderer->loadShader(
 			"assets/shader.vs",
 			"assets/shader.fs");
 
@@ -49,10 +51,10 @@ int main()
 		shader->setInt("texture1", 0);
 		shader->setInt("texture2", 1);
 
-		gltut::Texture* texture1 = engine->getRenderer()->loadTexture("assets/container.jpg");
+		gltut::Texture* texture1 = renderer->loadTexture("assets/container.jpg");
 		GLTUT_CHECK(texture1 != nullptr, "Failed to load texture")
 
-		gltut::Texture* texture2 = engine->getRenderer()->loadTexture("assets/awesomeface.png");
+		gltut::Texture* texture2 = renderer->loadTexture("assets/awesomeface.png");
 		GLTUT_CHECK(texture2 != nullptr, "Failed to load texture")
 
 		auto* material = scene->createMaterial(shader);

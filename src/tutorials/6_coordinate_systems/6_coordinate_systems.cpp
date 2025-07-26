@@ -6,7 +6,7 @@
 
 #include "engine/core/Check.h"
 #include "engine/math/Rng.h"
-#include "engine/scene/MeshCreation.h"
+#include "engine/utils/MeshCreation.h"
 #include "engine/Engine.h"
 
 static const size_t BOX_COUNT = 100;
@@ -24,12 +24,13 @@ int main()
 			engine->getWindow()->setTitle("Coordinate Systems");
 		engine->getWindow()->showFPS(true);
 
+		auto* renderer = engine->getRenderer();
 		auto* scene = engine->getScene();
-		auto* mesh = gltut::createBoxMesh(*scene, 1.0f, 1.0f, 1.0f);
+		auto* mesh = gltut::createBoxMesh(*renderer, 1.0f, 1.0f, 1.0f);
 
 		GLTUT_CHECK(mesh != nullptr, "Failed to create mesh")
 
-			gltut::Shader* shader = engine->getRenderer()->loadShader(
+			gltut::Shader* shader = renderer->loadShader(
 				"assets/shader.vs",
 				"assets/shader.fs");
 
@@ -38,10 +39,10 @@ int main()
 		shader->setInt("texture2", 1);
 		shader->setSceneParameterName(gltut::Shader::SceneParameter::MODEL, "model");
 
-		gltut::Texture* texture1 = engine->getRenderer()->loadTexture("assets/container.jpg");
+		gltut::Texture* texture1 = renderer->loadTexture("assets/container.jpg");
 		GLTUT_CHECK(texture1 != nullptr, "Failed to load texture")
 
-		gltut::Texture* texture2 = engine->getRenderer()->loadTexture("assets/awesomeface.png");
+		gltut::Texture* texture2 = renderer->loadTexture("assets/awesomeface.png");
 		GLTUT_CHECK(texture2 != nullptr, "Failed to load texture")
 
 		auto* material = scene->createMaterial(shader);
