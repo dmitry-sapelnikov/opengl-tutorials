@@ -6,6 +6,7 @@
 namespace gltut
 {
 // Global classes
+/// The geometry factory interface. Creates various render geometries.
 class GeometryFactory
 {
 public:

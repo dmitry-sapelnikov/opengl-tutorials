@@ -8,6 +8,7 @@
 namespace gltut
 {
 
+/// Implementation of the GeometryFactory class
 class GeometryFactoryC final : public GeometryFactory, public NonCopyable
 {
 public:
