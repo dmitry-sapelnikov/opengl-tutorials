@@ -1,5 +1,4 @@
-#ifndef OPENGL_TUTORIALS_FILE_H
-#define OPENGL_TUTORIALS_FILE_H
+#pragma once
 
 // Includes
 #include <string>
@@ -18,5 +17,3 @@ std::string readFileToString(const std::filesystem::path& path);
 
 // End of the namespace gltut
 }
-
-#endif

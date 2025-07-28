@@ -1,5 +1,4 @@
-#ifndef OPENGL_TUTORIALS_RENDERER_H
-#define OPENGL_TUTORIALS_RENDERER_H
+#pragma once
 
 // Includes
 #include "engine/core/Types.h"
@@ -73,5 +72,3 @@ public:
 
 // End of the namespace gltut
 }
-
-#endif

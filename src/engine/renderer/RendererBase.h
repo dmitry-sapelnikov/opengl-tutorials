@@ -1,5 +1,4 @@
-#ifndef OPENGL_TUTORIALS_RENDERER_BASE_H
-#define OPENGL_TUTORIALS_RENDERER_BASE_H
+#pragma once
 
 // Includes
 #include <unordered_map>
@@ -103,5 +102,3 @@ private:
 
 // End of the namespace gltut
 }
-
-#endif

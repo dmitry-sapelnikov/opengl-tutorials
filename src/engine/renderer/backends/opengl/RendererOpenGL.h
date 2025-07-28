@@ -1,5 +1,4 @@
-#ifndef OPENGL_TUTORIALS_RENDERER_OPEN_GL_H
-#define OPENGL_TUTORIALS_RENDERER_OPEN_GL_H
+#pragma once
 
 // Includes
 #include <vector>
@@ -56,5 +55,3 @@ private:
 
 // End of the namespace gltut
 }
-
-#endif

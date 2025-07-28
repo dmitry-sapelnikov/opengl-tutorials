@@ -1,5 +1,4 @@
-#ifndef GLTUT_KEYCODES_H
-#define GLTUT_KEYCODES_H
+#pragma once
 
 namespace gltut
 {
@@ -164,5 +163,3 @@ enum class KeyCode
 
 // End of the namespace gltut
 }
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef OPENGL_TUTORIALS_MATH_FUNCTIONS_H
-#define OPENGL_TUTORIALS_MATH_FUNCTIONS_H
+#pragma once
 
 // Includes
 #include <cmath>
@@ -28,5 +27,3 @@ inline float toDegrees(float radians) noexcept
 
 // End of namespace gltut
 }
-
-#endif

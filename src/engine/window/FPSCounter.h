@@ -1,5 +1,4 @@
-#ifndef OPENGL_TUTORIALS_FPS_COUNTER_H
-#define OPENGL_TUTORIALS_FPS_COUNTER_H
+#pragma once
 
 // Includes
 #include <chrono>
@@ -42,5 +41,3 @@ private:
 
 // End of the namespace gltut
 }
-
-#endif

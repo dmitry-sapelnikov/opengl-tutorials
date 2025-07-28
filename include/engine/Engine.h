@@ -1,5 +1,4 @@
-#ifndef OPENGL_TUTORIALS_ENGINE_H
-#define OPENGL_TUTORIALS_ENGINE_H
+#pragma once
 
 // Includes
 #include "engine/window/Window.h"
@@ -42,5 +41,3 @@ Engine* createEngine(u32 windowWidth, u32 windowHeight) noexcept;
 
 // End of the namespace gltut
 }
-
-#endif

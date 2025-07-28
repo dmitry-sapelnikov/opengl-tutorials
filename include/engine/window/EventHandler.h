@@ -1,5 +1,4 @@
-#ifndef OPENGL_TUTORIALS_EVENT_HANDLER_H
-#define OPENGL_TUTORIALS_EVENT_HANDLER_H
+#pragma once
 
 // Includes
 #include "engine/window/Event.h"
@@ -21,4 +20,3 @@ public:
 // End of the namespace gltut
 }
 
-#endif

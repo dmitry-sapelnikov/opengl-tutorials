@@ -1,5 +1,4 @@
-#ifndef OPENGL_TUTORIALS_VECTOR3_H
-#define OPENGL_TUTORIALS_VECTOR3_H
+#pragma once
 
 // Libraries
 #include "engine/core/Check.h"
@@ -205,5 +204,3 @@ inline Vector3 setDistanceAzimuthInclination(const Vector3& dai) noexcept
 
 // End of the namespace gltut
 }
-
-#endif

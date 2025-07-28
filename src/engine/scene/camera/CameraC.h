@@ -1,5 +1,4 @@
-#ifndef OPENGL_TUTORIALS_CAMERA_C_H
-#define OPENGL_TUTORIALS_CAMERA_C_H
+#pragma once
 
 // Includes
 #include <optional>
@@ -249,5 +248,3 @@ private:
 
 // End of the namespace gltut
 }
-
-#endif

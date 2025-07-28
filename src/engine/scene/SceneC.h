@@ -1,5 +1,4 @@
-#ifndef OPENGL_TUTORIALS_SCENE_C_H
-#define OPENGL_TUTORIALS_SCENE_C_H
+#pragma once
 
 // Includes
 #include <deque>
@@ -89,5 +88,3 @@ private:
 
 // End of the namespace gltut
 }
-
-#endif

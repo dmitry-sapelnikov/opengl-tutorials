@@ -1,5 +1,4 @@
-#ifndef OPENGL_TUTORIALS_MATRIX3_H
-#define OPENGL_TUTORIALS_MATRIX3_H
+#pragma once
 
 // Includes
 #include "engine/Core/Types.h"
@@ -271,5 +270,3 @@ inline Matrix3 getNormalMatrix(const Matrix3& rotationScale) noexcept
 
 // End of the namespace gltut
 }
-
-#endif

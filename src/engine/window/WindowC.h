@@ -1,5 +1,4 @@
-#ifndef OPENGL_TUTORIALS_WINDOW_C_H
-#define OPENGL_TUTORIALS_WINDOW_C_H
+#pragma once
 
 // Includes
 #include <string>
@@ -86,5 +85,3 @@ private:
 
 // End of the namespace gltut
 }
-
-#endif

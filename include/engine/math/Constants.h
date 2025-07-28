@@ -1,5 +1,4 @@
-#ifndef OPENGL_TUTORIALS_MATH_CONSTANTS_H
-#define OPENGL_TUTORIALS_MATH_CONSTANTS_H
+#pragma once
 
 #include <limits>
 
@@ -17,5 +16,3 @@ constexpr float FLOAT_EPSILON = std::numeric_limits<float>::epsilon();
 
 // End of namespace gltut
 }
-
-#endif

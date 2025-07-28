@@ -1,5 +1,4 @@
-#ifndef OPENGL_TUTORIALS_TYPES_H
-#define OPENGL_TUTORIALS_TYPES_H
+#pragma once
 
 namespace gltut
 {
@@ -41,5 +40,3 @@ static_assert(sizeof(float) == 4, "The size of float is not 4 bytes");
 
 // End of the namespace gltut
 }
-
-#endif

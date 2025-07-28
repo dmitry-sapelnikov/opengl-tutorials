@@ -1,5 +1,4 @@
-#ifndef OPENGL_TUTORIALS_POINT2_H
-#define OPENGL_TUTORIALS_POINT2_H
+#pragma once
 
 // Libraries
 #include "engine/core/Check.h"
@@ -78,5 +77,3 @@ using Point2i = Point2<int32>;
 
 // End of the namespace gltut
 }
-
-#endif

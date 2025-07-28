@@ -1,5 +1,4 @@
-#ifndef OPENGL_TUTORIALS_VERTEX_FORMAT_H
-#define OPENGL_TUTORIALS_VERTEX_FORMAT_H
+#pragma once
 
 // Includes
 #include "engine/core/Types.h"
@@ -117,5 +116,3 @@ const VertexFormat VERTEX_FORMAT_POS3_NORM3_COLOR4_TEX2 = createVertexFormat({ 3
 
 // End of the namespace gltut
 }
-
-#endif

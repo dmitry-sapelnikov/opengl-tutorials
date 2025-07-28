@@ -1,5 +1,4 @@
-#ifndef OPENGL_TUTORIALS_SCENE_OBJECT_H
-#define OPENGL_TUTORIALS_SCENE_OBJECT_H
+#pragma once
 
 // Includes
 #include "engine/math/Matrix4.h"
@@ -40,5 +39,3 @@ public:
 
 // End of the namespace gltut
 }
-
-#endif

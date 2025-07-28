@@ -1,5 +1,4 @@
-#ifndef OPENGL_TUTORIALS_EVENT_H
-#define OPENGL_TUTORIALS_EVENT_H
+#pragma once
 
 // Includes
 #include "engine/math/Point2.h"
@@ -117,5 +116,3 @@ struct Event
 
 // End of the namespace gltut
 }
-
-#endif

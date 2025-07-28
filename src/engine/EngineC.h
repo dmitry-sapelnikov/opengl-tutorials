@@ -1,5 +1,4 @@
-#ifndef OPENGL_TUTORIALS_ENGINE_C_H
-#define OPENGL_TUTORIALS_ENGINE_C_H
+#pragma once
 
 // Includes
 #include <memory>
@@ -48,5 +47,3 @@ private:
 
 // End of the namespace gltut
 }
-
-#endif

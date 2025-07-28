@@ -1,5 +1,4 @@
-#ifndef OPENGL_TUTORIALS_NON_COPYABLE_H
-#define OPENGL_TUTORIALS_NON_COPYABLE_H
+#pragma once
 
 namespace gltut
 {
@@ -33,5 +32,3 @@ protected:
 
 //	End of the namespace gltut
 }
-
-#endif

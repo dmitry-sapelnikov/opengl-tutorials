@@ -1,5 +1,4 @@
-#ifndef OPENGL_TUTORIALS_CAMERA_CONTROLLER_H
-#define OPENGL_TUTORIALS_CAMERA_CONTROLLER_H
+#pragma once
 
 // Includes
 #include "engine/scene/camera/Camera.h"
@@ -40,5 +39,3 @@ CameraController* createMouseCameraController(
 
 // End of the namespace gltut
 }
-
-#endif

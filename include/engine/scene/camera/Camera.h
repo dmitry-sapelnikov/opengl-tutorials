@@ -1,5 +1,4 @@
-#ifndef OPENGL_TUTORIALS_CAMERA_H
-#define OPENGL_TUTORIALS_CAMERA_H
+#pragma once
 
 // Includes
 #include "engine/math/Matrix4.h"
@@ -136,5 +135,3 @@ Vector3 screenToCameraRay(
 
 // End of the namespace gltut
 }
-
-#endif

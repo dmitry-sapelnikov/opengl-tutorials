@@ -1,5 +1,4 @@
-#ifndef OPENGL_TUTORIALS_ISCENE_H
-#define OPENGL_TUTORIALS_ISCENE_H
+#pragma once
 
 // Includes
 #include "engine/scene/SceneObject.h"
@@ -80,5 +79,3 @@ public:
 
 // End of the namespace gltut
 }
-
-#endif

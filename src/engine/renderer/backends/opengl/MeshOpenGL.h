@@ -1,5 +1,4 @@
-#ifndef OPENGL_TUTORIALS_MESH_OPEN_GL_H
-#define OPENGL_TUTORIALS_MESH_OPEN_GL_H
+#pragma once
 
 // Includes
 #include <glad/glad.h>
@@ -42,5 +41,3 @@ private:
 
 // End of the namespace gltut
 }
-
-#endif

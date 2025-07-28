@@ -1,5 +1,4 @@
-#ifndef OPENGL_TUTORIALS_SCENE_OJBECT_C_H
-#define OPENGL_TUTORIALS_SCENE_OJBECT_C_H
+#pragma once
 
 // Includes
 #include "engine/core/NonCopyable.h"
@@ -56,5 +55,3 @@ private:
 
 // End of the namespace gltut
 }
-
-#endif

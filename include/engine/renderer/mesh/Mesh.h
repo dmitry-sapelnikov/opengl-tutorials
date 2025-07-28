@@ -1,5 +1,4 @@
-#ifndef OPENGL_TUTORIALS_MESH_H
-#define OPENGL_TUTORIALS_MESH_H
+#pragma once
 
 // Includes
 #include "engine/renderer/mesh/VertexFormat.h"
@@ -20,5 +19,3 @@ public:
 
 // End of the namespace gltut
 }
-
-#endif

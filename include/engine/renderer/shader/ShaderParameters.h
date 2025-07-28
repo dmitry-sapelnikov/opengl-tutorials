@@ -1,5 +1,4 @@
-#ifndef OPENGL_TUTORIALS_SHADER_PARAMETERS_SETTER_H
-#define OPENGL_TUTORIALS_SHADER_PARAMETERS_SETTER_H
+#pragma once
 
 // Includes
 #include "engine/core/Check.h"
@@ -93,5 +92,3 @@ public:
 
 // End of the namespace gltut
 }
-
-#endif

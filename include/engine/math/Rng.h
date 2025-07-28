@@ -1,5 +1,4 @@
-#ifndef OPENGL_TUTORIALS_RNG_H
-#define OPENGL_TUTORIALS_RNG_H
+#pragma once
 
 //	Includes
 #include <random>
@@ -47,5 +46,3 @@ private:
 
 //	End of the namespace gltut
 }
-
-#endif

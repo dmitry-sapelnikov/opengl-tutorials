@@ -1,5 +1,4 @@
-#ifndef OPENGL_TUTORIALS_SHADER_ARGUMENTS_H
-#define OPENGL_TUTORIALS_SHADER_ARGUMENTS_H
+#pragma once
 
 // Includes
 #include <array>
@@ -83,5 +82,3 @@ private:
 
 // End of the namespace gltut
 }
-
-#endif

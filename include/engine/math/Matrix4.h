@@ -1,5 +1,4 @@
-#ifndef OPENGL_TUTORIALS_MATRIX4_H
-#define OPENGL_TUTORIALS_MATRIX4_H
+#pragma once
 
 // Includes
 #include "engine/Math/Matrix3.h"
@@ -510,5 +509,3 @@ inline Matrix4 Matrix4::orthographicProjectionMatrix(
 
 // End of the namespace gltut
 }
-
-#endif

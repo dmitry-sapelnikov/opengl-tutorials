@@ -1,5 +1,4 @@
-#ifndef OPENGL_TUTORIALS_PHONG_MATERIAL_H
-#define OPENGL_TUTORIALS_PHONG_MATERIAL_H
+#pragma once
 
 // Includes
 #include "engine/renderer/Renderer.h"
@@ -30,5 +29,3 @@ void setPhongMaterialParameters(
 
 // End of the namespace gltut
 }
-
-#endif

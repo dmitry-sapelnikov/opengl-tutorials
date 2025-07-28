@@ -1,5 +1,4 @@
-#ifndef OPENGL_TUTORIALS_ASSERT_H
-#define OPENGL_TUTORIALS_ASSERT_H
+#pragma once
 
 // Includes
 #include <cassert>
@@ -62,4 +61,3 @@ catch (...)\
 	return 1;\
 }
 
-#endif

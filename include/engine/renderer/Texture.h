@@ -1,5 +1,4 @@
-#ifndef OPENGL_TUTORIALS_TEXTURE_H
-#define OPENGL_TUTORIALS_TEXTURE_H
+#pragma once
 
 // Includes
 #include "engine/core/Types.h"
@@ -31,5 +30,3 @@ public:
 
 // End of the namespace gltut
 }
-
-#endif

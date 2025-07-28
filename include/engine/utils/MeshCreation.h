@@ -1,5 +1,4 @@
-#ifndef OPENGL_TUTORIALS_MESH_CREATION_H
-#define OPENGL_TUTORIALS_MESH_CREATION_H
+#pragma once
 
 // Includes
 #include "engine/renderer/Renderer.h"
@@ -41,5 +40,3 @@ Mesh* createSphereMesh(Renderer& renderer, float radius, u32 subdivisions) noexc
 
 // End of the namespace gltut
 }
-
-#endif

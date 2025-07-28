@@ -1,5 +1,4 @@
-#ifndef OPENGL_TUTORIALS_MATERIAL_H
-#define OPENGL_TUTORIALS_MATERIAL_H
+#pragma once
 
 // Includes
 #include "engine/renderer/Texture.h"
@@ -37,5 +36,3 @@ public:
 
 // End of the namespace gltut
 }
-
-#endif
