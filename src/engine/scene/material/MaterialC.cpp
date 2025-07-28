@@ -1,12 +1,17 @@
 // Includes
 #include "MaterialC.h"
+
 #include "engine/core/Check.h"
+#include "engine/scene/SceneObject.h"
 
 namespace gltut
 {
 //	Global classes
-MaterialC::MaterialC(Shader* shader) noexcept :
-	mShaderArguments(shader),
+MaterialC::MaterialC(SceneShaderBinding* Shader) noexcept :
+	mShaderBinding(Shader),
+	mShaderArguments(Shader != nullptr ? 
+		Shader->getShader() :
+		nullptr),
 	mTextures()
 {
 	for (u32 i = 0; i < TEXTURE_SLOTS; ++i)
@@ -15,14 +20,18 @@ MaterialC::MaterialC(Shader* shader) noexcept :
 	}
 }
 
-Shader* MaterialC::getShader() const noexcept
+/// Returns the shader binding
+const SceneShaderBinding* MaterialC::getShader() const noexcept
 {
-	return mShaderArguments.getShader();
+	return mShaderBinding;
 }
 
-void MaterialC::setShader(Shader* shader) noexcept
+void MaterialC::setShader(const SceneShaderBinding* shader) noexcept
 {
-	mShaderArguments.setShader(shader);
+	mShaderBinding = shader;
+	mShaderArguments.setShader(shader != nullptr ?
+		shader->getShader() :
+		nullptr);
 }
 
 Texture* MaterialC::getTexture(u32 slot) const noexcept
@@ -37,12 +46,17 @@ void MaterialC::setTexture(Texture* texture, u32 slot) noexcept
 	mTextures[slot] = texture;
 }
 
-void MaterialC::activate() const noexcept
+void MaterialC::activate(const SceneObject* object) const noexcept
 {
-	if (mShaderArguments.getShader() != nullptr)
+	if (object == nullptr || 
+		mShaderBinding == nullptr || 
+		mShaderBinding->getShader() == nullptr)
 	{
-		mShaderArguments.activate();
+		return;
 	}
+
+	mShaderBinding->activate(object);
+	mShaderArguments.activate();
 	bindTextures();
 }
 

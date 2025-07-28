@@ -5,6 +5,8 @@
 #include "engine/scene/SceneObject.h"
 #include "engine/scene/material/Material.h"
 #include "engine/scene/camera/CameraController.h"
+#include "engine/scene/shader/SceneShaderBinding.h"
+
 
 namespace gltut
 {
@@ -60,12 +62,14 @@ public:
 	*/
 	virtual void removeCameraController(CameraController* controller) noexcept = 0;
 
+	///	Creates a binding between a shader and the scene
+	virtual SceneShaderBinding* createShaderBinding(Shader* shader) noexcept = 0;
+
 	/**
 		\brief Creates a material
-		\param shader The shader
-		\return The material if it was created successfully, nullptr otherwise
+		\param shaderBinding The shader binding to use for the material
 	*/
-	virtual Material* createMaterial(Shader* shader) noexcept = 0;
+	virtual Material* createMaterial(SceneShaderBinding* shaderBinding) noexcept = 0;
 
 	/// Creates a scene object
 	virtual SceneObject* createObject(

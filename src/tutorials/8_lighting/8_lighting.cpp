@@ -31,11 +31,11 @@ int main()
 		auto* mesh = gltut::createSphereMesh(*renderer, 1.0f, 10);
 		GLTUT_CHECK(mesh, "Failed to create mesh");
 
-		gltut::Shader* phongShader = gltut::createPhongShader(*renderer);
-		GLTUT_CHECK(phongShader, "Failed to create Phong shader program");
+		gltut::SceneShaderBinding* phongShader = gltut::createPhongShader(*renderer, *scene);
+		GLTUT_CHECK(phongShader, "Failed to create Phong shader");
 
-		phongShader->setVec3("lightPos", LIGHT_POSITION.x, LIGHT_POSITION.y, LIGHT_POSITION.z);
-		phongShader->setVec3("lightColor", LIGHT_COLOR.x, LIGHT_COLOR.y, LIGHT_COLOR.z);
+		phongShader->getShader()->setVec3("lightPos", LIGHT_POSITION.x, LIGHT_POSITION.y, LIGHT_POSITION.z);
+		phongShader->getShader()->setVec3("lightColor", LIGHT_COLOR.x, LIGHT_COLOR.y, LIGHT_COLOR.z);
 		
 		gltut::Texture* ambientTexture = renderer->createSolidColorTexture(0.1f, 0.1f, 0.1f);
 		GLTUT_CHECK(ambientTexture, "Failed to create ambient texture");
@@ -62,11 +62,12 @@ int main()
 			"assets/light_shader.vs",
 			"assets/light_shader.fs");
 		GLTUT_CHECK(lightShader, "Failed to create light shader program");
-		lightShader->setSceneParameterName(gltut::Shader::SceneParameter::MODEL, "model");
-		lightShader->setSceneParameterName(gltut::Shader::SceneParameter::VIEW, "view");
-		lightShader->setSceneParameterName(gltut::Shader::SceneParameter::PROJECTION, "projection");
 
-		auto* lightMaterial = scene->createMaterial(lightShader);
+		auto* lightShaderBinding = scene->createShaderBinding(lightShader);
+		GLTUT_CHECK(lightShaderBinding, "Failed to create light shader binding");
+
+		gltut::bindModelViewProjectionShaderParameters(lightShaderBinding, "model", "view", "projection");
+		auto* lightMaterial = scene->createMaterial(lightShaderBinding);
 		GLTUT_CHECK(lightMaterial, "Failed to create light material");
 
 		auto* light = scene->createObject(mesh, lightMaterial);

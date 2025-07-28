@@ -30,11 +30,11 @@
     <ClInclude Include="..\..\include\engine\renderer\Texture.h" />
     <ClInclude Include="..\..\include\engine\scene\camera\Camera.h" />
     <ClInclude Include="..\..\include\engine\scene\camera\CameraController.h" />
-    <ClInclude Include="..\..\include\engine\scene\material\GenericMaterial.h" />
     <ClInclude Include="..\..\include\engine\scene\material\Material.h" />
     <ClInclude Include="..\..\include\engine\scene\material\PhongMaterial.h" />
     <ClInclude Include="..\..\include\engine\scene\Scene.h" />
     <ClInclude Include="..\..\include\engine\scene\SceneObject.h" />
+    <ClInclude Include="..\..\include\engine\scene\shader\SceneShaderBinding.h" />
     <ClInclude Include="..\..\include\engine\utils\MeshCreation.h" />
     <ClInclude Include="..\..\include\engine\window\Event.h" />
     <ClInclude Include="..\..\include\engine\window\EventHandler.h" />
@@ -48,15 +48,14 @@
     <ClInclude Include="..\..\src\engine\renderer\backends\opengl\TextureOpenGL.h" />
     <ClInclude Include="..\..\src\engine\renderer\RendererBase.h" />
     <ClInclude Include="..\..\src\engine\renderer\shader\ShaderArguments.h" />
-    <ClInclude Include="..\..\src\engine\renderer\shader\ShaderC.h" />
     <ClInclude Include="..\..\src\engine\renderer\texture\stb_image.h" />
     <ClInclude Include="..\..\src\engine\scene\camera\CameraC.h" />
     <ClInclude Include="..\..\src\engine\scene\camera\FPSCameraControllerC.h" />
     <ClInclude Include="..\..\src\engine\scene\camera\MouseCameraControllerC.h" />
     <ClInclude Include="..\..\src\engine\scene\material\MaterialC.h" />
-    <ClInclude Include="..\..\src\engine\scene\material\phong\PhongMaterial.h" />
     <ClInclude Include="..\..\src\engine\scene\SceneC.h" />
     <ClInclude Include="..\..\src\engine\scene\SceneObjectC.h" />
+    <ClInclude Include="..\..\src\engine\scene\shader\SceneShaderBindingC.h" />
     <ClInclude Include="..\..\src\engine\window\FPSCounter.h" />
     <ClInclude Include="..\..\src\engine\window\WindowC.h" />
   </ItemGroup>
@@ -69,7 +68,6 @@
     <ClCompile Include="..\..\src\engine\renderer\backends\opengl\TextureOpenGL.cpp" />
     <ClCompile Include="..\..\src\engine\renderer\RendererBase.cpp" />
     <ClCompile Include="..\..\src\engine\renderer\shader\ShaderArguments.cpp" />
-    <ClCompile Include="..\..\src\engine\renderer\shader\ShaderC.cpp" />
     <ClCompile Include="..\..\src\engine\renderer\texture\stb_image.cpp" />
     <ClCompile Include="..\..\src\engine\scene\camera\CameraC.cpp" />
     <ClCompile Include="..\..\src\engine\scene\camera\FPSCameraControllerC.cpp" />
@@ -78,6 +76,7 @@
     <ClCompile Include="..\..\src\engine\scene\material\phong\PhongMaterial.cpp" />
     <ClCompile Include="..\..\src\engine\scene\SceneC.cpp" />
     <ClCompile Include="..\..\src\engine\scene\SceneObjectC.cpp" />
+    <ClCompile Include="..\..\src\engine\scene\shader\SceneShaderBindingC.cpp" />
     <ClCompile Include="..\..\src\engine\utils\MeshCreation.cpp" />
     <ClCompile Include="..\..\src\engine\window\FPSCounter.cpp" />
     <ClCompile Include="..\..\src\engine\window\WindowC.cpp" />

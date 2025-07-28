@@ -3,7 +3,7 @@
 
 // Includes
 #include "engine/renderer/Renderer.h"
-#include "engine/scene/material/Material.h"
+#include "engine/scene/Scene.h"
 
 namespace gltut
 {
@@ -16,7 +16,9 @@ namespace gltut
 	- 1: Normal (vec3)
 	- 2: Texture coordinates (vec2)
 */
-Shader* createPhongShader(Renderer& renderer) noexcept;
+SceneShaderBinding* createPhongShader(
+	Renderer& renderer,
+	Scene& scene) noexcept;
 
 /// Sets the Phong material parameters
 void setPhongMaterialParameters(

@@ -1,0 +1,58 @@
+#pragma once
+
+// Includes
+#include <array>
+#include <string>
+#include "engine/core/NonCopyable.h"
+#include "engine/scene/shader/SceneShaderBinding.h"
+
+namespace gltut
+{
+
+/// Implementation of the SceneShaderBinding interface
+class SceneShaderBindingC final : public SceneShaderBinding, public NonCopyable
+{
+public:
+	/// Constructor
+	explicit SceneShaderBindingC(Shader* shader) noexcept :
+		mShader(shader)
+	{
+	}
+
+	/// Returns the shader associated with this binding
+	Shader* getShader() const noexcept final;
+
+	/**
+		\brief Sets the shader associated with this binding
+		\param shader The shader to set
+		\param resetParameters If true, clears all bound shader parameters
+	*/
+	void setShader(
+		Shader* shader,
+		bool resetParameters = false) noexcept final;
+
+	/// Binds a scene object parameter to a shader parameter
+	void bind(
+		Parameter parameter,
+		const char* shaderParameter) noexcept final;
+
+	/// Returns the name of a shader parameter bound to a scene object parameter
+	const char* getBoundShaderParameter(
+		Parameter parameter) const noexcept final;
+
+	/// Activates the shader binding for a scene
+	void activate(const Scene* scene) const noexcept final;
+
+	/// Activates the shader binding for a scene object
+	void activate(const SceneObject* sceneObject) const noexcept final;
+
+private:
+	/// The shader associated with this binding
+	Shader* mShader;
+
+	/// Names of scene parameters
+	std::array<std::string, static_cast<size_t>(Parameter::TOTAL_COUNT)> mShaderParameters;
+};
+
+// End of the namespace gltut
+}

@@ -94,7 +94,11 @@ void ShaderArguments::setMat4(int32 location, const float* value) noexcept
 
 void ShaderArguments::activate() const noexcept
 {
-	GLTUT_ASSERT(mShader != nullptr);
+	if (mShader == nullptr)
+	{
+		return;
+	}
+	
 	mShader->activate();
 	for (const auto& [location, value] : mParameterValues)
 	{

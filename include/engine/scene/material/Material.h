@@ -2,12 +2,13 @@
 #define OPENGL_TUTORIALS_MATERIAL_H
 
 // Includes
-#include "engine/renderer/shader/Shader.h"
 #include "engine/renderer/Texture.h"
+#include "engine/scene/shader/SceneShaderBinding.h"
 
 namespace gltut
 {
 
+// Global classes
 /// The class represents a material
 class Material
 {
@@ -16,10 +17,10 @@ public:
 	virtual ~Material() noexcept = default;
 
 	/// Returns the shader
-	virtual Shader* getShader() const noexcept = 0;
+	virtual const SceneShaderBinding* getShader() const noexcept = 0;
 
 	/// Sets the shader
-	virtual void setShader(Shader* shader) noexcept = 0;
+	virtual void setShader(const SceneShaderBinding* shader) noexcept = 0;
 
 	/// Returns the shader arguments object, i.e. values of shader parameters
 	virtual ShaderParameters* getShaderArguments() = 0;
@@ -30,8 +31,8 @@ public:
 	/// Sets a texture
 	virtual void setTexture(Texture* texture, u32 slot) noexcept = 0;
 
-	/// Activates the material
-	virtual void activate() const noexcept = 0;
+	/// Activates the material for a scene object
+	virtual void activate(const SceneObject* object) const noexcept = 0;
 };
 
 // End of the namespace gltut

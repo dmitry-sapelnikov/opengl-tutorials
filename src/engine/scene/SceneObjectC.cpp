@@ -49,31 +49,12 @@ void SceneObjectC::setMaterial(Material* material) noexcept
 
 void SceneObjectC::render() const noexcept
 {
-	if (mMaterial != nullptr)
-	{
-		mMaterial->activate();
-		
-		if (Shader* shader = mMaterial->getShader();
-			shader != nullptr)
-		{
-			if (const char* modelMatrixName = shader->getSceneParameterName(Shader::SceneParameter::MODEL);
-				modelMatrixName != nullptr)
-			{
-				shader->setMat4(modelMatrixName, mTransform.data());
-			}
-
-			if (const char* normalMatrixName = shader->getSceneParameterName(Shader::SceneParameter::NORMAL);
-				normalMatrixName != nullptr)
-			{
-				shader->setMat3(
-					normalMatrixName,
-					getNormalMatrix(mTransform.getMatrix3()).data());
-			}
-		}
-	}
-
 	if (mMesh != nullptr)
 	{
+		if (mMaterial != nullptr)
+		{
+			mMaterial->activate(this);
+		}
 		mMesh->render();
 	}
 }

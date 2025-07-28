@@ -1,6 +1,7 @@
 // Includes
 #include "engine/scene/material/PhongMaterial.h"
 
+
 namespace gltut
 {
 //	 Constants and enums
@@ -81,26 +82,32 @@ void main()
 static constexpr float DEFAULT_SHINESS = 32.0f;
 
 // Global functions
-Shader* createPhongShader(Renderer& renderer) noexcept
+SceneShaderBinding* createPhongShader(Renderer& renderer, Scene& scene) noexcept
 {
-	Shader* result = renderer.createShader(PHONG_VERTEX_SHADER, PHONG_FRAGMENT_SHADER);
-	if (result == nullptr)
+	Shader* shader = renderer.createShader(PHONG_VERTEX_SHADER, PHONG_FRAGMENT_SHADER);
+	if (shader == nullptr)
 	{
 		return nullptr;
 	}
 
-	result->setSceneParameterName(Shader::SceneParameter::MODEL, "model");
-	result->setSceneParameterName(Shader::SceneParameter::VIEW, "view");
-	result->setSceneParameterName(Shader::SceneParameter::PROJECTION, "projection");
-	result->setSceneParameterName(Shader::SceneParameter::NORMAL, "normalMat");
-	result->setSceneParameterName(Shader::SceneParameter::VIEW_POSITION, "viewPos");
+	SceneShaderBinding* binding = scene.createShaderBinding(shader);
 
-	result->setInt("ambientSampler", 0);
-	result->setInt("diffuseSampler", 1);
-	result->setInt("specularSampler", 2);
-	result->setFloat("shininess", DEFAULT_SHINESS);
+	if (binding == nullptr)
+	{
+		renderer.removeShader(shader);
+		return nullptr;
+	}
 
-	return result;
+	shader->setInt("ambientSampler", 0);
+	shader->setInt("diffuseSampler", 1);
+	shader->setInt("specularSampler", 2);
+	shader->setFloat("shininess", DEFAULT_SHINESS);
+
+	bindModelViewProjectionShaderParameters(binding, "model", "view", "projection");
+	binding->bind(SceneShaderBinding::Parameter::OBJECT_NORMAL_MATRIX, "normalMat");
+	binding->bind(SceneShaderBinding::Parameter::CAMERA_POSITION, "viewPos");
+
+	return binding;
 }
 
 void setPhongMaterialParameters(

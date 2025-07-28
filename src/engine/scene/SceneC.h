@@ -11,6 +11,7 @@
 
 #include "./camera/CameraC.h"
 #include "./material/MaterialC.h"
+#include "./shader/SceneShaderBindingC.h"
 #include "SceneObjectC.h"
 
 namespace gltut
@@ -24,7 +25,9 @@ public:
 		Window& window,
 		RendererBase& renderer);
 
-	Material* createMaterial(Shader* shader) noexcept final;
+	SceneShaderBinding* createShaderBinding(Shader* shader) noexcept final;
+
+	Material* createMaterial(SceneShaderBinding* shader) noexcept final;
 
 	SceneObject* createObject(
 		Mesh* mesh,
@@ -58,6 +61,9 @@ private:
 
 	/// The renderer
 	RendererBase& mRenderer;
+
+	/// The shader bindings
+	std::deque<SceneShaderBindingC> mShaderBindings;
 
 	/// The materials
 	std::deque<MaterialC> mMaterials;

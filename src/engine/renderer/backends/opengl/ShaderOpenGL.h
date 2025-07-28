@@ -2,12 +2,12 @@
 #define OPENGL_TUTORIALS_SHADER_OPEN_GL_H
 
 // Includes
-#include "../../shader/ShaderC.h"
+#include "engine/renderer/shader/Shader.h"
 
 namespace gltut
 {
 
-class ShaderOpenGL final : public ShaderC
+class ShaderOpenGL final : public Shader
 {
 public:
 	/**

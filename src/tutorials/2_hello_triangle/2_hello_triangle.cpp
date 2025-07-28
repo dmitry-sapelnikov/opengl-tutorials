@@ -81,7 +81,9 @@ int main()
 			VERTEX_SHADER_SOURCE_CODE,
 			FRAGMENT_SHADER_SOURCE_CODE);
 
-		auto* material = scene->createMaterial(shader);
+		auto* shaderBinding = scene->createShaderBinding(shader);
+
+		auto* material = scene->createMaterial(shaderBinding);
 		scene->createObject(mesh1, material);
 		scene->createObject(mesh2, material);
 

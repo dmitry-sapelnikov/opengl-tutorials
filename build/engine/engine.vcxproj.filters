@@ -75,6 +75,12 @@
     <Filter Include="src\utils">
       <UniqueIdentifier>{1aa5c8fd-c1c9-498e-a282-c3765e8ddb43}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\scene\shader">
+      <UniqueIdentifier>{37d44eac-24a7-493e-991f-ac2e7d04e4ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\scene\shader">
+      <UniqueIdentifier>{f49163d3-c6cc-429e-8e7a-ae0376966809}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\engine\Engine.h">
@@ -127,9 +133,6 @@
     </ClInclude>
     <ClInclude Include="..\..\include\engine\math\Matrix3.h">
       <Filter>include\math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\engine\backends\opengl\ShaderOpenGL.h">
-      <Filter>src\backends\opengl</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\engine\scene\SceneObject.h">
       <Filter>include\scene</Filter>
@@ -191,14 +194,8 @@
     <ClInclude Include="..\..\src\engine\renderer\shader\ShaderArguments.h">
       <Filter>src\renderer\shader</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\engine\renderer\shader\ShaderC.h">
-      <Filter>src\renderer\shader</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\engine\renderer\texture\stb_image.h">
       <Filter>src\renderer\texture</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\engine\scene\material\GenericMaterial.h">
-      <Filter>include\scene\material</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\engine\scene\material\Material.h">
       <Filter>include\scene\material</Filter>
@@ -208,9 +205,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\engine\scene\material\MaterialC.h">
       <Filter>src\scene\material</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\engine\scene\material\phong\PhongMaterial.h">
-      <Filter>src\scene\material\phong</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\engine\renderer\backends\opengl\MeshOpenGL.h">
       <Filter>src\renderer\backends\opengl</Filter>
@@ -223,6 +217,12 @@
     </ClInclude>
     <ClInclude Include="..\..\include\engine\utils\MeshCreation.h">
       <Filter>include\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\scene\shader\SceneShaderBinding.h">
+      <Filter>include\scene\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\scene\shader\SceneShaderBindingC.h">
+      <Filter>src\scene\shader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -237,9 +237,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\engine\scene\camera\FPSCameraControllerC.cpp">
       <Filter>src\scene\camera</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\engine\backends\opengl\ShaderOpenGL.cpp">
-      <Filter>src\backends\opengl</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\engine\core\File.cpp">
       <Filter>src\core</Filter>
@@ -271,9 +268,6 @@
     <ClCompile Include="..\..\src\engine\renderer\shader\ShaderArguments.cpp">
       <Filter>src\renderer\shader</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\engine\renderer\shader\ShaderC.cpp">
-      <Filter>src\renderer\shader</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\engine\renderer\texture\stb_image.cpp">
       <Filter>src\renderer\texture</Filter>
     </ClCompile>
@@ -288,6 +282,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\engine\utils\MeshCreation.cpp">
       <Filter>src\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\scene\shader\SceneShaderBindingC.cpp">
+      <Filter>src\scene\shader</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

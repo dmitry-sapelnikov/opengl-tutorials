@@ -13,13 +13,13 @@ class MaterialC final : public Material, public NonCopyable
 {
 public:
 	/// Constructor
-	explicit MaterialC(Shader* shader) noexcept;
+	explicit MaterialC(SceneShaderBinding* shader) noexcept;
 
-	/// Return the shader
-	virtual Shader* getShader() const noexcept final;
+	/// Returns the shader binding
+	const SceneShaderBinding* getShader() const noexcept final;
 
-	/// Sets the shader
-	void setShader(Shader* shader) noexcept final;
+	/// Sets the shader binding
+	void setShader(const SceneShaderBinding* shader) noexcept final;
 
 	/// Returns the shader controller
 	ShaderParameters* getShaderArguments() final
@@ -33,12 +33,15 @@ public:
 	/// Sets a texture
 	void setTexture(Texture* texture, u32 slot) noexcept final;
 
-	/// Use the material
-	void activate() const noexcept final;
+	/// Activates the material for a scene object
+	void activate(const SceneObject* object) const noexcept final;
 
 private:
 	/// Binds the textures
 	void bindTextures() const noexcept;
+
+	/// The shader binding
+	const SceneShaderBinding* mShaderBinding;
 
 	/// The shader arguments
 	ShaderArguments mShaderArguments;

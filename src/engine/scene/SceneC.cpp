@@ -21,12 +21,22 @@ SceneC::SceneC(
 	mLastUpdateTime = mCreationTime;
 }
 
-Material* SceneC::createMaterial(Shader* shader) noexcept
+SceneShaderBinding* SceneC::createShaderBinding(Shader* shader) noexcept
 {
+	SceneShaderBinding* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN
-		return &mMaterials.emplace_back(shader);
+		result = &mShaderBindings.emplace_back(shader);
+	GLTUT_CATCH_ALL_END("Cannot create a shader binding")
+	return result;
+}
+
+Material* SceneC::createMaterial(SceneShaderBinding* shaderBinding) noexcept
+{
+	Material* result = nullptr;
+	GLTUT_CATCH_ALL_BEGIN
+		result = &mMaterials.emplace_back(shaderBinding);
 	GLTUT_CATCH_ALL_END("Cannot create a material")
-	return nullptr;
+	return result;
 }
 
 SceneObject* SceneC::createObject(
@@ -127,37 +137,13 @@ void SceneC::update() noexcept
 
 void SceneC::render() noexcept
 {
+	for (auto& shaderBinding: mShaderBindings)
+	{
+		shaderBinding.activate(this);
+	}
+
 	for (const auto& object : mObjects)
 	{
-		if (mActiveCamera != nullptr && 
-			object.getMaterial() != nullptr && 
-			object.getMaterial()->getShader() != nullptr)
-		{
-			auto* shader = object.getMaterial()->getShader();
-			shader->activate();
-
-			const auto& viewMatrix = mActiveCamera->getView().getMatrix();
-			const auto& projectionMatrix = mActiveCamera->getProjection().getMatrix();
-
-			if (const char* viewMatrixName = shader->getSceneParameterName(Shader::SceneParameter::VIEW);
-				viewMatrixName != nullptr)
-			{
-				shader->setMat4(viewMatrixName, viewMatrix.data());
-			}
-
-			if (const char* projectionMatrixName = shader->getSceneParameterName(Shader::SceneParameter::PROJECTION);
-				projectionMatrixName != nullptr)
-			{
-				shader->setMat4(projectionMatrixName, projectionMatrix.data());
-			}
-
-			if (const char* viewPositionName = shader->getSceneParameterName(Shader::SceneParameter::VIEW_POSITION);
-				viewPositionName != nullptr)
-			{
-				const Vector3& viewPosition = mActiveCamera->getView().getPosition();
-				shader->setVec3(viewPositionName, viewPosition.x, viewPosition.y, viewPosition.z);
-			}
-		}
 		object.render();
 	}
 }
