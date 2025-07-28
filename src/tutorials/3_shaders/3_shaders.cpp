@@ -69,7 +69,7 @@ int main()
 		auto* material = scene->createMaterial(binding);
 		GLTUT_CHECK(material != nullptr, "Failed to create material")
 
-		scene->createObject(mesh, material);
+		scene->createGeometry(mesh, material);
 		while (engine->update())
 		{
 			float time = std::chrono::duration<float>(

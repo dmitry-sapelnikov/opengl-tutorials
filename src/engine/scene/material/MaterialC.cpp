@@ -2,7 +2,7 @@
 #include "MaterialC.h"
 
 #include "engine/core/Check.h"
-#include "engine/scene/SceneObject.h"
+#include "engine/scene/nodes/GeometryNode.h"
 
 namespace gltut
 {
@@ -46,16 +46,16 @@ void MaterialC::setTexture(Texture* texture, u32 slot) noexcept
 	mTextures[slot] = texture;
 }
 
-void MaterialC::activate(const SceneObject* object) const noexcept
+void MaterialC::activate(const GeometryNode* node) const noexcept
 {
-	if (object == nullptr || 
+	if (node == nullptr || 
 		mShaderBinding == nullptr || 
 		mShaderBinding->getShader() == nullptr)
 	{
 		return;
 	}
 
-	mShaderBinding->activate(object);
+	mShaderBinding->activate(node);
 	mShaderArguments.activate();
 	bindTextures();
 }

@@ -32,8 +32,8 @@ public:
 	/// Sets a texture
 	void setTexture(Texture* texture, u32 slot) noexcept final;
 
-	/// Activates the material for a scene object
-	void activate(const SceneObject* object) const noexcept final;
+	/// Activates the material for a scene node
+	void activate(const GeometryNode* node) const noexcept final;
 
 private:
 	/// Binds the textures

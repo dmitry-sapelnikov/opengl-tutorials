@@ -65,7 +65,7 @@ int main()
 		material->setTexture(texture1, 0);
 		material->setTexture(texture2, 1);
 
-		scene->createObject(mesh, material);
+		scene->createGeometry(mesh, material);
 		while (engine->update())
 		{
 		}

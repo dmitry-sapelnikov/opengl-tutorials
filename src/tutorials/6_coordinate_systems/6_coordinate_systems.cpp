@@ -40,7 +40,7 @@ int main()
 
 		auto* shaderBinding = scene->createShaderBinding(shader);
 		GLTUT_CHECK(shaderBinding != nullptr, "Failed to create shader binding")
-		shaderBinding->bind(gltut::SceneShaderBinding::Parameter::OBJECT_MATRIX, "model");
+		shaderBinding->bind(gltut::SceneShaderBinding::Parameter::NODE_MATRIX, "model");
 
 		gltut::Texture* texture1 = renderer->loadTexture("assets/container.jpg");
 		GLTUT_CHECK(texture1 != nullptr, "Failed to load texture")
@@ -55,11 +55,11 @@ int main()
 		material->setTexture(texture2, 1);
 
 		gltut::Rng rng;
-		std::vector<gltut::SceneObject*> boxes;
+		std::vector<gltut::GeometryNode*> boxes;
 		std::vector<gltut::Vector3> boxPositions;
 		for (size_t i = 0; i < BOX_COUNT; ++i)
 		{
-			boxes.push_back(scene->createObject(mesh, material));
+			boxes.push_back(scene->createGeometry(mesh, material));
 			boxPositions.emplace_back(
 				rng.nextFloat(-POSITION_RANGE, POSITION_RANGE),
 				rng.nextFloat(-POSITION_RANGE, POSITION_RANGE),

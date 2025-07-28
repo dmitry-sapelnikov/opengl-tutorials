@@ -44,7 +44,7 @@ public:
 	void activate(const Scene* scene) const noexcept final;
 
 	/// Activates the shader binding for a scene object
-	void activate(const SceneObject* sceneObject) const noexcept final;
+	void activate(const GeometryNode* node) const noexcept final;
 
 private:
 	/// The shader associated with this binding

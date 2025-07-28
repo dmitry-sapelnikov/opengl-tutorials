@@ -39,15 +39,17 @@ Material* SceneC::createMaterial(SceneShaderBinding* shaderBinding) noexcept
 	return result;
 }
 
-SceneObject* SceneC::createObject(
+GeometryNode* SceneC::createGeometry(
 	Mesh* mesh,
 	Material* material,
-	const Matrix4& transform) noexcept
+	const Matrix4& transform,
+	SceneNode* parent) noexcept
 {
+	GeometryNode* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN
-		return &mObjects.emplace_back(mRenderer, mesh, material, transform);
+		result = &mGeometries.emplace_back(mesh, material, transform, parent);
 	GLTUT_CATCH_ALL_END("Cannot create a scene object")
-		return nullptr;
+	return result;
 }
 
 Camera* SceneC::createCamera(
@@ -59,8 +61,9 @@ Camera* SceneC::createCamera(
 	float farPlan,
 	const float* aspectRatio) noexcept
 {
+	Camera* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN
-		auto* camera = &mCameras.emplace_back(
+		result = &mCameras.emplace_back(
 			mWindow,
 			position,
 			target,
@@ -70,14 +73,12 @@ Camera* SceneC::createCamera(
 			farPlan,
 			aspectRatio);
 
-	if (mActiveCamera == nullptr)
-	{
-		mActiveCamera = camera;
-	}
-	return camera;
+		if (mActiveCamera == nullptr)
+		{
+			mActiveCamera = result;
+		}
 	GLTUT_CATCH_ALL_END("Cannot create a camera")
-
-		return nullptr;
+	return result;
 }
 
 Camera* SceneC::getActiveCamera() const noexcept
@@ -142,7 +143,7 @@ void SceneC::render() noexcept
 		shaderBinding.activate(this);
 	}
 
-	for (const auto& object : mObjects)
+	for (const auto& object : mGeometries)
 	{
 		object.render();
 	}

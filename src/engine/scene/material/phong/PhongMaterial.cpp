@@ -104,7 +104,7 @@ SceneShaderBinding* createPhongShader(Renderer& renderer, Scene& scene) noexcept
 	shader->setFloat("shininess", DEFAULT_SHINESS);
 
 	bindModelViewProjectionShaderParameters(binding, "model", "view", "projection");
-	binding->bind(SceneShaderBinding::Parameter::OBJECT_NORMAL_MATRIX, "normalMat");
+	binding->bind(SceneShaderBinding::Parameter::NODE_NORMAL_MATRIX, "normalMat");
 	binding->bind(SceneShaderBinding::Parameter::CAMERA_POSITION, "viewPos");
 
 	return binding;

@@ -55,7 +55,7 @@ int main()
 			diffuseTexture,
 			specularTexture);
 
-		auto* object = scene->createObject(mesh, phongMaterial);
+		auto* object = scene->createGeometry(mesh, phongMaterial);
 		GLTUT_CHECK(object, "Failed to create object");
 
 		auto* lightShader = renderer->loadShader(
@@ -70,7 +70,7 @@ int main()
 		auto* lightMaterial = scene->createMaterial(lightShaderBinding);
 		GLTUT_CHECK(lightMaterial, "Failed to create light material");
 
-		auto* light = scene->createObject(mesh, lightMaterial);
+		auto* light = scene->createGeometry(mesh, lightMaterial);
 		GLTUT_CHECK(light, "Failed to create light object");
 		light->setTransform(gltut::Matrix4::transformMatrix(
 			LIGHT_POSITION,

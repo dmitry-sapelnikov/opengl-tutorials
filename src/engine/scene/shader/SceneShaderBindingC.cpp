@@ -75,25 +75,25 @@ void SceneShaderBindingC::activate(const Scene* scene) const noexcept
 }
 
 /// Activates the shader binding for a scene object
-void SceneShaderBindingC::activate(const SceneObject* sceneObject) const noexcept
+void SceneShaderBindingC::activate(const GeometryNode* node) const noexcept
 {
-	if (mShader == nullptr || sceneObject == nullptr)
+	if (mShader == nullptr || node == nullptr)
 	{
 		return;
 	}
 
 	mShader->activate();
 
-	if (const char* objectMatrix = getBoundShaderParameter(Parameter::OBJECT_MATRIX);
+	if (const char* objectMatrix = getBoundShaderParameter(Parameter::NODE_MATRIX);
 		objectMatrix != nullptr)
 	{
-		mShader->setMat4(objectMatrix, sceneObject->getTransform().data());
+		mShader->setMat4(objectMatrix, node->getGlobalTransform().data());
 	}
 
-	if (const char* objectNormalMatrix = getBoundShaderParameter(Parameter::OBJECT_NORMAL_MATRIX);
+	if (const char* objectNormalMatrix = getBoundShaderParameter(Parameter::NODE_NORMAL_MATRIX);
 		objectNormalMatrix != nullptr)
 	{
-		const Matrix3 normalMatrix = getNormalMatrix(sceneObject->getTransform().getMatrix3());
+		const Matrix3 normalMatrix = getNormalMatrix(node->getGlobalTransform().getMatrix3());
 		mShader->setMat3(objectNormalMatrix, normalMatrix.data());
 	}
 }

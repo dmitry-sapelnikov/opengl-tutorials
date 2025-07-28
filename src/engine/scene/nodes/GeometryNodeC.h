@@ -1,28 +1,23 @@
 #pragma once
 
 // Includes
-#include "engine/core/NonCopyable.h"
-#include "engine/scene/SceneObject.h"
-#include "../renderer/RendererBase.h"
+#include "engine/scene/nodes/GeometryNode.h"
+#include "../../renderer/RendererBase.h"
+#include "./SceneNodeT.h"
+
 
 namespace gltut
 {
 // Global classes
 /// Implementation of the Scene interface
-class SceneObjectC final : public SceneObject, public NonCopyable
+class GeometryNodeC final : public SceneNodeT<GeometryNode>
 {
 public:
-	SceneObjectC(
-		RendererBase& renderer,
+	GeometryNodeC(
 		Mesh* mesh,
 		Material* material,
-		const Matrix4& transform) noexcept;
-
-	/// Returns the transform
-	const Matrix4& getTransform() const noexcept final;
-
-	/// Sets the transform
-	void setTransform(const Matrix4& transform) noexcept final;
+		const Matrix4& transform,
+		SceneNode* parent) noexcept;
 
 	/// Returns the mesh
 	Mesh* getMesh() const noexcept final;
@@ -40,17 +35,11 @@ public:
 	void render() const noexcept final;
 
 private:
-	/// The renderer
-	RendererBase& mRenderer;
-
 	/// The mesh
 	Mesh* mMesh = nullptr;
 
 	/// The material
 	Material* mMaterial = nullptr;
-
-	/// The transform
-	Matrix4 mTransform = Matrix4::identity();
 };
 
 // End of the namespace gltut

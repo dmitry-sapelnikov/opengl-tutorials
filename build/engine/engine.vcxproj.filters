@@ -81,6 +81,12 @@
     <Filter Include="src\scene\shader">
       <UniqueIdentifier>{f49163d3-c6cc-429e-8e7a-ae0376966809}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\scene\nodes">
+      <UniqueIdentifier>{c01989a6-0fe8-428d-8e71-e7ca6b9b08b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\scene\nodes">
+      <UniqueIdentifier>{e870d6c5-c98c-48fb-a556-48549a8b5f4d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\engine\Engine.h">
@@ -134,9 +140,6 @@
     <ClInclude Include="..\..\include\engine\math\Matrix3.h">
       <Filter>include\math</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\engine\scene\SceneObject.h">
-      <Filter>include\scene</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\engine\scene\Scene.h">
       <Filter>include\scene</Filter>
     </ClInclude>
@@ -178,9 +181,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\engine\renderer\backends\opengl\TextureOpenGL.h">
       <Filter>src\renderer\backends\opengl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\engine\scene\SceneObjectC.h">
-      <Filter>src\scene</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\engine\scene\SceneC.h">
       <Filter>src\scene</Filter>
@@ -224,6 +224,18 @@
     <ClInclude Include="..\..\src\engine\scene\shader\SceneShaderBindingC.h">
       <Filter>src\scene\shader</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\engine\scene\nodes\GeometryNode.h">
+      <Filter>include\scene\nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\scene\nodes\SceneNode.h">
+      <Filter>include\scene\nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\scene\nodes\GeometryNodeC.h">
+      <Filter>src\scene\nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\scene\nodes\SceneNodeT.h">
+      <Filter>src\scene\nodes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\engine\EngineC.cpp">
@@ -256,9 +268,6 @@
     <ClCompile Include="..\..\src\engine\scene\SceneC.cpp">
       <Filter>src\scene</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\engine\scene\SceneObjectC.cpp">
-      <Filter>src\scene</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\engine\window\FPSCounter.cpp">
       <Filter>src\window</Filter>
     </ClCompile>
@@ -285,6 +294,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\engine\scene\shader\SceneShaderBindingC.cpp">
       <Filter>src\scene\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\scene\nodes\GeometryNodeC.cpp">
+      <Filter>src\scene\nodes</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

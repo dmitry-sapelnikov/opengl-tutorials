@@ -84,8 +84,8 @@ int main()
 		auto* shaderBinding = scene->createShaderBinding(shader);
 
 		auto* material = scene->createMaterial(shaderBinding);
-		scene->createObject(mesh1, material);
-		scene->createObject(mesh2, material);
+		scene->createGeometry(mesh1, material);
+		scene->createGeometry(mesh2, material);
 
 		GLTUT_CHECK(shader != nullptr, "Failed to create shader")
 		while (engine->update())

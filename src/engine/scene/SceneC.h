@@ -11,7 +11,7 @@
 #include "./camera/CameraC.h"
 #include "./material/MaterialC.h"
 #include "./shader/SceneShaderBindingC.h"
-#include "SceneObjectC.h"
+#include "./nodes/GeometryNodeC.h"
 
 namespace gltut
 {
@@ -28,10 +28,11 @@ public:
 
 	Material* createMaterial(SceneShaderBinding* shader) noexcept final;
 
-	SceneObject* createObject(
+	GeometryNode* createGeometry(
 		Mesh* mesh,
 		Material* material,
-		const Matrix4& transform = Matrix4::identity()) noexcept final;
+		const Matrix4& transform = Matrix4::identity(),
+		SceneNode* parent = nullptr) noexcept final;
 
 	Camera* createCamera(
 		const Vector3& position,
@@ -68,7 +69,7 @@ private:
 	std::deque<MaterialC> mMaterials;
 
 	/// The scene objects
-	std::deque<SceneObjectC> mObjects;
+	std::deque<GeometryNodeC> mGeometries;
 
 	///	The cameras
 	std::deque<CameraC> mCameras;

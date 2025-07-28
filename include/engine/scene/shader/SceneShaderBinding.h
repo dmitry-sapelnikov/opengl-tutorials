@@ -7,7 +7,7 @@ namespace gltut
 {
 //	Global classes
 class Scene;
-class SceneObject;
+class GeometryNode;
 
 /// The class represents a shader binding for scene parameters
 class SceneShaderBinding
@@ -23,10 +23,10 @@ public:
 		/// Camera view position
 		CAMERA_POSITION,
 
-		/// Body object (model) matrix
-		OBJECT_MATRIX,
-		/// Body object normal matrix
-		OBJECT_NORMAL_MATRIX,
+		/// Scene node matrix (model matrix)
+		NODE_MATRIX,
+		/// Scene node normal matrix
+		NODE_NORMAL_MATRIX,
 
 		/// Total number of scene parameters
 		TOTAL_COUNT
@@ -60,7 +60,7 @@ public:
 	virtual void activate(const Scene* scene) const noexcept = 0;
 
 	/// Activates the shader binding for a scene object
-	virtual void activate(const SceneObject* sceneObject) const noexcept = 0;
+	virtual void activate(const GeometryNode* node) const noexcept = 0;
 };
 
 // Global functions
@@ -84,7 +84,7 @@ inline void bindModelViewProjectionShaderParameters(
 	{
 		return;
 	}
-	binding->bind(SceneShaderBinding::Parameter::OBJECT_MATRIX, modelMatrix);
+	binding->bind(SceneShaderBinding::Parameter::NODE_MATRIX, modelMatrix);
 	binding->bind(SceneShaderBinding::Parameter::CAMERA_VIEW_MATRIX, viewMatrix);
 	binding->bind(SceneShaderBinding::Parameter::CAMERA_PROJECTION_MATRIX, projectionMatrix);
 }

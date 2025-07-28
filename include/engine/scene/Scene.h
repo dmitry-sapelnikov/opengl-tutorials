@@ -1,11 +1,11 @@
 #pragma once
 
 // Includes
-#include "engine/scene/SceneObject.h"
 #include "engine/scene/material/Material.h"
 #include "engine/scene/camera/CameraController.h"
 #include "engine/scene/shader/SceneShaderBinding.h"
 
+#include "engine/scene/nodes/GeometryNode.h"
 
 namespace gltut
 {
@@ -71,10 +71,11 @@ public:
 	virtual Material* createMaterial(SceneShaderBinding* shaderBinding) noexcept = 0;
 
 	/// Creates a scene object
-	virtual SceneObject* createObject(
+	virtual GeometryNode* createGeometry(
 		Mesh* mesh,
 		Material* material,
-		const Matrix4& transform = Matrix4::identity()) noexcept = 0;
+		const Matrix4& transform = Matrix4::identity(),
+		SceneNode* parent = nullptr) noexcept = 0;
 };
 
 // End of the namespace gltut

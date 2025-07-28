@@ -32,8 +32,9 @@
     <ClInclude Include="..\..\include\engine\scene\camera\CameraController.h" />
     <ClInclude Include="..\..\include\engine\scene\material\Material.h" />
     <ClInclude Include="..\..\include\engine\scene\material\PhongMaterial.h" />
+    <ClInclude Include="..\..\include\engine\scene\nodes\GeometryNode.h" />
+    <ClInclude Include="..\..\include\engine\scene\nodes\SceneNode.h" />
     <ClInclude Include="..\..\include\engine\scene\Scene.h" />
-    <ClInclude Include="..\..\include\engine\scene\SceneObject.h" />
     <ClInclude Include="..\..\include\engine\scene\shader\SceneShaderBinding.h" />
     <ClInclude Include="..\..\include\engine\utils\MeshCreation.h" />
     <ClInclude Include="..\..\include\engine\window\Event.h" />
@@ -53,8 +54,9 @@
     <ClInclude Include="..\..\src\engine\scene\camera\FPSCameraControllerC.h" />
     <ClInclude Include="..\..\src\engine\scene\camera\MouseCameraControllerC.h" />
     <ClInclude Include="..\..\src\engine\scene\material\MaterialC.h" />
+    <ClInclude Include="..\..\src\engine\scene\nodes\GeometryNodeC.h" />
+    <ClInclude Include="..\..\src\engine\scene\nodes\SceneNodeT.h" />
     <ClInclude Include="..\..\src\engine\scene\SceneC.h" />
-    <ClInclude Include="..\..\src\engine\scene\SceneObjectC.h" />
     <ClInclude Include="..\..\src\engine\scene\shader\SceneShaderBindingC.h" />
     <ClInclude Include="..\..\src\engine\window\FPSCounter.h" />
     <ClInclude Include="..\..\src\engine\window\WindowC.h" />
@@ -74,8 +76,8 @@
     <ClCompile Include="..\..\src\engine\scene\camera\MouseCameraControllerC.cpp" />
     <ClCompile Include="..\..\src\engine\scene\material\MaterialC.cpp" />
     <ClCompile Include="..\..\src\engine\scene\material\phong\PhongMaterial.cpp" />
+    <ClCompile Include="..\..\src\engine\scene\nodes\GeometryNodeC.cpp" />
     <ClCompile Include="..\..\src\engine\scene\SceneC.cpp" />
-    <ClCompile Include="..\..\src\engine\scene\SceneObjectC.cpp" />
     <ClCompile Include="..\..\src\engine\scene\shader\SceneShaderBindingC.cpp" />
     <ClCompile Include="..\..\src\engine\utils\MeshCreation.cpp" />
     <ClCompile Include="..\..\src\engine\window\FPSCounter.cpp" />

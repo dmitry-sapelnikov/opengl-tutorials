@@ -30,8 +30,8 @@ public:
 	/// Sets a texture
 	virtual void setTexture(Texture* texture, u32 slot) noexcept = 0;
 
-	/// Activates the material for a scene object
-	virtual void activate(const SceneObject* object) const noexcept = 0;
+	/// Activates the material for a scene geometry
+	virtual void activate(const GeometryNode* node) const noexcept = 0;
 };
 
 // End of the namespace gltut
