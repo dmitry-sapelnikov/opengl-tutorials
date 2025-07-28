@@ -29,10 +29,9 @@ const char* FRAGMENT_SHADER_SOURCE_CODE =
 ///	The program entry point
 int main()
 {
-	gltut::Engine* engine = nullptr;
 	try
 	{
-		engine = gltut::createEngine(1024, 768);
+		std::unique_ptr<gltut::Engine> engine(gltut::createEngine(1024, 768));
 		GLTUT_CHECK(engine != nullptr, "Failed to create engine")
 	
 		engine->getWindow()->setTitle("Hello Triangle");
@@ -92,14 +91,6 @@ int main()
 		{
 		}
 	}
-	catch (const std::exception& e)
-	{
-		std::cerr << "An ERROR occurred: " << e.what() << std::endl;
-		// Wait for the user to close the console window
-		std::cin.get();
-		delete engine;
-		return -1;
-	}
-	delete engine;
+	GLTUT_APPLICATION_CATCH;
 	return 0;
 }

@@ -6,7 +6,6 @@
 
 #include "engine/core/Check.h"
 #include "engine/math/Rng.h"
-#include "engine/utils/MeshCreation.h"
 #include "engine/Engine.h"
 
 static const size_t BOX_COUNT = 100;
@@ -15,13 +14,12 @@ static const float POSITION_RANGE = 5.0f;
 ///	The program entry point
 int main()
 {
-	gltut::Engine* engine = nullptr;
 	try
 	{
-		engine = gltut::createEngine(1024, 768);
-		GLTUT_CHECK(engine != nullptr, "Failed to create engine")
+		std::unique_ptr<gltut::Engine> engine(gltut::createEngine(1024, 768));
+		GLTUT_CHECK(engine != nullptr, "Failed to create engine");
 
-			engine->getWindow()->setTitle("Camera");
+		engine->getWindow()->setTitle("Camera");
 		engine->getWindow()->showFPS(true);
 
 		auto* renderer = engine->getRenderer();
@@ -48,13 +46,13 @@ int main()
 			"projection");
 
 		gltut::Texture* texture1 = renderer->loadTexture("assets/container.jpg");
-		GLTUT_CHECK(texture1 != nullptr, "Failed to load texture")
+		GLTUT_CHECK(texture1 != nullptr, "Failed to load texture");
 
 		gltut::Texture* texture2 = renderer->loadTexture("assets/awesomeface.png");
-		GLTUT_CHECK(texture2 != nullptr, "Failed to load texture")
+		GLTUT_CHECK(texture2 != nullptr, "Failed to load texture");
 
 		auto* material = scene->createMaterial(shaderBinding);
-		GLTUT_CHECK(material != nullptr, "Failed to create material")
+		GLTUT_CHECK(material != nullptr, "Failed to create material");
 
 		material->setTexture(texture1, 0);
 		material->setTexture(texture2, 1);
@@ -98,15 +96,6 @@ int main()
 			}
 		}
 	}
-	catch (const std::exception& e)
-	{
-		std::cerr << "An ERROR occurred: " << e.what() << std::endl;
-		// Wait for the user to close the console window
-		std::cin.get();
-		delete engine;
-		return -1;
-	}
-
-	delete engine;
+	GLTUT_APPLICATION_CATCH;
 	return 0;
 }

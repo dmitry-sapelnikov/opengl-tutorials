@@ -6,13 +6,12 @@
 
 #include "engine/core/Check.h"
 #include "engine/scene/material/PhongMaterial.h"
-#include "engine/utils/MeshCreation.h"
 #include "engine/Engine.h"
 
 namespace
 {
-	const gltut::Vector3 LIGHT_POSITION = { 0.0, 10.0f, 20.0f };
-	const gltut::Vector3 LIGHT_COLOR = { 1.0, 1.0f, 1.0f };
+const gltut::Vector3 LIGHT_POSITION = { 0.0, 10.0f, 20.0f };
+const gltut::Vector3 LIGHT_COLOR = { 1.0, 1.0f, 1.0f };
 }
 
 ///	The program entry point
@@ -36,7 +35,7 @@ int main()
 
 		phongShader->getShader()->setVec3("lightPos", LIGHT_POSITION.x, LIGHT_POSITION.y, LIGHT_POSITION.z);
 		phongShader->getShader()->setVec3("lightColor", LIGHT_COLOR.x, LIGHT_COLOR.y, LIGHT_COLOR.z);
-		
+
 		gltut::Texture* ambientTexture = renderer->createSolidColorTexture(0.1f, 0.1f, 0.1f);
 		GLTUT_CHECK(ambientTexture, "Failed to create ambient texture");
 
@@ -97,10 +96,10 @@ int main()
 			const auto now = std::chrono::high_resolution_clock::now();
 			const float time = std::chrono::duration<float>(now - startTime).count();
 
-			const gltut::Vector3 rotation = {time, 0.0f, 0.0f};
+			const gltut::Vector3 rotation = { 0.0f, time, 0.0f };
 			object->setTransform(gltut::Matrix4::transformMatrix(
 				{ 0.0f, 0.0f, 0.0f },
-				{ 0.0f, 0.0f, 0.0f },
+				rotation,
 				{ 2.0f, 2.0f, 2.0f }));
 			if (!engine->update())
 			{
@@ -108,7 +107,6 @@ int main()
 			}
 		}
 	}
-	GLTUT_APPLICATION_CATCH
-
+	GLTUT_APPLICATION_CATCH;
 	return 0;
 }

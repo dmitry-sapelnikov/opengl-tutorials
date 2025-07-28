@@ -9,11 +9,10 @@
 ///	The program entry point
 int main()
 {
-	gltut::Engine* engine = nullptr;
 	try
 	{
-		engine = gltut::createEngine(1024, 768);
-		GLTUT_CHECK(engine != nullptr, "Failed to create engine")
+		std::unique_ptr<gltut::Engine> engine(gltut::createEngine(1024, 768));
+		GLTUT_CHECK(engine != nullptr, "Failed to create engine");
 
 		engine->getWindow()->setTitle("Transformations");
 		engine->getWindow()->showFPS(true);
@@ -40,32 +39,32 @@ int main()
 			6,
 			indices);
 
-		GLTUT_CHECK(mesh != nullptr, "Failed to create mesh")
+		GLTUT_CHECK(mesh != nullptr, "Failed to create mesh");
 
 		gltut::Shader* shader = renderer->loadShader(
 			"assets/shader.vs",
 			"assets/shader.fs");
 
-		GLTUT_CHECK(shader != 0, "Failed to create shader program")
+		GLTUT_CHECK(shader != 0, "Failed to create shader program");
 		shader->setInt("texture1", 0);
 		shader->setInt("texture2", 1);
 
 		auto* binding = scene->createShaderBinding(shader);
-		GLTUT_CHECK(binding != nullptr, "Failed to create shader binding")
+		GLTUT_CHECK(binding != nullptr, "Failed to create shader binding");
 
 		binding->bind(gltut::SceneShaderBinding::Parameter::NODE_MATRIX, "model");
 
 		gltut::Texture* texture1 = renderer->loadTexture("assets/container.jpg");
 		GLTUT_CHECK(texture1 != nullptr, "Failed to load texture")
 
-		gltut::Texture* texture2 = renderer->loadTexture("assets/awesomeface.png");
+			gltut::Texture* texture2 = renderer->loadTexture("assets/awesomeface.png");
 		GLTUT_CHECK(texture2 != nullptr, "Failed to load texture")
 
-		auto* material = scene->createMaterial(binding);
-		GLTUT_CHECK(material != nullptr, "Failed to create material")
+			auto* material = scene->createMaterial(binding);
+		GLTUT_CHECK(material != nullptr, "Failed to create material");
 		material->setTexture(texture1, 0);
 		material->setTexture(texture2, 1);
-		
+
 		auto* object = scene->createGeometry(mesh, material);
 
 		auto start = std::chrono::high_resolution_clock::now();
@@ -79,16 +78,6 @@ int main()
 				gltut::Matrix4::scaleMatrix({ 0.5f, 0.5f, 0.5 }));
 		}
 	}
-	catch (const std::exception& e)
-	{
-		std::cerr << "An ERROR occurred: " << e.what() << std::endl;
-		// Wait for the user to close the console window
-		std::cin.get();
-
-		delete engine;
-		return -1;
-	}
-
-	delete engine;
+	GLTUT_APPLICATION_CATCH;
 	return 0;
 }

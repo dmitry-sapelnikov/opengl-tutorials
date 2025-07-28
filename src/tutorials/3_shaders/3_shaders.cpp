@@ -9,11 +9,10 @@
 ///	The program entry point
 int main()
 {
-	gltut::Engine* engine = nullptr;
 	try
 	{
-		engine = gltut::createEngine(1024, 768);
-		GLTUT_CHECK(engine != nullptr, "Failed to create engine")
+		std::unique_ptr<gltut::Engine> engine(gltut::createEngine(1024, 768));
+		GLTUT_CHECK(engine != nullptr, "Failed to create engine");
 
 		engine->getWindow()->setTitle("Shaders");
 		engine->getWindow()->showFPS(true);
@@ -61,13 +60,13 @@ int main()
 			3,
 			indices.data());
 
-		GLTUT_CHECK(mesh != nullptr, "Failed to create mesh")
+		GLTUT_CHECK(mesh != nullptr, "Failed to create mesh");
 
 		auto* binding = scene->createShaderBinding(shader);
-		GLTUT_CHECK(binding != nullptr, "Failed to create shader binding")
+		GLTUT_CHECK(binding != nullptr, "Failed to create shader binding");
 
 		auto* material = scene->createMaterial(binding);
-		GLTUT_CHECK(material != nullptr, "Failed to create material")
+		GLTUT_CHECK(material != nullptr, "Failed to create material");
 
 		scene->createGeometry(mesh, material);
 		while (engine->update())
@@ -79,15 +78,6 @@ int main()
 			shader->setFloat("colorScale", colorScale);
 		}
 	}
-	catch (const std::exception& e)
-	{
-		std::cerr << "An ERROR occurred: " << e.what() << std::endl;
-		// Wait for the user to close the console window
-		std::cin.get();
-		delete engine;
-		return -1;
-	}
-
-	delete engine;
+	GLTUT_APPLICATION_CATCH;
 	return 0;
 }

@@ -9,11 +9,10 @@
 ///	The program entry point
 int main()
 {
-	gltut::Engine* engine = nullptr;
 	try
 	{
-		engine = gltut::createEngine(1024, 768);
-		GLTUT_CHECK(engine != nullptr, "Failed to create engine")
+		std::unique_ptr<gltut::Engine> engine(gltut::createEngine(1024, 768));
+		GLTUT_CHECK(engine != nullptr, "Failed to create engine");
 
 		engine->getWindow()->setTitle("Textures");
 		engine->getWindow()->showFPS(true);
@@ -47,18 +46,18 @@ int main()
 			"assets/shader.vs",
 			"assets/shader.fs");
 
-		GLTUT_CHECK(shader != 0, "Failed to create shader program")
+		GLTUT_CHECK(shader != 0, "Failed to create shader program");
 		shader->setInt("texture1", 0);
 		shader->setInt("texture2", 1);
 
 		gltut::Texture* texture1 = renderer->loadTexture("assets/container.jpg");
-		GLTUT_CHECK(texture1 != nullptr, "Failed to load texture")
+		GLTUT_CHECK(texture1 != nullptr, "Failed to load texture");
 
 		gltut::Texture* texture2 = renderer->loadTexture("assets/awesomeface.png");
-		GLTUT_CHECK(texture2 != nullptr, "Failed to load texture")
+		GLTUT_CHECK(texture2 != nullptr, "Failed to load texture");
 
 		auto* shaderBinding = scene->createShaderBinding(shader);
-		GLTUT_CHECK(shaderBinding != nullptr, "Failed to create shader binding")
+		GLTUT_CHECK(shaderBinding != nullptr, "Failed to create shader binding");
 
 		auto* material = scene->createMaterial(shaderBinding);
 		GLTUT_CHECK(material != nullptr, "Failed to create material")
@@ -70,16 +69,6 @@ int main()
 		{
 		}
 	}
-	catch (const std::exception& e)
-	{
-		std::cerr << "An ERROR occurred: " << e.what() << std::endl;
-		// Wait for the user to close the console window
-		std::cin.get();
-
-		delete engine;
-		return -1;
-	}
-
-	delete engine;
+	GLTUT_APPLICATION_CATCH;
 	return 0;
 }

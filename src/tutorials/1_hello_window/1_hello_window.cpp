@@ -1,11 +1,15 @@
 // Includes
+#include <memory>
 #include "engine/Engine.h"
 
 int main()
 {
-	gltut::Engine* engine = gltut::createEngine(1024, 768);
-	if (!engine)
+	std::unique_ptr<gltut::Engine> engine(
+		gltut::createEngine(1024, 768));
+
+	if (engine == nullptr)
 	{
+		std::cerr << "Failed to create engine" << std::endl;
 		return -1;
 	}
 	
@@ -16,6 +20,5 @@ int main()
 	while (engine->update())
 	{
 	}
-	delete engine;
 	return 0;
 }
