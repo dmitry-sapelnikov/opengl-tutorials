@@ -24,7 +24,7 @@ int main()
 
 		auto* renderer = engine->getRenderer();
 		auto* scene = engine->getScene();
-		auto* mesh = gltut::createBoxMesh(*renderer, 1.0f, 1.0f, 1.0f);
+		auto* mesh = engine->getGeometryFactory()->createBox(1.0f, 1.0f, 1.0f);
 
 		GLTUT_CHECK(mesh != nullptr, "Failed to create mesh")
 

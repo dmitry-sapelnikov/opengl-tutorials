@@ -7,6 +7,7 @@
 #include "renderer/backends/opengl/RendererOpenGL.h"
 #include "scene/SceneC.h"
 #include "window/WindowC.h"
+#include "factories/GeometryFactoryC.h"
 
 namespace gltut
 {
@@ -26,6 +27,8 @@ EngineC::EngineC(u32 windowWidth, u32 windowHeight)
 
 	mScene = std::make_unique<SceneC>(*mWindow , *renderer);
 	mRenderer = std::move(renderer);
+
+	mGeometryFactory = std::make_unique<GeometryFactoryC>(*mRenderer);
 }
 
 EngineC::~EngineC() noexcept
@@ -57,6 +60,11 @@ Renderer* EngineC::getRenderer() noexcept
 Scene* EngineC::getScene() noexcept
 {
 	return mScene.get();
+}
+
+GeometryFactory* EngineC::getGeometryFactory() noexcept
+{
+	return mGeometryFactory.get();
 }
 
 void EngineC::onEvent(const Event& event) noexcept

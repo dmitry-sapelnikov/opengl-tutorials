@@ -31,6 +31,9 @@ public:
 	/// Returns the scene
 	Scene* getScene() noexcept final;
 
+	/// Returns the geometry factory
+	GeometryFactory* getGeometryFactory() noexcept final;
+
 	/// Called when the window is resized
 	void onEvent(const Event& event) noexcept final;
 
@@ -43,6 +46,9 @@ private:
 
 	/// The scene
 	std::unique_ptr<SceneC> mScene;
+
+	/// The geometry factory
+	std::unique_ptr<GeometryFactory> mGeometryFactory;
 };
 
 // End of the namespace gltut

@@ -1,9 +1,10 @@
 #pragma once
 
 // Includes
-#include "engine/window/Window.h"
+#include "engine/factories/GeometryFactory.h"
 #include "engine/renderer/Renderer.h"
 #include "engine/scene/Scene.h"
+#include "engine/window/Window.h"
 
 namespace gltut
 {
@@ -29,6 +30,9 @@ public:
 
 	/// Returns the scene
 	virtual Scene* getScene() noexcept = 0;
+
+	/// Returns the geometry factory
+	virtual GeometryFactory* getGeometryFactory() noexcept = 0;
 };
 
 //	Global functions

@@ -27,7 +27,7 @@ int main()
 
 		auto* renderer = engine->getRenderer();
 		auto* scene = engine->getScene();
-		auto* mesh = gltut::createSphereMesh(*renderer, 1.0f, 10);
+		auto* mesh = engine->getGeometryFactory()->createSphere(1.0f, 10);
 		GLTUT_CHECK(mesh, "Failed to create mesh");
 
 		gltut::SceneShaderBinding* phongShader = gltut::createPhongShader(*renderer, *scene);

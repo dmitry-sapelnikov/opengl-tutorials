@@ -15,6 +15,7 @@
     <ClInclude Include="..\..\include\engine\core\NonCopyable.h" />
     <ClInclude Include="..\..\include\engine\core\Types.h" />
     <ClInclude Include="..\..\include\engine\Engine.h" />
+    <ClInclude Include="..\..\include\engine\factories\GeometryFactory.h" />
     <ClInclude Include="..\..\include\engine\math\Functions.h" />
     <ClInclude Include="..\..\include\engine\math\Constants.h" />
     <ClInclude Include="..\..\include\engine\math\Matrix3.h" />
@@ -36,13 +37,13 @@
     <ClInclude Include="..\..\include\engine\scene\nodes\SceneNode.h" />
     <ClInclude Include="..\..\include\engine\scene\Scene.h" />
     <ClInclude Include="..\..\include\engine\scene\shader\SceneShaderBinding.h" />
-    <ClInclude Include="..\..\include\engine\utils\MeshCreation.h" />
     <ClInclude Include="..\..\include\engine\window\Event.h" />
     <ClInclude Include="..\..\include\engine\window\EventHandler.h" />
     <ClInclude Include="..\..\include\engine\window\Keycodes.h" />
     <ClInclude Include="..\..\include\engine\window\Window.h" />
     <ClInclude Include="..\..\src\engine\core\File.h" />
     <ClInclude Include="..\..\src\engine\EngineC.h" />
+    <ClInclude Include="..\..\src\engine\factories\GeometryFactoryC.h" />
     <ClInclude Include="..\..\src\engine\renderer\backends\opengl\MeshOpenGL.h" />
     <ClInclude Include="..\..\src\engine\renderer\backends\opengl\RendererOpenGL.h" />
     <ClInclude Include="..\..\src\engine\renderer\backends\opengl\ShaderOpenGL.h" />
@@ -64,6 +65,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\src\engine\core\File.cpp" />
     <ClCompile Include="..\..\src\engine\EngineC.cpp" />
+    <ClCompile Include="..\..\src\engine\factories\GeometryFactoryC.cpp" />
     <ClCompile Include="..\..\src\engine\renderer\backends\opengl\MeshOpenGL.cpp" />
     <ClCompile Include="..\..\src\engine\renderer\backends\opengl\RendererOpenGL.cpp" />
     <ClCompile Include="..\..\src\engine\renderer\backends\opengl\ShaderOpenGL.cpp" />
@@ -79,7 +81,6 @@
     <ClCompile Include="..\..\src\engine\scene\nodes\GeometryNodeC.cpp" />
     <ClCompile Include="..\..\src\engine\scene\SceneC.cpp" />
     <ClCompile Include="..\..\src\engine\scene\shader\SceneShaderBindingC.cpp" />
-    <ClCompile Include="..\..\src\engine\utils\MeshCreation.cpp" />
     <ClCompile Include="..\..\src\engine\window\FPSCounter.cpp" />
     <ClCompile Include="..\..\src\engine\window\WindowC.cpp" />
   </ItemGroup>

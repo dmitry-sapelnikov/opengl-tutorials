@@ -69,12 +69,6 @@
     <Filter Include="include\renderer\mesh">
       <UniqueIdentifier>{7b7e2a01-d409-4e63-bdcf-3793738c8d14}</UniqueIdentifier>
     </Filter>
-    <Filter Include="include\utils">
-      <UniqueIdentifier>{a2a96b07-6b0b-4374-81e8-a3fcfbf667fd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\utils">
-      <UniqueIdentifier>{1aa5c8fd-c1c9-498e-a282-c3765e8ddb43}</UniqueIdentifier>
-    </Filter>
     <Filter Include="include\scene\shader">
       <UniqueIdentifier>{37d44eac-24a7-493e-991f-ac2e7d04e4ff}</UniqueIdentifier>
     </Filter>
@@ -86,6 +80,12 @@
     </Filter>
     <Filter Include="src\scene\nodes">
       <UniqueIdentifier>{e870d6c5-c98c-48fb-a556-48549a8b5f4d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\factories">
+      <UniqueIdentifier>{a2a96b07-6b0b-4374-81e8-a3fcfbf667fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\factories">
+      <UniqueIdentifier>{1aa5c8fd-c1c9-498e-a282-c3765e8ddb43}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -215,9 +215,6 @@
     <ClInclude Include="..\..\include\engine\renderer\mesh\VertexFormat.h">
       <Filter>include\renderer\mesh</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\engine\utils\MeshCreation.h">
-      <Filter>include\utils</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\engine\scene\shader\SceneShaderBinding.h">
       <Filter>include\scene\shader</Filter>
     </ClInclude>
@@ -235,6 +232,12 @@
     </ClInclude>
     <ClInclude Include="..\..\src\engine\scene\nodes\SceneNodeT.h">
       <Filter>src\scene\nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\factories\GeometryFactory.h">
+      <Filter>include\factories</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\factories\GeometryFactoryC.h">
+      <Filter>src\factories</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -289,14 +292,14 @@
     <ClCompile Include="..\..\src\engine\renderer\backends\opengl\MeshOpenGL.cpp">
       <Filter>src\renderer\backends\opengl</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\engine\utils\MeshCreation.cpp">
-      <Filter>src\utils</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\engine\scene\shader\SceneShaderBindingC.cpp">
       <Filter>src\scene\shader</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\engine\scene\nodes\GeometryNodeC.cpp">
       <Filter>src\scene\nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\factories\GeometryFactoryC.cpp">
+      <Filter>src\factories</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
