@@ -40,10 +40,10 @@ Material* SceneC::createMaterial(SceneShaderBinding* shaderBinding) noexcept
 }
 
 GeometryNode* SceneC::createGeometry(
-	Mesh* mesh,
-	Material* material,
+	const Mesh* mesh,
+	const Material* material,
 	const Matrix4& transform,
-	SceneNode* parent) noexcept
+	const SceneNode* parent) noexcept
 {
 	GeometryNode* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN

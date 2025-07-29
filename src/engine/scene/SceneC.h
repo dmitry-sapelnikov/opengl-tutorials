@@ -29,10 +29,10 @@ public:
 	Material* createMaterial(SceneShaderBinding* shader) noexcept final;
 
 	GeometryNode* createGeometry(
-		Mesh* mesh,
-		Material* material,
+		const Mesh* mesh,
+		const Material* material,
 		const Matrix4& transform = Matrix4::identity(),
-		SceneNode* parent = nullptr) noexcept final;
+		const SceneNode* parent = nullptr) noexcept final;
 
 	Camera* createCamera(
 		const Vector3& position,

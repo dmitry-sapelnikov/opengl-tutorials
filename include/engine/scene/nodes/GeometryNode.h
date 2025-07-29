@@ -13,17 +13,11 @@ namespace gltut
 class GeometryNode : public SceneNode
 {
 public:
-	/// Returns the mesh
-	virtual Mesh* getMesh() const noexcept = 0;
-
 	/// Adds a mesh
-	virtual void setMesh(Mesh* mesh) noexcept = 0;
-
-	/// Returns the material
-	virtual Material* getMaterial() const noexcept = 0;
+	virtual void setMesh(const Mesh* mesh) noexcept = 0;
 
 	/// Sets a material
-	virtual void setMaterial(Material* material) noexcept = 0;
+	virtual void setMaterial(const Material* material) noexcept = 0;
 
 	/// Renders the object
 	virtual void render() const noexcept = 0;

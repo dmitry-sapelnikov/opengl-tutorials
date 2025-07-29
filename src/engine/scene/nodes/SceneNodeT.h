@@ -21,7 +21,7 @@ public:
 	/// Constructor
 	SceneNodeT(
 		const Matrix4& transform,
-		SceneNode* parent) noexcept :
+		const SceneNode* parent) noexcept :
 		mTransform(transform)
 	{
 		setParent(parent);
@@ -47,7 +47,7 @@ public:
 	}
 
 	/// Returns the parent node
-	SceneNode* getParent() const noexcept final
+	const SceneNode* getParent() const noexcept final
 	{
 		return mParent;
 	}
@@ -66,7 +66,7 @@ public:
 			return;
 		}
 
-		SceneNode* node = this;
+		const SceneNode* node = this;
 		while (node != nullptr)
 		{
 			// Prevent adding an anchestor node as a child
@@ -115,7 +115,7 @@ private:
 	void updateGlobalTransform() noexcept final
 	{
 		mGlobalTransform = mTransform;
-		SceneNode* parent = mParent;
+		const SceneNode* parent = mParent;
 		while (parent != nullptr)
 		{
 			mGlobalTransform = parent->getTransform() * mGlobalTransform;
@@ -129,14 +129,14 @@ private:
 	}
 
 	/// Sets the parent node. For internal use only.
-	void setParent(SceneNode* parent) noexcept final
+	void setParent(const SceneNode* parent) noexcept final
 	{
 		mParent = parent;
 		updateGlobalTransform();
 	}
 
 	/// The parent node
-	SceneNode* mParent = nullptr;
+	const SceneNode* mParent = nullptr;
 
 	/// The transform relative to the parent
 	Matrix4 mTransform;

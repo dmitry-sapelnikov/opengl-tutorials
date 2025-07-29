@@ -5,10 +5,10 @@ namespace gltut
 {
 // Global classes
 GeometryNodeC::GeometryNodeC(
-	Mesh* mesh,
-	Material* material,
+	const Mesh* mesh,
+	const Material* material,
 	const Matrix4& transform,
-	SceneNode* parent) noexcept :
+	const SceneNode* parent) noexcept :
 	
 	SceneNodeT<GeometryNode>(transform, parent),
 	mMesh(mesh),
@@ -16,22 +16,12 @@ GeometryNodeC::GeometryNodeC(
 {
 }
 
-Mesh* GeometryNodeC::getMesh() const noexcept
-{
-	return mMesh;
-}
-
-void GeometryNodeC::setMesh(Mesh* mesh) noexcept
+void GeometryNodeC::setMesh(const Mesh* mesh) noexcept
 {
 	mMesh = mesh;
 }
 
-Material* GeometryNodeC::getMaterial() const noexcept
-{
-	return mMaterial;
-}
-
-void GeometryNodeC::setMaterial(Material* material) noexcept
+void GeometryNodeC::setMaterial(const Material* material) noexcept
 {
 	mMaterial = material;
 }

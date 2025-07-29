@@ -14,32 +14,26 @@ class GeometryNodeC final : public SceneNodeT<GeometryNode>
 {
 public:
 	GeometryNodeC(
-		Mesh* mesh,
-		Material* material,
+		const Mesh* mesh,
+		const Material* material,
 		const Matrix4& transform,
-		SceneNode* parent) noexcept;
-
-	/// Returns the mesh
-	Mesh* getMesh() const noexcept final;
+		const SceneNode* parent) noexcept;
 
 	/// Adds a mesh
-	void setMesh(Mesh* mesh) noexcept final;
-
-	/// Returns the material
-	Material* getMaterial() const noexcept final;
+	void setMesh(const Mesh* mesh) noexcept final;
 
 	/// Sets a material
-	void setMaterial(Material* material) noexcept final;
+	void setMaterial(const Material* material) noexcept final;
 
 	/// Renders the object
 	void render() const noexcept final;
 
 private:
 	/// The mesh
-	Mesh* mMesh = nullptr;
+	const Mesh* mMesh = nullptr;
 
 	/// The material
-	Material* mMaterial = nullptr;
+	const Material* mMaterial = nullptr;
 };
 
 // End of the namespace gltut

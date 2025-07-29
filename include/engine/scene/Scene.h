@@ -72,10 +72,10 @@ public:
 
 	/// Creates a scene object
 	virtual GeometryNode* createGeometry(
-		Mesh* mesh,
-		Material* material,
+		const Mesh* mesh,
+		const Material* material,
 		const Matrix4& transform = Matrix4::identity(),
-		SceneNode* parent = nullptr) noexcept = 0;
+		const SceneNode* parent = nullptr) noexcept = 0;
 };
 
 // End of the namespace gltut

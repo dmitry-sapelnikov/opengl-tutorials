@@ -24,7 +24,7 @@ public:
 	virtual const Matrix4& getGlobalTransform() const noexcept = 0;
 
 	/// Returns the parent of this node
-	virtual SceneNode* getParent() const noexcept = 0;
+	virtual const SceneNode* getParent() const noexcept = 0;
 
 	/**
 		\brief Adds a child node.
@@ -52,7 +52,7 @@ private:
 	virtual void updateGlobalTransform() noexcept = 0;
 
 	/// Sets the parent of this node
-	virtual void setParent(SceneNode* parent) noexcept = 0;
+	virtual void setParent(const SceneNode* parent) noexcept = 0;
 };
 
 // End of the namespace gltut
