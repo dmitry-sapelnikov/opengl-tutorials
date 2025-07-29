@@ -5,7 +5,6 @@
 #include <string>
 
 #include "engine/core/Check.h"
-#include "engine/scene/material/PhongMaterial.h"
 #include "engine/Engine.h"
 
 namespace
