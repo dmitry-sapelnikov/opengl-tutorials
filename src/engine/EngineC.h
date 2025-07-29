@@ -4,10 +4,10 @@
 #include <memory>
 #include "engine/core/NonCopyable.h"
 #include "engine/Engine.h"
-#include "scene/SceneC.h"
-#include "engine/window/Window.h"
 #include "engine/factory/Factory.h"
 
+#include "./scene/SceneC.h"
+#include "./window/WindowC.h"
 
 namespace gltut
 {
@@ -41,13 +41,13 @@ public:
 
 private:
 	/// The window
-	std::unique_ptr<Window> mWindow;
+	std::unique_ptr<WindowC> mWindow;
 
 	///	The renderer
 	std::unique_ptr<Renderer> mRenderer;
 
 	/// The scene
-	std::unique_ptr<Scene> mScene;
+	std::unique_ptr<SceneC> mScene;
 
 	/// The geometry factory
 	std::unique_ptr<Factory> mFactory;
