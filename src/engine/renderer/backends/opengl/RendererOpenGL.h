@@ -3,8 +3,6 @@
 // Includes
 #include <vector>
 #include <memory>
-#include <glad/glad.h>
-
 #include "../../RendererBase.h"
 
 namespace gltut

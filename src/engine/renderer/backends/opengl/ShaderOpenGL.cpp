@@ -1,8 +1,9 @@
 // Includes
 #include "ShaderOpenGL.h"
-#include "engine/core/Check.h"
+
 #include <iostream>
 #include <glad/glad.h>
+#include "engine/core/Check.h"
 
 namespace gltut
 {

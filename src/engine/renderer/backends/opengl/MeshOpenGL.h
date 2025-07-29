@@ -1,7 +1,6 @@
 #pragma once
 
 // Includes
-#include <glad/glad.h>
 #include "engine/core/NonCopyable.h"
 #include "engine/renderer/mesh/Mesh.h"
 

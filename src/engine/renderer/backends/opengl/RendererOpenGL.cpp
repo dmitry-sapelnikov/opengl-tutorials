@@ -4,6 +4,7 @@
 #include <iostream>
 #undef APIENTRY
 #include <Windows.h>
+#include <glad/glad.h>
 
 #include "engine/core/Check.h"
 #include "MeshOpenGL.h"

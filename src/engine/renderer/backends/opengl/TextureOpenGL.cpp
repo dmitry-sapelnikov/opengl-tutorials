@@ -1,7 +1,8 @@
 // Includes
 #include "TextureOpenGL.h"
-#include "engine/core/Check.h"
+
 #include <glad/glad.h>
+#include "engine/core/Check.h"
 
 namespace gltut
 {
