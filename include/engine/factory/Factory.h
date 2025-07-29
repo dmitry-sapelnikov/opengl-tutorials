@@ -12,10 +12,10 @@ class Factory
 {
 public:
 	/// Returns the geometry factory
-	virtual GeometryFactory* getGeometries() noexcept = 0;
+	virtual GeometryFactory* getGeometry() noexcept = 0;
 
 	/// Returns the material factory
-	virtual MaterialFactory* getMaterials() noexcept = 0;
+	virtual MaterialFactory* getMaterial() noexcept = 0;
 };
 
 // End of the namespace gltut

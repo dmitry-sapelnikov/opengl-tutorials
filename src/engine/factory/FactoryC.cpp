@@ -12,13 +12,13 @@ FactoryC::FactoryC(Renderer& renderer, Scene& scene) noexcept :
 }
 
 // Returns the geometry factory
-GeometryFactory* FactoryC::getGeometries() noexcept
+GeometryFactory* FactoryC::getGeometry() noexcept
 {
 	return &mGeometries;
 }
 
 // Returns the material factory
-MaterialFactory* FactoryC::getMaterials() noexcept
+MaterialFactory* FactoryC::getMaterial() noexcept
 {
 	return &mMaterials;
 }

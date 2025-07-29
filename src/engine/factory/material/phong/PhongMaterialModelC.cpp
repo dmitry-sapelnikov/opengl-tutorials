@@ -10,6 +10,11 @@ PhongMaterialModelC::PhongMaterialModelC(Material& material) noexcept :
 {
 }
 
+const Material* PhongMaterialModelC::getMaterial() const noexcept
+{
+	return &mMaterial;
+}
+
 void PhongMaterialModelC::setAmbient(Texture* ambient) noexcept
 {
 	mMaterial.setTexture(ambient, 0);

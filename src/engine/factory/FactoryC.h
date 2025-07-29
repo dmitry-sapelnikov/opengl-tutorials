@@ -18,10 +18,10 @@ public:
 	explicit FactoryC(Renderer& renderer, Scene& scene) noexcept;
 
 	// Returns the geometry factory
-	GeometryFactory* getGeometries() noexcept final;
+	GeometryFactory* getGeometry() noexcept final;
 
 	// Returns the material factory
-	MaterialFactory* getMaterials() noexcept final;
+	MaterialFactory* getMaterial() noexcept final;
 
 private:
 	/// The geometry factory

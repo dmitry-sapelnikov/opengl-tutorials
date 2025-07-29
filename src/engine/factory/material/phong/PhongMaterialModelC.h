@@ -7,7 +7,9 @@
 
 namespace gltut
 {
+// Global classes
 
+/// Implementation of the PhongMaterialModel interface
 class PhongMaterialModelC final : public PhongMaterialModel, public NonCopyable
 {
 public:

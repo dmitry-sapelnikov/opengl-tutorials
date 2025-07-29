@@ -47,7 +47,7 @@
     <ClInclude Include="..\..\src\engine\core\File.h" />
     <ClInclude Include="..\..\src\engine\EngineC.h" />
     <ClInclude Include="..\..\src\engine\factory\FactoryC.h" />
-    <ClInclude Include="..\..\src\engine\factory\factory\GeometryFactoryC.h" />
+    <ClInclude Include="..\..\src\engine\factory\geometry\GeometryFactoryC.h" />
     <ClInclude Include="..\..\src\engine\factory\material\MaterialFactoryC.h" />
     <ClInclude Include="..\..\src\engine\factory\material\phong\PhongMaterialModelC.h" />
     <ClInclude Include="..\..\src\engine\factory\material\phong\PhongShader.h" />
@@ -73,7 +73,7 @@
     <ClCompile Include="..\..\src\engine\core\File.cpp" />
     <ClCompile Include="..\..\src\engine\EngineC.cpp" />
     <ClCompile Include="..\..\src\engine\factory\FactoryC.cpp" />
-    <ClCompile Include="..\..\src\engine\factory\factory\GeometryFactoryC.cpp" />
+    <ClCompile Include="..\..\src\engine\factory\geometry\GeometryFactoryC.cpp" />
     <ClCompile Include="..\..\src\engine\factory\material\MaterialFactoryC.cpp" />
     <ClCompile Include="..\..\src\engine\factory\material\phong\PhongMaterialModelC.cpp" />
     <ClCompile Include="..\..\src\engine\factory\material\phong\PhongShader.cpp" />

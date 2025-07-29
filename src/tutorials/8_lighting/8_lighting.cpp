@@ -27,14 +27,15 @@ int main()
 
 		auto* renderer = engine->getRenderer();
 		auto* scene = engine->getScene();
-		auto* mesh = engine->getGeometryFactory()->createSphere(1.0f, 10);
+		auto* mesh = engine->getFactory()->getGeometry()->createSphere(1.0f, 10);
 		GLTUT_CHECK(mesh, "Failed to create mesh");
 
-		gltut::SceneShaderBinding* phongShader = gltut::createPhongShader(*renderer, *scene);
-		GLTUT_CHECK(phongShader, "Failed to create Phong shader");
+		gltut::PhongMaterialModel* phongMaterialModel = engine->getFactory()->getMaterial()->createPhongModel();
+		GLTUT_CHECK(phongMaterialModel, "Failed to create Phong material model");
 
-		phongShader->getShader()->setVec3("lightPos", LIGHT_POSITION.x, LIGHT_POSITION.y, LIGHT_POSITION.z);
-		phongShader->getShader()->setVec3("lightColor", LIGHT_COLOR.x, LIGHT_COLOR.y, LIGHT_COLOR.z);
+		auto* phongShader = phongMaterialModel->getMaterial()->getShader()->getShader();
+		phongShader->setVec3("lightPos", LIGHT_POSITION.x, LIGHT_POSITION.y, LIGHT_POSITION.z);
+		phongShader->setVec3("lightColor", LIGHT_COLOR.x, LIGHT_COLOR.y, LIGHT_COLOR.z);
 
 		gltut::Texture* ambientTexture = renderer->createSolidColorTexture(0.1f, 0.1f, 0.1f);
 		GLTUT_CHECK(ambientTexture, "Failed to create ambient texture");
@@ -45,16 +46,11 @@ int main()
 		gltut::Texture* specularTexture = renderer->loadTexture("assets/container2_specular.png");
 		GLTUT_CHECK(specularTexture, "Failed to create specular texture");
 
-		auto* phongMaterial = scene->createMaterial(phongShader);
-		GLTUT_CHECK(phongMaterial, "Failed to create Phong material");
+		phongMaterialModel->setAmbient(ambientTexture);
+		phongMaterialModel->setDiffuse(diffuseTexture);
+		phongMaterialModel->setSpecular(specularTexture);
 
-		gltut::setPhongMaterialParameters(
-			*phongMaterial,
-			ambientTexture,
-			diffuseTexture,
-			specularTexture);
-
-		auto* object = scene->createGeometry(mesh, phongMaterial);
+		auto* object = scene->createGeometry(mesh, phongMaterialModel->getMaterial());
 		GLTUT_CHECK(object, "Failed to create object");
 
 		auto* lightShader = renderer->loadShader(

@@ -257,9 +257,6 @@
     <ClInclude Include="..\..\include\engine\factory\geometry\GeometryFactory.h">
       <Filter>include\factory\geometry</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\engine\factory\factory\GeometryFactoryC.h">
-      <Filter>src\factory\geometry</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\engine\factory\FactoryC.h">
       <Filter>src\factory</Filter>
     </ClInclude>
@@ -274,6 +271,9 @@
     </ClInclude>
     <ClInclude Include="..\..\include\engine\factory\material\phong\PhongMaterialModel.h">
       <Filter>include\factory\material\phong</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\factory\geometry\GeometryFactoryC.h">
+      <Filter>src\factory\geometry</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -331,9 +331,6 @@
     <ClCompile Include="..\..\src\engine\scene\nodes\GeometryNodeC.cpp">
       <Filter>src\scene\nodes</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\engine\factory\factory\GeometryFactoryC.cpp">
-      <Filter>src\factory\geometry</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\engine\factory\FactoryC.cpp">
       <Filter>src\factory</Filter>
     </ClCompile>
@@ -345,6 +342,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\engine\factory\material\phong\PhongShader.cpp">
       <Filter>src\factory\material\phong</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\factory\geometry\GeometryFactoryC.cpp">
+      <Filter>src\factory\geometry</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
