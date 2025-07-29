@@ -272,6 +272,9 @@
     <ClInclude Include="..\..\src\engine\factory\geometry\GeometryFactoryC.h">
       <Filter>src\factory\geometry</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\engine\math\Color.h">
+      <Filter>include\math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\engine\EngineC.cpp">
