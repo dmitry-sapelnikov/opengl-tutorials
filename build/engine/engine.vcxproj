@@ -37,6 +37,7 @@
     <ClInclude Include="..\..\include\engine\scene\camera\CameraController.h" />
     <ClInclude Include="..\..\include\engine\scene\material\Material.h" />
     <ClInclude Include="..\..\include\engine\scene\nodes\GeometryNode.h" />
+    <ClInclude Include="..\..\include\engine\scene\nodes\LightNode.h" />
     <ClInclude Include="..\..\include\engine\scene\nodes\SceneNode.h" />
     <ClInclude Include="..\..\include\engine\scene\Scene.h" />
     <ClInclude Include="..\..\include\engine\scene\shader\SceneShaderBinding.h" />
@@ -63,6 +64,7 @@
     <ClInclude Include="..\..\src\engine\scene\camera\MouseCameraControllerC.h" />
     <ClInclude Include="..\..\src\engine\scene\material\MaterialC.h" />
     <ClInclude Include="..\..\src\engine\scene\nodes\GeometryNodeC.h" />
+    <ClInclude Include="..\..\src\engine\scene\nodes\LightNodeC.h" />
     <ClInclude Include="..\..\src\engine\scene\nodes\SceneNodeT.h" />
     <ClInclude Include="..\..\src\engine\scene\SceneC.h" />
     <ClInclude Include="..\..\src\engine\scene\shader\SceneShaderBindingC.h" />

@@ -272,8 +272,14 @@
     <ClInclude Include="..\..\src\engine\factory\geometry\GeometryFactoryC.h">
       <Filter>src\factory\geometry</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\engine\scene\nodes\LightNode.h">
+      <Filter>include\scene\nodes</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\engine\math\Color.h">
       <Filter>include\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\scene\nodes\LightNodeC.h">
+      <Filter>src\scene\nodes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

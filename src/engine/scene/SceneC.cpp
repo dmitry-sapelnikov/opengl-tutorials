@@ -52,6 +52,18 @@ GeometryNode* SceneC::createGeometry(
 	return result;
 }
 
+LightNode* SceneC::createLight(
+	LightNode::Type type,
+	const Matrix4& transform,
+	const SceneNode* parent) noexcept
+{
+	LightNode* result = nullptr;
+	GLTUT_CATCH_ALL_BEGIN
+		result = &mLights.emplace_back(type, transform, parent);
+	GLTUT_CATCH_ALL_END("Cannot create a light")
+	return result;
+}
+
 Camera* SceneC::createCamera(
 	const Vector3& position,
 	const Vector3& target,

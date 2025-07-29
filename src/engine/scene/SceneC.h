@@ -12,6 +12,7 @@
 #include "./material/MaterialC.h"
 #include "./shader/SceneShaderBindingC.h"
 #include "./nodes/GeometryNodeC.h"
+#include "./nodes/LightNodeC.h"
 
 namespace gltut
 {
@@ -33,6 +34,11 @@ public:
 		const Material* material,
 		const Matrix4& transform = Matrix4::identity(),
 		const SceneNode* parent = nullptr) noexcept final;
+
+	LightNode* createLight(
+		LightNode::Type type,
+		const Matrix4& transform = Matrix4::identity(),
+		const SceneNode* parent = nullptr) noexcept override;
 
 	Camera* createCamera(
 		const Vector3& position,
@@ -68,8 +74,11 @@ private:
 	/// The materials
 	std::deque<MaterialC> mMaterials;
 
-	/// The scene objects
+	/// Geometry nodes
 	std::deque<GeometryNodeC> mGeometries;
+
+	/// Light nodes
+	std::deque<LightNodeC> mLights;
 
 	///	The cameras
 	std::deque<CameraC> mCameras;
