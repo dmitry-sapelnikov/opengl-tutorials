@@ -13,7 +13,7 @@ class Matrix3
 {
 public:
 	// Constructor
-	Matrix3(
+	constexpr Matrix3(
 		float m00 = 0, float m01 = 0, float m02 = 0,
 		float m10 = 0, float m11 = 0, float m12 = 0,
 		float m20 = 0, float m21 = 0, float m22 = 0) noexcept

@@ -15,7 +15,7 @@ struct Vector3
 	float z;
 
 	// Constructor
-	Vector3(
+	constexpr Vector3(
 		float x = 0.f,
 		float y = 0.f,
 		float z = 0.f) noexcept :

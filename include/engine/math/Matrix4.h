@@ -11,7 +11,7 @@ class Matrix4
 {
 public:
 	// Constructor
-	Matrix4(
+	constexpr Matrix4(
 		float m00 = 0, float m01 = 0, float m02 = 0, float m03 = 0,
 		float m10 = 0, float m11 = 0, float m12 = 0, float m13 = 0,
 		float m20 = 0, float m21 = 0, float m22 = 0, float m23 = 0,

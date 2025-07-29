@@ -22,7 +22,7 @@ struct Point2
 	}
 
 	/// Constructor
-	Point2(T x, T y) :
+	constexpr Point2(T x, T y) :
 		x(x),
 		y(y)
 	{
