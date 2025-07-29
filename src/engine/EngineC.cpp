@@ -37,14 +37,10 @@ EngineC::~EngineC() noexcept
 
 bool EngineC::update() noexcept
 {
-	if (!mWindow->update())
-	{
-		return false;
-	}
 	mRenderer->clear();
 	mScene->update();
 	mScene->render();
-	return true;
+	return mWindow->update();
 }
 
 Window* EngineC::getWindow() noexcept
