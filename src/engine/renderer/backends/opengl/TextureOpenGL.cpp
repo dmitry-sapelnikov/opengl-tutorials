@@ -7,6 +7,8 @@
 namespace gltut
 {
 
+static_assert(sizeof(GLuint) == sizeof(u32), "GLuint must be the same size as u32");
+
 // Global classes
 TextureOpenGL::TextureOpenGL(
 	const u8* data,

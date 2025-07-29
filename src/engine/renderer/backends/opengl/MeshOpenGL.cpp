@@ -11,6 +11,8 @@ namespace gltut
 namespace
 {
 
+static_assert(sizeof(GLuint) == sizeof(u32), "GLuint must be the same size as u32");
+
 GLuint allocateVertexBuffer(const float* vertices, u32 count) noexcept
 {
 	GLuint vbo = 0;

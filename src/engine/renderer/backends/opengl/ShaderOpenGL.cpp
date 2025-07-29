@@ -13,6 +13,8 @@ namespace
 	const size_t BUFFER_SIZE = 512;
 }
 
+static_assert(sizeof(GLuint) == sizeof(u32), "GLuint must be the same size as u32");
+
 // Local functions
 unsigned createShader(
 	GLenum shaderType,

@@ -26,16 +26,16 @@ public:
 
 private:
 	/// Indices count
-	GLsizei mIndexCount;
+	u32 mIndexCount;
 
 	/// The vertex buffer object
-	GLuint mVertexBuffer = 0;
+	u32 mVertexBuffer = 0;
 
 	/// The element buffer object
-	GLuint mIndexBuffer = 0;
+	u32 mIndexBuffer = 0;
 
 	/// The vertex array object
-	GLuint mVertexArray = 0;
+	u32 mVertexArray = 0;
 };
 
 // End of the namespace gltut
