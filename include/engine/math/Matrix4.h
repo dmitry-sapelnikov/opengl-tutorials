@@ -214,6 +214,12 @@ public:
 			m[0][2], m[1][2], m[2][2] };
 	}
 
+	/// Extracts the translation component from the matrix
+	Vector3 getTranslation() const noexcept
+	{
+		return { m[0][3], m[1][3], m[2][3] };
+	}
+
 	/// Returns the identity matrix
 	static Matrix4 identity() noexcept;
 
