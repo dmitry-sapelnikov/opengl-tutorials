@@ -215,9 +215,6 @@
     <ClInclude Include="..\..\include\engine\scene\material\Material.h">
       <Filter>include\scene\material</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\engine\scene\material\PhongMaterial.h">
-      <Filter>include\scene\material</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\engine\scene\material\MaterialC.h">
       <Filter>src\scene\material</Filter>
     </ClInclude>
