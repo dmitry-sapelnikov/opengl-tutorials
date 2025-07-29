@@ -17,16 +17,38 @@ public:
 		const Mesh* mesh,
 		const Material* material,
 		const Matrix4& transform,
-		const SceneNode* parent) noexcept;
+		const SceneNode* parent) noexcept :
+
+		SceneNodeT<GeometryNode>(transform, parent),
+		mMesh(mesh),
+		mMaterial(material)
+	{
+	}
 
 	/// Adds a mesh
-	void setMesh(const Mesh* mesh) noexcept final;
+	void setMesh(const Mesh* mesh) noexcept final
+	{
+		mMesh = mesh;
+	}
 
 	/// Sets a material
-	void setMaterial(const Material* material) noexcept final;
+	void setMaterial(const Material* material) noexcept final
+	{
+		mMaterial = material;
+	}
 
 	/// Renders the object
-	void render() const noexcept final;
+	void render() const noexcept final
+	{
+		if (mMesh != nullptr)
+		{
+			if (mMaterial != nullptr)
+			{
+				mMaterial->activate(this);
+			}
+			mMesh->render();
+		}
+	}
 
 private:
 	/// The mesh

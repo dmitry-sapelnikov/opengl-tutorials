@@ -325,9 +325,6 @@
     <ClCompile Include="..\..\src\engine\scene\shader\SceneShaderBindingC.cpp">
       <Filter>src\scene\shader</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\engine\scene\nodes\GeometryNodeC.cpp">
-      <Filter>src\scene\nodes</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\engine\factory\FactoryC.cpp">
       <Filter>src\factory</Filter>
     </ClCompile>

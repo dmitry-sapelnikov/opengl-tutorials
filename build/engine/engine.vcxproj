@@ -87,7 +87,6 @@
     <ClCompile Include="..\..\src\engine\scene\camera\FPSCameraControllerC.cpp" />
     <ClCompile Include="..\..\src\engine\scene\camera\MouseCameraControllerC.cpp" />
     <ClCompile Include="..\..\src\engine\scene\material\MaterialC.cpp" />
-    <ClCompile Include="..\..\src\engine\scene\nodes\GeometryNodeC.cpp" />
     <ClCompile Include="..\..\src\engine\scene\SceneC.cpp" />
     <ClCompile Include="..\..\src\engine\scene\shader\SceneShaderBindingC.cpp" />
     <ClCompile Include="..\..\src\engine\window\FPSCounter.cpp" />
