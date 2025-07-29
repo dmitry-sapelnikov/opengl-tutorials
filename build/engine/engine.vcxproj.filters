@@ -63,9 +63,6 @@
     <Filter Include="src\scene\material">
       <UniqueIdentifier>{87d4ba77-3e83-4c44-956e-a2be84d152cb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\scene\material\phong">
-      <UniqueIdentifier>{1cbfed58-929b-4e69-8f56-1b40e2d4d4b9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="include\renderer\mesh">
       <UniqueIdentifier>{7b7e2a01-d409-4e63-bdcf-3793738c8d14}</UniqueIdentifier>
     </Filter>
@@ -81,11 +78,29 @@
     <Filter Include="src\scene\nodes">
       <UniqueIdentifier>{e870d6c5-c98c-48fb-a556-48549a8b5f4d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="include\factories">
+    <Filter Include="include\factory">
       <UniqueIdentifier>{a2a96b07-6b0b-4374-81e8-a3fcfbf667fd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\factories">
+    <Filter Include="include\factory\material">
+      <UniqueIdentifier>{87d86816-b9aa-4593-bb66-eb3443661430}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\factory\geometry">
+      <UniqueIdentifier>{6cceb507-70aa-4857-9adf-d7ebb5885c82}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\factory">
       <UniqueIdentifier>{1aa5c8fd-c1c9-498e-a282-c3765e8ddb43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\factory\geometry">
+      <UniqueIdentifier>{3ae1d333-3d9b-4786-98b9-d73cd5324f3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\factory\material">
+      <UniqueIdentifier>{31044889-474a-4b1d-bda8-b4c99b1c6485}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\factory\material\phong">
+      <UniqueIdentifier>{360aa92b-cd77-45bb-a30c-a075e64a2ac8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\factory\material\phong">
+      <UniqueIdentifier>{a6f8e375-1223-4dae-a925-20ac2bec9d85}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -233,11 +248,32 @@
     <ClInclude Include="..\..\src\engine\scene\nodes\SceneNodeT.h">
       <Filter>src\scene\nodes</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\engine\factories\GeometryFactory.h">
-      <Filter>include\factories</Filter>
+    <ClInclude Include="..\..\include\engine\factory\Factory.h">
+      <Filter>include\factory</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\engine\factories\GeometryFactoryC.h">
-      <Filter>src\factories</Filter>
+    <ClInclude Include="..\..\include\engine\factory\material\MaterialFactory.h">
+      <Filter>include\factory\material</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\factory\geometry\GeometryFactory.h">
+      <Filter>include\factory\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\factory\factory\GeometryFactoryC.h">
+      <Filter>src\factory\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\factory\FactoryC.h">
+      <Filter>src\factory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\factory\material\MaterialFactoryC.h">
+      <Filter>src\factory\material</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\factory\material\phong\PhongMaterialModelC.h">
+      <Filter>src\factory\material\phong</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\factory\material\phong\PhongShader.h">
+      <Filter>src\factory\material\phong</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\factory\material\phong\PhongMaterialModel.h">
+      <Filter>include\factory\material\phong</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -286,9 +322,6 @@
     <ClCompile Include="..\..\src\engine\scene\material\MaterialC.cpp">
       <Filter>src\scene\material</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\engine\scene\material\phong\PhongMaterial.cpp">
-      <Filter>src\scene\material\phong</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\engine\renderer\backends\opengl\MeshOpenGL.cpp">
       <Filter>src\renderer\backends\opengl</Filter>
     </ClCompile>
@@ -298,8 +331,20 @@
     <ClCompile Include="..\..\src\engine\scene\nodes\GeometryNodeC.cpp">
       <Filter>src\scene\nodes</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\engine\factories\GeometryFactoryC.cpp">
-      <Filter>src\factories</Filter>
+    <ClCompile Include="..\..\src\engine\factory\factory\GeometryFactoryC.cpp">
+      <Filter>src\factory\geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\factory\FactoryC.cpp">
+      <Filter>src\factory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\factory\material\MaterialFactoryC.cpp">
+      <Filter>src\factory\material</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\factory\material\phong\PhongMaterialModelC.cpp">
+      <Filter>src\factory\material\phong</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\factory\material\phong\PhongShader.cpp">
+      <Filter>src\factory\material\phong</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -1,7 +1,7 @@
 #pragma once
 
 // Includes
-#include "engine/factories/GeometryFactory.h"
+#include "engine/factory/Factory.h"
 #include "engine/renderer/Renderer.h"
 #include "engine/scene/Scene.h"
 #include "engine/window/Window.h"
@@ -32,7 +32,7 @@ public:
 	virtual Scene* getScene() noexcept = 0;
 
 	/// Returns the geometry factory
-	virtual GeometryFactory* getGeometryFactory() noexcept = 0;
+	virtual Factory* getFactory() noexcept = 0;
 };
 
 //	Global functions

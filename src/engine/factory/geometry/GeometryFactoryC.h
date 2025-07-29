@@ -3,7 +3,7 @@
 // Includes
 #include "engine/core/NonCopyable.h"
 #include "engine/renderer/Renderer.h"
-#include "engine/factories/GeometryFactory.h"
+#include "engine/factory/geometry/GeometryFactory.h"
 
 namespace gltut
 {

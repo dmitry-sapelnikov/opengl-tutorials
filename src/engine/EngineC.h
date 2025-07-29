@@ -5,7 +5,9 @@
 #include "engine/core/NonCopyable.h"
 #include "engine/Engine.h"
 #include "scene/SceneC.h"
-#include "window/WindowC.h"
+#include "engine/window/Window.h"
+#include "engine/factory/Factory.h"
+
 
 namespace gltut
 {
@@ -32,23 +34,23 @@ public:
 	Scene* getScene() noexcept final;
 
 	/// Returns the geometry factory
-	GeometryFactory* getGeometryFactory() noexcept final;
+	Factory* getFactory() noexcept final;
 
 	/// Called when the window is resized
 	void onEvent(const Event& event) noexcept final;
 
 private:
 	/// The window
-	std::unique_ptr<WindowC> mWindow;
+	std::unique_ptr<Window> mWindow;
 
 	///	The renderer
 	std::unique_ptr<Renderer> mRenderer;
 
 	/// The scene
-	std::unique_ptr<SceneC> mScene;
+	std::unique_ptr<Scene> mScene;
 
 	/// The geometry factory
-	std::unique_ptr<GeometryFactory> mGeometryFactory;
+	std::unique_ptr<Factory> mFactory;
 };
 
 // End of the namespace gltut

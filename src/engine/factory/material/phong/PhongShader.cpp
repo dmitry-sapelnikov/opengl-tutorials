@@ -1,5 +1,5 @@
 // Includes
-#include "engine/scene/material/PhongMaterial.h"
+#include "PhongShader.h"
 
 
 namespace gltut
@@ -108,19 +108,6 @@ SceneShaderBinding* createPhongShader(Renderer& renderer, Scene& scene) noexcept
 	binding->bind(SceneShaderBinding::Parameter::CAMERA_POSITION, "viewPos");
 
 	return binding;
-}
-
-void setPhongMaterialParameters(
-	Material& material,
-	Texture* ambient,
-	Texture* diffuse,
-	Texture* specular,
-	float shininess) noexcept
-{
-	material.setTexture(ambient, 0);
-	material.setTexture(diffuse, 1);
-	material.setTexture(specular, 2);
-	material.getShaderArguments()->setFloat("shininess", shininess);
 }
 
 // End of the namespace gltut
