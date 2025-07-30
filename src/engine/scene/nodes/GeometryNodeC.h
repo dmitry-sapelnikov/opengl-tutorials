@@ -17,7 +17,7 @@ public:
 		const Mesh* mesh,
 		const Material* material,
 		const Matrix4& transform,
-		const SceneNode* parent) noexcept :
+		SceneNode* parent) noexcept :
 
 		SceneNodeT<GeometryNode>(transform, parent),
 		mMesh(mesh),

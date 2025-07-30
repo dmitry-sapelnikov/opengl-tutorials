@@ -33,7 +33,7 @@ public:
 		const Mesh* mesh,
 		const Material* material,
 		const Matrix4& transform = Matrix4::identity(),
-		const SceneNode* parent = nullptr) noexcept final;
+		SceneNode* parent = nullptr) noexcept final;
 
 	LightNode* createLight(
 		LightNode::Type type,

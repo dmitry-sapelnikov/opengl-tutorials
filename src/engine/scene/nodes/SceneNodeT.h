@@ -21,10 +21,14 @@ public:
 	/// Constructor
 	SceneNodeT(
 		const Matrix4& transform,
-		const SceneNode* parent) noexcept :
-		mTransform(transform)
+		SceneNode* parent) noexcept :
+		mTransform(transform),
+		mGlobalTransform(mTransform)
 	{
-		setParent(parent);
+		if (parent != nullptr)
+		{
+			parent->addChild(this);
+		}
 	}
 
 	/// Returns the transform
@@ -129,14 +133,14 @@ private:
 	}
 
 	/// Sets the parent node. For internal use only.
-	void setParent(const SceneNode* parent) noexcept final
+	void setParent(SceneNode* parent) noexcept final
 	{
 		mParent = parent;
 		updateGlobalTransform();
 	}
 
 	/// The parent node
-	const SceneNode* mParent = nullptr;
+	SceneNode* mParent = nullptr;
 
 	/// The transform relative to the parent
 	Matrix4 mTransform;

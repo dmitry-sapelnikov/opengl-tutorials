@@ -76,7 +76,7 @@ public:
 		const Mesh* mesh,
 		const Material* material,
 		const Matrix4& transform = Matrix4::identity(),
-		const SceneNode* parent = nullptr) noexcept = 0;
+		SceneNode* parent = nullptr) noexcept = 0;
 
 	/// Creates a scene light
 	virtual LightNode* createLight(
