@@ -43,7 +43,7 @@ GeometryNode* SceneC::createGeometry(
 	const Mesh* mesh,
 	const Material* material,
 	const Matrix4& transform,
-	const SceneNode* parent) noexcept
+	SceneNode* parent) noexcept
 {
 	GeometryNode* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN

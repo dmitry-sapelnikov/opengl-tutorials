@@ -52,7 +52,7 @@ private:
 	virtual void updateGlobalTransform() noexcept = 0;
 
 	/// Sets the parent of this node
-	virtual void setParent(const SceneNode* parent) noexcept = 0;
+	virtual void setParent(SceneNode* parent) noexcept = 0;
 };
 
 // End of the namespace gltut
