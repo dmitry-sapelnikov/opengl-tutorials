@@ -130,7 +130,7 @@ MeshOpenGL::~MeshOpenGL()
 
 void MeshOpenGL::render() const noexcept
 {
-	glBindVertexArray(mVertexBuffer);
+	glBindVertexArray(mVertexArray);
 	glDrawElements(GL_TRIANGLES, mIndexCount, GL_UNSIGNED_INT, nullptr);
 }
 
