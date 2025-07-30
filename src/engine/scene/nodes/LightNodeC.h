@@ -14,7 +14,7 @@ public:
 	LightNodeC(
 		LightNode::Type type,
 		const Matrix4& transform,
-		const SceneNode* parent) noexcept :
+		SceneNode* parent) noexcept :
 		SceneNodeT<LightNode>(transform, parent),
 		mType(type)
 	{

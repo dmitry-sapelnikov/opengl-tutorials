@@ -38,7 +38,11 @@ public:
 	LightNode* createLight(
 		LightNode::Type type,
 		const Matrix4& transform = Matrix4::identity(),
-		const SceneNode* parent = nullptr) noexcept override;
+		SceneNode* parent = nullptr) noexcept override;
+
+	u32 getLightCount() const noexcept final;
+
+	LightNode* getLight(u32 index) const noexcept final;
 
 	Camera* createCamera(
 		const Vector3& position,

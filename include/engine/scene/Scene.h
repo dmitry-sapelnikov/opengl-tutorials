@@ -82,7 +82,13 @@ public:
 	virtual LightNode* createLight(
 		LightNode::Type type,
 		const Matrix4& transform = Matrix4::identity(),
-		const SceneNode* parent = nullptr) noexcept = 0;
+		SceneNode* parent = nullptr) noexcept = 0;
+
+	/// Returns the number of lights in the scene
+	virtual u32 getLightCount() const noexcept = 0;
+
+	/// Returns the light at the specified index
+	virtual LightNode* getLight(u32 index) const noexcept = 0;
 };
 
 // End of the namespace gltut

@@ -40,15 +40,26 @@ static const char* PHONG_FRAGMENT_SHADER = R"(
 #version 330 core
 
 // Uniforms
-uniform sampler2D ambientSampler;
 uniform sampler2D diffuseSampler;
 uniform sampler2D specularSampler;
-
 uniform float shininess;
-
-uniform vec3 lightColor;
-uniform vec3 lightPos;
 uniform vec3 viewPos;
+
+struct LightColor
+{
+	vec3 ambient;
+	vec3 diffuse;
+	vec3 specular;
+};
+
+struct PointLight
+{
+	vec3 pos;
+	LightColor color;
+};
+
+#define MAX_POINT_LIGHTS 4
+uniform PointLight pointLights[MAX_POINT_LIGHTS];
 
 // Inputs
 in vec3 pos;
@@ -61,21 +72,25 @@ out vec4 outColor;
 void main()
 {
 	vec3 norm = normalize(normal);
+	for (int i = 0; i < MAX_POINT_LIGHTS; ++i)
+	{
+		vec3 geomDiffuse = texture(diffuseSampler, texCoord).rgb;
 
-	// Ambient
-	vec3 ambient = lightColor * texture(ambientSampler, texCoord).rgb;
+		// Ambient
+		vec3 ambient = pointLights[i].color.ambient * geomDiffuse;
 
-	// Diffuse
-	vec3 lightDir = normalize(lightPos - pos);
-	vec3 diffuse = max(0.0f, dot(norm, lightDir)) * lightColor * texture(diffuseSampler, texCoord).rgb;
+		// Diffuse
+		vec3 lightDir = normalize(pointLights[i].pos - pos);
+		vec3 diffuse = max(0.0f, dot(norm, lightDir)) * pointLights[i].color.diffuse * geomDiffuse;
 
-	// Specular
-	vec3 viewDir = normalize(viewPos - pos);
-	vec3 reflectDir = reflect(-lightDir, norm);
-	float spec = pow(max(dot(viewDir, reflectDir), 0.0), shininess);
-	vec3 specular = spec * lightColor * texture(specularSampler, texCoord).rgb;
+		// Specular
+		vec3 viewDir = normalize(viewPos - pos);
+		vec3 reflectDir = reflect(-lightDir, norm);
+		float spec = pow(max(dot(viewDir, reflectDir), 0.0), shininess);
+		vec3 specular = spec * pointLights[i].color.specular * texture(specularSampler, texCoord).rgb;
 
-	outColor = vec4(ambient + diffuse + specular, 1.0f);
+		outColor += vec4(ambient + diffuse + specular, 1.0f);
+	}
 })";
 
 // Default shininess value
@@ -98,14 +113,18 @@ SceneShaderBinding* createPhongShader(Renderer& renderer, Scene& scene) noexcept
 		return nullptr;
 	}
 
-	shader->setInt("ambientSampler", 0);
-	shader->setInt("diffuseSampler", 1);
-	shader->setInt("specularSampler", 2);
+	shader->setInt("diffuseSampler", 0);
+	shader->setInt("specularSampler", 1);
 	shader->setFloat("shininess", DEFAULT_SHINESS);
 
 	bindModelViewProjectionShaderParameters(binding, "model", "view", "projection");
-	binding->bind(SceneShaderBinding::Parameter::NODE_NORMAL_MATRIX, "normalMat");
+	binding->bind(SceneShaderBinding::Parameter::GEOMETRY_NORMAL_MATRIX, "normalMat");
 	binding->bind(SceneShaderBinding::Parameter::CAMERA_POSITION, "viewPos");
+
+	binding->bind(SceneShaderBinding::Parameter::POINT_LIGHT_POSITION, "pointLights.pos");
+	binding->bind(SceneShaderBinding::Parameter::POINT_LIGHT_AMBIENT_COLOR, "pointLights.color.ambient");
+	binding->bind(SceneShaderBinding::Parameter::POINT_LIGHT_DIFFUSE_COLOR, "pointLights.color.diffuse");
+	binding->bind(SceneShaderBinding::Parameter::POINT_LIGHT_SPECULAR_COLOR, "pointLights.color.specular");
 
 	return binding;
 }

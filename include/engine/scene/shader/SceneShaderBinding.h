@@ -23,10 +23,41 @@ public:
 		/// Camera view position
 		CAMERA_POSITION,
 
-		/// Scene node matrix (model matrix)
-		NODE_MATRIX,
-		/// Scene node normal matrix
-		NODE_NORMAL_MATRIX,
+		/// Scene geometry node matrix (model matrix)
+		GEOMETRY_MATRIX,
+		/// Scene geometry node normal matrix
+		GEOMETRY_NORMAL_MATRIX,
+
+		/// Directional light position
+		DIRECTIONAL_LIGHT_POSITION,
+		/// Directional light direction
+		DIRECTIONAL_LIGHT_DIRECTION,
+		/// Directional light ambient color
+		DIRECTIONAL_LIGHT_AMBIENT_COLOR,
+		/// Directional light diffuse color
+		DIRECTIONAL_LIGHT_DIFFUSE_COLOR,
+		/// Directional light specular color
+		DIRECTIONAL_LIGHT_SPECULAR_COLOR,
+
+		/// Point light position
+		POINT_LIGHT_POSITION,
+		/// Point light ambient color
+		POINT_LIGHT_AMBIENT_COLOR,
+		/// Point light diffuse color
+		POINT_LIGHT_DIFFUSE_COLOR,
+		/// Point light specular color
+		POINT_LIGHT_SPECULAR_COLOR,
+
+		/// Spot light position
+		SPOT_LIGHT_POSITION,
+		/// Spot light direction
+		SPOT_LIGHT_DIRECTION,
+		/// Spot light ambient color
+		SPOT_LIGHT_AMBIENT_COLOR,
+		/// Spot light diffuse color
+		SPOT_LIGHT_DIFFUSE_COLOR,
+		/// Spot light specular color
+		SPOT_LIGHT_SPECULAR_COLOR,
 
 		/// Total number of scene parameters
 		TOTAL_COUNT
@@ -84,7 +115,7 @@ inline void bindModelViewProjectionShaderParameters(
 	{
 		return;
 	}
-	binding->bind(SceneShaderBinding::Parameter::NODE_MATRIX, modelMatrix);
+	binding->bind(SceneShaderBinding::Parameter::GEOMETRY_MATRIX, modelMatrix);
 	binding->bind(SceneShaderBinding::Parameter::CAMERA_VIEW_MATRIX, viewMatrix);
 	binding->bind(SceneShaderBinding::Parameter::CAMERA_PROJECTION_MATRIX, projectionMatrix);
 }

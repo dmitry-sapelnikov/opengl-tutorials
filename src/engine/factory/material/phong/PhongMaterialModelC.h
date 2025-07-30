@@ -19,9 +19,6 @@ public:
 	// Returns the material
 	const Material* getMaterial() const noexcept final;
 
-	// Sets the ambient texture
-	void setAmbient(Texture* ambient) noexcept final;
-
 	// Sets the diffuse texture
 	void setDiffuse(Texture* diffuse) noexcept final;
 
