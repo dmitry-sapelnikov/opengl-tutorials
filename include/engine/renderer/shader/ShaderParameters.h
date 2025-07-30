@@ -43,7 +43,7 @@ public:
 	int32 getParameterLocationChecked(const char* name) const noexcept
 	{
 		const int location = getParameterLocation(name);
-		GLTUT_ASSERT(location != -1);
+		GLTUT_ASSERT(location >= 0);
 		return location;
 	}
 

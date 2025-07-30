@@ -10,7 +10,7 @@ void addParameterValue(
 	int32 location,
 	const T& value) noexcept
 {
-	GLTUT_ASSERT(location > 0);
+	GLTUT_ASSERT(location >= 0);
 
 	GLTUT_CATCH_ALL_BEGIN
 		// We use a simple linear search to find the location assuming that
