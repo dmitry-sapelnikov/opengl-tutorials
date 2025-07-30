@@ -217,7 +217,7 @@ public:
 	/// Extracts the translation component from the matrix
 	Vector3 getTranslation() const noexcept
 	{
-		return { m[0][3], m[1][3], m[2][3] };
+		return { m[3][0], m[3][1], m[3][2] };
 	}
 
 	/// Returns the identity matrix
