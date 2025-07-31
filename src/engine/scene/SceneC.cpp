@@ -32,6 +32,11 @@ SceneShaderBinding* SceneC::createShaderBinding(Shader* shader) noexcept
 
 Material* SceneC::createMaterial(SceneShaderBinding* shaderBinding) noexcept
 {
+	if (shaderBinding == nullptr)
+	{
+		return nullptr;
+	}
+
 	Material* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN
 		result = &mMaterials.emplace_back(shaderBinding);

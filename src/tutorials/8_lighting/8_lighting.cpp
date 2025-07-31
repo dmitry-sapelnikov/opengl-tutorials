@@ -160,7 +160,18 @@ int main()
 		auto* renderer = engine->getRenderer();
 		auto* scene = engine->getScene();
 
-		gltut::PhongMaterialModel* phongMaterialModel = engine->getFactory()->getMaterial()->createPhongModel();
+		auto* materialFactory = engine->getFactory()->getMaterial();
+
+		auto* phongShader = materialFactory->createPhongShader(
+			renderer,
+			scene,
+			0, // No directional lights
+			3, // Use 3 point lights
+			1); // Use 1 spot light
+
+		GLTUT_CHECK(phongShader, "Failed to create Phong shader");
+
+		gltut::PhongMaterialModel* phongMaterialModel = materialFactory->createPhongMaterial(phongShader);
 		GLTUT_CHECK(phongMaterialModel, "Failed to create Phong material model");
 
 		gltut::Texture* diffuseTexture = renderer->loadTexture("assets/container2.png");

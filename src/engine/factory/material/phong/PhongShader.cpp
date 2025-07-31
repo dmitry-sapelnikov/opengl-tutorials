@@ -1,6 +1,6 @@
 // Includes
+#include <string>
 #include "PhongShader.h"
-
 
 namespace gltut
 {
@@ -37,7 +37,6 @@ void main()
 
 // Fragment shader source code for Phong shading
 static const char* PHONG_FRAGMENT_SHADER = R"(
-#version 330 core
 
 // Uniforms
 uniform sampler2D diffuseSampler;
@@ -52,15 +51,17 @@ struct LightColor
 	vec3 specular;
 };
 
+#if MAX_POINT_LIGHTS > 0
 struct PointLight
 {
 	LightColor color;
 	vec3 pos;
 };
 
-#define MAX_POINT_LIGHTS 4
 uniform PointLight pointLights[MAX_POINT_LIGHTS];
+#endif
 
+#if MAX_SPOT_LIGHTS > 0
 struct SpotLight
 {
 	LightColor color;
@@ -70,8 +71,8 @@ struct SpotLight
 	float outerAngleCos;
 };
 
-#define MAX_SPOT_LIGHTS 4
 uniform SpotLight spotLights[MAX_SPOT_LIGHTS];
+#endif
 
 // Inputs
 in vec3 pos;
@@ -87,6 +88,7 @@ void main()
 	vec3 viewDir = normalize(viewPos - pos);
 
 	vec3 result = vec3(0.0f);
+#if MAX_POINT_LIGHTS > 0
 	for (int i = 0; i < MAX_POINT_LIGHTS; ++i)
 	{
 		vec3 geomDiffuse = texture(diffuseSampler, texCoord).rgb;
@@ -105,7 +107,9 @@ void main()
 
 		result += ambient + diffuse + specular;
 	}
+#endif
 
+#if MAX_SPOT_LIGHTS > 0
 	for (int i = 0; i < MAX_SPOT_LIGHTS; ++i)
 	{
 		vec3 geomDiffuse = texture(diffuseSampler, texCoord).rgb;
@@ -132,6 +136,7 @@ void main()
 			result += intensity * (diffuse + specular);
 		}
 	}
+#endif
 	outColor = vec4(result, 1.0f);
 })";
 
@@ -139,9 +144,26 @@ void main()
 static constexpr float DEFAULT_SHINESS = 32.0f;
 
 // Global functions
-SceneShaderBinding* createPhongShader(Renderer& renderer, Scene& scene) noexcept
+SceneShaderBinding* createPhongShader(
+	Renderer& renderer,
+	Scene& scene,
+	u32 maxDirectionalLights,
+	u32 maxPointLights,
+	u32 maxSpotLights) noexcept
 {
-	Shader* shader = renderer.createShader(PHONG_VERTEX_SHADER, PHONG_FRAGMENT_SHADER);
+	// No lights, no shader
+	if (maxDirectionalLights + maxPointLights + maxSpotLights == 0)
+	{
+		return nullptr;
+	}
+
+	std::string fragmentShader = "#version 330 core\n";
+	fragmentShader += "#define MAX_DIRECTIONAL_LIGHTS " + std::to_string(maxDirectionalLights) + "\n";
+	fragmentShader += "#define MAX_POINT_LIGHTS " + std::to_string(maxPointLights) + "\n";
+	fragmentShader += "#define MAX_SPOT_LIGHTS " + std::to_string(maxSpotLights) + "\n";
+	fragmentShader += PHONG_FRAGMENT_SHADER;
+
+	Shader* shader = renderer.createShader(PHONG_VERTEX_SHADER, fragmentShader.c_str());
 	if (shader == nullptr)
 	{
 		return nullptr;
