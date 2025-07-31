@@ -54,7 +54,6 @@ private:
 		const LightNode& light,
 		u32 lightInd,
 		SceneShaderBinding::Parameter position,
-		const SceneShaderBinding::Parameter* direction,
 		SceneShaderBinding::Parameter ambientColor,
 		SceneShaderBinding::Parameter diffuseColor,
 		SceneShaderBinding::Parameter specularColor) const noexcept;

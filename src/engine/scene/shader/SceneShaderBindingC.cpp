@@ -9,24 +9,47 @@ namespace gltut
 // Local functions
 namespace
 {
+
+static std::string getFullParameter(
+	const std::pair<std::string, std::string>& parameterAttribute,
+	u32 index)
+{
+	const auto& [parameter, attribute] = parameterAttribute;
+	if (parameter.empty())
+	{
+		return "";
+	}
+	return
+		parameter + "[" + std::to_string(index) + "]" +
+		(attribute.empty() ? "" : "." + attribute);
+}
+
 static void setVector3(
 	Shader& shader,
 	const std::pair<std::string, std::string>& parameterAttribute,
 	u32 index,
 	const Vector3& value) noexcept
 {
-	const auto& [parameter, attribute] = parameterAttribute;
-	if (parameter.empty())
+	if (const auto fullName = getFullParameter(parameterAttribute, index);
+		!fullName.empty())
 	{
-		return;
+		shader.setVec3(fullName.c_str(), value.x, value.y, value.z);
 	}
-
-	const std::string fullParameter =
-		parameter + "[" + std::to_string(index) + "]" +
-		(attribute.empty() ? "" : "." + attribute);
-
-	shader.setVec3(fullParameter.c_str(), value.x, value.y, value.z);
 }
+
+static void setFloat(
+	Shader& shader,
+	const std::pair<std::string, std::string>& parameterAttribute,
+	u32 index,
+	float value) noexcept
+{
+	if (const auto fullName = getFullParameter(parameterAttribute, index);
+		!fullName.empty())
+	{
+		shader.setFloat(fullName.c_str(), value);
+	}
+}
+
 }
 
 // Global classes
@@ -148,7 +171,6 @@ void SceneShaderBindingC::activateLight(
 	const LightNode& light,
 	u32 lightInd,
 	SceneShaderBinding::Parameter position,
-	const SceneShaderBinding::Parameter* direction,
 	SceneShaderBinding::Parameter ambientColor,
 	SceneShaderBinding::Parameter diffuseColor,
 	SceneShaderBinding::Parameter specularColor) const noexcept
@@ -160,15 +182,6 @@ void SceneShaderBindingC::activateLight(
 		getShaderParameterParts(position),
 		lightInd,
 		light.getGlobalTransform().getTranslation());
-
-	if (direction != nullptr)
-	{
-		setVector3(
-			*mShader,
-			getShaderParameterParts(*direction),
-			lightInd,
-			light.getGlobalDirection());
-	}
 
 	setVector3(
 		*mShader,
@@ -207,16 +220,21 @@ void SceneShaderBindingC::activateLights(const Scene& scene) const
 		{
 		case LightNode::Type::DIRECTIONAL:
 		{
-			const Parameter direction = Parameter::DIRECTIONAL_LIGHT_DIRECTION;
 			activateLight(
 				*light,
 				directionalInd,
 				Parameter::DIRECTIONAL_LIGHT_POSITION,
-				&direction,
 				Parameter::DIRECTIONAL_LIGHT_AMBIENT_COLOR,
 				Parameter::DIRECTIONAL_LIGHT_DIFFUSE_COLOR,
 				Parameter::DIRECTIONAL_LIGHT_SPECULAR_COLOR);
-			directionalInd++;
+
+			setVector3(
+				*mShader,
+				getShaderParameterParts(Parameter::DIRECTIONAL_LIGHT_DIRECTION),
+				lightInd,
+				light->getGlobalDirection());
+
+			++directionalInd;
 		}
 		break;
 
@@ -226,11 +244,11 @@ void SceneShaderBindingC::activateLights(const Scene& scene) const
 				*light,
 				pointInd,
 				Parameter::POINT_LIGHT_POSITION,
-				nullptr,
 				Parameter::POINT_LIGHT_AMBIENT_COLOR,
 				Parameter::POINT_LIGHT_DIFFUSE_COLOR,
 				Parameter::POINT_LIGHT_SPECULAR_COLOR);
-			pointInd++;
+
+			++pointInd;
 		}
 		break;
 
@@ -241,11 +259,29 @@ void SceneShaderBindingC::activateLights(const Scene& scene) const
 				*light,
 				spotInd,
 				Parameter::SPOT_LIGHT_POSITION,
-				&direction,
 				Parameter::SPOT_LIGHT_AMBIENT_COLOR,
 				Parameter::SPOT_LIGHT_DIFFUSE_COLOR,
 				Parameter::SPOT_LIGHT_SPECULAR_COLOR);
-			spotInd++;
+
+			setVector3(
+				*mShader,
+				getShaderParameterParts(Parameter::SPOT_LIGHT_DIRECTION),
+				spotInd,
+				light->getGlobalDirection());
+
+			setFloat(
+				*mShader,
+				getShaderParameterParts(Parameter::SPOT_LIGHT_INNER_ANGLE_COS),
+				spotInd,
+				std::cos(light->getInnerAngle()));
+
+			setFloat(
+				*mShader,
+				getShaderParameterParts(Parameter::SPOT_LIGHT_OUTER_ANGLE_COS),
+				spotInd,
+				std::cos(light->getOuterAngle()));
+
+			++spotInd;
 		}
 		break;
 

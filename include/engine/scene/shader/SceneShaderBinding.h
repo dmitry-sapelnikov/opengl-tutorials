@@ -52,6 +52,10 @@ public:
 		SPOT_LIGHT_POSITION,
 		/// Spot light direction
 		SPOT_LIGHT_DIRECTION,
+		/// Spot light inner angle cosine
+		SPOT_LIGHT_INNER_ANGLE_COS,
+		/// Spot light outer angle cosine
+		SPOT_LIGHT_OUTER_ANGLE_COS,
 		/// Spot light ambient color
 		SPOT_LIGHT_AMBIENT_COLOR,
 		/// Spot light diffuse color

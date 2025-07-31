@@ -7,24 +7,27 @@
 #include "engine/core/Check.h"
 #include "engine/Engine.h"
 
-const std::vector<gltut::Vector3> LIGHT_POSITIONS = {
+const std::vector<gltut::Vector3> POINT_LIGHT_POSITIONS = {
 	{0.0, 10.0f, 20.0f},
 	{5.0, 0.0f, 0.0f},
 	{0.0, 5.0f, 0.0f}
 };
 
-const std::vector<gltut::Color> LIGHT_COLORS = {
+const std::vector<gltut::Color> POINT_LIGHT_COLORS = {
 	{1.0f, 1.0f, 1.0f}, // White light
 	{1.0f, 0.5f, 0.5f}, // Red light
 	{0.5f, 0.5f, 1.0f}  // Blue light
 };
 
-const std::vector<gltut::Vector3> LIGHT_ROTATIONS = {
+const std::vector<gltut::Vector3> POINT_LIGHT_ROTATIONS = {
 	{0.0f, 1.0f, 0.0f},
 	{0.0f, 0.0f, -0.5f},
 	{1.5f, 0.0f, 0.0f},
 };
 
+const gltut::Color SPOT_LIGHT_COLOR = { 1.0f, 1.0f, 1.0f }; // White light
+constexpr float SPOT_LIGHT_Y = 10.0f;
+constexpr float SPOT_LIGHT_Z = 6.0f;
 
 /// Creates boxes
 void createBoxes(
@@ -60,8 +63,15 @@ void createBoxes(
 }
 
 /// Creates lights
-std::vector<gltut::GeometryNode*> createLights(gltut::Engine& engine)
+void createLights(
+	gltut::Engine& engine,
+	gltut::u32 usedPointLights,
+	std::vector<gltut::GeometryNode*>& pointLights,
+	gltut::GeometryNode*& spotLight)
 {
+	pointLights.clear();
+	spotLight = nullptr;
+
 	gltut::Scene& scene = *engine.getScene();
 
 	auto* lightMesh = engine.getFactory()->getGeometry()->createSphere(0.2f, 10);
@@ -77,21 +87,24 @@ std::vector<gltut::GeometryNode*> createLights(gltut::Engine& engine)
 
 	gltut::bindModelViewProjectionShaderParameters(lightShaderBinding, "model", "view", "projection");
 
-	std::vector<gltut::GeometryNode*> lights;
-	for (size_t i = 0; i < LIGHT_POSITIONS.size(); ++i)
+	const gltut::u32 pointLightCount  = std::min(
+		usedPointLights,
+		static_cast<gltut::u32>(POINT_LIGHT_POSITIONS.size()));
+
+	for (size_t i = 0; i < pointLightCount; ++i)
 	{
 		auto* lightMaterial = scene.createMaterial(lightShaderBinding);
 		GLTUT_CHECK(lightMaterial, "Failed to create light material");
 		lightMaterial->getShaderArguments()->setVec3("lightColor",
-			LIGHT_COLORS[i].r,
-			LIGHT_COLORS[i].g,
-			LIGHT_COLORS[i].b);
+			POINT_LIGHT_COLORS[i].r,
+			POINT_LIGHT_COLORS[i].g,
+			POINT_LIGHT_COLORS[i].b);
 
 		auto* light = scene.createGeometry(lightMesh, lightMaterial);
 		GLTUT_CHECK(light, "Failed to create light object");
-		light->setTransform(gltut::Matrix4::translationMatrix(LIGHT_POSITIONS[i]));
+		light->setTransform(gltut::Matrix4::translationMatrix(POINT_LIGHT_POSITIONS[i]));
 
-		lights.push_back(light);
+		pointLights.push_back(light);
 
 		auto* lightSource = scene.createLight(
 			gltut::LightNode::Type::POINT,
@@ -99,16 +112,38 @@ std::vector<gltut::GeometryNode*> createLights(gltut::Engine& engine)
 			light);
 
 		lightSource->setAmbient(gltut::Color(
-			LIGHT_COLORS[i].r * 0.1f,
-			LIGHT_COLORS[i].g * 0.1f,
-			LIGHT_COLORS[i].b * 0.1f, 1.0f));
+			POINT_LIGHT_COLORS[i].r * 0.2f,
+			POINT_LIGHT_COLORS[i].g * 0.2f,
+			POINT_LIGHT_COLORS[i].b * 0.2f, 1.0f));
 
-		lightSource->setDiffuse(LIGHT_COLORS[i]);
-		lightSource->setSpecular(LIGHT_COLORS[i]);
+		lightSource->setDiffuse(POINT_LIGHT_COLORS[i]);
+		lightSource->setSpecular(POINT_LIGHT_COLORS[i]);
 
 		GLTUT_CHECK(lightSource, "Failed to create light source");
 	}
-	return lights;
+
+	// Create a spot light
+	auto* spotLightMaterial = scene.createMaterial(lightShaderBinding);
+	GLTUT_CHECK(spotLightMaterial, "Failed to create spot light material");
+	spotLightMaterial->getShaderArguments()->setVec3("lightColor",
+		SPOT_LIGHT_COLOR.r,
+		SPOT_LIGHT_COLOR.g,
+		SPOT_LIGHT_COLOR.b);
+
+	spotLight = scene.createGeometry(
+		lightMesh,
+		spotLightMaterial,
+		gltut::Matrix4::translationMatrix({ 0.0f, SPOT_LIGHT_Y, SPOT_LIGHT_Z }));
+
+	auto* spotLightSource = scene.createLight(
+		gltut::LightNode::Type::SPOT,
+		gltut::Matrix4::identity(),
+		spotLight);
+
+	spotLightSource->setDirection({ 0.0f, -1.0f, -1.0f });
+	spotLightSource->setInnerAngle(gltut::toRadians(25.0f));
+	spotLightSource->setOuterAngle(gltut::toRadians(30.0f));
+	spotLightSource->setAmbient({ 0.5f, 0.5f, 0.5f, 1.0f });
 }
 
 ///	The program entry point
@@ -146,7 +181,10 @@ int main()
 
 		createBoxes(*engine, phongMaterialModel);
 
-		auto lights = createLights(*engine);
+		const gltut::u32 usedPointLights = 3; // Change this to use more or fewer lights
+		std::vector<gltut::GeometryNode*> pointLights;
+		gltut::GeometryNode* spotLight = nullptr;
+		createLights(*engine, usedPointLights, pointLights, spotLight);
 
 		gltut::Camera* camera = engine->getScene()->createCamera(
 			{ -2.0f, 2.0f, 6.0f },
@@ -168,14 +206,18 @@ int main()
 			const auto now = std::chrono::high_resolution_clock::now();
 			const float time = std::chrono::duration<float>(now - startTime).count();
 
-			for (size_t i = 0; i < lights.size(); ++i)
+			for (size_t i = 0; i < pointLights.size(); ++i)
 			{
-				const gltut::Vector3 lightRotation = time * LIGHT_ROTATIONS[i];
+				const gltut::Vector3 lightRotation = time * POINT_LIGHT_ROTATIONS[i];
 				gltut::Matrix4 lightTransform =
 					gltut::Matrix4::rotationMatrix(lightRotation) *
-					gltut::Matrix4::translationMatrix(LIGHT_POSITIONS[i]);
-				lights[i]->setTransform(lightTransform);
+					gltut::Matrix4::translationMatrix(POINT_LIGHT_POSITIONS[i]);
+				pointLights[i]->setTransform(lightTransform);
 			}
+
+			float spotLightHeight = (std::cos(time) * 0.5f + 0.5f) * SPOT_LIGHT_Y;
+			spotLight->setTransform(
+				gltut::Matrix4::translationMatrix({ 0.0f, spotLightHeight, SPOT_LIGHT_Z }));
 
 			if (!engine->update())
 			{

@@ -54,12 +54,24 @@ struct LightColor
 
 struct PointLight
 {
-	vec3 pos;
 	LightColor color;
+	vec3 pos;
 };
 
 #define MAX_POINT_LIGHTS 4
 uniform PointLight pointLights[MAX_POINT_LIGHTS];
+
+struct SpotLight
+{
+	LightColor color;
+	vec3 pos;
+	vec3 dir;
+	float innerAngleCos;
+	float outerAngleCos;
+};
+
+#define MAX_SPOT_LIGHTS 4
+uniform SpotLight spotLights[MAX_SPOT_LIGHTS];
 
 // Inputs
 in vec3 pos;
@@ -72,6 +84,9 @@ out vec4 outColor;
 void main()
 {
 	vec3 norm = normalize(normal);
+	vec3 viewDir = normalize(viewPos - pos);
+
+	vec3 result = vec3(0.0f);
 	for (int i = 0; i < MAX_POINT_LIGHTS; ++i)
 	{
 		vec3 geomDiffuse = texture(diffuseSampler, texCoord).rgb;
@@ -84,13 +99,40 @@ void main()
 		vec3 diffuse = max(0.0f, dot(norm, lightDir)) * pointLights[i].color.diffuse * geomDiffuse;
 
 		// Specular
-		vec3 viewDir = normalize(viewPos - pos);
 		vec3 reflectDir = reflect(-lightDir, norm);
 		float spec = pow(max(dot(viewDir, reflectDir), 0.0), shininess);
 		vec3 specular = spec * pointLights[i].color.specular * texture(specularSampler, texCoord).rgb;
 
-		outColor += vec4(ambient + diffuse + specular, 1.0f);
+		result += ambient + diffuse + specular;
 	}
+
+	for (int i = 0; i < MAX_SPOT_LIGHTS; ++i)
+	{
+		vec3 geomDiffuse = texture(diffuseSampler, texCoord).rgb;
+		// Ambient
+		result += spotLights[i].color.ambient * geomDiffuse;
+
+		vec3 lightDir = normalize(spotLights[i].pos - pos);
+
+		float theta = dot(-lightDir, spotLights[i].dir);
+		
+		float innerAngleCos = spotLights[i].innerAngleCos;
+		float outerAngleCos = spotLights[i].outerAngleCos;
+		if (theta > outerAngleCos)
+		{
+			float intensity = clamp((theta - outerAngleCos) / (innerAngleCos - outerAngleCos), 0.0, 1.0);
+
+			// Diffuse
+			vec3 diffuse = max(0.0f, dot(norm, lightDir)) * spotLights[i].color.diffuse * geomDiffuse;
+			
+			// Specular
+			vec3 reflectDir = reflect(-lightDir, norm);
+			float spec = pow(max(dot(viewDir, reflectDir), 0.0), shininess);
+			vec3 specular = spec * spotLights[i].color.specular * texture(specularSampler, texCoord).rgb;
+			result += intensity * (diffuse + specular);
+		}
+	}
+	outColor = vec4(result, 1.0f);
 })";
 
 // Default shininess value
@@ -125,6 +167,14 @@ SceneShaderBinding* createPhongShader(Renderer& renderer, Scene& scene) noexcept
 	binding->bind(SceneShaderBinding::Parameter::POINT_LIGHT_AMBIENT_COLOR, "pointLights.color.ambient");
 	binding->bind(SceneShaderBinding::Parameter::POINT_LIGHT_DIFFUSE_COLOR, "pointLights.color.diffuse");
 	binding->bind(SceneShaderBinding::Parameter::POINT_LIGHT_SPECULAR_COLOR, "pointLights.color.specular");
+
+	binding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_POSITION, "spotLights.pos");
+	binding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_DIRECTION, "spotLights.dir");
+	binding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_INNER_ANGLE_COS, "spotLights.innerAngleCos");
+	binding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_OUTER_ANGLE_COS, "spotLights.outerAngleCos");
+	binding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_AMBIENT_COLOR, "spotLights.color.ambient");
+	binding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_DIFFUSE_COLOR, "spotLights.color.diffuse");
+	binding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_SPECULAR_COLOR, "spotLights.color.specular");
 
 	return binding;
 }

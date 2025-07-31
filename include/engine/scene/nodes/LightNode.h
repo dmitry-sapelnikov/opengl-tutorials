@@ -65,6 +65,19 @@ public:
 	*/
 	virtual void setTarget(const Vector3& target) noexcept = 0;
 
+	/// Returns the outer angle for spot lights, in radians
+	virtual float getOuterAngle() const noexcept = 0;
+
+	/// Sets the outer cut-off angle, in radians. 
+	///	Clamps the outer angle to [0, PI] and the inner angle to [0, outer angle].
+	virtual void setOuterAngle(float angleRadians) noexcept = 0;
+
+	/// Returns the inner angle for spot lights, in radians
+	virtual float getInnerAngle() const noexcept = 0;
+
+	/// Sets the inner cut-off angle, in radians. Clamps the angle to [0, outer angle].
+	virtual void setInnerAngle(float angleRadians) noexcept = 0;
+
 	/// Returns the ambient color of the light
 	virtual const Color& getAmbient() const noexcept = 0;
 

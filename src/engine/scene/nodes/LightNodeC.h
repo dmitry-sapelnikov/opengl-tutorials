@@ -102,6 +102,31 @@ public:
 			(target - t.getTranslation()));
 	}
 
+	/// Returns the outer angle for spot lights, in radians
+	float getOuterAngle() const noexcept final
+	{
+		return mOuterAngle;
+	}
+
+	/// Sets the outer cut-off angle, in radians.
+	void setOuterAngle(float angleRadians) noexcept final
+	{
+		mOuterAngle = clamp(angleRadians, 0.0f, PI);
+		mInnerAngle = clamp(mInnerAngle, 0.0f, mOuterAngle);
+	}
+
+	/// Returns the inner angle for spot lights, in radians
+	float getInnerAngle() const noexcept final
+	{
+		return mInnerAngle;
+	}
+
+	/// Sets the inner cut-off angle, in radians.
+	void setInnerAngle(float angleRadians) noexcept final
+	{
+		mInnerAngle = clamp(angleRadians, 0.0f, mOuterAngle);
+	}
+
 private:
 	/// The light type
 	LightNode::Type mType;
@@ -117,6 +142,12 @@ private:
 
 	/// The light direction
 	Vector3 mDirection{ DEFAULT_DIRECTION };
+
+	/// The inner angle for spot lights, in radians
+	float mInnerAngle = PI * 0.5f;
+
+	/// The outer angle for spot lights, in radians
+	float mOuterAngle = PI * 0.5f;
 };
 
 // End of the namespace gltut
