@@ -103,16 +103,19 @@ Shader* RendererOpenGL::createBackendShader(
 {
 	Shader* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN
-		result = new ShaderOpenGL(vertexShader, fragmentShader);
+		result = new ShaderOpenGL(*this, vertexShader, fragmentShader);
 	GLTUT_CATCH_ALL_END("Failed to create shader program")
 	return result;
 }
 
 Texture* RendererOpenGL::createBackendTexture(
-	const u8* data,
+	const void* data,
 	u32 width,
 	u32 height,
-	u32 channelCount) noexcept
+	Texture::Format format,
+	Texture::FilterMode minFilter,
+	Texture::FilterMode magFilter,
+	Texture::WrapMode wrapMode) noexcept
 {
 	Texture* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN
@@ -120,7 +123,10 @@ Texture* RendererOpenGL::createBackendTexture(
 			data,
 			width,
 			height,
-			channelCount);
+			format,
+			minFilter,
+			magFilter,
+			wrapMode);
 	GLTUT_CATCH_ALL_END("Failed to create texture from data")
 	return result;
 }

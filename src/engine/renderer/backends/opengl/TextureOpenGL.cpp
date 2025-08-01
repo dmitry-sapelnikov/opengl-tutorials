@@ -9,54 +9,140 @@ namespace gltut
 
 static_assert(sizeof(GLuint) == sizeof(u32), "GLuint must be the same size as u32");
 
+// Local functions
+namespace
+{
+
+u32 toOpenGLFormat(Texture::Format format) noexcept
+{
+	switch (format)
+	{
+	case Texture::Format::RGB:
+		return GL_RGB;
+
+	case Texture::Format::RGBA:
+		return GL_RGBA;
+
+	case Texture::Format::DEPTH:
+		return GL_DEPTH_COMPONENT;
+
+		GLTUT_UNEXPECTED_SWITCH_DEFAULT_CASE(format)
+	}
+	return 0;
+}
+
+u32 toOpenGLFilterMode(Texture::FilterMode filterMode) noexcept
+{
+	switch (filterMode)
+	{
+	case Texture::FilterMode::NEAREST:
+		return GL_NEAREST;
+
+	case Texture::FilterMode::LINEAR:
+		return GL_LINEAR;
+
+	case Texture::FilterMode::NEAREST_MIPMAP_NEAREST:
+		return GL_NEAREST_MIPMAP_NEAREST;
+
+	case Texture::FilterMode::LINEAR_MIPMAP:
+		return GL_LINEAR_MIPMAP_LINEAR;
+
+		GLTUT_UNEXPECTED_SWITCH_DEFAULT_CASE(filterMode)
+	}
+	return 0;
+}
+
+u32 toOpenGLWrapMode(Texture::WrapMode wrapMode) noexcept
+{
+	switch (wrapMode)
+	{
+	case Texture::WrapMode::REPEAT:
+		return GL_REPEAT;
+
+	case Texture::WrapMode::CLAMP_TO_EDGE:
+		return GL_CLAMP_TO_EDGE;
+
+		GLTUT_UNEXPECTED_SWITCH_DEFAULT_CASE(wrapMode)
+	}
+	return 0;
+}
+
+u32 getChannelType(Texture::Format format) noexcept
+{
+	switch (format)
+	{
+	case Texture::Format::RGB:
+	case Texture::Format::RGBA:
+		return GL_UNSIGNED_BYTE;
+
+	case Texture::Format::DEPTH:
+		return GL_FLOAT;
+
+		GLTUT_UNEXPECTED_SWITCH_DEFAULT_CASE(format)
+	}
+	return 0;
+}
+
+} // namespace
+
 // Global classes
 TextureOpenGL::TextureOpenGL(
-	const u8* data,
+	const void* data,
 	u32 width,
 	u32 height,
-	u32 datachannelCount)
+	Texture::Format format,
+	Texture::FilterMode minFilter,
+	Texture::FilterMode magFilter,
+	Texture::WrapMode wrapMode) :
+
+	mFormat(format),
+	mMinFilter(minFilter),
+	mMagFilter(magFilter),
+	mWrapMode(wrapMode),
+	mTexture(0)
 {
 	GLTUT_CHECK(data != nullptr, "Texture data is null")
 	GLTUT_CHECK(width > 0, "Texture width is 0")
 	GLTUT_CHECK(height > 0, "Texture height is 0")
-	GLTUT_CHECK(
-		datachannelCount == 3 || datachannelCount == 4,
-		"Texture data channels count must be 3 or 4")
 
 	glGenTextures(1, &mTexture);
 	GLTUT_CHECK(mTexture != 0, "Failed to generate texture")
 
-	//	Get the currently bound texture to restore it after
-	GLint currentTexture;
+		//	Get the currently bound texture to restore it after
+		GLint currentTexture;
 	glGetIntegerv(GL_TEXTURE_BINDING_2D, &currentTexture);
 
 	glBindTexture(GL_TEXTURE_2D, mTexture);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, toOpenGLFilterMode(minFilter));
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, toOpenGLFilterMode(magFilter));
 
 	glTexImage2D(
 		GL_TEXTURE_2D,
 		0,
-		datachannelCount == 3 ? GL_RGB : GL_RGBA,
+		toOpenGLFormat(format),
 		width,
 		height,
 		0,
-		datachannelCount == 3 ? GL_RGB : GL_RGBA,
-		GL_UNSIGNED_BYTE,
+		toOpenGLFormat(format),
+		getChannelType(format),
 		data);
-	glGenerateMipmap(GL_TEXTURE_2D);
+	
+	if (minFilter == Texture::FilterMode::LINEAR_MIPMAP ||
+		minFilter == Texture::FilterMode::NEAREST_MIPMAP_NEAREST ||
+		magFilter == Texture::FilterMode::LINEAR_MIPMAP ||
+		magFilter == Texture::FilterMode::NEAREST_MIPMAP_NEAREST)
+	{
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
 	glBindTexture(GL_TEXTURE_2D, currentTexture);
+
+	setWrapMode(wrapMode);
 }
 
 TextureOpenGL::~TextureOpenGL()
 {
 	glDeleteTextures(1, &mTexture);
-}
-
-Texture::WrapMode TextureOpenGL::getWrapMode() const noexcept
-{
-	return mWrapMode;
 }
 
 void TextureOpenGL::setWrapMode(WrapMode wrapMode) noexcept
@@ -89,9 +175,29 @@ void TextureOpenGL::setWrapMode(WrapMode wrapMode) noexcept
 	glBindTexture(GL_TEXTURE_2D, currentTexture);
 }
 
+void TextureOpenGL::setMinFilterMode(FilterMode mode) noexcept
+{
+	mMinFilter = mode;
+	GLint currentTexture;
+	glGetIntegerv(GL_TEXTURE_BINDING_2D, &currentTexture);
+	glBindTexture(GL_TEXTURE_2D, mTexture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, toOpenGLFilterMode(mode));
+	glBindTexture(GL_TEXTURE_2D, currentTexture);
+}
+
+void TextureOpenGL::setMagFilterMode(FilterMode mode) noexcept
+{
+	mMagFilter = mode;
+	GLint currentTexture;
+	glGetIntegerv(GL_TEXTURE_BINDING_2D, &currentTexture);
+	glBindTexture(GL_TEXTURE_2D, mTexture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, toOpenGLFilterMode(mode));
+	glBindTexture(GL_TEXTURE_2D, currentTexture);
+}
+
 void TextureOpenGL::bind(u32 slot) const noexcept
 {
-	GLTUT_ASSERT(slot < 32);
+	GLTUT_ASSERT(slot < TEXTURE_SLOTS);
 	glActiveTexture(GL_TEXTURE0 + slot);
 	glBindTexture(GL_TEXTURE_2D, mTexture);
 }

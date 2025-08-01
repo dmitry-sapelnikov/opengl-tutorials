@@ -14,6 +14,7 @@ public:
 		\throw std::runtime_error If the shader could not be created
 	*/
 	ShaderOpenGL(
+		Renderer& renderer,
 		const std::string& vertexCode,
 		const std::string& fragmentCode);
 
@@ -44,12 +45,20 @@ public:
 	/// Sets a 4x4 matrix to a shader variable
 	void setMat4(int32 location, const float* data) noexcept final;
 
+	/// Returns the renderer associated with this shader
+	Renderer* getRenderer() const noexcept final
+	{
+		return &mRenderer;
+	}
+
 	/// Activates the shader
 	void activate() const noexcept final;
-
 private:
+	/// Renderer
+	Renderer& mRenderer;
+
 	/// Shader program
-	unsigned mProgram = 0;
+	unsigned mProgram;
 };
 
 // End of the namespace gltut

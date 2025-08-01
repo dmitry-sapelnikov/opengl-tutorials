@@ -9,10 +9,25 @@ namespace gltut
 class Texture
 {
 public:
+	enum class Format
+	{
+		RGB,
+		RGBA,
+		DEPTH
+	};
+
 	enum class WrapMode
 	{
 		REPEAT,
 		CLAMP_TO_EDGE
+	};
+
+	enum class FilterMode
+	{
+		NEAREST,
+		LINEAR,
+		NEAREST_MIPMAP_NEAREST,
+		LINEAR_MIPMAP
 	};
 
 	/// The number of texture slots available
@@ -20,6 +35,21 @@ public:
 
 	/// Virtual destructor
 	virtual ~Texture() noexcept = default;
+
+	/// Returns the texture format
+	virtual Format getFormat() const noexcept = 0;
+
+	/// Returns the filter mode of the texture
+	virtual FilterMode getMinFilterMode() const noexcept = 0;
+
+	/// Sets the filter mode of the texture
+	virtual void setMinFilterMode(FilterMode mode) noexcept = 0;
+
+	/// Returns the mag filter mode of the texture
+	virtual FilterMode getMagFilterMode() const noexcept = 0;
+
+	/// Sets the mag filter mode of the texture
+	virtual void setMagFilterMode(FilterMode mode) noexcept = 0;
 
 	/// Returns the wrap mode of the texture
 	virtual WrapMode getWrapMode() const noexcept = 0;

@@ -42,13 +42,20 @@ public:
 
 	/// Creates a texture
 	Texture* createTexture(
-		const u8* data,
+		const void* data,
 		u32 width,
 		u32 height,
-		u32 channelCount) noexcept final;
+		Texture::Format format,
+		Texture::FilterMode minFilter,
+		Texture::FilterMode magFilter,
+		Texture::WrapMode wrapMode) noexcept final;
 
 	/// Loads a texture
-	Texture* loadTexture(const char* path) noexcept final;
+	Texture* loadTexture(
+		const char* imagePath,
+		Texture::FilterMode minFilter,
+		Texture::FilterMode magFilter,
+		Texture::WrapMode wrapMode) noexcept final;
 
 	/// Removes a texture
 	void removeTexture(Texture* texture) noexcept final;
@@ -82,10 +89,13 @@ private:
 
 	/// Creates a texture for a specific graphics backend
 	virtual Texture* createBackendTexture(
-		const u8* data,
+		const void* data,
 		u32 width,
 		u32 height,
-		u32 channelCount) noexcept = 0;
+		Texture::Format format,
+		Texture::FilterMode minFilter,
+		Texture::FilterMode magFilter,
+		Texture::WrapMode wrapMode) noexcept = 0;
 
 	/// Meshes
 	std::vector<std::unique_ptr<Mesh>> mMeshes;

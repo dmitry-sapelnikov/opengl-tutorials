@@ -17,29 +17,68 @@ public:
 		\throw std::runtime_error If the shader could not be created
 	*/
 	TextureOpenGL(
-		const u8* data,
+		const void* data,
 		u32 width,
 		u32 height,
-		u32 datachannelCount);
+		Texture::Format format,
+		Texture::FilterMode minFilter,
+		Texture::FilterMode magFilter,
+		Texture::WrapMode wrapMode);
 
 	/// Destructor
 	~TextureOpenGL() noexcept final;
 
 	/// Returns the wrap mode of the texture
-	WrapMode getWrapMode() const noexcept final;
+	WrapMode getWrapMode() const noexcept final
+	{
+		return mWrapMode;
+	}
 
 	/// Sets the wrap mode of the texture
 	void setWrapMode(WrapMode mode) noexcept final;
+
+	/// Returns the texture format
+	Format getFormat() const noexcept final
+	{
+		return mFormat;
+	}
+
+	/// Returns the min filter mode of the texture
+	FilterMode getMinFilterMode() const noexcept final
+	{
+		return mMinFilter;
+	}
+
+	/// Sets the min filter mode of the texture
+	void setMinFilterMode(FilterMode mode) noexcept final;
+
+	/// Returns the mag filter mode of the texture
+	FilterMode getMagFilterMode() const noexcept final
+	{
+		return mMagFilter;
+	}
+
+	/// Sets the mag filter mode of the texture
+	void setMagFilterMode(FilterMode mode) noexcept final;
 
 	/// Binds the texture
 	void bind(u32 slot) const noexcept final;
 
 private:
-	/// Texture ID
-	unsigned mTexture = 0;
+	/// Texture format
+	Format mFormat;
+
+	/// Min filter mode
+	FilterMode mMinFilter;
+
+	/// Mag filter mode
+	FilterMode mMagFilter;
 
 	/// Wrap mode
-	WrapMode mWrapMode = WrapMode::REPEAT;
+	WrapMode mWrapMode;
+
+	/// Texture ID
+	unsigned mTexture;
 };
 
 // End of the namespace gltut

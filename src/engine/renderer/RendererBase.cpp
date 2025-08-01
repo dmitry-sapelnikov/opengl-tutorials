@@ -98,10 +98,13 @@ void RendererBase::removeShader(Shader* shader) noexcept
 }
 
 Texture* RendererBase::createTexture(
-	const u8* data,
+	const void* data,
 	u32 width,
 	u32 height,
-	u32 channelCount) noexcept
+	Texture::Format format,
+	Texture::FilterMode minFilter,
+	Texture::FilterMode magFilter,
+	Texture::WrapMode wrapMode) noexcept
 {
 	Texture* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN
@@ -109,24 +112,48 @@ Texture* RendererBase::createTexture(
 			data,
 			width,
 			height,
-			channelCount)).get();
+			format,
+			minFilter,
+			magFilter,
+			wrapMode)).get();
 	GLTUT_CATCH_ALL_END("Failed to create texture from data")
 	return result;
 }
 
-Texture* RendererBase::loadTexture(const char* imagePath) noexcept
+Texture* RendererBase::loadTexture(
+	const char* imagePath,
+	Texture::FilterMode minFilter,
+	Texture::FilterMode magFilter,
+	Texture::WrapMode wrapMode) noexcept
 {
 	stbi_set_flip_vertically_on_load(true);
 	int width = 0;
 	int height = 0;
 	int channels = 0;
-	unsigned char* data = stbi_load(imagePath, &width, &height, &channels, 0);
+	void* data = stbi_load(imagePath, &width, &height, &channels, 0);
 	if (data == nullptr)
 	{
 		std::cerr << "Failed to load the image: " << imagePath << std::endl;
+		stbi_image_free(data);
 		return nullptr;
 	}
-	Texture* result = createTexture(data, width, height, channels);
+
+	if (channels != 3 && channels != 4)
+	{
+		std::cerr << "Unsupported image format in: " << imagePath << std::endl;
+		stbi_image_free(data);
+		return nullptr;
+	}
+
+	Texture* result = createTexture(
+		data,
+		width,
+		height,
+		channels == 3 ? Texture::Format::RGB : Texture::Format::RGBA,
+		minFilter,
+		magFilter,
+		wrapMode);
+	
 	stbi_image_free(data);
 	return result;
 }
@@ -152,7 +179,14 @@ Texture* RendererBase::createSolidColorTexture(
 		}
 
 		const u8 colorData[] = { r8, g8, b8, a8 };
-		result = createTexture(colorData, 1U, 1U, 4U);
+		result = createTexture(
+			colorData,
+			1U,
+			1U,
+			Texture::Format::RGBA, 
+			Texture::FilterMode::NEAREST,
+			Texture::FilterMode::NEAREST,
+			Texture::WrapMode::CLAMP_TO_EDGE);
 		if (result != nullptr)
 		{
 			mSolidColorTextures[color_hex] = result;

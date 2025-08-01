@@ -38,10 +38,16 @@ private:
 
 	/// Creates a texture
 	Texture* createBackendTexture(
-		const u8* data,
+		const void* data,
 		u32 width,
 		u32 height,
-		u32 channelCount) noexcept final;
+		Texture::Format format,
+		Texture::FilterMode minFilter,
+		Texture::FilterMode magFilter,
+		Texture::WrapMode wrapMode) noexcept final;
+
+	/// Binds a texture to a slot
+	void bindTexture(Texture* texture, u32 slot) noexcept final;
 
 private:
 	/// Called when the window is resized

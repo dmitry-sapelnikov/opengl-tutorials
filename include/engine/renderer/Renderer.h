@@ -48,13 +48,20 @@ public:
 
 	/// Creates a texture
 	virtual Texture* createTexture(
-		const u8* data,
+		const void* data,
 		u32 width,
 		u32 height,
-		u32 channelCount) noexcept = 0;
+		Texture::Format format = Texture::Format::RGBA,
+		Texture::FilterMode minFilter = Texture::FilterMode::LINEAR_MIPMAP,
+		Texture::FilterMode magFilter = Texture::FilterMode::LINEAR,
+		Texture::WrapMode wrapMode = Texture::WrapMode::REPEAT) noexcept = 0;
 
 	/// Loads a texture
-	virtual Texture* loadTexture(const char* path) noexcept = 0;
+	virtual Texture* loadTexture(
+		const char* imagePath,
+		Texture::FilterMode minFilter = Texture::FilterMode::LINEAR_MIPMAP,
+		Texture::FilterMode magFilter = Texture::FilterMode::LINEAR,
+		Texture::WrapMode wrapMode = Texture::WrapMode::REPEAT) noexcept = 0;
 
 	/// Removes a texture
 	virtual void removeTexture(Texture* texture) noexcept = 0;
