@@ -220,7 +220,7 @@ int main()
 
 		createBoxes(*engine, phongMaterialModel);
 
-		const gltut::u32 usedPointLights = 0;
+		const gltut::u32 usedPointLights = 3;
 		gltut::GeometryNode* directionalLight = nullptr;
 		std::vector<gltut::GeometryNode*> pointLights;
 		gltut::GeometryNode* spotLight = nullptr;
