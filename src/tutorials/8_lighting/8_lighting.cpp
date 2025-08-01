@@ -25,6 +25,8 @@ const std::vector<gltut::Vector3> POINT_LIGHT_ROTATIONS = {
 	{1.5f, 0.0f, 0.0f},
 };
 
+const gltut::Color directionalLightColor = { 1.0f, 1.0f, 0.9f }; // Slightly yellowish light
+
 const gltut::Color SPOT_LIGHT_COLOR = { 1.0f, 1.0f, 1.0f }; // White light
 constexpr float SPOT_LIGHT_Y = 10.0f;
 constexpr float SPOT_LIGHT_Z = 6.0f;
@@ -63,12 +65,40 @@ void createBoxes(
 }
 
 /// Creates lights
+
+gltut::GeometryNode* createLight(
+	gltut::Scene& scene,
+	gltut::SceneShaderBinding* lightShaderBinding,
+	gltut::Mesh* lightMesh,
+	const gltut::LightNode::Type lightType,
+	const gltut::Vector3& position,
+	const gltut::Color& color)
+{
+	auto* lightMaterial = scene.createMaterial(lightShaderBinding);
+	GLTUT_CHECK(lightMaterial, "Failed to create light material");
+	lightMaterial->getShaderArguments()->setVec3("lightColor", color.r, color.g, color.b);
+	GLTUT_CHECK(lightMesh, "Failed to create light mesh");
+
+	auto* light = scene.createGeometry(lightMesh, lightMaterial);
+	GLTUT_CHECK(light, "Failed to create light object");
+	light->setTransform(gltut::Matrix4::translationMatrix(position));
+
+	auto* lightSource = scene.createLight(lightType, gltut::Matrix4::identity(), light);
+	lightSource->setAmbient(gltut::Color(color.r * 0.2f, color.g * 0.2f, color.b * 0.2f, 1.0f));
+	lightSource->setDiffuse(color);
+	lightSource->setSpecular(color);
+
+	return light;
+}
+
 void createLights(
 	gltut::Engine& engine,
 	gltut::u32 usedPointLights,
+	gltut::GeometryNode* directionalLight,
 	std::vector<gltut::GeometryNode*>& pointLights,
 	gltut::GeometryNode*& spotLight)
 {
+	directionalLight = nullptr;
 	pointLights.clear();
 	spotLight = nullptr;
 
@@ -85,61 +115,57 @@ void createLights(
 	auto* lightShaderBinding = scene.createShaderBinding(lightShader);
 	GLTUT_CHECK(lightShaderBinding, "Failed to create light shader binding");
 
-	gltut::bindModelViewProjectionShaderParameters(lightShaderBinding, "model", "view", "projection");
+	gltut::bindModelViewProjectionShaderParameters(
+		lightShaderBinding,
+		"model",
+		"view",
+		"projection");
 
-	const gltut::u32 pointLightCount  = std::min(
+	// Create a directional light]
+	directionalLight = createLight(
+		scene,
+		lightShaderBinding,
+		lightMesh,
+		gltut::LightNode::Type::DIRECTIONAL,
+		gltut::Vector3(0.0f, 10.0f, 0.0f),
+		directionalLightColor);
+
+	GLTUT_CHECK(directionalLight, "Failed to create directional light");
+	gltut::LightNode* directionalLightSource = dynamic_cast<gltut::LightNode*>(directionalLight->getChild(0));
+	GLTUT_CHECK(directionalLightSource, "Failed to get directional light source");
+	directionalLightSource->setDirection({ -3.0f, -1.0f, 0.0f });
+
+	const gltut::u32 pointLightCount = std::min(
 		usedPointLights,
 		static_cast<gltut::u32>(POINT_LIGHT_POSITIONS.size()));
 
 	for (size_t i = 0; i < pointLightCount; ++i)
 	{
-		auto* lightMaterial = scene.createMaterial(lightShaderBinding);
-		GLTUT_CHECK(lightMaterial, "Failed to create light material");
-		lightMaterial->getShaderArguments()->setVec3("lightColor",
-			POINT_LIGHT_COLORS[i].r,
-			POINT_LIGHT_COLORS[i].g,
-			POINT_LIGHT_COLORS[i].b);
-
-		auto* light = scene.createGeometry(lightMesh, lightMaterial);
-		GLTUT_CHECK(light, "Failed to create light object");
-		light->setTransform(gltut::Matrix4::translationMatrix(POINT_LIGHT_POSITIONS[i]));
-
-		pointLights.push_back(light);
-
-		auto* lightSource = scene.createLight(
+		const gltut::Vector3& position = POINT_LIGHT_POSITIONS[i];
+		const gltut::Color& color = POINT_LIGHT_COLORS[i % POINT_LIGHT_COLORS.size()];
+		auto* pointLight = createLight(
+			scene,
+			lightShaderBinding,
+			lightMesh,
 			gltut::LightNode::Type::POINT,
-			gltut::Matrix4::identity(),
-			light);
-
-		lightSource->setAmbient(gltut::Color(
-			POINT_LIGHT_COLORS[i].r * 0.2f,
-			POINT_LIGHT_COLORS[i].g * 0.2f,
-			POINT_LIGHT_COLORS[i].b * 0.2f, 1.0f));
-
-		lightSource->setDiffuse(POINT_LIGHT_COLORS[i]);
-		lightSource->setSpecular(POINT_LIGHT_COLORS[i]);
-
-		GLTUT_CHECK(lightSource, "Failed to create light source");
+			position,
+			color);
+		GLTUT_CHECK(pointLight, "Failed to create point light");
+		pointLights.push_back(pointLight);
 	}
 
 	// Create a spot light
-	auto* spotLightMaterial = scene.createMaterial(lightShaderBinding);
-	GLTUT_CHECK(spotLightMaterial, "Failed to create spot light material");
-	spotLightMaterial->getShaderArguments()->setVec3("lightColor",
-		SPOT_LIGHT_COLOR.r,
-		SPOT_LIGHT_COLOR.g,
-		SPOT_LIGHT_COLOR.b);
-
-	spotLight = scene.createGeometry(
+	spotLight = createLight(
+		scene,
+		lightShaderBinding,
 		lightMesh,
-		spotLightMaterial,
-		gltut::Matrix4::translationMatrix({ 0.0f, SPOT_LIGHT_Y, SPOT_LIGHT_Z }));
-
-	auto* spotLightSource = scene.createLight(
 		gltut::LightNode::Type::SPOT,
-		gltut::Matrix4::identity(),
-		spotLight);
+		gltut::Vector3(0.0f, SPOT_LIGHT_Y, SPOT_LIGHT_Z),
+		SPOT_LIGHT_COLOR);
 
+	GLTUT_CHECK(spotLight, "Failed to create spot light");
+	gltut::LightNode* spotLightSource = dynamic_cast<gltut::LightNode*>(spotLight->getChild(0));
+	GLTUT_CHECK(spotLightSource, "Failed to get spot light source");
 	spotLightSource->setDirection({ 0.0f, -1.0f, -1.0f });
 	spotLightSource->setInnerAngle(gltut::toRadians(25.0f));
 	spotLightSource->setOuterAngle(gltut::toRadians(30.0f));
@@ -165,7 +191,7 @@ int main()
 		auto* phongShader = materialFactory->createPhongShader(
 			renderer,
 			scene,
-			0, // No directional lights
+			1, // No directional lights
 			3, // Use 3 point lights
 			1); // Use 1 spot light
 
@@ -192,10 +218,11 @@ int main()
 
 		createBoxes(*engine, phongMaterialModel);
 
-		const gltut::u32 usedPointLights = 3; // Change this to use more or fewer lights
+		const gltut::u32 usedPointLights = 3;
+		gltut::GeometryNode* directionalLight = nullptr;
 		std::vector<gltut::GeometryNode*> pointLights;
 		gltut::GeometryNode* spotLight = nullptr;
-		createLights(*engine, usedPointLights, pointLights, spotLight);
+		createLights(*engine, usedPointLights, directionalLight, pointLights, spotLight);
 
 		gltut::Camera* camera = engine->getScene()->createCamera(
 			{ -2.0f, 2.0f, 6.0f },

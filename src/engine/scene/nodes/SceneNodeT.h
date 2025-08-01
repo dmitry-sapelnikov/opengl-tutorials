@@ -114,6 +114,18 @@ public:
 		GLTUT_CATCH_ALL_END("Failed to remove child node")
 	}
 
+	/// Returns the number of children
+	u32 getChildCount() const noexcept final
+	{
+		return static_cast<u32>(mChildren.size());
+	}
+
+	/// Returns a child node by index
+	SceneNode* getChild(u32 index) noexcept final
+	{
+		return index < mChildren.size() ? mChildren[index] : nullptr;
+	}
+
 private:
 	/// Updates the global transform
 	void updateGlobalTransform() noexcept final

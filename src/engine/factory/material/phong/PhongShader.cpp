@@ -51,6 +51,15 @@ struct LightColor
 	vec3 specular;
 };
 
+#if MAX_DIRECTIONAL_LIGHTS > 0
+struct DirectionalLight
+{
+	LightColor color;
+	vec3 dir;
+};
+uniform DirectionalLight directionalLights[MAX_DIRECTIONAL_LIGHTS];
+#endif
+
 #if MAX_POINT_LIGHTS > 0
 struct PointLight
 {
@@ -87,12 +96,31 @@ void main()
 	vec3 norm = normalize(normal);
 	vec3 viewDir = normalize(viewPos - pos);
 
+	vec3 geomDiffuse = texture(diffuseSampler, texCoord).rgb;
 	vec3 result = vec3(0.0f);
+
+#if MAX_DIRECTIONAL_LIGHTS > 0
+	for (int i = 0; i < MAX_DIRECTIONAL_LIGHTS; ++i)
+	{
+		// Ambient
+		vec3 ambient = directionalLights[i].color.ambient * geomDiffuse;
+
+		// Diffuse
+		vec3 lightDir = normalize(-directionalLights[i].dir);
+		vec3 diffuse = max(0.0f, dot(norm, lightDir)) * directionalLights[i].color.diffuse * geomDiffuse;
+
+		// Specular
+		vec3 reflectDir = reflect(-lightDir, norm);
+		float spec = pow(max(dot(viewDir, reflectDir), 0.0), shininess);
+		vec3 specular = spec * directionalLights[i].color.specular * texture(specularSampler, texCoord).rgb;
+
+		result += ambient + diffuse + specular;
+	}
+#endif
+
 #if MAX_POINT_LIGHTS > 0
 	for (int i = 0; i < MAX_POINT_LIGHTS; ++i)
 	{
-		vec3 geomDiffuse = texture(diffuseSampler, texCoord).rgb;
-
 		// Ambient
 		vec3 ambient = pointLights[i].color.ambient * geomDiffuse;
 
@@ -112,7 +140,6 @@ void main()
 #if MAX_SPOT_LIGHTS > 0
 	for (int i = 0; i < MAX_SPOT_LIGHTS; ++i)
 	{
-		vec3 geomDiffuse = texture(diffuseSampler, texCoord).rgb;
 		// Ambient
 		result += spotLights[i].color.ambient * geomDiffuse;
 
@@ -184,6 +211,11 @@ SceneShaderBinding* createPhongShader(
 	bindModelViewProjectionShaderParameters(binding, "model", "view", "projection");
 	binding->bind(SceneShaderBinding::Parameter::GEOMETRY_NORMAL_MATRIX, "normalMat");
 	binding->bind(SceneShaderBinding::Parameter::CAMERA_POSITION, "viewPos");
+
+	binding->bind(SceneShaderBinding::Parameter::DIRECTIONAL_LIGHT_DIRECTION, "directionalLights.dir");
+	binding->bind(SceneShaderBinding::Parameter::DIRECTIONAL_LIGHT_AMBIENT_COLOR, "directionalLights.color.ambient");
+	binding->bind(SceneShaderBinding::Parameter::DIRECTIONAL_LIGHT_DIFFUSE_COLOR, "directionalLights.color.diffuse");
+	binding->bind(SceneShaderBinding::Parameter::DIRECTIONAL_LIGHT_SPECULAR_COLOR, "directionalLights.color.specular");
 
 	binding->bind(SceneShaderBinding::Parameter::POINT_LIGHT_POSITION, "pointLights.pos");
 	binding->bind(SceneShaderBinding::Parameter::POINT_LIGHT_AMBIENT_COLOR, "pointLights.color.ambient");

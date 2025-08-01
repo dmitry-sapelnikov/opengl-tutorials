@@ -43,6 +43,12 @@ public:
 	*/
 	virtual void removeChild(SceneNode* child) noexcept = 0;
 
+	/// Returns the number of children
+	virtual u32 getChildCount() const noexcept = 0;
+
+	/// Returns a child node by index
+	virtual SceneNode* getChild(u32 index) noexcept = 0;
+
 private:
 	/// Friend implementation class
 	template <typename SceneNodeInterface>
