@@ -2,6 +2,7 @@
 
 // Includes
 #include <string>
+#include <glad/glad.h>
 #include "engine/core/NonCopyable.h"
 #include "engine/core/Types.h"
 #include "engine/renderer/Texture.h"
@@ -27,6 +28,12 @@ public:
 
 	/// Destructor
 	~TextureOpenGL() noexcept final;
+
+	/// Returns the texture ID
+	u32 getId() const noexcept final
+	{
+		return static_cast<u32>(mId);
+	}
 
 	/// Returns the wrap mode of the texture
 	WrapMode getWrapMode() const noexcept final
@@ -78,7 +85,7 @@ private:
 	WrapMode mWrapMode;
 
 	/// Texture ID
-	unsigned mTexture;
+	GLuint mId;
 };
 
 // End of the namespace gltut

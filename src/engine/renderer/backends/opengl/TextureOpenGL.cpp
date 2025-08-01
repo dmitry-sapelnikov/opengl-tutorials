@@ -1,7 +1,5 @@
 // Includes
 #include "TextureOpenGL.h"
-
-#include <glad/glad.h>
 #include "engine/core/Check.h"
 
 namespace gltut
@@ -99,20 +97,21 @@ TextureOpenGL::TextureOpenGL(
 	mMinFilter(minFilter),
 	mMagFilter(magFilter),
 	mWrapMode(wrapMode),
-	mTexture(0)
+	mId(0)
 {
-	GLTUT_CHECK(data != nullptr, "Texture data is null")
-	GLTUT_CHECK(width > 0, "Texture width is 0")
-	GLTUT_CHECK(height > 0, "Texture height is 0")
+	GLTUT_CHECK(data != nullptr, "Texture data is null");
+	GLTUT_CHECK(width > 0, "Texture width is 0");
+	GLTUT_CHECK(height > 0, "Texture height is 0");
 
-	glGenTextures(1, &mTexture);
-	GLTUT_CHECK(mTexture != 0, "Failed to generate texture")
+	glGenTextures(1, &mId);
+	GLTUT_CHECK(mId != 0, "Failed to generate texture");
+	GLTUT_CHECK(mId < std::numeric_limits<u32>::max(), "Texture ID is out of 32-bit range");
 
-		//	Get the currently bound texture to restore it after
-		GLint currentTexture;
+	//	Get the currently bound texture to restore it after
+	GLint currentTexture;
 	glGetIntegerv(GL_TEXTURE_BINDING_2D, &currentTexture);
 
-	glBindTexture(GL_TEXTURE_2D, mTexture);
+	glBindTexture(GL_TEXTURE_2D, mId);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, toOpenGLFilterMode(minFilter));
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, toOpenGLFilterMode(magFilter));
@@ -142,7 +141,7 @@ TextureOpenGL::TextureOpenGL(
 
 TextureOpenGL::~TextureOpenGL()
 {
-	glDeleteTextures(1, &mTexture);
+	glDeleteTextures(1, &mId);
 }
 
 void TextureOpenGL::setWrapMode(WrapMode wrapMode) noexcept
@@ -152,7 +151,7 @@ void TextureOpenGL::setWrapMode(WrapMode wrapMode) noexcept
 	GLint currentTexture;
 	glGetIntegerv(GL_TEXTURE_BINDING_2D, &currentTexture);
 
-	glBindTexture(GL_TEXTURE_2D, mTexture);
+	glBindTexture(GL_TEXTURE_2D, mId);
 	switch (wrapMode)
 	{
 	case WrapMode::REPEAT:
@@ -180,7 +179,7 @@ void TextureOpenGL::setMinFilterMode(FilterMode mode) noexcept
 	mMinFilter = mode;
 	GLint currentTexture;
 	glGetIntegerv(GL_TEXTURE_BINDING_2D, &currentTexture);
-	glBindTexture(GL_TEXTURE_2D, mTexture);
+	glBindTexture(GL_TEXTURE_2D, mId);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, toOpenGLFilterMode(mode));
 	glBindTexture(GL_TEXTURE_2D, currentTexture);
 }
@@ -190,7 +189,7 @@ void TextureOpenGL::setMagFilterMode(FilterMode mode) noexcept
 	mMagFilter = mode;
 	GLint currentTexture;
 	glGetIntegerv(GL_TEXTURE_BINDING_2D, &currentTexture);
-	glBindTexture(GL_TEXTURE_2D, mTexture);
+	glBindTexture(GL_TEXTURE_2D, mId);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, toOpenGLFilterMode(mode));
 	glBindTexture(GL_TEXTURE_2D, currentTexture);
 }
@@ -199,7 +198,7 @@ void TextureOpenGL::bind(u32 slot) const noexcept
 {
 	GLTUT_ASSERT(slot < TEXTURE_SLOTS);
 	glActiveTexture(GL_TEXTURE0 + slot);
-	glBindTexture(GL_TEXTURE_2D, mTexture);
+	glBindTexture(GL_TEXTURE_2D, mId);
 }
 
 // End of the namespace gltut
