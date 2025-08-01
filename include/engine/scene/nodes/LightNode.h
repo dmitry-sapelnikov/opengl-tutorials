@@ -78,6 +78,18 @@ public:
 	/// Sets the inner cut-off angle, in radians. Clamps the angle to [0, outer angle].
 	virtual void setInnerAngle(float angleRadians) noexcept = 0;
 
+	/// Returns the linear attenuation factor for point and spot lights
+	virtual float getLinearAttenuation() const noexcept = 0;
+
+	/// Sets the linear attenuation factor for point and spot lights
+	virtual void setLinearAttenuation(float factor) noexcept = 0;
+
+	/// Returns the quadratic attenuation factor for point and spot lights
+	virtual float getQuadraticAttenuation() const noexcept = 0;
+
+	/// Sets the quadratic attenuation factor for point and spot lights
+	virtual void setQuadraticAttenuation(float factor) noexcept = 0;
+
 	/// Returns the ambient color of the light
 	virtual const Color& getAmbient() const noexcept = 0;
 

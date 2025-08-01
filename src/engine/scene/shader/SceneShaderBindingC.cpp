@@ -248,6 +248,18 @@ void SceneShaderBindingC::activateLights(const Scene& scene) const
 				Parameter::POINT_LIGHT_DIFFUSE_COLOR,
 				Parameter::POINT_LIGHT_SPECULAR_COLOR);
 
+			setFloat(
+				*mShader,
+				getShaderParameterParts(Parameter::POINT_LIGHT_LINEAR_ATTENUATION),
+				spotInd,
+				light->getLinearAttenuation());
+
+			setFloat(
+				*mShader,
+				getShaderParameterParts(Parameter::POINT_LIGHT_QUADRATIC_ATTENUATION),
+				spotInd,
+				light->getQuadraticAttenuation());
+
 			++pointInd;
 		}
 		break;
@@ -280,6 +292,18 @@ void SceneShaderBindingC::activateLights(const Scene& scene) const
 				getShaderParameterParts(Parameter::SPOT_LIGHT_OUTER_ANGLE_COS),
 				spotInd,
 				std::cos(light->getOuterAngle()));
+
+			setFloat(
+				*mShader,
+				getShaderParameterParts(Parameter::SPOT_LIGHT_LINEAR_ATTENUATION),
+				spotInd,
+				light->getLinearAttenuation());
+
+			setFloat(
+				*mShader,
+				getShaderParameterParts(Parameter::SPOT_LIGHT_QUADRATIC_ATTENUATION),
+				spotInd,
+				light->getQuadraticAttenuation());
 
 			++spotInd;
 		}

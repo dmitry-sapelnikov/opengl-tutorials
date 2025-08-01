@@ -169,6 +169,8 @@ void createLights(
 	spotLightSource->setDirection({ 0.0f, -1.0f, -1.0f });
 	spotLightSource->setInnerAngle(gltut::toRadians(25.0f));
 	spotLightSource->setOuterAngle(gltut::toRadians(30.0f));
+	spotLightSource->setLinearAttenuation(0.1f);
+	spotLightSource->setQuadraticAttenuation(0.01f);
 	spotLightSource->setAmbient({ 0.5f, 0.5f, 0.5f, 1.0f });
 }
 
@@ -218,7 +220,7 @@ int main()
 
 		createBoxes(*engine, phongMaterialModel);
 
-		const gltut::u32 usedPointLights = 3;
+		const gltut::u32 usedPointLights = 0;
 		gltut::GeometryNode* directionalLight = nullptr;
 		std::vector<gltut::GeometryNode*> pointLights;
 		gltut::GeometryNode* spotLight = nullptr;

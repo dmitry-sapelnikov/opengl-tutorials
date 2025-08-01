@@ -32,42 +32,6 @@ public:
 		mType = type;
 	}
 
-	/// Returns the ambient color
-	const Color& getAmbient() const noexcept final
-	{
-		return mAmbient;
-	}
-
-	/// Sets the ambient color
-	void setAmbient(const Color& ambient) noexcept final
-	{
-		mAmbient = ambient;
-	}
-
-	/// Returns the diffuse color
-	const Color& getDiffuse() const noexcept final
-	{
-		return mDiffuse;
-	}
-
-	/// Sets the diffuse color
-	void setDiffuse(const Color& diffuse) noexcept final
-	{
-		mDiffuse = diffuse;
-	}
-
-	/// Returns the specular color
-	const Color& getSpecular() const noexcept final
-	{
-		return mSpecular;
-	}
-
-	/// Sets the specular color
-	void setSpecular(const Color& specular) noexcept final
-	{
-		mSpecular = specular;
-	}
-
 	/// Returns the light direction in the local frame
 	const Vector3& getDirection() const noexcept final
 	{
@@ -127,18 +91,69 @@ public:
 		mInnerAngle = clamp(angleRadians, 0.0f, mOuterAngle);
 	}
 
+	/// Returns the linear attenuation for point and spot lights
+	float getLinearAttenuation() const noexcept final
+	{
+		return mLinearAttenuation;
+	}
+
+	/// Sets the linear attenuation for point and spot lights
+	void setLinearAttenuation(float linearAttenuation) noexcept final
+	{
+		mLinearAttenuation = linearAttenuation;
+	}
+
+	/// Returns the quadratic attenuation for point and spot lights
+	float getQuadraticAttenuation() const noexcept final
+	{
+		return mQuadraticAttenuation;
+	}
+
+	/// Sets the quadratic attenuation for point and spot lights
+	void setQuadraticAttenuation(float quadraticAttenuation) noexcept final
+	{
+		mQuadraticAttenuation = quadraticAttenuation;
+	}
+
+	/// Returns the ambient color
+	const Color& getAmbient() const noexcept final
+	{
+		return mAmbient;
+	}
+
+	/// Sets the ambient color
+	void setAmbient(const Color& ambient) noexcept final
+	{
+		mAmbient = ambient;
+	}
+
+	/// Returns the diffuse color
+	const Color& getDiffuse() const noexcept final
+	{
+		return mDiffuse;
+	}
+
+	/// Sets the diffuse color
+	void setDiffuse(const Color& diffuse) noexcept final
+	{
+		mDiffuse = diffuse;
+	}
+
+	/// Returns the specular color
+	const Color& getSpecular() const noexcept final
+	{
+		return mSpecular;
+	}
+
+	/// Sets the specular color
+	void setSpecular(const Color& specular) noexcept final
+	{
+		mSpecular = specular;
+	}
+
 private:
 	/// The light type
 	LightNode::Type mType;
-
-	/// The ambient color
-	Color mAmbient{ DEFAULT_AMBIENT };
-
-	/// The diffuse color
-	Color mDiffuse{ DEFAULT_DIFFUSE };
-
-	/// The specular color
-	Color mSpecular{ DEFAULT_SPECULAR };
 
 	/// The light direction
 	Vector3 mDirection{ DEFAULT_DIRECTION };
@@ -148,6 +163,21 @@ private:
 
 	/// The outer angle for spot lights, in radians
 	float mOuterAngle = PI * 0.5f;
+	
+	/// Linear attenuation for point and spot lights
+	float mLinearAttenuation{ 0.0f };
+
+	/// Quadratic attenuation for point and spot lights
+	float mQuadraticAttenuation{ 0.0f };
+
+	/// The ambient color
+	Color mAmbient{ DEFAULT_AMBIENT };
+
+	/// The diffuse color
+	Color mDiffuse{ DEFAULT_DIFFUSE };
+
+	/// The specular color
+	Color mSpecular{ DEFAULT_SPECULAR };
 };
 
 // End of the namespace gltut

@@ -32,6 +32,10 @@ public:
 		DIRECTIONAL_LIGHT_POSITION,
 		/// Directional light direction
 		DIRECTIONAL_LIGHT_DIRECTION,
+		/// Directional light linear attenuation
+		DIRECTIONAL_LIGHT_LINEAR_ATTENUATION,
+		/// Directional light quadratic attenuation
+		DIRECTIONAL_LIGHT_QUADRATIC_ATTENUATION,
 		/// Directional light ambient color
 		DIRECTIONAL_LIGHT_AMBIENT_COLOR,
 		/// Directional light diffuse color
@@ -41,6 +45,10 @@ public:
 
 		/// Point light position
 		POINT_LIGHT_POSITION,
+		/// Point light linear attenuation
+		POINT_LIGHT_LINEAR_ATTENUATION,
+		/// Point light quadratic attenuation
+		POINT_LIGHT_QUADRATIC_ATTENUATION,
 		/// Point light ambient color
 		POINT_LIGHT_AMBIENT_COLOR,
 		/// Point light diffuse color
@@ -56,6 +64,10 @@ public:
 		SPOT_LIGHT_INNER_ANGLE_COS,
 		/// Spot light outer angle cosine
 		SPOT_LIGHT_OUTER_ANGLE_COS,
+		/// Spot light linear attenuation
+		SPOT_LIGHT_LINEAR_ATTENUATION,
+		/// Spot light quadratic attenuation
+		SPOT_LIGHT_QUADRATIC_ATTENUATION,
 		/// Spot light ambient color
 		SPOT_LIGHT_AMBIENT_COLOR,
 		/// Spot light diffuse color

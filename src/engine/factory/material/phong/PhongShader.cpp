@@ -44,7 +44,7 @@ uniform sampler2D specularSampler;
 uniform float shininess;
 uniform vec3 viewPos;
 
-struct LightColor
+struct Color
 {
 	vec3 ambient;
 	vec3 diffuse;
@@ -54,7 +54,7 @@ struct LightColor
 #if MAX_DIRECTIONAL_LIGHTS > 0
 struct DirectionalLight
 {
-	LightColor color;
+	Color color;
 	vec3 dir;
 };
 uniform DirectionalLight directionalLights[MAX_DIRECTIONAL_LIGHTS];
@@ -63,8 +63,10 @@ uniform DirectionalLight directionalLights[MAX_DIRECTIONAL_LIGHTS];
 #if MAX_POINT_LIGHTS > 0
 struct PointLight
 {
-	LightColor color;
+	Color color;
 	vec3 pos;
+	float linAttenuation;
+	float quadAttenuation;
 };
 
 uniform PointLight pointLights[MAX_POINT_LIGHTS];
@@ -73,11 +75,13 @@ uniform PointLight pointLights[MAX_POINT_LIGHTS];
 #if MAX_SPOT_LIGHTS > 0
 struct SpotLight
 {
-	LightColor color;
+	Color color;
 	vec3 pos;
 	vec3 dir;
 	float innerAngleCos;
 	float outerAngleCos;
+	float linAttenuation;
+	float quadAttenuation;
 };
 
 uniform SpotLight spotLights[MAX_SPOT_LIGHTS];
@@ -93,11 +97,13 @@ out vec4 outColor;
 
 void main()
 {
+	vec3 result = vec3(0.0f);
+
+#if MAX_DIRECTIONAL_LIGHTS + MAX_POINT_LIGHTS + MAX_SPOT_LIGHTS > 0
 	vec3 norm = normalize(normal);
 	vec3 viewDir = normalize(viewPos - pos);
-
 	vec3 geomDiffuse = texture(diffuseSampler, texCoord).rgb;
-	vec3 result = vec3(0.0f);
+#endif
 
 #if MAX_DIRECTIONAL_LIGHTS > 0
 	for (int i = 0; i < MAX_DIRECTIONAL_LIGHTS; ++i)
@@ -106,7 +112,7 @@ void main()
 		vec3 ambient = directionalLights[i].color.ambient * geomDiffuse;
 
 		// Diffuse
-		vec3 lightDir = normalize(-directionalLights[i].dir);
+		vec3 lightDir = -directionalLights[i].dir;
 		vec3 diffuse = max(0.0f, dot(norm, lightDir)) * directionalLights[i].color.diffuse * geomDiffuse;
 
 		// Specular
@@ -125,7 +131,9 @@ void main()
 		vec3 ambient = pointLights[i].color.ambient * geomDiffuse;
 
 		// Diffuse
-		vec3 lightDir = normalize(pointLights[i].pos - pos);
+		vec3 lightDir = (pointLights[i].pos - pos);
+		float distance = length(lightDir);
+		lightDir /= distance;
 		vec3 diffuse = max(0.0f, dot(norm, lightDir)) * pointLights[i].color.diffuse * geomDiffuse;
 
 		// Specular
@@ -133,7 +141,13 @@ void main()
 		float spec = pow(max(dot(viewDir, reflectDir), 0.0), shininess);
 		vec3 specular = spec * pointLights[i].color.specular * texture(specularSampler, texCoord).rgb;
 
-		result += ambient + diffuse + specular;
+		// Attenuation
+		float attenuation = 1.0f / (
+			1.0f +
+			pointLights[i].linAttenuation * distance +
+			pointLights[i].quadAttenuation * distance * distance);
+
+		result += ambient + attenuation * (diffuse + specular);
 	}
 #endif
 
@@ -143,7 +157,9 @@ void main()
 		// Ambient
 		result += spotLights[i].color.ambient * geomDiffuse;
 
-		vec3 lightDir = normalize(spotLights[i].pos - pos);
+		vec3 lightDir = (spotLights[i].pos - pos);
+		float distance = length(lightDir);
+		lightDir /= distance;
 
 		float theta = dot(-lightDir, spotLights[i].dir);
 		
@@ -160,7 +176,14 @@ void main()
 			vec3 reflectDir = reflect(-lightDir, norm);
 			float spec = pow(max(dot(viewDir, reflectDir), 0.0), shininess);
 			vec3 specular = spec * spotLights[i].color.specular * texture(specularSampler, texCoord).rgb;
-			result += intensity * (diffuse + specular);
+
+			// Attenuation
+			float attenuation = 1.0f / (
+				1.0f +
+				spotLights[i].linAttenuation * distance +
+				spotLights[i].quadAttenuation * distance * distance);
+
+			result += intensity * attenuation * (diffuse + specular);
 		}
 	}
 #endif
@@ -221,6 +244,8 @@ SceneShaderBinding* createPhongShader(
 	binding->bind(SceneShaderBinding::Parameter::POINT_LIGHT_AMBIENT_COLOR, "pointLights.color.ambient");
 	binding->bind(SceneShaderBinding::Parameter::POINT_LIGHT_DIFFUSE_COLOR, "pointLights.color.diffuse");
 	binding->bind(SceneShaderBinding::Parameter::POINT_LIGHT_SPECULAR_COLOR, "pointLights.color.specular");
+	binding->bind(SceneShaderBinding::Parameter::POINT_LIGHT_LINEAR_ATTENUATION, "pointLights.linAttenuation");
+	binding->bind(SceneShaderBinding::Parameter::POINT_LIGHT_QUADRATIC_ATTENUATION, "pointLights.quadAttenuation");
 
 	binding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_POSITION, "spotLights.pos");
 	binding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_DIRECTION, "spotLights.dir");
@@ -229,6 +254,8 @@ SceneShaderBinding* createPhongShader(
 	binding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_AMBIENT_COLOR, "spotLights.color.ambient");
 	binding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_DIFFUSE_COLOR, "spotLights.color.diffuse");
 	binding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_SPECULAR_COLOR, "spotLights.color.specular");
+	binding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_LINEAR_ATTENUATION, "spotLights.linAttenuation");
+	binding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_QUADRATIC_ATTENUATION, "spotLights.quadAttenuation");
 
 	return binding;
 }
