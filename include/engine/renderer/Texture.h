@@ -13,7 +13,7 @@ public:
 	{
 		RGB,
 		RGBA,
-		DEPTH
+		FLOAT
 	};
 
 	enum class WrapMode

@@ -21,7 +21,7 @@ u32 toOpenGLFormat(Texture::Format format) noexcept
 	case Texture::Format::RGBA:
 		return GL_RGBA;
 
-	case Texture::Format::DEPTH:
+	case Texture::Format::FLOAT:
 		return GL_DEPTH_COMPONENT;
 
 		GLTUT_UNEXPECTED_SWITCH_DEFAULT_CASE(format)
@@ -73,7 +73,7 @@ u32 getChannelType(Texture::Format format) noexcept
 	case Texture::Format::RGBA:
 		return GL_UNSIGNED_BYTE;
 
-	case Texture::Format::DEPTH:
+	case Texture::Format::FLOAT:
 		return GL_FLOAT;
 
 		GLTUT_UNEXPECTED_SWITCH_DEFAULT_CASE(format)
