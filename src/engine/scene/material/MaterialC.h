@@ -36,20 +36,17 @@ public:
 	void activate(const GeometryNode* node) const noexcept final;
 
 private:
-	/// Binds the textures
-	void bindTextures() const noexcept;
-
 	/// The shader binding
 	const SceneShaderBinding* mShaderBinding;
 
 	/// The shader arguments
 	ShaderArguments mShaderArguments;
 
-	/// The number of texture slots
-	static constexpr u32 TEXTURE_SLOTS = 16;
-
 	/// Texture slots
-	std::array<Texture*, TEXTURE_SLOTS> mTextures;
+	std::array<Texture*, Texture::TEXTURE_SLOTS> mTextures;
+
+	/// Max non-empty texture slot
+	u32 mBoundTextureSlots = 0;
 };
 
 // End of the namespace gltut

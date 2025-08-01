@@ -125,6 +125,24 @@ Texture* RendererOpenGL::createBackendTexture(
 	return result;
 }
 
+void RendererOpenGL::bindTexture(Texture* texture, u32 slot) noexcept
+{
+	if (slot >= Texture::TEXTURE_SLOTS)
+	{
+		return;
+	}
+
+	glActiveTexture(GL_TEXTURE0 + slot);
+	if (texture == nullptr)
+	{
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
+	else
+	{
+		texture->bind(slot);
+	}
+}
+
 void RendererOpenGL::onResize(const Point2u& size) noexcept
 {
 	glViewport(0, 0, size.x, size.y);

@@ -6,8 +6,6 @@
 #include "engine/core/NonCopyable.h"
 #include "engine/scene/Scene.h"
 
-#include "../renderer/RendererBase.h"
-
 #include "./camera/CameraC.h"
 #include "./material/MaterialC.h"
 #include "./shader/SceneShaderBindingC.h"

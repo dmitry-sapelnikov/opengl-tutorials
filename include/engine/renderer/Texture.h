@@ -15,6 +15,9 @@ public:
 		CLAMP_TO_EDGE
 	};
 
+	/// The number of texture slots available
+	static constexpr u32 TEXTURE_SLOTS = 16;
+
 	/// Virtual destructor
 	virtual ~Texture() noexcept = default;
 

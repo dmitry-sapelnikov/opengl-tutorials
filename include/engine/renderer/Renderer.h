@@ -59,6 +59,9 @@ public:
 	/// Removes a texture
 	virtual void removeTexture(Texture* texture) noexcept = 0;
 
+	/// Binds a texture to a slot
+	virtual void bindTexture(Texture* texture, u32 slot) noexcept = 0;
+
 	/// Enables or disables vertical synchronization
 	virtual void enableVSync(bool vSync) noexcept = 0;
 
