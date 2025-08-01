@@ -7,10 +7,171 @@
 #include "engine/core/Check.h"
 #include "engine/Engine.h"
 
-namespace
+const std::vector<gltut::Vector3> POINT_LIGHT_POSITIONS = {
+	{0.0, 10.0f, 20.0f},
+	{5.0, 0.0f, 0.0f},
+	{0.0, 5.0f, 0.0f}
+};
+
+const std::vector<gltut::Color> POINT_LIGHT_COLORS = {
+	{1.0f, 1.0f, 1.0f}, // White light
+	{1.0f, 0.5f, 0.5f}, // Red light
+	{0.5f, 0.5f, 1.0f}  // Blue light
+};
+
+const std::vector<gltut::Vector3> POINT_LIGHT_ROTATIONS = {
+	{0.0f, 1.0f, 0.0f},
+	{0.0f, 0.0f, -0.5f},
+	{1.5f, 0.0f, 0.0f},
+};
+
+const gltut::Color directionalLightColor = { 1.0f, 1.0f, 0.9f }; // Slightly yellowish light
+
+const gltut::Color SPOT_LIGHT_COLOR = { 1.0f, 1.0f, 1.0f }; // White light
+constexpr float SPOT_LIGHT_Y = 10.0f;
+constexpr float SPOT_LIGHT_Z = 6.0f;
+
+/// Creates boxes
+void createBoxes(
+	gltut::Engine& engine,
+	gltut::PhongMaterialModel* phongMaterialModel)
 {
-const gltut::Vector3 LIGHT_POSITION = { 0.0, 10.0f, 20.0f };
-const gltut::Vector3 LIGHT_COLOR = { 1.0, 1.0f, 1.0f };
+	const int COUNT = 3;
+	const float GEOMETRY_SIZE = 1.0f;
+	const float STRIDE = 3.0f;
+	auto* boxMesh = engine.getFactory()->getGeometry()->createBox(
+		GEOMETRY_SIZE,
+		GEOMETRY_SIZE,
+		GEOMETRY_SIZE);
+
+	GLTUT_CHECK(boxMesh, "Failed to create mesh");
+
+	for (int i = 0; i < COUNT; ++i)
+	{
+		for (int j = 0; j < COUNT; ++j)
+		{
+			const gltut::Vector3 position(
+				(i - (COUNT - 1.0f) * 0.5f) * STRIDE,
+				GEOMETRY_SIZE * 0.5,
+				(j - (COUNT - 1.0f) * 0.5f) * STRIDE);
+
+			auto* object = engine.getScene()->createGeometry(
+				boxMesh,
+				phongMaterialModel->getMaterial(),
+				gltut::Matrix4::translationMatrix(position));
+			GLTUT_CHECK(object, "Failed to create object");
+		}
+	}
+}
+
+/// Creates lights
+
+gltut::GeometryNode* createLight(
+	gltut::Scene& scene,
+	gltut::SceneShaderBinding* lightShaderBinding,
+	gltut::Mesh* lightMesh,
+	const gltut::LightNode::Type lightType,
+	const gltut::Vector3& position,
+	const gltut::Color& color)
+{
+	auto* lightMaterial = scene.createMaterial(lightShaderBinding);
+	GLTUT_CHECK(lightMaterial, "Failed to create light material");
+	lightMaterial->getShaderArguments()->setVec3("lightColor", color.r, color.g, color.b);
+	GLTUT_CHECK(lightMesh, "Failed to create light mesh");
+
+	auto* light = scene.createGeometry(lightMesh, lightMaterial);
+	GLTUT_CHECK(light, "Failed to create light object");
+	light->setTransform(gltut::Matrix4::translationMatrix(position));
+
+	auto* lightSource = scene.createLight(lightType, gltut::Matrix4::identity(), light);
+	lightSource->setAmbient(gltut::Color(color.r * 0.2f, color.g * 0.2f, color.b * 0.2f, 1.0f));
+	lightSource->setDiffuse(color);
+	lightSource->setSpecular(color);
+
+	return light;
+}
+
+void createLights(
+	gltut::Engine& engine,
+	gltut::u32 usedPointLights,
+	gltut::GeometryNode* directionalLight,
+	std::vector<gltut::GeometryNode*>& pointLights,
+	gltut::GeometryNode*& spotLight)
+{
+	directionalLight = nullptr;
+	pointLights.clear();
+	spotLight = nullptr;
+
+	gltut::Scene& scene = *engine.getScene();
+
+	auto* lightMesh = engine.getFactory()->getGeometry()->createSphere(0.2f, 10);
+	GLTUT_CHECK(lightMesh, "Failed to create light mesh");
+
+	auto* lightShader = engine.getRenderer()->loadShader(
+		"assets/light_shader.vs",
+		"assets/light_shader.fs");
+	GLTUT_CHECK(lightShader, "Failed to create light shader program");
+
+	auto* lightShaderBinding = scene.createShaderBinding(lightShader);
+	GLTUT_CHECK(lightShaderBinding, "Failed to create light shader binding");
+
+	gltut::bindModelViewProjectionShaderParameters(
+		lightShaderBinding,
+		"model",
+		"view",
+		"projection");
+
+	// Create a directional light]
+	directionalLight = createLight(
+		scene,
+		lightShaderBinding,
+		lightMesh,
+		gltut::LightNode::Type::DIRECTIONAL,
+		gltut::Vector3(0.0f, 10.0f, 0.0f),
+		directionalLightColor);
+
+	GLTUT_CHECK(directionalLight, "Failed to create directional light");
+	gltut::LightNode* directionalLightSource = dynamic_cast<gltut::LightNode*>(directionalLight->getChild(0));
+	GLTUT_CHECK(directionalLightSource, "Failed to get directional light source");
+	directionalLightSource->setDirection({ -3.0f, -1.0f, 0.0f });
+
+	const gltut::u32 pointLightCount = std::min(
+		usedPointLights,
+		static_cast<gltut::u32>(POINT_LIGHT_POSITIONS.size()));
+
+	for (size_t i = 0; i < pointLightCount; ++i)
+	{
+		const gltut::Vector3& position = POINT_LIGHT_POSITIONS[i];
+		const gltut::Color& color = POINT_LIGHT_COLORS[i % POINT_LIGHT_COLORS.size()];
+		auto* pointLight = createLight(
+			scene,
+			lightShaderBinding,
+			lightMesh,
+			gltut::LightNode::Type::POINT,
+			position,
+			color);
+		GLTUT_CHECK(pointLight, "Failed to create point light");
+		pointLights.push_back(pointLight);
+	}
+
+	// Create a spot light
+	spotLight = createLight(
+		scene,
+		lightShaderBinding,
+		lightMesh,
+		gltut::LightNode::Type::SPOT,
+		gltut::Vector3(0.0f, SPOT_LIGHT_Y, SPOT_LIGHT_Z),
+		SPOT_LIGHT_COLOR);
+
+	GLTUT_CHECK(spotLight, "Failed to create spot light");
+	gltut::LightNode* spotLightSource = dynamic_cast<gltut::LightNode*>(spotLight->getChild(0));
+	GLTUT_CHECK(spotLightSource, "Failed to get spot light source");
+	spotLightSource->setDirection({ 0.0f, -1.0f, -1.0f });
+	spotLightSource->setInnerAngle(gltut::toRadians(25.0f));
+	spotLightSource->setOuterAngle(gltut::toRadians(30.0f));
+	spotLightSource->setLinearAttenuation(0.1f);
+	spotLightSource->setQuadraticAttenuation(0.01f);
+	spotLightSource->setAmbient({ 0.5f, 0.5f, 0.5f, 1.0f });
 }
 
 ///	The program entry point
@@ -26,18 +187,20 @@ int main()
 
 		auto* renderer = engine->getRenderer();
 		auto* scene = engine->getScene();
-		auto* mesh = engine->getFactory()->getGeometry()->createSphere(1.0f, 10);
-		GLTUT_CHECK(mesh, "Failed to create mesh");
 
-		gltut::PhongMaterialModel* phongMaterialModel = engine->getFactory()->getMaterial()->createPhongModel();
+		auto* materialFactory = engine->getFactory()->getMaterial();
+
+		auto* phongShader = materialFactory->createPhongShader(
+			renderer,
+			scene,
+			1, // No directional lights
+			3, // Use 3 point lights
+			1); // Use 1 spot light
+
+		GLTUT_CHECK(phongShader, "Failed to create Phong shader");
+
+		gltut::PhongMaterialModel* phongMaterialModel = materialFactory->createPhongMaterial(phongShader);
 		GLTUT_CHECK(phongMaterialModel, "Failed to create Phong material model");
-
-		auto* phongShader = phongMaterialModel->getMaterial()->getShader()->getShader();
-		phongShader->setVec3("lightPos", LIGHT_POSITION.x, LIGHT_POSITION.y, LIGHT_POSITION.z);
-		phongShader->setVec3("lightColor", LIGHT_COLOR.x, LIGHT_COLOR.y, LIGHT_COLOR.z);
-
-		gltut::Texture* ambientTexture = renderer->createSolidColorTexture(0.1f, 0.1f, 0.1f);
-		GLTUT_CHECK(ambientTexture, "Failed to create ambient texture");
 
 		gltut::Texture* diffuseTexture = renderer->loadTexture("assets/container2.png");
 		GLTUT_CHECK(diffuseTexture, "Failed to create diffuse texture");
@@ -45,31 +208,23 @@ int main()
 		gltut::Texture* specularTexture = renderer->loadTexture("assets/container2_specular.png");
 		GLTUT_CHECK(specularTexture, "Failed to create specular texture");
 
-		phongMaterialModel->setAmbient(ambientTexture);
 		phongMaterialModel->setDiffuse(diffuseTexture);
 		phongMaterialModel->setSpecular(specularTexture);
 
-		auto* object = scene->createGeometry(mesh, phongMaterialModel->getMaterial());
-		GLTUT_CHECK(object, "Failed to create object");
+		auto* floorGeometry = engine->getFactory()->getGeometry()->createBox(20.0f, 1.0f, 20.0f);
+		GLTUT_CHECK(floorGeometry, "Failed to create floor geometry");
+		scene->createGeometry(
+			floorGeometry,
+			phongMaterialModel->getMaterial(),
+			gltut::Matrix4::translationMatrix({ 0.0f, -0.5f, 0.0f }));
 
-		auto* lightShader = renderer->loadShader(
-			"assets/light_shader.vs",
-			"assets/light_shader.fs");
-		GLTUT_CHECK(lightShader, "Failed to create light shader program");
+		createBoxes(*engine, phongMaterialModel);
 
-		auto* lightShaderBinding = scene->createShaderBinding(lightShader);
-		GLTUT_CHECK(lightShaderBinding, "Failed to create light shader binding");
-
-		gltut::bindModelViewProjectionShaderParameters(lightShaderBinding, "model", "view", "projection");
-		auto* lightMaterial = scene->createMaterial(lightShaderBinding);
-		GLTUT_CHECK(lightMaterial, "Failed to create light material");
-
-		auto* light = scene->createGeometry(mesh, lightMaterial);
-		GLTUT_CHECK(light, "Failed to create light object");
-		light->setTransform(gltut::Matrix4::transformMatrix(
-			LIGHT_POSITION,
-			{ 0.0f, 0.0f, 0.0f },
-			{ 0.2f, 0.2f, 0.2f }));
+		const gltut::u32 usedPointLights = 0;
+		gltut::GeometryNode* directionalLight = nullptr;
+		std::vector<gltut::GeometryNode*> pointLights;
+		gltut::GeometryNode* spotLight = nullptr;
+		createLights(*engine, usedPointLights, directionalLight, pointLights, spotLight);
 
 		gltut::Camera* camera = engine->getScene()->createCamera(
 			{ -2.0f, 2.0f, 6.0f },
@@ -91,11 +246,19 @@ int main()
 			const auto now = std::chrono::high_resolution_clock::now();
 			const float time = std::chrono::duration<float>(now - startTime).count();
 
-			const gltut::Vector3 rotation = { 0.0f, time, 0.0f };
-			object->setTransform(gltut::Matrix4::transformMatrix(
-				{ 0.0f, 0.0f, 0.0f },
-				rotation,
-				{ 2.0f, 2.0f, 2.0f }));
+			for (size_t i = 0; i < pointLights.size(); ++i)
+			{
+				const gltut::Vector3 lightRotation = time * POINT_LIGHT_ROTATIONS[i];
+				gltut::Matrix4 lightTransform =
+					gltut::Matrix4::rotationMatrix(lightRotation) *
+					gltut::Matrix4::translationMatrix(POINT_LIGHT_POSITIONS[i]);
+				pointLights[i]->setTransform(lightTransform);
+			}
+
+			float spotLightHeight = (std::cos(time) * 0.5f + 0.5f) * SPOT_LIGHT_Y;
+			spotLight->setTransform(
+				gltut::Matrix4::translationMatrix({ 0.0f, spotLightHeight, SPOT_LIGHT_Z }));
+
 			if (!engine->update())
 			{
 				break;

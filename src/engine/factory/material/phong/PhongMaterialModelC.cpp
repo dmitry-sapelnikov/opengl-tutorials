@@ -15,19 +15,14 @@ const Material* PhongMaterialModelC::getMaterial() const noexcept
 	return &mMaterial;
 }
 
-void PhongMaterialModelC::setAmbient(Texture* ambient) noexcept
-{
-	mMaterial.setTexture(ambient, 0);
-}
-
 void PhongMaterialModelC::setDiffuse(Texture* diffuse) noexcept
 {
-	mMaterial.setTexture(diffuse, 1);
+	mMaterial.setTexture(diffuse, 0);
 }
 
 void PhongMaterialModelC::setSpecular(Texture* specular) noexcept
 {
-	mMaterial.setTexture(specular, 2);
+	mMaterial.setTexture(specular, 1);
 }
 
 void PhongMaterialModelC::setShininess(float shininess) noexcept

@@ -6,6 +6,7 @@
 #include "engine/scene/shader/SceneShaderBinding.h"
 
 #include "engine/scene/nodes/GeometryNode.h"
+#include "engine/scene/nodes/LightNode.h"
 
 namespace gltut
 {
@@ -76,6 +77,18 @@ public:
 		const Material* material,
 		const Matrix4& transform = Matrix4::identity(),
 		SceneNode* parent = nullptr) noexcept = 0;
+
+	/// Creates a scene light
+	virtual LightNode* createLight(
+		LightNode::Type type,
+		const Matrix4& transform = Matrix4::identity(),
+		SceneNode* parent = nullptr) noexcept = 0;
+
+	/// Returns the number of lights in the scene
+	virtual u32 getLightCount() const noexcept = 0;
+
+	/// Returns the light at the specified index
+	virtual LightNode* getLight(u32 index) const noexcept = 0;
 };
 
 // End of the namespace gltut

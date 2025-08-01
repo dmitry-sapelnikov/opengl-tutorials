@@ -9,7 +9,12 @@ namespace gltut
 {
 // Global functions
 /// Creates a Phong shader
-SceneShaderBinding* createPhongShader(Renderer& renderer, Scene& scene) noexcept;
+SceneShaderBinding* createPhongShader(
+	Renderer& renderer,
+	Scene& scene,
+	u32 maxDirectionalLights,
+	u32 maxPointLights,
+	u32 maxSpotLights) noexcept;
 
 // End of the namespace gltut
 }

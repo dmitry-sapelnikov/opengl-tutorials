@@ -37,7 +37,7 @@ int main()
 
 		auto* shaderBinding = scene->createShaderBinding(shader);
 		GLTUT_CHECK(shaderBinding != nullptr, "Failed to create shader binding");
-		shaderBinding->bind(gltut::SceneShaderBinding::Parameter::NODE_MATRIX, "model");
+		shaderBinding->bind(gltut::SceneShaderBinding::Parameter::GEOMETRY_MATRIX, "model");
 
 		gltut::Texture* texture1 = renderer->loadTexture("assets/container.jpg");
 		GLTUT_CHECK(texture1 != nullptr, "Failed to load texture");

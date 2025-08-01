@@ -32,6 +32,11 @@ SceneShaderBinding* SceneC::createShaderBinding(Shader* shader) noexcept
 
 Material* SceneC::createMaterial(SceneShaderBinding* shaderBinding) noexcept
 {
+	if (shaderBinding == nullptr)
+	{
+		return nullptr;
+	}
+
 	Material* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN
 		result = &mMaterials.emplace_back(shaderBinding);
@@ -50,6 +55,30 @@ GeometryNode* SceneC::createGeometry(
 		result = &mGeometries.emplace_back(mesh, material, transform, parent);
 	GLTUT_CATCH_ALL_END("Cannot create a scene object")
 	return result;
+}
+
+LightNode* SceneC::createLight(
+	LightNode::Type type,
+	const Matrix4& transform,
+	SceneNode* parent) noexcept
+{
+	LightNode* result = nullptr;
+	GLTUT_CATCH_ALL_BEGIN
+		result = &mLights.emplace_back(type, transform, parent);
+	GLTUT_CATCH_ALL_END("Cannot create a light")
+	return result;
+}
+
+u32 SceneC::getLightCount() const noexcept
+{
+	return static_cast<u32>(mLights.size());
+}
+
+LightNode* SceneC::getLight(u32 index) const noexcept
+{
+	return index < getLightCount() ?
+		&const_cast<LightNodeC&>(mLights[index]) :
+		nullptr;
 }
 
 Camera* SceneC::createCamera(

@@ -5,6 +5,7 @@
 #include <string>
 #include "engine/core/NonCopyable.h"
 #include "engine/scene/shader/SceneShaderBinding.h"
+#include "engine/scene/nodes/LightNode.h"
 
 namespace gltut
 {
@@ -47,11 +48,29 @@ public:
 	void activate(const GeometryNode* node) const noexcept final;
 
 private:
+	using ShaderParamterParts = std::pair<std::string, std::string>;
+
+	void activateLight(
+		const LightNode& light,
+		u32 lightInd,
+		SceneShaderBinding::Parameter position,
+		SceneShaderBinding::Parameter ambientColor,
+		SceneShaderBinding::Parameter diffuseColor,
+		SceneShaderBinding::Parameter specularColor) const noexcept;
+
+	/// Activates the shader binding for lights in a scene
+	void activateLights(const Scene& scene) const;
+
+	const ShaderParamterParts& getShaderParameterParts(Parameter parameter) const noexcept;
+
 	/// The shader associated with this binding
 	Shader* mShader;
 
 	/// Names of scene parameters
 	std::array<std::string, static_cast<size_t>(Parameter::TOTAL_COUNT)> mShaderParameters;
+
+	/// Names of scene parameters split into parts
+	std::array<ShaderParamterParts, static_cast<size_t>(Parameter::TOTAL_COUNT)> mShaderParameterParts;
 };
 
 // End of the namespace gltut

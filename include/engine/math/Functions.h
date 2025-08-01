@@ -25,5 +25,11 @@ inline float toDegrees(float radians) noexcept
 	return radians * 180.0f / PI;
 }
 
+/// Clamps a float value between min and max
+inline float clamp(float value, float min, float max) noexcept
+{
+	return std::max(min, std::min(value, max));
+}
+
 // End of namespace gltut
 }

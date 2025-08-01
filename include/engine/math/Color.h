@@ -1,5 +1,8 @@
 #pragma once
 
+// Includes
+#include "engine/math/Vector3.h"
+
 namespace gltut
 {
 
@@ -34,6 +37,12 @@ struct Color
 	{
 	}
 };
+
+// Global functions
+inline Vector3 toVector3(const Color& color) noexcept
+{
+	return { color.r, color.g, color.b };
+}
 
 // End of the namespace gltut
 }

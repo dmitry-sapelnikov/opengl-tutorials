@@ -11,8 +11,6 @@ class PhongMaterialModel
 public:
 	virtual const Material* getMaterial() const noexcept = 0;
 
-	virtual void setAmbient(Texture* ambient) noexcept = 0;
-
 	virtual void setDiffuse(Texture* diffuse) noexcept = 0;
 
 	virtual void setSpecular(Texture* specular) noexcept = 0;
