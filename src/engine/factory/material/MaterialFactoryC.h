@@ -7,6 +7,8 @@
 #include "engine/renderer/Renderer.h"
 #include "engine/scene/Scene.h"
 #include "engine/factory/material/MaterialFactory.h"
+
+#include "./flat_color/FlatColorMaterialModelC.h"
 #include "./phong/PhongMaterialModelC.h"
 
 namespace gltut
@@ -17,6 +19,9 @@ class MaterialFactoryC final : public MaterialFactory, public NonCopyable
 public:
 	// Constructor
 	explicit MaterialFactoryC(Renderer& renderer, Scene& scene) noexcept;
+
+	/// Creates a flat color material model
+	FlatColorMaterialModel* createFlatColorMaterial() noexcept final;
 
 	/// Creates a Phong shader
 	SceneShaderBinding* createPhongShader(
@@ -35,6 +40,12 @@ private:
 
 	/// The scene used to create materials
 	Scene& mScene;
+
+	/// Flat color shader binding
+	SceneShaderBinding* mFlatColorShader = nullptr;
+
+	/// Flat color material models
+	std::deque<FlatColorMaterialModelC> mFlatColorModels;
 
 	/// Pointer to the Phong material shader
 	std::map<std::tuple<u32, u32, u32>, SceneShaderBinding*> mPhongShaders;

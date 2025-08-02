@@ -1,35 +1,37 @@
 #pragma once
 
 // Includes
-#include "engine/core/NonCopyable.h"
-#include "engine/factory/material/phong/PhongMaterialModel.h"
-#include "engine/scene/material/Material.h"
+#include "engine/factory/material/PhongMaterialModel.h"
+#include "../MaterialModelT.h"
 
 namespace gltut
 {
 // Global classes
 
 /// Implementation of the PhongMaterialModel interface
-class PhongMaterialModelC final : public PhongMaterialModel, public NonCopyable
+class PhongMaterialModelC final : public MaterialModelT<PhongMaterialModel>
 {
 public:
-	// Constructor
-	explicit PhongMaterialModelC(Material& material) noexcept;
-
-	// Returns the material
-	const Material* getMaterial() const noexcept final;
+	/// Constructor
+	using MaterialModelT<PhongMaterialModel>::MaterialModelT;
 
 	// Sets the diffuse texture
-	void setDiffuse(Texture* diffuse) noexcept final;
+	void setDiffuse(Texture* diffuse) noexcept final
+	{
+		getMaterial().setTexture(diffuse, 0);
+	}
 
 	// Sets the specular texture
-	void setSpecular(Texture* specular) noexcept final;
+	void setSpecular(Texture* specular) noexcept final
+	{
+		getMaterial().setTexture(specular, 1);
+	}
 
 	// Sets the shininess value
-	void setShininess(float shininess) noexcept final;
-
-private:
-	Material& mMaterial;
+	void setShininess(float shininess) noexcept final
+	{
+		getMaterial().getShaderArguments()->setFloat("shininess", shininess);
+	}
 };
 
 // End of the namespace gltut
