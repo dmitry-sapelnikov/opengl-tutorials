@@ -3,7 +3,8 @@
 // Includes
 #include "engine/renderer/Renderer.h"
 #include "engine/scene/Scene.h"
-#include "engine/factory/material/phong/PhongMaterialModel.h"
+#include "engine/factory/material/FlatColorMaterialModel.h"
+#include "engine/factory/material/PhongMaterialModel.h"
 
 namespace gltut
 {
@@ -14,6 +15,9 @@ class MaterialFactory
 public:
 	/// Virtual destructor
 	virtual ~MaterialFactory() noexcept = default;
+
+	/// Creates a flat color material model
+	virtual FlatColorMaterialModel* createFlatColorMaterial() noexcept = 0;
 
 	/// Creates a Phong shader
 	virtual SceneShaderBinding* createPhongShader(

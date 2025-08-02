@@ -67,23 +67,25 @@ void createBoxes(
 /// Creates lights
 
 gltut::GeometryNode* createLight(
-	gltut::Scene& scene,
-	gltut::SceneShaderBinding* lightShaderBinding,
+	gltut::Engine& engine,
 	gltut::Mesh* lightMesh,
 	const gltut::LightNode::Type lightType,
 	const gltut::Vector3& position,
 	const gltut::Color& color)
 {
-	auto* lightMaterial = scene.createMaterial(lightShaderBinding);
-	GLTUT_CHECK(lightMaterial, "Failed to create light material");
-	lightMaterial->getShaderArguments()->setVec3("lightColor", color.r, color.g, color.b);
-	GLTUT_CHECK(lightMesh, "Failed to create light mesh");
+	auto* colorTexture = engine.getRenderer()->createSolidColorTexture(
+		color.r, color.g, color.b, color.a);
+	GLTUT_CHECK(colorTexture, "Failed to create color texture");
 
-	auto* light = scene.createGeometry(lightMesh, lightMaterial);
+	auto* lightMaterial = engine.getFactory()->getMaterial()->createFlatColorMaterial();
+	GLTUT_CHECK(lightMaterial, "Failed to create light material");
+	lightMaterial->setColor(colorTexture);
+
+	auto* light = engine.getScene()->createGeometry(lightMesh, lightMaterial->getMaterial());
 	GLTUT_CHECK(light, "Failed to create light object");
 	light->setTransform(gltut::Matrix4::translationMatrix(position));
 
-	auto* lightSource = scene.createLight(lightType, gltut::Matrix4::identity(), light);
+	auto* lightSource = engine.getScene()->createLight(lightType, gltut::Matrix4::identity(), light);
 	lightSource->setAmbient(gltut::Color(color.r * 0.2f, color.g * 0.2f, color.b * 0.2f, 1.0f));
 	lightSource->setDiffuse(color);
 	lightSource->setSpecular(color);
@@ -102,29 +104,12 @@ void createLights(
 	pointLights.clear();
 	spotLight = nullptr;
 
-	gltut::Scene& scene = *engine.getScene();
-
 	auto* lightMesh = engine.getFactory()->getGeometry()->createSphere(0.2f, 10);
 	GLTUT_CHECK(lightMesh, "Failed to create light mesh");
 
-	auto* lightShader = engine.getRenderer()->loadShader(
-		"assets/light_shader.vs",
-		"assets/light_shader.fs");
-	GLTUT_CHECK(lightShader, "Failed to create light shader program");
-
-	auto* lightShaderBinding = scene.createShaderBinding(lightShader);
-	GLTUT_CHECK(lightShaderBinding, "Failed to create light shader binding");
-
-	gltut::bindModelViewProjectionShaderParameters(
-		lightShaderBinding,
-		"model",
-		"view",
-		"projection");
-
 	// Create a directional light]
 	directionalLight = createLight(
-		scene,
-		lightShaderBinding,
+		engine,
 		lightMesh,
 		gltut::LightNode::Type::DIRECTIONAL,
 		gltut::Vector3(0.0f, 10.0f, 0.0f),
@@ -144,8 +129,7 @@ void createLights(
 		const gltut::Vector3& position = POINT_LIGHT_POSITIONS[i];
 		const gltut::Color& color = POINT_LIGHT_COLORS[i % POINT_LIGHT_COLORS.size()];
 		auto* pointLight = createLight(
-			scene,
-			lightShaderBinding,
+			engine,
 			lightMesh,
 			gltut::LightNode::Type::POINT,
 			position,
@@ -156,8 +140,7 @@ void createLights(
 
 	// Create a spot light
 	spotLight = createLight(
-		scene,
-		lightShaderBinding,
+		engine,
 		lightMesh,
 		gltut::LightNode::Type::SPOT,
 		gltut::Vector3(0.0f, SPOT_LIGHT_Y, SPOT_LIGHT_Z),

@@ -1,6 +1,7 @@
 // Includes
 #include "MaterialFactoryC.h"
 #include "./phong/PhongShader.h"
+#include "./flat_color//FlatColorShader.h"
 
 namespace gltut
 {
@@ -11,7 +12,30 @@ MaterialFactoryC::MaterialFactoryC(Renderer& renderer, Scene& scene) noexcept :
 {
 }
 
-/// Creates a Phong shader
+FlatColorMaterialModel* MaterialFactoryC::createFlatColorMaterial() noexcept
+{
+	if (mFlatColorShader == nullptr)
+	{
+		mFlatColorShader = gltut::createFlatColorShader(mRenderer, mScene);
+		if (mFlatColorShader == nullptr)
+		{
+			return nullptr;
+		}
+	}
+
+	Material* material = mScene.createMaterial(mFlatColorShader);
+	if (material == nullptr)
+	{
+		return nullptr;
+	}
+
+	FlatColorMaterialModel* result = nullptr;
+	GLTUT_CATCH_ALL_BEGIN
+		result = &mFlatColorModels.emplace_back(*material);
+	GLTUT_CATCH_ALL_END("Cannot create a flat color material model")
+	return result;
+}
+
 SceneShaderBinding* MaterialFactoryC::createPhongShader(
 	Renderer* renderer,
 	Scene* scene,
