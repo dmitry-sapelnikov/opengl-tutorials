@@ -2,6 +2,7 @@
 
 // Includes
 #include "engine/core/Types.h"
+#include "engine/math/Rectangle.h"
 #include "engine/renderer/mesh/Mesh.h"
 #include "engine/renderer/shader/Shader.h"
 #include "engine/renderer/Texture.h"
@@ -68,6 +69,9 @@ public:
 
 	/// Binds a texture to a slot
 	virtual void bindTexture(Texture* texture, u32 slot) noexcept = 0;
+
+	/// Set viewport for the current render target
+	virtual void setViewport(const Rectangle2u& rectangle) noexcept = 0;
 
 	/// Enables or disables vertical synchronization
 	virtual void enableVSync(bool vSync) noexcept = 0;
