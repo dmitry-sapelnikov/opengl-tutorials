@@ -21,6 +21,7 @@
     <ClInclude Include="..\..\include\engine\factory\material\FlatColorMaterialModel.h" />
     <ClInclude Include="..\..\include\engine\factory\material\MaterialModel.h" />
     <ClInclude Include="..\..\include\engine\factory\material\PhongMaterialModel.h" />
+    <ClInclude Include="..\..\include\engine\math\Aabb.h" />
     <ClInclude Include="..\..\include\engine\math\Color.h" />
     <ClInclude Include="..\..\include\engine\math\Functions.h" />
     <ClInclude Include="..\..\include\engine\math\Constants.h" />
