@@ -296,6 +296,12 @@
     <ClInclude Include="..\..\src\engine\factory\material\flat_color\FlatColorShader.h">
       <Filter>src\factory\material\flat_color</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\engine\math\Aabb.h">
+      <Filter>include\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\math\Rectangle.h">
+      <Filter>include\math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\engine\EngineC.cpp">

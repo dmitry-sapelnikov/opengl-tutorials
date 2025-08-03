@@ -62,6 +62,20 @@ struct Point2
 		return { -x, -y };
 	}
 
+	/// operator []
+	T& operator[](u32 i)
+	{
+		GLTUT_ASSERT(i < 2);
+		return (&x)[i];
+	}
+
+	/// operator []
+	const T& operator[](u32 i) const
+	{
+		GLTUT_ASSERT(i < 2);
+		return (&x)[i];
+	}
+
 	/// Checks if the point is zero
 	bool isZero() const
 	{

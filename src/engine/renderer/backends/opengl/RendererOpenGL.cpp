@@ -149,9 +149,11 @@ void RendererOpenGL::bindTexture(Texture* texture, u32 slot) noexcept
 	}
 }
 
-void RendererOpenGL::onResize(const Point2u& size) noexcept
+void RendererOpenGL::setViewport(const Rectangle2u& rectangle) noexcept
 {
-	glViewport(0, 0, size.x, size.y);
+	glViewport(
+		rectangle.getMin().x, rectangle.getMin().y,
+		rectangle.getMax().x, rectangle.getMax().y);
 }
 
 // End of the namespace gltut

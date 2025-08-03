@@ -17,11 +17,14 @@ public:
 	/// Sets the clear color
 	void setClearColor(float r, float g, float b, float a) noexcept final;
 
-	/// Clears the screen
+	/// Clears the viewport
 	void clear() noexcept final;
 
 	/// Enables or disables vertical synchronization
 	void enableVSync(bool vSync) noexcept final;
+
+	/// Sets the viewport for the current render target
+	void setViewport(const Rectangle2u& rectangle) noexcept final;
 
 private:
 	Mesh* createBackendMesh(
@@ -50,9 +53,6 @@ private:
 	void bindTexture(Texture* texture, u32 slot) noexcept final;
 
 private:
-	/// Called when the window is resized
-	void onResize(const Point2u& size) noexcept final;
-
 	///	The window
 	void* mDeviceContext;
 };

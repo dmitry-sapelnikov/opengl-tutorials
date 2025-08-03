@@ -71,9 +71,6 @@ public:
 	void onEvent(const Event& event) noexcept final;
 
 private:
-	/// Called when the window is resized
-	virtual void onResize(const Point2u& size) noexcept = 0;
-
 	/// Creates a shader for a specific graphics backend
 	virtual Mesh* createBackendMesh(
 		VertexFormat vertexFormat,
