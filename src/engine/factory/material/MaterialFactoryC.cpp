@@ -23,7 +23,7 @@ FlatColorMaterialModel* MaterialFactoryC::createFlatColorMaterial() noexcept
 		}
 	}
 
-	Material* material = mScene.createMaterial(mFlatColorShader);
+	Material* material = mScene.createMaterial(mFlatColorShader, 1);
 	if (material == nullptr)
 	{
 		return nullptr;
@@ -79,7 +79,7 @@ SceneShaderBinding* MaterialFactoryC::createPhongShader(
 
 PhongMaterialModel* MaterialFactoryC::createPhongMaterial(SceneShaderBinding* phongShader) noexcept
 {
-	Material* material = mScene.createMaterial(phongShader);
+	Material* material = mScene.createMaterial(phongShader, 2);
 	if (material == nullptr)
 	{
 		return nullptr;

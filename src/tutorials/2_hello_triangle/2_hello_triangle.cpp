@@ -82,7 +82,7 @@ int main()
 
 		auto* shaderBinding = scene->createShaderBinding(shader);
 
-		auto* material = scene->createMaterial(shaderBinding);
+		auto* material = scene->createMaterial(shaderBinding, 0);
 		scene->createGeometry(mesh1, material);
 		scene->createGeometry(mesh2, material);
 

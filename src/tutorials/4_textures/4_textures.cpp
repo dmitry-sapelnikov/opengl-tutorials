@@ -59,7 +59,7 @@ int main()
 		auto* shaderBinding = scene->createShaderBinding(shader);
 		GLTUT_CHECK(shaderBinding != nullptr, "Failed to create shader binding");
 
-		auto* material = scene->createMaterial(shaderBinding);
+		auto* material = scene->createMaterial(shaderBinding, 2);
 		GLTUT_CHECK(material != nullptr, "Failed to create material")
 		material->setTexture(texture1, 0);
 		material->setTexture(texture2, 1);

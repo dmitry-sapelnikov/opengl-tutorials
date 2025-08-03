@@ -12,7 +12,9 @@ class MaterialC final : public Material, public NonCopyable
 {
 public:
 	/// Constructor
-	explicit MaterialC(SceneShaderBinding* shader) noexcept;
+	explicit MaterialC(
+		SceneShaderBinding* shader,
+		u32 textureSlotsCount) noexcept;
 
 	/// Returns the shader binding
 	const SceneShaderBinding* getShader() const noexcept final;
@@ -32,6 +34,19 @@ public:
 	/// Sets a texture
 	void setTexture(Texture* texture, u32 slot) noexcept final;
 
+	/// Returns the number of textures
+	u32 getTextureSlotsCount() const noexcept final
+	{
+		return mTextureSlotsCount;
+	}
+
+	/// Sets the number of used texture slots
+	/// The number is truncated to Texture::TEXTURE_SLOTS
+	void setTextureSlotsCount(u32 count) noexcept final
+	{
+		mTextureSlotsCount = std::min(count, Texture::TEXTURE_SLOTS);
+	}
+
 	/// Activates the material for a scene node
 	void activate(const GeometryNode* node) const noexcept final;
 
@@ -45,8 +60,8 @@ private:
 	/// Texture slots
 	std::array<Texture*, Texture::TEXTURE_SLOTS> mTextures;
 
-	/// Max non-empty texture slot
-	u32 mBoundTextureSlots = 0;
+	/// The number of texture slots
+	u32 mTextureSlotsCount = 0;
 };
 
 // End of the namespace gltut

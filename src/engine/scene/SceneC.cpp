@@ -30,7 +30,7 @@ SceneShaderBinding* SceneC::createShaderBinding(Shader* shader) noexcept
 	return result;
 }
 
-Material* SceneC::createMaterial(SceneShaderBinding* shaderBinding) noexcept
+Material* SceneC::createMaterial(SceneShaderBinding* shaderBinding, u32 textureSlotsCount) noexcept
 {
 	if (shaderBinding == nullptr)
 	{
@@ -39,7 +39,7 @@ Material* SceneC::createMaterial(SceneShaderBinding* shaderBinding) noexcept
 
 	Material* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN
-		result = &mMaterials.emplace_back(shaderBinding);
+		result = &mMaterials.emplace_back(shaderBinding, textureSlotsCount);
 	GLTUT_CATCH_ALL_END("Cannot create a material")
 	return result;
 }

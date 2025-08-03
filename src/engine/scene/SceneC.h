@@ -26,6 +26,9 @@ public:
 	SceneShaderBinding* createShaderBinding(Shader* shader) noexcept final;
 
 	Material* createMaterial(SceneShaderBinding* shader) noexcept final;
+	Material* createMaterial(
+		SceneShaderBinding* shader,
+		u32 textureSlotsCount) noexcept final;
 
 	GeometryNode* createGeometry(
 		const Mesh* mesh,
