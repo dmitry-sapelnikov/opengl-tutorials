@@ -41,16 +41,20 @@ public:
 	const char* getBoundShaderParameter(
 		Parameter parameter) const noexcept final;
 
-	/// Activates the shader binding for a scene
-	void activate(const Scene* scene) const noexcept final;
+	/// Updates the shader binding for a scene
+	void update(const Scene* scene) const noexcept final;
 
-	/// Activates the shader binding for a scene object
-	void activate(const GeometryNode* node) const noexcept final;
+	/// Updates the shader binding for a viewpoint
+	void update(const Viewpoint* viewpoint) const noexcept final;
+
+	/// Updates the shader binding for a geometry node
+	void update(const GeometryNode* node) const noexcept final;
 
 private:
-	using ShaderParamterParts = std::pair<std::string, std::string>;
+	using ShaderParameterParts = std::pair<std::string, std::string>;
 
-	void activateLight(
+	/// Update the shader for a light
+	void updateLight(
 		const LightNode& light,
 		u32 lightInd,
 		SceneShaderBinding::Parameter position,
@@ -59,9 +63,10 @@ private:
 		SceneShaderBinding::Parameter specularColor) const noexcept;
 
 	/// Activates the shader binding for lights in a scene
-	void activateLights(const Scene& scene) const;
+	void updateLights(const Scene& scene) const;
 
-	const ShaderParamterParts& getShaderParameterParts(Parameter parameter) const noexcept;
+	/// Return 2 parts of a shader parameter name
+	const ShaderParameterParts& getShaderParameterParts(Parameter parameter) const noexcept;
 
 	/// The shader associated with this binding
 	Shader* mShader;
@@ -70,7 +75,7 @@ private:
 	std::array<std::string, static_cast<size_t>(Parameter::TOTAL_COUNT)> mShaderParameters;
 
 	/// Names of scene parameters split into parts
-	std::array<ShaderParamterParts, static_cast<size_t>(Parameter::TOTAL_COUNT)> mShaderParameterParts;
+	std::array<ShaderParameterParts, static_cast<size_t>(Parameter::TOTAL_COUNT)> mShaderParameterParts;
 };
 
 // End of the namespace gltut

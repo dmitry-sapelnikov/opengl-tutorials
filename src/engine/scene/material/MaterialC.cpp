@@ -62,7 +62,7 @@ void MaterialC::activate(const GeometryNode* node) const noexcept
 		return;
 	}
 
-	mShaderBinding->activate(node);
+	mShaderBinding->update(node);
 	mShaderArguments.activate();
 	
 	Renderer& renderer = *mShaderBinding->getShader()->getRenderer();

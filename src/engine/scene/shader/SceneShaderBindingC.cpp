@@ -107,44 +107,46 @@ void SceneShaderBindingC::bind(
 	}
 }
 
-void SceneShaderBindingC::activate(const Scene* scene) const noexcept
+void SceneShaderBindingC::update(const Scene* scene) const noexcept
 {
-	if (mShader == nullptr ||
-		scene == nullptr ||
-		scene->getActiveCamera() == nullptr)
+	if (mShader == nullptr || scene == nullptr)
 	{
 		return;
 	}
 
 	mShader->activate();
+	updateLights(*scene);
+}
 
-	const Camera* camera = scene->getActiveCamera();
+void SceneShaderBindingC::update(const Viewpoint* viewer) const noexcept
+{
+	if (mShader == nullptr || viewer == nullptr)
+	{
+		return;
+	}
 
 	if (const char* cameraView = getBoundShaderParameter(Parameter::CAMERA_VIEW_MATRIX);
 		cameraView != nullptr)
 	{
-		mShader->setMat4(cameraView, camera->getView().getMatrix().data());
+		mShader->setMat4(cameraView, viewer->getViewMatrix().data());
 	}
 
 	if (const char* cameraProjection = getBoundShaderParameter(Parameter::CAMERA_PROJECTION_MATRIX);
 		cameraProjection != nullptr)
 	{
-		mShader->setMat4(cameraProjection, camera->getProjection().getMatrix().data());
+		mShader->setMat4(cameraProjection, viewer->getProjectionMatrix().data());
 	}
 
 	if (const char* cameraPosition = getBoundShaderParameter(Parameter::CAMERA_POSITION);
 		cameraPosition != nullptr)
 	{
-		const Vector3& position = camera->getView().getPosition();
+		const Vector3& position = viewer->getPosition();
 		mShader->setVec3(cameraPosition, position.x, position.y, position.z);
 	}
-
-	activateLights(*scene);
 }
 
-
 /// Activates the shader binding for a scene object
-void SceneShaderBindingC::activate(const GeometryNode* node) const noexcept
+void SceneShaderBindingC::update(const GeometryNode* node) const noexcept
 {
 	if (mShader == nullptr || node == nullptr)
 	{
@@ -167,7 +169,7 @@ void SceneShaderBindingC::activate(const GeometryNode* node) const noexcept
 	}
 }
 
-void SceneShaderBindingC::activateLight(
+void SceneShaderBindingC::updateLight(
 	const LightNode& light,
 	u32 lightInd,
 	SceneShaderBinding::Parameter position,
@@ -202,7 +204,7 @@ void SceneShaderBindingC::activateLight(
 		toVector3(light.getSpecular()));
 }
 
-void SceneShaderBindingC::activateLights(const Scene& scene) const
+void SceneShaderBindingC::updateLights(const Scene& scene) const
 {
 	u32 directionalInd = 0;
 	u32 pointInd = 0;
@@ -220,7 +222,7 @@ void SceneShaderBindingC::activateLights(const Scene& scene) const
 		{
 		case LightNode::Type::DIRECTIONAL:
 		{
-			activateLight(
+			updateLight(
 				*light,
 				directionalInd,
 				Parameter::DIRECTIONAL_LIGHT_POSITION,
@@ -240,7 +242,7 @@ void SceneShaderBindingC::activateLights(const Scene& scene) const
 
 		case LightNode::Type::POINT:
 		{
-			activateLight(
+			updateLight(
 				*light,
 				pointInd,
 				Parameter::POINT_LIGHT_POSITION,
@@ -267,7 +269,7 @@ void SceneShaderBindingC::activateLights(const Scene& scene) const
 		case LightNode::Type::SPOT:
 		{
 			const Parameter direction = Parameter::SPOT_LIGHT_DIRECTION;
-			activateLight(
+			updateLight(
 				*light,
 				spotInd,
 				Parameter::SPOT_LIGHT_POSITION,
@@ -314,7 +316,7 @@ void SceneShaderBindingC::activateLights(const Scene& scene) const
 	}
 }
 
-const SceneShaderBindingC::ShaderParamterParts& SceneShaderBindingC::getShaderParameterParts(
+const SceneShaderBindingC::ShaderParameterParts& SceneShaderBindingC::getShaderParameterParts(
 	Parameter parameter) const noexcept
 {
 	return mShaderParameterParts[static_cast<size_t>(parameter)];

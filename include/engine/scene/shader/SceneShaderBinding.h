@@ -7,6 +7,7 @@ namespace gltut
 {
 //	Global classes
 class Scene;
+class Viewpoint;
 class GeometryNode;
 
 /// The class represents a shader binding for scene parameters
@@ -103,11 +104,14 @@ public:
 	virtual const char* getBoundShaderParameter(
 		Parameter parameter) const noexcept = 0;
 
-	/// Activates the shader binding for a scene
-	virtual void activate(const Scene* scene) const noexcept = 0;
+	/// Updates the shader binding for a scene
+	virtual void update(const Scene* scene) const noexcept = 0;
 
-	/// Activates the shader binding for a scene object
-	virtual void activate(const GeometryNode* node) const noexcept = 0;
+	/// Updates the shader binding for a view-projection matrices
+	virtual void update(const Viewpoint* viewer) const noexcept = 0;
+
+	/// Updates the shader binding for a geometry
+	virtual void update(const GeometryNode* node) const noexcept = 0;
 };
 
 // Global functions

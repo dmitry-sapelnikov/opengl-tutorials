@@ -165,7 +165,8 @@ void SceneC::render() noexcept
 {
 	for (auto& shaderBinding: mShaderBindings)
 	{
-		shaderBinding.activate(this);
+		shaderBinding.update(this);
+		shaderBinding.update(getActiveCameraViewpoint());
 	}
 
 	for (const auto& object : mGeometries)
