@@ -308,7 +308,7 @@
     <ClInclude Include="..\..\src\engine\renderer\backends\opengl\FramebufferOpenGL.h">
       <Filter>src\renderer\backends\opengl</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\engine\renderer\framebuffer\FrameBufferBase.h">
+    <ClInclude Include="..\..\src\engine\renderer\framebuffer\FramebufferBase.h">
       <Filter>src\renderer\framebuffer</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\engine\renderer\Framebuffer.h">
@@ -385,7 +385,7 @@
     <ClCompile Include="..\..\src\engine\renderer\backends\opengl\FramebufferOpenGL.cpp">
       <Filter>src\renderer\backends\opengl</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\engine\renderer\framebuffer\FrameBufferBase.cpp">
+    <ClCompile Include="..\..\src\engine\renderer\framebuffer\FramebufferBase.cpp">
       <Filter>src\renderer\framebuffer</Filter>
     </ClCompile>
   </ItemGroup>
