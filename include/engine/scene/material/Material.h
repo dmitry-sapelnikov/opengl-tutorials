@@ -30,6 +30,13 @@ public:
 	/// Sets a texture
 	virtual void setTexture(Texture* texture, u32 slot) noexcept = 0;
 
+	/// Returns the number of textures
+	virtual u32 getTextureSlotsCount() const noexcept = 0;
+
+	/// Sets the number of used texture slots
+	/// The number is truncated to Texture::TEXTURE_SLOTS
+	virtual void setTextureSlotsCount(u32 count) noexcept = 0;
+
 	/// Activates the material for a scene geometry
 	virtual void activate(const GeometryNode* node) const noexcept = 0;
 };

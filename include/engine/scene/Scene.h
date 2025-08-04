@@ -69,7 +69,9 @@ public:
 		\brief Creates a material
 		\param shaderBinding The shader binding to use for the material
 	*/
-	virtual Material* createMaterial(SceneShaderBinding* shaderBinding) noexcept = 0;
+	virtual Material* createMaterial(
+		SceneShaderBinding* shaderBinding,
+		u32 textureSlotsCount) noexcept = 0;
 
 	/// Creates a scene object
 	virtual GeometryNode* createGeometry(
