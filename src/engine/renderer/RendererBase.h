@@ -57,9 +57,6 @@ public:
 		Texture::FilterMode magFilter,
 		Texture::WrapMode wrapMode) noexcept final;
 
-	/// Removes a texture
-	void removeTexture(Texture* texture) noexcept final;
-
 	/// Creates a solid color texture
 	Texture* createSolidColorTexture(
 		float r,
@@ -67,32 +64,35 @@ public:
 		float b,
 		float a = 1.0f) noexcept final;
 
+	/// Removes a texture
+	void removeTexture(Texture* texture) noexcept final;
+
 	/// Called when an event occurs
 	void onEvent(const Event& event) noexcept final;
 
 private:
 	/// Creates a shader for a specific graphics backend
-	virtual Mesh* createBackendMesh(
+	virtual std::unique_ptr<Mesh> createBackendMesh(
 		VertexFormat vertexFormat,
 		u32 vertexCount,
 		const float* vertices,
 		u32 indexCount,
-		const u32* indices) noexcept = 0;
+		const u32* indices) = 0;
 
 	/// Creates a shader for a specific graphics backend
-	virtual Shader* createBackendShader(
+	virtual std::unique_ptr<Shader> createBackendShader(
 		const char* vertexShader,
-		const char* fragmentShader) noexcept = 0;
+		const char* fragmentShader) = 0;
 
 	/// Creates a texture for a specific graphics backend
-	virtual Texture* createBackendTexture(
+	virtual std::unique_ptr<Texture> createBackendTexture(
 		const void* data,
 		u32 width,
 		u32 height,
 		Texture::Format format,
 		Texture::FilterMode minFilter,
 		Texture::FilterMode magFilter,
-		Texture::WrapMode wrapMode) noexcept = 0;
+		Texture::WrapMode wrapMode) = 0;
 
 	/// Meshes
 	std::vector<std::unique_ptr<Mesh>> mMeshes;

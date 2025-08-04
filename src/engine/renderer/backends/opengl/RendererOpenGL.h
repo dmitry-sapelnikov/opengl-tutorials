@@ -27,27 +27,27 @@ public:
 	void setViewport(const Rectangle2u& rectangle) noexcept final;
 
 private:
-	Mesh* createBackendMesh(
+	std::unique_ptr<Mesh> createBackendMesh(
 		VertexFormat vertexFormat,
 		u32 vertexCount,
 		const float* vertices,
 		u32 indexCount,
-		const u32* indices) noexcept final;
+		const u32* indices) final;
 
 	/// Creates a shader
-	Shader* createBackendShader(
+	std::unique_ptr<Shader> createBackendShader(
 		const char* vertexShader,
-		const char* fragmentShader) noexcept final;
+		const char* fragmentShader) final;
 
 	/// Creates a texture
-	Texture* createBackendTexture(
+	std::unique_ptr<Texture> createBackendTexture(
 		const void* data,
 		u32 width,
 		u32 height,
 		Texture::Format format,
 		Texture::FilterMode minFilter,
 		Texture::FilterMode magFilter,
-		Texture::WrapMode wrapMode) noexcept final;
+		Texture::WrapMode wrapMode) final;
 
 	/// Binds a texture to a slot
 	void bindTexture(Texture* texture, u32 slot) noexcept final;

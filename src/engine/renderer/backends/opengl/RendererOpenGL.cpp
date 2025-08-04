@@ -78,57 +78,45 @@ void RendererOpenGL::enableVSync(bool vSync) noexcept
 	wglSwapIntervalEXT(vSync ? 1 : 0);
 }
 
-Mesh* RendererOpenGL::createBackendMesh(
+std::unique_ptr<Mesh> RendererOpenGL::createBackendMesh(
 	VertexFormat vertexFormat,
 	u32 vertexCount,
 	const float* vertices,
 	u32 indexCount,
-	const u32* indices) noexcept
+	const u32* indices)
 {
-	Mesh* result = nullptr;
-	GLTUT_CATCH_ALL_BEGIN
-		result = new MeshOpenGL(
-			vertexFormat,
-			vertexCount,
-			vertices,
-			indexCount,
-			indices);
-	GLTUT_CATCH_ALL_END("Failed to create mesh")
-	return result;
+	return std::make_unique<MeshOpenGL>(
+		vertexFormat,
+		vertexCount,
+		vertices,
+		indexCount,
+		indices);
 }
 
-Shader* RendererOpenGL::createBackendShader(
+std::unique_ptr<Shader> RendererOpenGL::createBackendShader(
 	const char* vertexShader,
-	const char* fragmentShader) noexcept
+	const char* fragmentShader)
 {
-	Shader* result = nullptr;
-	GLTUT_CATCH_ALL_BEGIN
-		result = new ShaderOpenGL(*this, vertexShader, fragmentShader);
-	GLTUT_CATCH_ALL_END("Failed to create shader program")
-	return result;
+	return std::make_unique<ShaderOpenGL>(*this, vertexShader, fragmentShader);
 }
 
-Texture* RendererOpenGL::createBackendTexture(
+std::unique_ptr<Texture> RendererOpenGL::createBackendTexture(
 	const void* data,
 	u32 width,
 	u32 height,
 	Texture::Format format,
 	Texture::FilterMode minFilter,
 	Texture::FilterMode magFilter,
-	Texture::WrapMode wrapMode) noexcept
+	Texture::WrapMode wrapMode)
 {
-	Texture* result = nullptr;
-	GLTUT_CATCH_ALL_BEGIN
-		result = new TextureOpenGL(
-			data,
-			width,
-			height,
-			format,
-			minFilter,
-			magFilter,
-			wrapMode);
-	GLTUT_CATCH_ALL_END("Failed to create texture from data")
-	return result;
+	return std::make_unique<TextureOpenGL>(
+		data,
+		width,
+		height,
+		format,
+		minFilter,
+		magFilter,
+		wrapMode);
 }
 
 void RendererOpenGL::bindTexture(Texture* texture, u32 slot) noexcept
