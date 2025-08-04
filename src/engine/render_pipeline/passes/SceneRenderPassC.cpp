@@ -1,33 +1,28 @@
 #pragma once
 
 // Includes
-#include "RenderPassC.h"
+#include "SceneRenderPassC.h"
 
 namespace gltut
 {
 //	Global classes
-RenderPassC::RenderPassC(
+SceneRenderPassC::SceneRenderPassC(
 	Renderer& renderer,
-	Scene& scene,
 	Framebuffer* target,
-	const Viewpoint* viewer,
 	const Color& clearColor,
+	Scene& scene,
+	const Viewpoint* viewpoint,
 	u32 materialPass) noexcept :
 
-	mRenderer(renderer),
+	RenderPassT<SceneRenderPass>(renderer, target, clearColor),
 	mScene(scene),
-	mTarget(target),
-	mViewpoint(viewer),
-	mClearColor(clearColor),
+	mViewpoint(viewpoint),
 	mMaterialPass(materialPass)
 {
 }
 
-void RenderPassC::execute() noexcept
+void SceneRenderPassC::doExecute() noexcept
 {
-	mRenderer.activateFramebuffer(mTarget);
-	mRenderer.clear(mClearColor);
-
 	for (u32 i = 0; i < mScene.getShaderBindingCount(); ++i)
 	{
 		mScene.getShaderBinding(i)->update(mViewpoint);

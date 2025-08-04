@@ -3,6 +3,8 @@
 // Includes
 #include "RenderPipelineC.h"
 #include <algorithm>
+#include "./passes/BasicRenderPassC.h"
+#include "./passes/SceneRenderPassC.h"
 
 namespace gltut
 {
@@ -16,7 +18,23 @@ RenderPipelineC::RenderPipelineC(
 {
 }
 
-RenderPass* RenderPipelineC::createPass(
+BasicRenderPass* RenderPipelineC::createBasicPass(
+	Framebuffer* target,
+	const Color& clearColor) noexcept
+{
+	GLTUT_CATCH_ALL_BEGIN
+		auto resultPtr = std::make_unique<BasicRenderPassC>(
+			mRenderer,
+			target,
+			clearColor);
+	BasicRenderPass* result = resultPtr.get();
+	mPasses.emplace_back(std::move(resultPtr), 0);
+	return result;
+	GLTUT_CATCH_ALL_END("Cannot create a basic render pass")
+	return nullptr;
+}
+
+SceneRenderPass* RenderPipelineC::createScenePass(
 	Framebuffer* target,
 	const Viewpoint* viewpoint,
 	u32 materialLayer,
@@ -26,36 +44,50 @@ RenderPass* RenderPipelineC::createPass(
 	{
 		return nullptr;
 	}
-	RenderPass* result = nullptr;
+
 	GLTUT_CATCH_ALL_BEGIN
-		result = mPasses.emplace_back(std::make_unique<RenderPassC>(
-			mRenderer, mScene, target, viewpoint, clearColor, materialLayer)).get();
-	GLTUT_CATCH_ALL_END("Cannot create a render pass")
-	return result;
+		auto resultPtr = std::make_unique<SceneRenderPassC>(
+			mRenderer,
+			target,
+			clearColor,
+			mScene,
+			viewpoint,
+			materialLayer);
+		SceneRenderPass* result = resultPtr.get();
+		mPasses.emplace_back(std::move(resultPtr), 0);
+		return result;
+		GLTUT_CATCH_ALL_END("Cannot create a scene render pass")
+	return nullptr;
 }
 
-void RenderPipelineC::setPassPriority(u32 pass, int32 priority) noexcept
+void RenderPipelineC::setPassPriority(RenderPass* pass, int32 priority) noexcept
 {
-	if (pass >= mPasses.size())
-	{
-		return;
-	}
-
-	mPasses[pass]->setPriority(priority);
-	std::sort(
+	auto findResult = std::find_if(
 		mPasses.begin(),
 		mPasses.end(),
-		[](const auto& a, const auto& b)
+		[&pass](const auto& currentPass)
 		{
-			return a->getPriority() < b->getPriority();
+			return currentPass.first.get() == pass;
 		});
+
+	if (findResult != mPasses.end())
+	{
+		findResult->second = priority;
+		std::sort(
+			mPasses.begin(),
+			mPasses.end(),
+			[](const auto& pass1, const auto& pass2)
+			{
+				return pass1.second < pass2.second;
+			});
+	}
 }
 
 void RenderPipelineC::execute() noexcept
 {
 	for (const auto& pass : mPasses)
 	{
-		pass->execute();
+		pass.first->execute();
 	}
 }
 

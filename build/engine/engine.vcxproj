@@ -38,7 +38,9 @@
     <ClInclude Include="..\..\include\engine\renderer\shader\Shader.h" />
     <ClInclude Include="..\..\include\engine\renderer\shader\ShaderParameters.h" />
     <ClInclude Include="..\..\include\engine\renderer\Texture.h" />
-    <ClInclude Include="..\..\include\engine\render_pipeline\RenderPass.h" />
+    <ClInclude Include="..\..\include\engine\render_pipeline\passes\RenderPass.h" />
+    <ClInclude Include="..\..\include\engine\render_pipeline\passes\SceneRenderPass.h" />
+    <ClInclude Include="..\..\include\engine\render_pipeline\passes\BasicRenderPass.h" />
     <ClInclude Include="..\..\include\engine\render_pipeline\RenderPipeline.h" />
     <ClInclude Include="..\..\include\engine\scene\camera\Camera.h" />
     <ClInclude Include="..\..\include\engine\scene\camera\CameraController.h" />
@@ -73,7 +75,9 @@
     <ClInclude Include="..\..\src\engine\renderer\RendererBase.h" />
     <ClInclude Include="..\..\src\engine\renderer\shader\ShaderArguments.h" />
     <ClInclude Include="..\..\src\engine\renderer\texture\stb_image.h" />
-    <ClInclude Include="..\..\src\engine\render_pipeline\RenderPassC.h" />
+    <ClInclude Include="..\..\src\engine\render_pipeline\passes\BasicRenderPassC.h" />
+    <ClInclude Include="..\..\src\engine\render_pipeline\passes\RenderPassT.h" />
+    <ClInclude Include="..\..\src\engine\render_pipeline\passes\SceneRenderPassC.h" />
     <ClInclude Include="..\..\src\engine\render_pipeline\RenderPipelineC.h" />
     <ClInclude Include="..\..\src\engine\scene\camera\CameraC.h" />
     <ClInclude Include="..\..\src\engine\scene\camera\CameraViewpointC.h" />
@@ -106,7 +110,8 @@
     <ClCompile Include="..\..\src\engine\renderer\RendererBase.cpp" />
     <ClCompile Include="..\..\src\engine\renderer\shader\ShaderArguments.cpp" />
     <ClCompile Include="..\..\src\engine\renderer\texture\stb_image.cpp" />
-    <ClCompile Include="..\..\src\engine\render_pipeline\RenderPassC.cpp" />
+    <ClCompile Include="..\..\src\engine\render_pipeline\passes\BasicRenderPassC.cpp" />
+    <ClCompile Include="..\..\src\engine\render_pipeline\passes\SceneRenderPassC.cpp" />
     <ClCompile Include="..\..\src\engine\render_pipeline\RenderPipelineC.cpp" />
     <ClCompile Include="..\..\src\engine\scene\camera\CameraC.cpp" />
     <ClCompile Include="..\..\src\engine\scene\camera\FPSCameraControllerC.cpp" />

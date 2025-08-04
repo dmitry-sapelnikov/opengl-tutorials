@@ -111,6 +111,12 @@
     <Filter Include="include\render_pipeline">
       <UniqueIdentifier>{4ea6f70e-cc24-4c14-89f8-f5e39cfd7029}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\render_pipeline\passes">
+      <UniqueIdentifier>{3d791c30-baa1-4307-844f-985c2c064c92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\render_pipeline\passes">
+      <UniqueIdentifier>{12cfd86b-3aa6-4a0b-94e1-68a6c42f4004}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\engine\Engine.h">
@@ -326,16 +332,10 @@
     <ClInclude Include="..\..\src\engine\scene\camera\CameraViewpointC.h">
       <Filter>src\scene\camera</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\engine\render_pipeline\RenderPassC.h">
-      <Filter>src\render_pipeline</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\engine\render_pipeline\RenderPipelineC.h">
       <Filter>src\render_pipeline</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\engine\render_pipeline\RenderPipeline.h">
-      <Filter>include\render_pipeline</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\engine\render_pipeline\RenderPass.h">
       <Filter>include\render_pipeline</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\engine\scene\material\Material.h">
@@ -343,6 +343,24 @@
     </ClInclude>
     <ClInclude Include="..\..\src\engine\scene\material\MaterialC.h">
       <Filter>src\scene\material</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\render_pipeline\passes\SceneRenderPass.h">
+      <Filter>include\render_pipeline\passes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\render_pipeline\passes\BasicRenderPass.h">
+      <Filter>include\render_pipeline\passes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\render_pipeline\passes\RenderPass.h">
+      <Filter>include\render_pipeline\passes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\render_pipeline\passes\BasicRenderPassC.h">
+      <Filter>src\render_pipeline\passes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\render_pipeline\passes\RenderPassT.h">
+      <Filter>src\render_pipeline\passes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\render_pipeline\passes\SceneRenderPassC.h">
+      <Filter>src\render_pipeline\passes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -418,14 +436,17 @@
     <ClCompile Include="..\..\src\engine\renderer\framebuffer\FramebufferBase.cpp">
       <Filter>src\renderer\framebuffer</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\engine\render_pipeline\RenderPassC.cpp">
-      <Filter>src\render_pipeline</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\engine\render_pipeline\RenderPipelineC.cpp">
       <Filter>src\render_pipeline</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\engine\scene\material\MaterialC.cpp">
       <Filter>src\scene\material</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\render_pipeline\passes\BasicRenderPassC.cpp">
+      <Filter>src\render_pipeline\passes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\render_pipeline\passes\SceneRenderPassC.cpp">
+      <Filter>src\render_pipeline\passes</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
