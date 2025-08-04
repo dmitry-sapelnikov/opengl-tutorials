@@ -102,6 +102,9 @@
     <Filter Include="src\factory\material\flat_color">
       <UniqueIdentifier>{670fe105-b12a-47fa-a712-4bb9859301ab}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\renderer\framebuffer">
+      <UniqueIdentifier>{af636d3a-379f-45fd-9805-48c829ef2714}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\engine\Engine.h">
@@ -302,6 +305,15 @@
     <ClInclude Include="..\..\include\engine\math\Rectangle.h">
       <Filter>include\math</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\engine\renderer\backends\opengl\FramebufferOpenGL.h">
+      <Filter>src\renderer\backends\opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\renderer\framebuffer\FrameBufferBase.h">
+      <Filter>src\renderer\framebuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\renderer\Framebuffer.h">
+      <Filter>include\renderer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\engine\EngineC.cpp">
@@ -369,6 +381,12 @@
     </ClCompile>
     <ClCompile Include="..\..\src\engine\factory\material\flat_color\FlatColorShader.cpp">
       <Filter>src\factory\material\flat_color</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\renderer\backends\opengl\FramebufferOpenGL.cpp">
+      <Filter>src\renderer\backends\opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\renderer\framebuffer\FrameBufferBase.cpp">
+      <Filter>src\renderer\framebuffer</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

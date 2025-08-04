@@ -20,6 +20,9 @@ public:
 	/// Clears the viewport
 	void clear() noexcept final;
 
+	/// Activates a framebuffer
+	void activateFramebuffer(Framebuffer* frameBuffer) noexcept final;
+
 	/// Enables or disables vertical synchronization
 	void enableVSync(bool vSync) noexcept final;
 
@@ -48,6 +51,11 @@ private:
 		Texture::FilterMode minFilter,
 		Texture::FilterMode magFilter,
 		Texture::WrapMode wrapMode) final;
+
+	/// Creates a framebuffer
+	std::unique_ptr<Framebuffer> createBackendFramebuffer(
+		Texture* color,
+		Texture* depth) final;
 
 	/// Binds a texture to a slot
 	void bindTexture(Texture* texture, u32 slot) noexcept final;

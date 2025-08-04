@@ -216,11 +216,30 @@ void RendererBase::removeTexture(Texture* texture) noexcept
 	removeElement(mTextures, texture, "Texture");
 }
 
+Framebuffer* RendererBase::createFramebuffer(
+	Texture* color,
+	Texture* depth) noexcept
+{
+	Framebuffer* result = nullptr;
+	GLTUT_CATCH_ALL_BEGIN
+		result = mFramebuffers.emplace_back(createBackendFramebuffer(
+			color,
+			depth)).get();
+	GLTUT_CATCH_ALL_END("Failed to create framebuffer")
+	return result;
+}
+
+void RendererBase::removeFramebuffer(Framebuffer* frameBuffer) noexcept
+{
+	removeElement(mFramebuffers, frameBuffer, "Framebuffer");
+}
+
 void RendererBase::onEvent(const Event& event) noexcept
 {
 	if (event.type == Event::Type::WINDOW_RESIZE)
 	{
 		clear();
+		activateFramebuffer(0);
 		setViewport({ { 0, 0 }, event.windowResize.size });
 	}
 }

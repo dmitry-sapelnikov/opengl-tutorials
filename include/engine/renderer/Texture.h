@@ -13,7 +13,7 @@ public:
 	{
 		RGB,
 		RGBA,
-		DEPTH
+		FLOAT
 	};
 
 	enum class WrapMode
@@ -36,6 +36,9 @@ public:
 	/// Virtual destructor
 	virtual ~Texture() noexcept = default;
 
+	/// Returns the texture id
+	virtual u32 getId() const noexcept = 0;
+	
 	/// Returns the texture format
 	virtual Format getFormat() const noexcept = 0;
 
