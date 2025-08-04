@@ -10,6 +10,7 @@
 #include "MeshOpenGL.h"
 #include "ShaderOpenGL.h"
 #include "TextureOpenGL.h"
+#include "FramebufferOpenGL.h"
 
 #include "../../../core/File.h"
 
@@ -70,6 +71,18 @@ void RendererOpenGL::clear() noexcept
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
+void RendererOpenGL::activateFramebuffer(Framebuffer* frameBuffer) noexcept
+{
+	if (frameBuffer == nullptr)
+	{
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	}
+	else
+	{
+		frameBuffer->activate();
+	}
+}
+
 void RendererOpenGL::enableVSync(bool vSync) noexcept
 {
 	PFNWGLSWAPINTERVALEXTPROC wglSwapIntervalEXT =
@@ -117,6 +130,13 @@ std::unique_ptr<Texture> RendererOpenGL::createBackendTexture(
 		minFilter,
 		magFilter,
 		wrapMode);
+}
+
+std::unique_ptr<Framebuffer> RendererOpenGL::createBackendFramebuffer(
+	Texture* color,
+	Texture* depth)
+{
+	return std::make_unique<FramebufferOpenGL>(color, depth);
 }
 
 void RendererOpenGL::bindTexture(Texture* texture, u32 slot) noexcept

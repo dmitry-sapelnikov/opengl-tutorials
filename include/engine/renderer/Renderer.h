@@ -6,6 +6,7 @@
 #include "engine/renderer/mesh/Mesh.h"
 #include "engine/renderer/shader/Shader.h"
 #include "engine/renderer/Texture.h"
+#include "engine/renderer/Framebuffer.h"
 
 namespace gltut
 {
@@ -69,6 +70,20 @@ public:
 
 	/// Binds a texture to a slot
 	virtual void bindTexture(Texture* texture, u32 slot) noexcept = 0;
+
+	/**
+		\brief Creates a framebuffer
+		\note At least one of texture parameters must be non-null
+	*/
+	virtual Framebuffer* createFramebuffer(
+		Texture* color,
+		Texture* depth) noexcept = 0;
+
+	/// Removes a framebuffer
+	virtual void removeFramebuffer(Framebuffer* frameBuffer) noexcept = 0;
+
+	/// Activates a framebuffer
+	virtual void activateFramebuffer(Framebuffer* frameBuffer) noexcept = 0;
 
 	/// Set viewport for the current render target
 	virtual void setViewport(const Rectangle2u& rectangle) noexcept = 0;

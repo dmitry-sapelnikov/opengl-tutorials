@@ -67,6 +67,17 @@ public:
 	/// Removes a texture
 	void removeTexture(Texture* texture) noexcept final;
 
+	/**
+		\brief Creates a framebuffer
+		\note At least one of texture parameters must be non-null
+	*/
+	Framebuffer* createFramebuffer(
+		Texture* color,
+		Texture* depth) noexcept final;
+
+	/// Removes a framebuffer
+	void removeFramebuffer(Framebuffer* frameBuffer) noexcept final;
+
 	/// Called when an event occurs
 	void onEvent(const Event& event) noexcept final;
 
@@ -94,6 +105,10 @@ private:
 		Texture::FilterMode magFilter,
 		Texture::WrapMode wrapMode) = 0;
 
+	virtual std::unique_ptr<Framebuffer> createBackendFramebuffer(
+		Texture* color,
+		Texture* depth) = 0;
+
 	/// Meshes
 	std::vector<std::unique_ptr<Mesh>> mMeshes;
 
@@ -105,6 +120,9 @@ private:
 
 	/// Solid color textures
 	std::unordered_map<u32, Texture*> mSolidColorTextures;
+
+	/// Framebuffers
+	std::vector<std::unique_ptr<Framebuffer>> mFramebuffers;
 };
 
 // End of the namespace gltut

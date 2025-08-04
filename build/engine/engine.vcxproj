@@ -31,6 +31,7 @@
     <ClInclude Include="..\..\include\engine\math\Rng.h" />
     <ClInclude Include="..\..\include\engine\math\Point2.h" />
     <ClInclude Include="..\..\include\engine\math\Vector3.h" />
+    <ClInclude Include="..\..\include\engine\renderer\Framebuffer.h" />
     <ClInclude Include="..\..\include\engine\renderer\mesh\Mesh.h" />
     <ClInclude Include="..\..\include\engine\renderer\mesh\VertexFormat.h" />
     <ClInclude Include="..\..\include\engine\renderer\Renderer.h" />
@@ -59,10 +60,12 @@
     <ClInclude Include="..\..\src\engine\factory\material\MaterialModelT.h" />
     <ClInclude Include="..\..\src\engine\factory\material\phong\PhongMaterialModelC.h" />
     <ClInclude Include="..\..\src\engine\factory\material\phong\PhongShader.h" />
+    <ClInclude Include="..\..\src\engine\renderer\backends\opengl\FramebufferOpenGL.h" />
     <ClInclude Include="..\..\src\engine\renderer\backends\opengl\MeshOpenGL.h" />
     <ClInclude Include="..\..\src\engine\renderer\backends\opengl\RendererOpenGL.h" />
     <ClInclude Include="..\..\src\engine\renderer\backends\opengl\ShaderOpenGL.h" />
     <ClInclude Include="..\..\src\engine\renderer\backends\opengl\TextureOpenGL.h" />
+    <ClInclude Include="..\..\src\engine\renderer\framebuffer\FrameBufferBase.h" />
     <ClInclude Include="..\..\src\engine\renderer\RendererBase.h" />
     <ClInclude Include="..\..\src\engine\renderer\shader\ShaderArguments.h" />
     <ClInclude Include="..\..\src\engine\renderer\texture\stb_image.h" />
@@ -86,10 +89,12 @@
     <ClCompile Include="..\..\src\engine\factory\material\flat_color\FlatColorShader.cpp" />
     <ClCompile Include="..\..\src\engine\factory\material\MaterialFactoryC.cpp" />
     <ClCompile Include="..\..\src\engine\factory\material\phong\PhongShader.cpp" />
+    <ClCompile Include="..\..\src\engine\renderer\backends\opengl\FramebufferOpenGL.cpp" />
     <ClCompile Include="..\..\src\engine\renderer\backends\opengl\MeshOpenGL.cpp" />
     <ClCompile Include="..\..\src\engine\renderer\backends\opengl\RendererOpenGL.cpp" />
     <ClCompile Include="..\..\src\engine\renderer\backends\opengl\ShaderOpenGL.cpp" />
     <ClCompile Include="..\..\src\engine\renderer\backends\opengl\TextureOpenGL.cpp" />
+    <ClCompile Include="..\..\src\engine\renderer\framebuffer\FrameBufferBase.cpp" />
     <ClCompile Include="..\..\src\engine\renderer\RendererBase.cpp" />
     <ClCompile Include="..\..\src\engine\renderer\shader\ShaderArguments.cpp" />
     <ClCompile Include="..\..\src\engine\renderer\texture\stb_image.cpp" />
