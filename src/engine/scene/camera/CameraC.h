@@ -5,6 +5,7 @@
 #include "engine/core/Check.h"
 #include "engine/core/NonCopyable.h"
 #include "engine/scene/camera/Camera.h"
+#include "./CameraViewpointC.h"
 
 namespace gltut
 {
@@ -210,7 +211,8 @@ public:
 		const float* aspectRatio) noexcept :
 
 		mView(position, target, up),
-		mProjection(window, fov, nearPlane, farPlane, aspectRatio)
+		mProjection(window, fov, nearPlane, farPlane, aspectRatio),
+		mViewpoint(this)
 	{
 	}
 
@@ -238,12 +240,21 @@ public:
 		return mProjection;
 	}
 
+	/// Returns the viewpoint
+	const Viewpoint& getViewpoint() const noexcept final
+	{
+		return mViewpoint;
+	}
+
 private:
 	/// The view
 	CameraViewC mView;
 
 	/// The projection
 	CameraProjectionC mProjection;
+
+	/// The viewpoint
+	CameraViewpointC mViewpoint;
 };
 
 // End of the namespace gltut
