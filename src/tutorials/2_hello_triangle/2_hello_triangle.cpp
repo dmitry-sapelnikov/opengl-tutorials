@@ -82,7 +82,12 @@ int main()
 
 		auto* shaderBinding = scene->createShaderBinding(shader);
 
-		auto* material = scene->createMaterial(shaderBinding, 0);
+		auto* material = scene->createMaterial();
+		GLTUT_CHECK(material != nullptr, "Failed to create material")
+
+		auto* pass = material->createPass(0, shaderBinding, 0);
+		GLTUT_CHECK(pass != nullptr, "Failed to create material pass")
+
 		scene->createGeometry(mesh1, material);
 		scene->createGeometry(mesh2, material);
 

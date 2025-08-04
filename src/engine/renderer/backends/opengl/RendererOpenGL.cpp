@@ -61,13 +61,9 @@ RendererOpenGL::RendererOpenGL(void* deviceContext) :
 	enableVSync(false);
 }
 
-void RendererOpenGL::setClearColor(float r, float g, float b, float a) noexcept
+void RendererOpenGL::clear(const Color& color) noexcept
 {
-	glClearColor(r, g, b, a);
-}
-
-void RendererOpenGL::clear() noexcept
-{
+	glClearColor(color.r, color.g, color.b, color.a);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
@@ -87,8 +83,14 @@ void RendererOpenGL::enableVSync(bool vSync) noexcept
 {
 	PFNWGLSWAPINTERVALEXTPROC wglSwapIntervalEXT =
 		(PFNWGLSWAPINTERVALEXTPROC)wglGetProcAddress("wglSwapIntervalEXT");
-	GLTUT_ASSERT(wglSwapIntervalEXT != nullptr);
-	wglSwapIntervalEXT(vSync ? 1 : 0);
+	if (wglSwapIntervalEXT != nullptr)
+	{
+		wglSwapIntervalEXT(vSync ? 1 : 0);
+	}
+	else
+	{
+		std::cerr << "wglSwapIntervalEXT is not supported, VSync cannot be enabled." << std::endl;
+	}
 }
 
 std::unique_ptr<Mesh> RendererOpenGL::createBackendMesh(

@@ -25,10 +25,22 @@ public:
 	{
 	}
 
-	/// Adds a mesh
+	/// Returns the mesh of this geometry node
+	const Mesh* getMesh() const noexcept final
+	{
+		return mMesh;
+	}
+
+	/// Sets a mesh
 	void setMesh(const Mesh* mesh) noexcept final
 	{
 		mMesh = mesh;
+	}
+
+	/// Returns the material for a specific render pass
+	const Material* getMaterial() const noexcept final
+	{
+		return mMaterial;
 	}
 
 	/// Sets a material
@@ -37,25 +49,12 @@ public:
 		mMaterial = material;
 	}
 
-	/// Renders the object
-	void render() const noexcept final
-	{
-		if (mMesh != nullptr)
-		{
-			if (mMaterial != nullptr)
-			{
-				mMaterial->activate(this);
-			}
-			mMesh->render();
-		}
-	}
-
 private:
 	/// The mesh
 	const Mesh* mMesh = nullptr;
 
-	/// The material
-	const Material* mMaterial = nullptr;
+	/// Material passes
+	const Material* mMaterial;
 };
 
 // End of the namespace gltut

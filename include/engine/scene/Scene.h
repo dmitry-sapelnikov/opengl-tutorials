@@ -68,13 +68,17 @@ public:
 	///	Creates a binding between a shader and the scene
 	virtual SceneShaderBinding* createShaderBinding(Shader* shader) noexcept = 0;
 
-	/**
-		\brief Creates a material
-		\param shaderBinding The shader binding to use for the material
-	*/
-	virtual Material* createMaterial(
-		SceneShaderBinding* shaderBinding,
-		u32 textureSlotsCount) noexcept = 0;
+	/// Returns the number of shader bindings in the scene
+	virtual u32 getShaderBindingCount() const noexcept = 0;
+
+	/// Returns the shader binding at the specified index
+	virtual SceneShaderBinding* getShaderBinding(u32 index) const noexcept = 0;
+
+	///	Creates a material
+	virtual Material* createMaterial() noexcept = 0;
+
+	/// Removes a material from the scene
+	virtual void removeMaterial(Material* material) noexcept = 0;
 
 	/// Creates a scene object
 	virtual GeometryNode* createGeometry(
@@ -82,6 +86,12 @@ public:
 		const Material* material,
 		const Matrix4& transform = Matrix4::identity(),
 		SceneNode* parent = nullptr) noexcept = 0;
+
+	/// Returns the number of geometries in the scene
+	virtual u32 getGeometryCount() const noexcept = 0;
+
+	/// Returns the geometry at the specified index
+	virtual GeometryNode* getGeometry(u32 index) const noexcept = 0;
 
 	/// Creates a scene light
 	virtual LightNode* createLight(

@@ -25,9 +25,19 @@ public:
 
 	SceneShaderBinding* createShaderBinding(Shader* shader) noexcept final;
 
-	Material* createMaterial(
-		SceneShaderBinding* shader,
-		u32 textureSlotsCount) noexcept final;
+	u32 getShaderBindingCount() const noexcept final
+	{
+		return static_cast<u32>(mShaderBindings.size());
+	}
+
+	SceneShaderBinding* getShaderBinding(u32 index) const noexcept final
+	{
+		return &const_cast<SceneShaderBindingC&>(mShaderBindings[index]);
+	}
+
+	Material* createMaterial() noexcept final;
+
+	void removeMaterial(Material* material) noexcept final;
 
 	GeometryNode* createGeometry(
 		const Mesh* mesh,
@@ -35,14 +45,30 @@ public:
 		const Matrix4& transform = Matrix4::identity(),
 		SceneNode* parent = nullptr) noexcept final;
 
+	u32 getGeometryCount() const noexcept final
+	{
+		return static_cast<u32>(mGeometries.size());
+	}
+
+	GeometryNode* getGeometry(u32 index) const noexcept final
+	{
+		return &const_cast<GeometryNodeC&>(mGeometries[index]);
+	}
+
 	LightNode* createLight(
 		LightNode::Type type,
 		const Matrix4& transform = Matrix4::identity(),
 		SceneNode* parent = nullptr) noexcept override;
 
-	u32 getLightCount() const noexcept final;
+	u32 getLightCount() const noexcept final
+	{
+		return static_cast<u32>(mLights.size());
+	}
 
-	LightNode* getLight(u32 index) const noexcept final;
+	LightNode* getLight(u32 index) const noexcept final
+	{
+		return &const_cast<LightNodeC&>(mLights[index]);
+	}
 
 	Camera* createCamera(
 		const Vector3& position,
@@ -71,20 +97,15 @@ public:
 
 	void update() noexcept;
 
-	void render() noexcept;
-
 private:
 	/// The window
 	Window& mWindow;
-
-	/// The renderer
-	RendererBase& mRenderer;
 
 	/// The shader bindings
 	std::deque<SceneShaderBindingC> mShaderBindings;
 
 	/// The materials
-	std::deque<MaterialC> mMaterials;
+	std::vector<std::unique_ptr<MaterialC>> mMaterials;
 
 	/// Geometry nodes
 	std::deque<GeometryNodeC> mGeometries;

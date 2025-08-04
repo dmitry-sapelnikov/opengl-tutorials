@@ -1,75 +1,44 @@
 // Includes
 #include "MaterialC.h"
-
-#include "engine/core/Check.h"
-#include "engine/renderer/Renderer.h"
-#include "engine/scene/nodes/GeometryNode.h"
+#include "./MaterialPassC.h"
 
 namespace gltut
 {
 //	Global classes
-MaterialC::MaterialC(
-	SceneShaderBinding* Shader,
-	u32 textureSlotsCount) noexcept :
-
-	mShaderBinding(Shader),
-	mShaderArguments(Shader != nullptr ? 
-		Shader->getShader() :
-		nullptr),
-	mTextures()
+MaterialPass* MaterialC::createPass(
+	u32 index,
+	SceneShaderBinding* shader,
+	u32 textureSlotsCount) noexcept
 {
-	for (u32 i = 0; i < Texture::TEXTURE_SLOTS; ++i)
+	if (index < mPasses.size() && mPasses[index] != nullptr)
 	{
-		mTextures[i] = nullptr;
+		return mPasses[index].get();
 	}
-	setTextureSlotsCount(textureSlotsCount);
+
+	MaterialPass* result = nullptr;
+	GLTUT_CATCH_ALL_BEGIN
+		auto pass = std::make_unique<MaterialPassC>(shader, textureSlotsCount);
+		if (index >= mPasses.size())
+		{
+			mPasses.resize(index + 1);
+		}
+		mPasses[index] = std::move(pass);
+		result = mPasses[index].get();
+	GLTUT_CATCH_ALL_END("Cannot create a material pass")
+	return result;
 }
 
-/// Returns the shader binding
-const SceneShaderBinding* MaterialC::getShader() const noexcept
+void MaterialC::removePass(u32 index) noexcept
 {
-	return mShaderBinding;
-}
-
-void MaterialC::setShader(const SceneShaderBinding* shader) noexcept
-{
-	mShaderBinding = shader;
-	mShaderArguments.setShader(shader != nullptr ?
-		shader->getShader() :
-		nullptr);
-}
-
-Texture* MaterialC::getTexture(u32 slot) const noexcept
-{
-	return slot < mTextureSlotsCount ? mTextures[slot] : nullptr;
-}
-
-void MaterialC::setTexture(Texture* texture, u32 slot) noexcept
-{
-	if (slot < mTextureSlotsCount)
+	if (index < mPasses.size())
 	{
-		mTextures[slot] = texture;
+		mPasses[index].reset();
 	}
 }
 
-void MaterialC::activate(const GeometryNode* node) const noexcept
+MaterialPass* MaterialC::getPass(u32 index) const noexcept
 {
-	if (node == nullptr ||
-		mShaderBinding == nullptr || 
-		mShaderBinding->getShader() == nullptr ||
-		mShaderBinding->getShader()->getRenderer() == nullptr)
-	{
-		return;
-	}
-
-	mShaderBinding->update(node);
-	mShaderArguments.activate();
-	
-	Renderer& renderer = *mShaderBinding->getShader()->getRenderer();
-	for (u32 i = 0; i < mTextureSlotsCount; ++i)
-	{
-		renderer.bindTexture(mTextures[i], i);
-	}
+	return index < mPasses.size() ? mPasses[index].get() : nullptr;
 }
 
 // End of the namespace gltut

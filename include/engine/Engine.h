@@ -3,6 +3,7 @@
 // Includes
 #include "engine/factory/Factory.h"
 #include "engine/renderer/Renderer.h"
+#include "engine/render_pipeline/RenderPipeline.h"
 #include "engine/scene/Scene.h"
 #include "engine/window/Window.h"
 
@@ -30,6 +31,9 @@ public:
 
 	/// Returns the scene
 	virtual Scene* getScene() noexcept = 0;
+
+	/// Returns the render pipeline
+	virtual RenderPipeline* getRenderPipeline() noexcept = 0;
 
 	/// Returns the geometry factory
 	virtual Factory* getFactory() noexcept = 0;
