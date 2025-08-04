@@ -8,6 +8,7 @@
 
 #include "./scene/SceneC.h"
 #include "./window/WindowC.h"
+#include "./render_pipeline/RenderPipelineC.h"
 
 namespace gltut
 {
@@ -18,23 +19,38 @@ public:
 	/// Constructor
 	EngineC(u32 windowWidth, u32 windowHeight);
 
-	/// Destructor
-	~EngineC() noexcept final;
-
 	/// Runs the engine
 	bool update() noexcept final;
 
 	///	Returns the window
-	Window* getWindow() noexcept final;
+	Window* getWindow() noexcept final
+	{
+		return mWindow.get();
+	}
 
 	/// Returns the renderer
-	Renderer* getRenderer() noexcept final;
+	Renderer* getRenderer() noexcept final
+	{
+		return mRenderer.get();
+	}
+
+	/// Returns the render pipeline
+	RenderPipeline* getRenderPipeline() noexcept final
+	{
+		return mRenderPipeline.get();
+	}
 
 	/// Returns the scene
-	Scene* getScene() noexcept final;
+	Scene* getScene() noexcept final
+	{
+		return mScene.get();
+	}
 
 	/// Returns the geometry factory
-	Factory* getFactory() noexcept final;
+	Factory* getFactory() noexcept final
+	{
+		return mFactory.get();
+	}
 
 	/// Called when the window is resized
 	void onEvent(const Event& event) noexcept final;
@@ -44,10 +60,13 @@ private:
 	std::unique_ptr<WindowC> mWindow;
 
 	///	The renderer
-	std::unique_ptr<Renderer> mRenderer;
+	std::unique_ptr<RendererBase> mRenderer;
 
 	/// The scene
 	std::unique_ptr<SceneC> mScene;
+
+	/// The render pipeline
+	std::unique_ptr<RenderPipelineC> mRenderPipeline;
 
 	/// The geometry factory
 	std::unique_ptr<Factory> mFactory;

@@ -23,9 +23,16 @@ FlatColorMaterialModel* MaterialFactoryC::createFlatColorMaterial() noexcept
 		}
 	}
 
-	Material* material = mScene.createMaterial(mFlatColorShader, 1);
+	Material* material = mScene.createMaterial();
 	if (material == nullptr)
 	{
+		return nullptr;
+	}
+
+	if (auto* pass = material->createPass(0, mFlatColorShader, 1);
+		pass == nullptr)
+	{
+		mScene.removeMaterial(material);
 		return nullptr;
 	}
 
@@ -33,6 +40,11 @@ FlatColorMaterialModel* MaterialFactoryC::createFlatColorMaterial() noexcept
 	GLTUT_CATCH_ALL_BEGIN
 		result = &mFlatColorModels.emplace_back(*material);
 	GLTUT_CATCH_ALL_END("Cannot create a flat color material model")
+	
+	if (result == nullptr)
+	{
+		mScene.removeMaterial(material);
+	}
 	return result;
 }
 
@@ -79,9 +91,16 @@ SceneShaderBinding* MaterialFactoryC::createPhongShader(
 
 PhongMaterialModel* MaterialFactoryC::createPhongMaterial(SceneShaderBinding* phongShader) noexcept
 {
-	Material* material = mScene.createMaterial(phongShader, 2);
+	Material* material = mScene.createMaterial();
 	if (material == nullptr)
 	{
+		return nullptr;
+	}
+
+	if (auto* pass = material->createPass(0, phongShader, 3);
+		pass == nullptr)
+	{
+		mScene.removeMaterial(material);
 		return nullptr;
 	}
 
@@ -89,6 +108,11 @@ PhongMaterialModel* MaterialFactoryC::createPhongMaterial(SceneShaderBinding* ph
 	GLTUT_CATCH_ALL_BEGIN
 		result = &mPhongModels.emplace_back(*material);
 	GLTUT_CATCH_ALL_END("Cannot create a Phong material model")
+
+	if (result == nullptr)
+	{
+		mScene.removeMaterial(material);
+	}
 	return result;
 }
 

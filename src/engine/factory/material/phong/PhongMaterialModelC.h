@@ -18,19 +18,19 @@ public:
 	// Sets the diffuse texture
 	void setDiffuse(Texture* diffuse) noexcept final
 	{
-		getMaterial().setTexture(diffuse, 0);
+		getMaterial()[0]->setTexture(diffuse, 0);
 	}
 
 	// Sets the specular texture
 	void setSpecular(Texture* specular) noexcept final
 	{
-		getMaterial().setTexture(specular, 1);
+		getMaterial()[0]->setTexture(specular, 1);
 	}
 
 	// Sets the shininess value
 	void setShininess(float shininess) noexcept final
 	{
-		getMaterial().getShaderArguments()->setFloat("shininess", shininess);
+		getMaterial()[0]->getShaderArguments()->setFloat("shininess", shininess);
 	}
 };
 

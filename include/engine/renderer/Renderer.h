@@ -2,6 +2,7 @@
 
 // Includes
 #include "engine/core/Types.h"
+#include "engine/math/Color.h"
 #include "engine/math/Rectangle.h"
 #include "engine/renderer/mesh/Mesh.h"
 #include "engine/renderer/shader/Shader.h"
@@ -18,11 +19,8 @@ public:
 	/// Virtual destructor
 	virtual ~Renderer() noexcept = default;
 
-	/// Sets the clear color
-	virtual void setClearColor(float r, float g, float b, float a) noexcept = 0;
-
-	/// Clears the screen
-	virtual void clear() noexcept = 0;
+	/// Clears the current render target with a specific color
+	virtual void clear(const Color& color) noexcept = 0;
 
 	/// Creates a mesh
 	virtual Mesh* createMesh(

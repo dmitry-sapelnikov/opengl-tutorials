@@ -105,6 +105,12 @@
     <Filter Include="src\renderer\framebuffer">
       <UniqueIdentifier>{af636d3a-379f-45fd-9805-48c829ef2714}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\render_pipeline">
+      <UniqueIdentifier>{02e12331-ca12-4be6-9803-3c1f90d59d46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\render_pipeline">
+      <UniqueIdentifier>{4ea6f70e-cc24-4c14-89f8-f5e39cfd7029}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\engine\Engine.h">
@@ -215,10 +221,10 @@
     <ClInclude Include="..\..\src\engine\renderer\texture\stb_image.h">
       <Filter>src\renderer\texture</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\engine\scene\material\Material.h">
+    <ClInclude Include="..\..\include\engine\scene\material\MaterialPass.h">
       <Filter>include\scene\material</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\engine\scene\material\MaterialC.h">
+    <ClInclude Include="..\..\src\engine\scene\material\MaterialPassC.h">
       <Filter>src\scene\material</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\engine\renderer\backends\opengl\MeshOpenGL.h">
@@ -320,6 +326,24 @@
     <ClInclude Include="..\..\src\engine\scene\camera\CameraViewpointC.h">
       <Filter>src\scene\camera</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\engine\render_pipeline\RenderPassC.h">
+      <Filter>src\render_pipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\render_pipeline\RenderPipelineC.h">
+      <Filter>src\render_pipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\render_pipeline\RenderPipeline.h">
+      <Filter>include\render_pipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\render_pipeline\RenderPass.h">
+      <Filter>include\render_pipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\scene\material\Material.h">
+      <Filter>include\scene\material</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\scene\material\MaterialC.h">
+      <Filter>src\scene\material</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\engine\EngineC.cpp">
@@ -364,7 +388,7 @@
     <ClCompile Include="..\..\src\engine\renderer\texture\stb_image.cpp">
       <Filter>src\renderer\texture</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\engine\scene\material\MaterialC.cpp">
+    <ClCompile Include="..\..\src\engine\scene\material\MaterialPassC.cpp">
       <Filter>src\scene\material</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\engine\renderer\backends\opengl\MeshOpenGL.cpp">
@@ -393,6 +417,15 @@
     </ClCompile>
     <ClCompile Include="..\..\src\engine\renderer\framebuffer\FramebufferBase.cpp">
       <Filter>src\renderer\framebuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\render_pipeline\RenderPassC.cpp">
+      <Filter>src\render_pipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\render_pipeline\RenderPipelineC.cpp">
+      <Filter>src\render_pipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\scene\material\MaterialC.cpp">
+      <Filter>src\scene\material</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

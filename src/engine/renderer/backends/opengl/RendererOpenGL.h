@@ -14,11 +14,8 @@ public:
 	/// Constructor
 	RendererOpenGL(void* deviceContext);
 
-	/// Sets the clear color
-	void setClearColor(float r, float g, float b, float a) noexcept final;
-
-	/// Clears the viewport
-	void clear() noexcept final;
+	/// Clears the current render target with a specific color
+	void clear(const Color& color) noexcept final;
 
 	/// Activates a framebuffer
 	void activateFramebuffer(Framebuffer* frameBuffer) noexcept final;

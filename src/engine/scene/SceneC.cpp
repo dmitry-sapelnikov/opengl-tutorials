@@ -9,13 +9,8 @@ namespace gltut
 SceneC::SceneC(
 	Window& window,
 	RendererBase& renderer) :
-
-	mWindow(window),
-	mRenderer(renderer)
+	mWindow(window)
 {
-	// Set the background color
-	mRenderer.setClearColor(0.1f, 0.3f, 0.3f, 1.0f);
-
 	// Get creation time in ms using high resolution clock
 	mCreationTime = std::chrono::high_resolution_clock::now();
 	mLastUpdateTime = mCreationTime;
@@ -30,18 +25,31 @@ SceneShaderBinding* SceneC::createShaderBinding(Shader* shader) noexcept
 	return result;
 }
 
-Material* SceneC::createMaterial(SceneShaderBinding* shaderBinding, u32 textureSlotsCount) noexcept
+Material* SceneC::createMaterial() noexcept
 {
-	if (shaderBinding == nullptr)
-	{
-		return nullptr;
-	}
-
 	Material* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN
-		result = &mMaterials.emplace_back(shaderBinding, textureSlotsCount);
+		result = mMaterials.emplace_back(std::make_unique<MaterialC>()).get();
 	GLTUT_CATCH_ALL_END("Cannot create a material")
 	return result;
+}
+
+void SceneC::removeMaterial(Material* material) noexcept
+{
+	GLTUT_ASSERT(material != nullptr);
+	GLTUT_CATCH_ALL_BEGIN
+		const auto findResult = std::find_if(
+			mMaterials.begin(),
+			mMaterials.end(),
+			[material](const auto& m)
+			{
+				return m.get() == material;
+			});
+		if (findResult != mMaterials.end())
+		{
+			mMaterials.erase(findResult);
+		}
+	GLTUT_CATCH_ALL_END("Cannot remove a material")
 }
 
 GeometryNode* SceneC::createGeometry(
@@ -67,18 +75,6 @@ LightNode* SceneC::createLight(
 		result = &mLights.emplace_back(type, transform, parent);
 	GLTUT_CATCH_ALL_END("Cannot create a light")
 	return result;
-}
-
-u32 SceneC::getLightCount() const noexcept
-{
-	return static_cast<u32>(mLights.size());
-}
-
-LightNode* SceneC::getLight(u32 index) const noexcept
-{
-	return index < getLightCount() ?
-		&const_cast<LightNodeC&>(mLights[index]) :
-		nullptr;
 }
 
 Camera* SceneC::createCamera(
@@ -159,19 +155,10 @@ void SceneC::update() noexcept
 		controller->updateCamera(timeMs, timeDeltaMs);
 	}
 	mLastUpdateTime = currentTime;
-}
 
-void SceneC::render() noexcept
-{
-	for (auto& shaderBinding: mShaderBindings)
+	for (auto& shaderBinding : mShaderBindings)
 	{
 		shaderBinding.update(this);
-		shaderBinding.update(getActiveCameraViewpoint());
-	}
-
-	for (const auto& object : mGeometries)
-	{
-		object.render();
 	}
 }
 

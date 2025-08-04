@@ -18,7 +18,7 @@ public:
 	/// Sets the color texture
 	void setColor(Texture* color) noexcept final
 	{
-		getMaterial().setTexture(color, 0);
+		getMaterial()[0]->setTexture(color, 0);
 	}
 };
 
