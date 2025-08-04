@@ -21,6 +21,9 @@ public:
 	/// Returns the active camera
 	virtual Camera* getActiveCamera() const noexcept = 0;
 
+	/// Returns the active camera viewpoint
+	virtual const Viewpoint* getActiveCameraViewpoint() const noexcept = 0;
+
 	/// Sets the active camera
 	virtual void setActiveCamera(Camera* camera) noexcept = 0;
 

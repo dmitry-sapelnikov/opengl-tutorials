@@ -101,23 +101,19 @@ Camera* SceneC::createCamera(
 			nearPlane,
 			farPlan,
 			aspectRatio);
-
-		if (mActiveCamera == nullptr)
+		// Set the active camera if it is not set yet
+		if (getActiveCamera() == nullptr)
 		{
-			mActiveCamera = result;
+			setActiveCamera(result);
 		}
 	GLTUT_CATCH_ALL_END("Cannot create a camera")
 	return result;
 }
 
-Camera* SceneC::getActiveCamera() const noexcept
-{
-	return mActiveCamera;
-}
-
 void SceneC::setActiveCamera(Camera* camera) noexcept
 {
 	mActiveCamera = camera;
+	mActiveCameraViewpoint.setCamera(camera);
 }
 
 void SceneC::addCameraController(CameraController* controller) noexcept

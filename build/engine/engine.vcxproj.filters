@@ -314,6 +314,12 @@
     <ClInclude Include="..\..\include\engine\renderer\Framebuffer.h">
       <Filter>include\renderer</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\engine\scene\camera\Viewpoint.h">
+      <Filter>include\scene\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\scene\camera\CameraViewpointC.h">
+      <Filter>src\scene\camera</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\engine\EngineC.cpp">

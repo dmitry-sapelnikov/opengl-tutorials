@@ -53,7 +53,15 @@ public:
 		float farPlane,
 		const float* aspectRatio = nullptr) noexcept final;
 
-	Camera* getActiveCamera() const noexcept final;
+	Camera* getActiveCamera() const noexcept final
+	{
+		return mActiveCamera;
+	}
+
+	const Viewpoint* getActiveCameraViewpoint() const noexcept final
+	{
+		return &mActiveCameraViewpoint;
+	}
 
 	void setActiveCamera(Camera* camera) noexcept final;
 
@@ -92,6 +100,9 @@ private:
 
 	/// The active camera
 	Camera* mActiveCamera = nullptr;
+
+	/// The active camera viewpoint
+	CameraViewpointC mActiveCameraViewpoint { nullptr };
 
 	/// Creation time
 	std::chrono::time_point<std::chrono::high_resolution_clock> mCreationTime;

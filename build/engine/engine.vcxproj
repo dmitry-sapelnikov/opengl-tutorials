@@ -40,6 +40,7 @@
     <ClInclude Include="..\..\include\engine\renderer\Texture.h" />
     <ClInclude Include="..\..\include\engine\scene\camera\Camera.h" />
     <ClInclude Include="..\..\include\engine\scene\camera\CameraController.h" />
+    <ClInclude Include="..\..\include\engine\scene\camera\Viewpoint.h" />
     <ClInclude Include="..\..\include\engine\scene\material\Material.h" />
     <ClInclude Include="..\..\include\engine\scene\nodes\GeometryNode.h" />
     <ClInclude Include="..\..\include\engine\scene\nodes\LightNode.h" />
@@ -70,6 +71,7 @@
     <ClInclude Include="..\..\src\engine\renderer\shader\ShaderArguments.h" />
     <ClInclude Include="..\..\src\engine\renderer\texture\stb_image.h" />
     <ClInclude Include="..\..\src\engine\scene\camera\CameraC.h" />
+    <ClInclude Include="..\..\src\engine\scene\camera\CameraViewpointC.h" />
     <ClInclude Include="..\..\src\engine\scene\camera\FPSCameraControllerC.h" />
     <ClInclude Include="..\..\src\engine\scene\camera\MouseCameraControllerC.h" />
     <ClInclude Include="..\..\src\engine\scene\material\MaterialC.h" />

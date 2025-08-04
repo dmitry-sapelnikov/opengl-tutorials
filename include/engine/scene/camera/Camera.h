@@ -3,6 +3,7 @@
 // Includes
 #include "engine/math/Matrix4.h"
 #include "engine/window/Window.h"
+#include "engine/scene/camera/Viewpoint.h"
 
 namespace gltut
 {
@@ -109,17 +110,8 @@ public:
 	/// Returns the projection (non-const)
 	virtual CameraProjection& getProjection() noexcept = 0;
 
-	/// Returns the projection-view matrix
-	Matrix4 getProjectionView() const noexcept
-	{
-		return getProjection().getMatrix() * getView().getMatrix();
-	}
-
-	/// Returns the inverted projection-view matrix
-	Matrix4 getProjectionViewInverse() const noexcept
-	{
-		return getProjectionView().getInverse();
-	}
+	/// Returns the viewpoint
+	virtual const Viewpoint& getViewpoint() const noexcept = 0;
 };
 
 // Global functions
