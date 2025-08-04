@@ -6,8 +6,10 @@
 
 #include "engine/core/NonCopyable.h"
 #include "engine/render_pipeline/RenderPipeline.h"
-#include "./RenderPassC.h"
-#include "engine/window/EventHandler.h"
+#include "engine/render_pipeline/passes/BasicRenderPass.h"
+#include "engine/render_pipeline/passes/SceneRenderPass.h"
+#include "engine/renderer/Renderer.h"
+#include "engine/scene/Scene.h"
 
 namespace gltut
 {
@@ -21,27 +23,20 @@ public:
 		Renderer& renderer,
 		Scene& scene);
 
-	/// Creates a render pass
-	RenderPass* createPass(
+	/// Creates a basic render pass
+	BasicRenderPass* createBasicPass(
+		Framebuffer* target,
+		const Color& clearColor = { 0.0f, 0.0f, 0.0f }) noexcept final;
+
+	/// Creates a scene render pass
+	SceneRenderPass* createScenePass(
 		Framebuffer* target,
 		const Viewpoint* viewer,
 		u32 materialLayer,
 		const Color& clearColor = { 0.0f, 0.0f, 0.0f }) noexcept final;
 
-	/// Returns the number of render passes
-	u32 getPassCount() const noexcept final
-	{
-		return static_cast<u32>(mPasses.size());
-	}
-
-	/// Returns the render pass at the specified index
-	RenderPass* getPass(u32 index) noexcept final
-	{
-		return mPasses[index].get();
-	}
-
 	/// Sets the priority of the render pass
-	void setPassPriority(u32 index, int32 priority) noexcept final;
+	void setPassPriority(RenderPass* pass, int32 priority) noexcept final;
 
 	/// Executes the render pipeline
 	void execute() noexcept;
@@ -54,7 +49,7 @@ private:
 	Scene& mScene;
 
 	/// List of render passes
-	std::vector<std::unique_ptr<RenderPassC>> mPasses;
+	std::vector<std::pair<std::unique_ptr<RenderPass>, u32>> mPasses;
 };
 
 // End of the namespace gltut

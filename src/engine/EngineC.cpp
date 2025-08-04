@@ -34,7 +34,7 @@ EngineC::EngineC(u32 windowWidth, u32 windowHeight)
 	// - the 0th material layer
 	// - the current active scene camera
 	// - the window frame buffer
-	RenderPass* defaultPass = mRenderPipeline->createPass(
+	RenderPass* defaultPass = mRenderPipeline->createScenePass(
 		nullptr,
 		mScene->getActiveCameraViewpoint(),
 		0,
