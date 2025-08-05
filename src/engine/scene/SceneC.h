@@ -5,9 +5,9 @@
 #include <chrono>
 #include "engine/core/NonCopyable.h"
 #include "engine/scene/Scene.h"
+#include "engine/render_pipeline/RenderPipeline.h"
 
 #include "./camera/CameraC.h"
-#include "./material/MaterialC.h"
 #include "./shader/SceneShaderBindingC.h"
 #include "./nodes/GeometryNodeC.h"
 #include "./nodes/LightNodeC.h"
@@ -19,9 +19,16 @@ namespace gltut
 class SceneC final : public Scene, public NonCopyable
 {
 public:
+	/// Constructor
 	SceneC(
 		Window& window,
-		RendererBase& renderer);
+		RenderPipeline& renderer);
+
+	/// Returns the render object for the scene
+	const RenderObject* getRenderObject() const noexcept final
+	{
+		return mRenderGroup;
+	}
 
 	SceneShaderBinding* createShaderBinding(Shader* shader) noexcept final;
 
@@ -34,10 +41,6 @@ public:
 	{
 		return &const_cast<SceneShaderBindingC&>(mShaderBindings[index]);
 	}
-
-	Material* createMaterial() noexcept final;
-
-	void removeMaterial(Material* material) noexcept final;
 
 	GeometryNode* createGeometry(
 		const Mesh* mesh,
@@ -101,11 +104,14 @@ private:
 	/// The window
 	Window& mWindow;
 
+	/// The renderer
+	RenderPipeline& mRenderer;
+
+	/// The scene render group
+	RenderGroup* mRenderGroup = nullptr;
+
 	/// The shader bindings
 	std::deque<SceneShaderBindingC> mShaderBindings;
-
-	/// The materials
-	std::vector<std::unique_ptr<MaterialC>> mMaterials;
 
 	/// Geometry nodes
 	std::deque<GeometryNodeC> mGeometries;

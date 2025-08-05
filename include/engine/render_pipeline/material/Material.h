@@ -1,7 +1,7 @@
 #pragma once
 
 // Includes
-#include "engine/scene/material/MaterialPass.h"
+#include "engine/render_pipeline/material/MaterialPass.h"
 
 namespace gltut
 {
@@ -17,7 +17,7 @@ public:
 	/// Creates a material pass by index
 	virtual MaterialPass* createPass(
 		u32 index,
-		SceneShaderBinding* shader,
+		ShaderMaterialBinding* shader,
 		u32 textureSlotsCount) noexcept = 0;
 
 	/// Removes a material pass by index

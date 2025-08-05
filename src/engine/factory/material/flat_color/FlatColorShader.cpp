@@ -47,29 +47,49 @@ void main()
 })";
 
 // Global functions
-SceneShaderBinding* createFlatColorShader(
-	Renderer& renderer,
-	Scene& scene) noexcept
+ShaderMaterialBinding* createFlatColorShader(RenderPipeline& renderPipeline) noexcept
 {
-	Shader* shader = renderer.createShader(
-		FLAT_COLOR_VERTEX_SHADER,
-		FLAT_COLOR_FRAGMENT_SHADER);
+	Shader* shader = nullptr;
+	ShaderViewpointBinding* viewpointBinding = nullptr;
+	ShaderMaterialBinding* materialBinding = nullptr;
 
-	if (shader == nullptr)
+	GLTUT_CATCH_ALL_BEGIN
+		Shader* shader = renderPipeline.getRenderer()->createShader(
+			FLAT_COLOR_VERTEX_SHADER,
+			FLAT_COLOR_FRAGMENT_SHADER);
+
+		GLTUT_CHECK(shader != nullptr, "Cannot create a flat color shader");
+		shader->setInt("colorSampler", 0);
+
+		viewpointBinding = renderPipeline.createShaderViewpointBinding(shader);
+		GLTUT_CHECK(viewpointBinding != nullptr, "Cannot create a shader viewpoint binding");
+
+		viewpointBinding->bind(ShaderViewpointBinding::Parameter::VIEW_MATRIX, "view");
+		viewpointBinding->bind(ShaderViewpointBinding::Parameter::PROJECTION_MATRIX, "projection");
+
+		materialBinding = renderPipeline.createShaderMaterialBinding(shader);
+		GLTUT_CHECK(materialBinding != nullptr, "Cannot create a shader material binding");
+		materialBinding->bind(ShaderMaterialBinding::Parameter::GEOMETRY_MATRIX, "model");
+
+		return materialBinding;
+	GLTUT_CATCH_ALL_END("Cannot create a flat color shader");
+
+	if (materialBinding != nullptr)
 	{
-		return nullptr;
+		renderPipeline.removeShaderMaterialBinding(materialBinding);
 	}
 
-	SceneShaderBinding* binding = scene.createShaderBinding(shader);
-	if (binding == nullptr)
+	if (viewpointBinding != nullptr)
 	{
-		renderer.removeShader(shader);
-		return nullptr;
+		renderPipeline.removeShaderViewpointBinding(viewpointBinding);
 	}
 
-	shader->setInt("colorSampler", 0);
-	bindModelViewProjectionShaderParameters(binding, "model", "view", "projection");
-	return binding;
+	if (shader != nullptr)
+	{
+		renderPipeline.getRenderer()->removeShader(shader);
+	}
+
+	return nullptr;
 }
 
 // End of the namespace gltut

@@ -9,7 +9,7 @@ namespace gltut
 {
 //	Global classes
 MaterialPassC::MaterialPassC(
-	SceneShaderBinding* Shader,
+	ShaderMaterialBinding* Shader,
 	u32 textureSlotsCount) noexcept :
 
 	mShaderBinding(Shader),
@@ -26,12 +26,12 @@ MaterialPassC::MaterialPassC(
 }
 
 /// Returns the shader binding
-const SceneShaderBinding* MaterialPassC::getShader() const noexcept
+const ShaderMaterialBinding* MaterialPassC::getShader() const noexcept
 {
 	return mShaderBinding;
 }
 
-void MaterialPassC::setShader(const SceneShaderBinding* shader) noexcept
+void MaterialPassC::setShader(const ShaderMaterialBinding* shader) noexcept
 {
 	mShaderBinding = shader;
 	mShaderArguments.setShader(shader != nullptr ?
@@ -52,9 +52,9 @@ void MaterialPassC::setTexture(Texture* texture, u32 slot) noexcept
 	}
 }
 
-void MaterialPassC::activate(const GeometryNode* node) const noexcept
+void MaterialPassC::activate(const RenderGeometry* geometry) const noexcept
 {
-	if (node == nullptr ||
+	if (geometry == nullptr ||
 		mShaderBinding == nullptr || 
 		mShaderBinding->getShader() == nullptr ||
 		mShaderBinding->getShader()->getRenderer() == nullptr)
@@ -62,7 +62,7 @@ void MaterialPassC::activate(const GeometryNode* node) const noexcept
 		return;
 	}
 
-	mShaderBinding->update(node);
+	mShaderBinding->update(geometry);
 	mShaderArguments.activate();
 	
 	Renderer& renderer = *mShaderBinding->getShader()->getRenderer();

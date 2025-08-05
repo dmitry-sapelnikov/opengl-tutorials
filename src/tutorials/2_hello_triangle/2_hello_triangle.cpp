@@ -80,9 +80,11 @@ int main()
 			VERTEX_SHADER_SOURCE_CODE,
 			FRAGMENT_SHADER_SOURCE_CODE);
 
-		auto* shaderBinding = scene->createShaderBinding(shader);
+		auto* renderPipeline = engine->getRenderPipeline();
 
-		auto* material = scene->createMaterial();
+		auto* shaderBinding = renderPipeline->createShaderMaterialBinding(shader);
+		
+		auto* material = renderPipeline->createMaterial();
 		GLTUT_CHECK(material != nullptr, "Failed to create material")
 
 		auto* pass = material->createPass(0, shaderBinding, 0);

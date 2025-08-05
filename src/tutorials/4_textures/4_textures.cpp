@@ -56,10 +56,12 @@ int main()
 		gltut::Texture* texture2 = renderer->loadTexture("assets/awesomeface.png");
 		GLTUT_CHECK(texture2 != nullptr, "Failed to load texture");
 
-		auto* shaderBinding = scene->createShaderBinding(shader);
+		auto* renderPipeline = engine->getRenderPipeline();
+
+		auto* shaderBinding = renderPipeline->createShaderMaterialBinding(shader);
 		GLTUT_CHECK(shaderBinding != nullptr, "Failed to create shader binding");
 
-		auto* material = scene->createMaterial();
+		auto* material = renderPipeline->createMaterial();
 		GLTUT_CHECK(material != nullptr, "Failed to create material")
 
 		auto* materialPass = material->createPass(0, shaderBinding, 2);

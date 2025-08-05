@@ -53,121 +53,67 @@ static void setFloat(
 }
 
 // Global classes
-Shader* SceneShaderBindingC::getShader() const noexcept
-{
-	return mShader;
-}
-
-void SceneShaderBindingC::setShader(
-	Shader* shader,
-	bool resetParameters) noexcept
-{
-	mShader = shader;
-	if (resetParameters)
-	{
-		for (auto& name : mShaderParameters)
-		{
-			name.clear();
-		}
-	}
-}
-
-const char* SceneShaderBindingC::getBoundShaderParameter(
-	Parameter parameter) const noexcept
-{
-	const auto& result = mShaderParameters[static_cast<size_t>(parameter)];
-	return result.empty() ? nullptr : result.c_str();
-}
-
-void SceneShaderBindingC::bind(
-	Parameter parameter,
-	const char* shaderParameter) noexcept
-{
-	const size_t index = static_cast<size_t>(parameter);
-	const std::string param((shaderParameter != nullptr) ? shaderParameter : "");
-
-	mShaderParameters[index] = param;
-
-	// Find the first dot in the shader parameter name
-	size_t dotPos = param.find('.');
-	if (dotPos != std::string::npos)
-	{
-		// Split the shader parameter name into two parts
-		mShaderParameterParts[index] = { param.substr(0, dotPos), param.substr(dotPos + 1) };
-	}
-	else
-	{
-		// No dot found, use the whole name as the first part
-		mShaderParameterParts[index] = { param, "" };
-	}
-
-	if (!mShaderParameterParts[index].second.empty())
-	{
-		GLTUT_ASSERT(!mShaderParameterParts[index].first.empty());
-	}
-}
-
 void SceneShaderBindingC::update(const Scene* scene) const noexcept
 {
-	if (mShader == nullptr || scene == nullptr)
+	if (getShader() == nullptr || scene == nullptr)
 	{
 		return;
 	}
-
-	mShader->activate();
+	getShader()->activate();
 	updateLights(*scene);
 }
 
-void SceneShaderBindingC::update(const Viewpoint* viewer) const noexcept
-{
-	if (mShader == nullptr || viewer == nullptr)
-	{
-		return;
-	}
-
-	if (const char* cameraView = getBoundShaderParameter(Parameter::CAMERA_VIEW_MATRIX);
-		cameraView != nullptr)
-	{
-		mShader->setMat4(cameraView, viewer->getViewMatrix().data());
-	}
-
-	if (const char* cameraProjection = getBoundShaderParameter(Parameter::CAMERA_PROJECTION_MATRIX);
-		cameraProjection != nullptr)
-	{
-		mShader->setMat4(cameraProjection, viewer->getProjectionMatrix().data());
-	}
-
-	if (const char* cameraPosition = getBoundShaderParameter(Parameter::CAMERA_POSITION);
-		cameraPosition != nullptr)
-	{
-		const Vector3& position = viewer->getPosition();
-		mShader->setVec3(cameraPosition, position.x, position.y, position.z);
-	}
-}
-
-/// Activates the shader binding for a scene object
-void SceneShaderBindingC::update(const GeometryNode* node) const noexcept
-{
-	if (mShader == nullptr || node == nullptr)
-	{
-		return;
-	}
-
-	mShader->activate();
-
-	if (const char* objectMatrix = getBoundShaderParameter(Parameter::GEOMETRY_MATRIX);
-		objectMatrix != nullptr)
-	{
-		mShader->setMat4(objectMatrix, node->getGlobalTransform().data());
-	}
-
-	if (const char* objectNormalMatrix = getBoundShaderParameter(Parameter::GEOMETRY_NORMAL_MATRIX);
-		objectNormalMatrix != nullptr)
-	{
-		const Matrix3 normalMatrix = getNormalMatrix(node->getGlobalTransform().getMatrix3());
-		mShader->setMat3(objectNormalMatrix, normalMatrix.data());
-	}
-}
+//
+//void SceneShaderBindingC::update(const Viewpoint* viewer) const noexcept
+//{
+//	if (shader == nullptr || viewer == nullptr)
+//	{
+//		return;
+//	}
+//
+//	if (const char* cameraView = getBoundShaderParameter(Parameter::CAMERA_VIEW_MATRIX);
+//		cameraView != nullptr)
+//	{
+//		shader->setMat4(cameraView, viewer->getViewMatrix().data());
+//	}
+//
+//	if (const char* cameraProjection = getBoundShaderParameter(Parameter::CAMERA_PROJECTION_MATRIX);
+//		cameraProjection != nullptr)
+//	{
+//		shader->setMat4(cameraProjection, viewer->getProjectionMatrix().data());
+//	}
+//
+//	if (const char* cameraPosition = getBoundShaderParameter(Parameter::CAMERA_POSITION);
+//		cameraPosition != nullptr)
+//	{
+//		const Vector3& position = viewer->getPosition();
+//		shader->setVec3(cameraPosition, position.x, position.y, position.z);
+//	}
+//}
+//
+///// Activates the shader binding for a scene object
+//void SceneShaderBindingC::update(const GeometryNode* node) const noexcept
+//{
+//	if (shader == nullptr || node == nullptr)
+//	{
+//		return;
+//	}
+//
+//	shader->activate();
+//
+//	if (const char* objectMatrix = getBoundShaderParameter(Parameter::GEOMETRY_MATRIX);
+//		objectMatrix != nullptr)
+//	{
+//		shader->setMat4(objectMatrix, node->getGlobalTransform().data());
+//	}
+//
+//	if (const char* objectNormalMatrix = getBoundShaderParameter(Parameter::GEOMETRY_NORMAL_MATRIX);
+//		objectNormalMatrix != nullptr)
+//	{
+//		const Matrix3 normalMatrix = getNormalMatrix(node->getGlobalTransform().getMatrix3());
+//		shader->setMat3(objectNormalMatrix, normalMatrix.data());
+//	}
+//}
 
 void SceneShaderBindingC::updateLight(
 	const LightNode& light,
@@ -177,28 +123,29 @@ void SceneShaderBindingC::updateLight(
 	SceneShaderBinding::Parameter diffuseColor,
 	SceneShaderBinding::Parameter specularColor) const noexcept
 {
-	GLTUT_ASSERT(mShader != nullptr);
+	Shader* shader = getShader();
+	GLTUT_ASSERT(shader != nullptr);
 
 	setVector3(
-		*mShader,
+		*shader,
 		getShaderParameterParts(position),
 		lightInd,
 		light.getGlobalTransform().getTranslation());
 
 	setVector3(
-		*mShader,
+		*shader,
 		getShaderParameterParts(ambientColor),
 		lightInd,
 		toVector3(light.getAmbient()));
 
 	setVector3(
-		*mShader,
+		*shader,
 		getShaderParameterParts(diffuseColor),
 		lightInd,
 		toVector3(light.getDiffuse()));
 
 	setVector3(
-		*mShader,
+		*shader,
 		getShaderParameterParts(specularColor),
 		lightInd,
 		toVector3(light.getSpecular()));
@@ -206,6 +153,9 @@ void SceneShaderBindingC::updateLight(
 
 void SceneShaderBindingC::updateLights(const Scene& scene) const
 {
+	Shader* shader = getShader();
+	GLTUT_ASSERT(shader != nullptr);
+
 	u32 directionalInd = 0;
 	u32 pointInd = 0;
 	u32 spotInd = 0;
@@ -231,7 +181,7 @@ void SceneShaderBindingC::updateLights(const Scene& scene) const
 				Parameter::DIRECTIONAL_LIGHT_SPECULAR_COLOR);
 
 			setVector3(
-				*mShader,
+				*shader,
 				getShaderParameterParts(Parameter::DIRECTIONAL_LIGHT_DIRECTION),
 				lightInd,
 				light->getGlobalDirection());
@@ -251,13 +201,13 @@ void SceneShaderBindingC::updateLights(const Scene& scene) const
 				Parameter::POINT_LIGHT_SPECULAR_COLOR);
 
 			setFloat(
-				*mShader,
+				*shader,
 				getShaderParameterParts(Parameter::POINT_LIGHT_LINEAR_ATTENUATION),
 				spotInd,
 				light->getLinearAttenuation());
 
 			setFloat(
-				*mShader,
+				*shader,
 				getShaderParameterParts(Parameter::POINT_LIGHT_QUADRATIC_ATTENUATION),
 				spotInd,
 				light->getQuadraticAttenuation());
@@ -278,31 +228,31 @@ void SceneShaderBindingC::updateLights(const Scene& scene) const
 				Parameter::SPOT_LIGHT_SPECULAR_COLOR);
 
 			setVector3(
-				*mShader,
+				*shader,
 				getShaderParameterParts(Parameter::SPOT_LIGHT_DIRECTION),
 				spotInd,
 				light->getGlobalDirection());
 
 			setFloat(
-				*mShader,
+				*shader,
 				getShaderParameterParts(Parameter::SPOT_LIGHT_INNER_ANGLE_COS),
 				spotInd,
 				std::cos(light->getInnerAngle()));
 
 			setFloat(
-				*mShader,
+				*shader,
 				getShaderParameterParts(Parameter::SPOT_LIGHT_OUTER_ANGLE_COS),
 				spotInd,
 				std::cos(light->getOuterAngle()));
 
 			setFloat(
-				*mShader,
+				*shader,
 				getShaderParameterParts(Parameter::SPOT_LIGHT_LINEAR_ATTENUATION),
 				spotInd,
 				light->getLinearAttenuation());
 
 			setFloat(
-				*mShader,
+				*shader,
 				getShaderParameterParts(Parameter::SPOT_LIGHT_QUADRATIC_ATTENUATION),
 				spotInd,
 				light->getQuadraticAttenuation());
@@ -314,12 +264,6 @@ void SceneShaderBindingC::updateLights(const Scene& scene) const
 		GLTUT_UNEXPECTED_SWITCH_DEFAULT_CASE(light->getType())
 		}
 	}
-}
-
-const SceneShaderBindingC::ShaderParameterParts& SceneShaderBindingC::getShaderParameterParts(
-	Parameter parameter) const noexcept
-{
-	return mShaderParameterParts[static_cast<size_t>(parameter)];
 }
 
 // End of the namespace gltut

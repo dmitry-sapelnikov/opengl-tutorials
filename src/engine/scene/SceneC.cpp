@@ -1,6 +1,5 @@
 // Includes
 #include "SceneC.h"
-#include <stdexcept>
 #include "engine/core/Check.h"
 
 namespace gltut
@@ -8,9 +7,15 @@ namespace gltut
 
 SceneC::SceneC(
 	Window& window,
-	RendererBase& renderer) :
-	mWindow(window)
+	RenderPipeline& renderer) :
+
+	mWindow(window),
+	mRenderer(renderer)
 {
+	mRenderGroup = mRenderer.createGroup();
+	GLTUT_CHECK(mRenderGroup != nullptr,
+		"Cannot create a render group for the scene");
+
 	// Get creation time in ms using high resolution clock
 	mCreationTime = std::chrono::high_resolution_clock::now();
 	mLastUpdateTime = mCreationTime;
@@ -25,43 +30,27 @@ SceneShaderBinding* SceneC::createShaderBinding(Shader* shader) noexcept
 	return result;
 }
 
-Material* SceneC::createMaterial() noexcept
-{
-	Material* result = nullptr;
-	GLTUT_CATCH_ALL_BEGIN
-		result = mMaterials.emplace_back(std::make_unique<MaterialC>()).get();
-	GLTUT_CATCH_ALL_END("Cannot create a material")
-	return result;
-}
-
-void SceneC::removeMaterial(Material* material) noexcept
-{
-	GLTUT_ASSERT(material != nullptr);
-	GLTUT_CATCH_ALL_BEGIN
-		const auto findResult = std::find_if(
-			mMaterials.begin(),
-			mMaterials.end(),
-			[material](const auto& m)
-			{
-				return m.get() == material;
-			});
-		if (findResult != mMaterials.end())
-		{
-			mMaterials.erase(findResult);
-		}
-	GLTUT_CATCH_ALL_END("Cannot remove a material")
-}
-
 GeometryNode* SceneC::createGeometry(
 	const Mesh* mesh,
 	const Material* material,
 	const Matrix4& transform,
 	SceneNode* parent) noexcept
 {
+	RenderGeometry* renderGeometry = mRenderer.createGeometry(
+		mesh,
+		material,
+		Matrix4::identity());
+
+	if (renderGeometry == nullptr)
+	{
+		return nullptr;
+	}
+
+	mRenderGroup->addObject(renderGeometry);
 	GeometryNode* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN
-		result = &mGeometries.emplace_back(mesh, material, transform, parent);
-	GLTUT_CATCH_ALL_END("Cannot create a scene object")
+		result = &mGeometries.emplace_back(*renderGeometry, transform, parent);
+	GLTUT_CATCH_ALL_END("Cannot create a scene geometry");
 	return result;
 }
 

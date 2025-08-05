@@ -35,9 +35,10 @@ int main()
 		shader->setInt("texture1", 0);
 		shader->setInt("texture2", 1);
 
-		auto* shaderBinding = scene->createShaderBinding(shader);
+		auto* renderPipeline = engine->getRenderPipeline();
+		auto* shaderBinding = renderPipeline->createShaderMaterialBinding(shader);
 		GLTUT_CHECK(shaderBinding != nullptr, "Failed to create shader binding");
-		shaderBinding->bind(gltut::SceneShaderBinding::Parameter::GEOMETRY_MATRIX, "model");
+		shaderBinding->bind(gltut::ShaderMaterialBinding::Parameter::GEOMETRY_MATRIX, "model");
 
 		gltut::Texture* texture1 = renderer->loadTexture("assets/container.jpg");
 		GLTUT_CHECK(texture1 != nullptr, "Failed to load texture");
@@ -45,7 +46,7 @@ int main()
 		gltut::Texture* texture2 = renderer->loadTexture("assets/awesomeface.png");
 		GLTUT_CHECK(texture2 != nullptr, "Failed to load texture");
 
-		auto* material = scene->createMaterial();
+		auto* material = renderPipeline->createMaterial();
 		GLTUT_CHECK(material != nullptr, "Failed to create material");
 
 		auto* materialPass = material->createPass(0, shaderBinding, 2);
