@@ -35,6 +35,12 @@ public:
 		return static_cast<u32>(mId);
 	}
 
+	/// Returns the texture size
+	const Point2u& getSize() const noexcept final
+	{
+		return mSize;
+	}
+
 	/// Returns the wrap mode of the texture
 	WrapMode getWrapMode() const noexcept final
 	{
@@ -72,6 +78,9 @@ public:
 	void bind(u32 slot) const noexcept final;
 
 private:
+	/// Texture size
+	Point2u mSize;
+
 	/// Texture format
 	Format mFormat;
 

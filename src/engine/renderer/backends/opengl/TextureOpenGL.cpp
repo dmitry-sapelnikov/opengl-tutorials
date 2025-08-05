@@ -93,6 +93,7 @@ TextureOpenGL::TextureOpenGL(
 	Texture::FilterMode magFilter,
 	Texture::WrapMode wrapMode) :
 
+	mSize(width, height),
 	mFormat(format),
 	mMinFilter(minFilter),
 	mMagFilter(magFilter),

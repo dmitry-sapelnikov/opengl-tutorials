@@ -63,7 +63,8 @@ public:
 		const RenderObject* object,
 		Framebuffer* target,
 		u32 materialPass,
-		const Color& clearColor = { 0.0f, 0.0f, 0.0f }) noexcept final;
+		const Color* clearColor,
+		const Rectangle2u* viewport) noexcept final;
 
 	/// Sets the priority of the render pass
 	void setPassPriority(RenderPass* pass, int32 priority) noexcept final;

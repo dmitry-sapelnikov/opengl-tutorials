@@ -12,21 +12,19 @@ class RendererOpenGL final : public RendererBase
 {
 public:
 	/// Constructor
-	RendererOpenGL(void* deviceContext);
+	RendererOpenGL(Window& window);
 
 	/// Clears the current render target with a specific color
 	void clear(const Color& color) noexcept final;
 
-	/// Activates a framebuffer
-	void activateFramebuffer(Framebuffer* frameBuffer) noexcept final;
-
 	/// Enables or disables vertical synchronization
 	void enableVSync(bool vSync) noexcept final;
 
-	/// Sets the viewport for the current render target
-	void setViewport(const Rectangle2u& rectangle) noexcept final;
-
 private:
+	void setFramebuffer(Framebuffer* frameBuffer) noexcept final;
+
+	void setViewport(const Rectangle2u& viewport) noexcept final;
+
 	std::unique_ptr<Mesh> createBackendMesh(
 		VertexFormat vertexFormat,
 		u32 vertexCount,
@@ -56,10 +54,6 @@ private:
 
 	/// Binds a texture to a slot
 	void bindTexture(Texture* texture, u32 slot) noexcept final;
-
-private:
-	///	The window
-	void* mDeviceContext;
 };
 
 // End of the namespace gltut

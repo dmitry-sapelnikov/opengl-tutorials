@@ -26,13 +26,16 @@ public:
 	virtual const Framebuffer* getTarget() const noexcept = 0;
 
 	/// Returns the clear color for the render target
-	virtual const Color& getClearColor() const noexcept = 0;
+	virtual const Color* getClearColor() const noexcept = 0;
 
 	///	Returns the scene viewpoint
 	virtual const Viewpoint* getViewpoint() const noexcept = 0;
 
 	/// Returns the material layer for this render pass
 	virtual u32 getMaterialPass() const noexcept = 0;
+
+	/// Returns the viewport rectangle for this render pass
+	virtual const Rectangle2u* getViewport() const noexcept = 0;
 
 	/// Executes the render pass
 	virtual void execute() noexcept = 0;

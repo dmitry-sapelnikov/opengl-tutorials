@@ -134,7 +134,8 @@ RenderPass* RenderPipelineC::createPass(
 	const RenderObject* object,
 	Framebuffer* target,
 	u32 materialPass,
-	const Color& clearColor) noexcept
+	const Color* clearColor,
+	const Rectangle2u* viewport) noexcept
 {
 	RenderPass* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN
@@ -144,6 +145,7 @@ RenderPass* RenderPipelineC::createPass(
 			target,
 			materialPass,
 			clearColor,
+			viewport,
 			mRenderer,
 			mShaderViewpointBindings),
 			0).first.get();

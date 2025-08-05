@@ -9,7 +9,8 @@ RenderPassC::RenderPassC(
 	const RenderObject* object,
 	Framebuffer* target,
 	u32 materialPass,
-	const Color& clearColor,
+	const Color* clearColor,
+	const Rectangle2u* viewport,
 	Renderer& renderer,
 	const ShaderViewpointBindings& viewpointBindings) noexcept :
 
@@ -17,16 +18,31 @@ RenderPassC::RenderPassC(
 	mObject(object),
 	mTarget(target),
 	mMaterialPass(materialPass),
-	mClearColor(clearColor),
 	mRenderer(renderer),
 	mViewpointBindings(viewpointBindings)
 {
+	if (clearColor != nullptr)
+	{
+		mClearColor = *clearColor;
+	}
+
+	if (viewport != nullptr)
+	{
+		mViewport = *viewport;
+	}
 }
 
 void RenderPassC::execute() noexcept
 {
-	mRenderer.activateFramebuffer(mTarget);
-	mRenderer.clear(mClearColor);
+	mRenderer.activateFramebuffer(
+		mTarget, 
+		mViewport.has_value() ? &mViewport.value() : nullptr);
+
+	if (mClearColor.has_value())
+	{
+		mRenderer.clear(*mClearColor);
+	}
+
 	for (const auto& binding : mViewpointBindings)
 	{
 		binding->update(mViewpoint);

@@ -17,12 +17,12 @@ EngineC::EngineC(u32 windowWidth, u32 windowHeight)
 	mWindow = std::make_unique<WindowC>(
 		windowWidth,
 		windowHeight);
+	GLTUT_CHECK(mWindow != nullptr, "Failed to create the window");
 
-	auto renderer = std::make_unique<RendererOpenGL>(
-		mWindow->getDeviceContext());
+	auto renderer = std::make_unique<RendererOpenGL>(*mWindow);
+	GLTUT_CHECK(renderer != nullptr, "Failed to create the renderer");
 
 	//	First add the renderer as a handler, then the engine
-	mWindow->addEventHandler(renderer.get());
 	mWindow->addEventHandler(this);
 
 	mRenderPipeline = std::make_unique<RenderPipelineC>(*renderer);
@@ -34,12 +34,14 @@ EngineC::EngineC(u32 windowWidth, u32 windowHeight)
 	// - the 0th material layer
 	// - the current active scene camera
 	// - the window frame buffer
+	const Color clearColor(0.1f, 0.3f, 0.3f);
 	RenderPass* defaultPass = mRenderPipeline->createPass(
 		mScene->getActiveCameraViewpoint(),
 		mScene->getRenderObject(),
 		nullptr,
 		0,
-		Color(0.1f, 0.3f, 0.3f));
+		&clearColor,
+		nullptr);
 	GLTUT_CHECK(defaultPass != nullptr, "Cannot create the default render pass");
 
 	mFactory = std::make_unique<FactoryC>(*mRenderPipeline, *mScene);
