@@ -1,0 +1,19 @@
+#pragma once
+#include "engine/core/Types.h"
+
+namespace gltut
+{
+//	Global classes
+///	Represents a base class for render objects
+class RenderObject
+{
+public:
+	/// Virtual destructor
+	virtual ~RenderObject() noexcept = default;
+
+	/// Renders the object
+	virtual void render(u32 materialPass) const noexcept = 0;
+};
+
+// End of the namespace gltut
+}

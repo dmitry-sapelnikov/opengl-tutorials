@@ -20,15 +20,14 @@ public:
 	virtual FlatColorMaterialModel* createFlatColorMaterial() noexcept = 0;
 
 	/// Creates a Phong shader
-	virtual SceneShaderBinding* createPhongShader(
-		Renderer* renderer,
-		Scene* scene,
+	virtual ShaderMaterialBinding* createPhongShader(
 		u32 maxDirectionalLights,
 		u32 maxPointLights,
 		u32 maxSpotLights) noexcept = 0;
 
 	///	Creates a Phong material model
-	virtual PhongMaterialModel* createPhongMaterial(SceneShaderBinding* phongShader) noexcept = 0;
+	virtual PhongMaterialModel* createPhongMaterial(
+		ShaderMaterialBinding* phongShader) noexcept = 0;
 };
 
 // End of the namespace gltut

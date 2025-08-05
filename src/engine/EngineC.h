@@ -6,6 +6,7 @@
 #include "engine/Engine.h"
 #include "engine/factory/Factory.h"
 
+#include "./renderer/RendererBase.h"
 #include "./scene/SceneC.h"
 #include "./window/WindowC.h"
 #include "./render_pipeline/RenderPipelineC.h"

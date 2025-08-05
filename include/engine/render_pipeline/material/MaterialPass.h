@@ -2,7 +2,8 @@
 
 // Includes
 #include "engine/renderer/Texture.h"
-#include "engine/scene/shader/SceneShaderBinding.h"
+#include "engine/renderer/shader/ShaderParameters.h"
+#include "engine/render_pipeline/material/ShaderMaterialBinding.h"
 
 namespace gltut
 {
@@ -16,10 +17,10 @@ public:
 	virtual ~MaterialPass() noexcept = default;
 
 	/// Returns the shader
-	virtual const SceneShaderBinding* getShader() const noexcept = 0;
+	virtual const ShaderMaterialBinding* getShader() const noexcept = 0;
 
 	/// Sets the shader
-	virtual void setShader(const SceneShaderBinding* shader) noexcept = 0;
+	virtual void setShader(const ShaderMaterialBinding* shader) noexcept = 0;
 
 	/// Returns the shader arguments object, i.e. values of shader parameters
 	virtual ShaderParameters* getShaderArguments() = 0;
@@ -37,8 +38,8 @@ public:
 	/// The number is truncated to Texture::TEXTURE_SLOTS
 	virtual void setTextureSlotsCount(u32 count) noexcept = 0;
 
-	/// Activates the material for a scene geometry
-	virtual void activate(const GeometryNode* node) const noexcept = 0;
+	/// Activates the material pass for a render geometry
+	virtual void activate(const RenderGeometry* geometry) const noexcept = 0;
 };
 
 // End of the namespace gltut

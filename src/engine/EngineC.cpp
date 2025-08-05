@@ -25,26 +25,24 @@ EngineC::EngineC(u32 windowWidth, u32 windowHeight)
 	mWindow->addEventHandler(renderer.get());
 	mWindow->addEventHandler(this);
 
-	mScene = std::make_unique<SceneC>(*mWindow , *renderer);
+	mRenderPipeline = std::make_unique<RenderPipelineC>(*renderer);
+	mScene = std::make_unique<SceneC>(*mWindow, *mRenderPipeline);
 	mRenderer = std::move(renderer);
 
-	mRenderPipeline = std::make_unique<RenderPipelineC>(*mRenderer, *mScene);
 	// Create the default render pass
 	// It uses:
 	// - the 0th material layer
 	// - the current active scene camera
 	// - the window frame buffer
-	RenderPass* defaultPass = mRenderPipeline->createScenePass(
-		nullptr,
+	RenderPass* defaultPass = mRenderPipeline->createPass(
 		mScene->getActiveCameraViewpoint(),
+		mScene->getRenderObject(),
+		nullptr,
 		0,
 		Color(0.1f, 0.3f, 0.3f));
 	GLTUT_CHECK(defaultPass != nullptr, "Cannot create the default render pass");
 
-
-	mFactory = std::make_unique<FactoryC>(*mRenderer, *mScene);
-
-
+	mFactory = std::make_unique<FactoryC>(*mRenderPipeline, *mScene);
 }
 
 bool EngineC::update() noexcept

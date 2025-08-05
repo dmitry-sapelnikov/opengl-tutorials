@@ -6,7 +6,10 @@
 namespace gltut
 {
 
-MaterialFactoryC::MaterialFactoryC(Renderer& renderer, Scene& scene) noexcept :
+MaterialFactoryC::MaterialFactoryC(
+	RenderPipeline& renderer,
+	Scene& scene) noexcept :
+
 	mRenderer(renderer),
 	mScene(scene)
 {
@@ -16,14 +19,14 @@ FlatColorMaterialModel* MaterialFactoryC::createFlatColorMaterial() noexcept
 {
 	if (mFlatColorShader == nullptr)
 	{
-		mFlatColorShader = gltut::createFlatColorShader(mRenderer, mScene);
+		mFlatColorShader = gltut::createFlatColorShader(mRenderer);
 		if (mFlatColorShader == nullptr)
 		{
 			return nullptr;
 		}
 	}
 
-	Material* material = mScene.createMaterial();
+	Material* material = mRenderer.createMaterial();
 	if (material == nullptr)
 	{
 		return nullptr;
@@ -32,7 +35,7 @@ FlatColorMaterialModel* MaterialFactoryC::createFlatColorMaterial() noexcept
 	if (auto* pass = material->createPass(0, mFlatColorShader, 1);
 		pass == nullptr)
 	{
-		mScene.removeMaterial(material);
+		mRenderer.removeMaterial(material);
 		return nullptr;
 	}
 
@@ -40,27 +43,20 @@ FlatColorMaterialModel* MaterialFactoryC::createFlatColorMaterial() noexcept
 	GLTUT_CATCH_ALL_BEGIN
 		result = &mFlatColorModels.emplace_back(*material);
 	GLTUT_CATCH_ALL_END("Cannot create a flat color material model")
-	
-	if (result == nullptr)
-	{
-		mScene.removeMaterial(material);
-	}
+
+		if (result == nullptr)
+		{
+			mRenderer.removeMaterial(material);
+		}
 	return result;
 }
 
-SceneShaderBinding* MaterialFactoryC::createPhongShader(
-	Renderer* renderer,
-	Scene* scene,
+ShaderMaterialBinding* MaterialFactoryC::createPhongShader(
 	u32 maxDirectionalLights,
 	u32 maxPointLights,
 	u32 maxSpotLights) noexcept
 {
-	if (renderer == nullptr || scene == nullptr)
-	{
-		return nullptr;
-	}
-
-	SceneShaderBinding* result = nullptr;
+	ShaderMaterialBinding* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN
 		const auto lightCounts = std::make_tuple(
 			maxDirectionalLights,
@@ -75,8 +71,8 @@ SceneShaderBinding* MaterialFactoryC::createPhongShader(
 		else
 		{
 			result = gltut::createPhongShader(
-				*renderer,
-				*scene,
+				mRenderer,
+				mScene,
 				maxDirectionalLights,
 				maxPointLights,
 				maxSpotLights);
@@ -89,9 +85,10 @@ SceneShaderBinding* MaterialFactoryC::createPhongShader(
 	return result;
 }
 
-PhongMaterialModel* MaterialFactoryC::createPhongMaterial(SceneShaderBinding* phongShader) noexcept
+PhongMaterialModel* MaterialFactoryC::createPhongMaterial(
+	ShaderMaterialBinding* phongShader) noexcept
 {
-	Material* material = mScene.createMaterial();
+	Material* material = mRenderer.createMaterial();
 	if (material == nullptr)
 	{
 		return nullptr;
@@ -100,7 +97,7 @@ PhongMaterialModel* MaterialFactoryC::createPhongMaterial(SceneShaderBinding* ph
 	if (auto* pass = material->createPass(0, phongShader, 3);
 		pass == nullptr)
 	{
-		mScene.removeMaterial(material);
+		mRenderer.removeMaterial(material);
 		return nullptr;
 	}
 
@@ -109,10 +106,10 @@ PhongMaterialModel* MaterialFactoryC::createPhongMaterial(SceneShaderBinding* ph
 		result = &mPhongModels.emplace_back(*material);
 	GLTUT_CATCH_ALL_END("Cannot create a Phong material model")
 
-	if (result == nullptr)
-	{
-		mScene.removeMaterial(material);
-	}
+		if (result == nullptr)
+		{
+			mRenderer.removeMaterial(material);
+		}
 	return result;
 }
 

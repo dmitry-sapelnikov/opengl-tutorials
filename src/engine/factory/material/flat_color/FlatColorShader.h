@@ -1,16 +1,14 @@
 #pragma once
 
 // Includes
-#include "engine/renderer/Renderer.h"
+#include "engine/render_pipeline/RenderPipeline.h"
 #include "engine/scene/Scene.h"
 
 namespace gltut
 {
 // Global functions
 /// Creates a flat color shader
-SceneShaderBinding* createFlatColorShader(
-	Renderer& renderer,
-	Scene& scene) noexcept;
+ShaderMaterialBinding* createFlatColorShader(RenderPipeline& renderPipeline) noexcept;
 
 // End of the namespace gltut
 }

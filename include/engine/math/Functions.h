@@ -1,6 +1,7 @@
 #pragma once
 
 // Includes
+#include <algorithm>
 #include <cmath>
 #include "Constants.h"
 

@@ -5,8 +5,11 @@ namespace gltut
 {
 
 // Constructor
-FactoryC::FactoryC(Renderer& renderer, Scene& scene) noexcept :
-	mGeometries(renderer),
+FactoryC::FactoryC(
+	RenderPipeline& renderer,
+	Scene& scene) noexcept :
+
+	mGeometries(*renderer.getRenderer()),
 	mMaterials(renderer, scene)
 {
 }
