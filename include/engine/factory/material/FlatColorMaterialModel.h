@@ -1,7 +1,7 @@
 #pragma once
 
 // Includes
-#include "engine/scene/material/Material.h"
+#include "engine/render_pipeline/material/Material.h"
 
 namespace gltut
 {

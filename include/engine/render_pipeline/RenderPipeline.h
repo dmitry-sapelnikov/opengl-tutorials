@@ -1,8 +1,11 @@
 #pragma once
 
 // Includes
-#include "engine/render_pipeline/passes/BasicRenderPass.h"
-#include "engine/render_pipeline/passes/SceneRenderPass.h"
+#include "engine/renderer/Renderer.h"
+#include "engine/render_pipeline/viewpoint/ShaderViewpointBinding.h"
+#include "engine/render_pipeline/objects/RenderGeometry.h"
+#include "engine/render_pipeline/objects/RenderGroup.h"
+#include "engine/render_pipeline/RenderPass.h"
 
 namespace gltut
 {
@@ -14,16 +17,46 @@ public:
 	/// Virtual destructor
 	virtual ~RenderPipeline() noexcept = default;
 
-	/// Creates a basic render pass
-	virtual BasicRenderPass* createBasicPass(
-		Framebuffer* target,
-		const Color& clearColor = { 0.0f, 0.0f, 0.0f }) noexcept = 0;
+	/// Returns the renderer
+	virtual Renderer* getRenderer() noexcept = 0;
+
+	/// Creates a shader material binding
+	virtual ShaderMaterialBinding* createShaderMaterialBinding(
+		Shader* shader) noexcept = 0;
+
+	/// Removes a shader material binding
+	virtual void removeShaderMaterialBinding(
+		ShaderMaterialBinding* binding) noexcept = 0;
+
+	/// Creates a shader viewpoint binding
+	virtual ShaderViewpointBinding* createShaderViewpointBinding(
+		Shader* shader) noexcept = 0;
+
+	/// Removes a shader viewpoint binding
+	virtual void removeShaderViewpointBinding(
+		ShaderViewpointBinding* binding) noexcept = 0;
+
+	/// Creates a material
+	virtual Material* createMaterial() noexcept = 0;
+
+	/// Removes a material
+	virtual void removeMaterial(Material* material) noexcept = 0;
+
+	/// Creates a render geometry
+	virtual RenderGeometry* createGeometry(
+		const Mesh* geometry,
+		const Material* material,
+		const Matrix4& transform) noexcept = 0;
+
+	/// Creates a render group
+	virtual RenderGroup* createGroup() noexcept = 0;
 
 	/// Creates a render pass
-	virtual SceneRenderPass* createScenePass(
-		Framebuffer* target,
+	virtual RenderPass* createPass(
 		const Viewpoint* viewpoint,
-		u32 materialLayer,
+		const RenderObject* object,
+		Framebuffer* target,
+		u32 materialPass,
 		const Color& clearColor = { 0.0f, 0.0f, 0.0f }) noexcept = 0;
 
 	/// Sets the priority of the render pass

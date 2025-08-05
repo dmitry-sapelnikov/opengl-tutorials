@@ -2,7 +2,7 @@
 
 // Includes
 #include "engine/core/NonCopyable.h"
-#include "engine/scene/material/MaterialPass.h"
+#include "engine/render_pipeline/material/MaterialPass.h"
 #include "../../renderer/shader/ShaderArguments.h"
 
 namespace gltut
@@ -13,14 +13,14 @@ class MaterialPassC final : public MaterialPass, public NonCopyable
 public:
 	/// Constructor
 	explicit MaterialPassC(
-		SceneShaderBinding* shader,
+		ShaderMaterialBinding* shader,
 		u32 textureSlotsCount) noexcept;
 
 	/// Returns the shader binding
-	const SceneShaderBinding* getShader() const noexcept final;
+	const ShaderMaterialBinding* getShader() const noexcept final;
 
 	/// Sets the shader binding
-	void setShader(const SceneShaderBinding* shader) noexcept final;
+	void setShader(const ShaderMaterialBinding* shader) noexcept final;
 
 	/// Returns the shader controller
 	ShaderParameters* getShaderArguments() final
@@ -47,12 +47,12 @@ public:
 		mTextureSlotsCount = std::min(count, Texture::TEXTURE_SLOTS);
 	}
 
-	/// Activates the material for a scene node
-	void activate(const GeometryNode* node) const noexcept final;
+	/// Activates the material pass for a render geometry
+	void activate(const RenderGeometry* geometry) const noexcept final;
 
 private:
 	/// The shader binding
-	const SceneShaderBinding* mShaderBinding;
+	const ShaderMaterialBinding* mShaderBinding;
 
 	/// The shader arguments
 	ShaderArguments mShaderArguments;

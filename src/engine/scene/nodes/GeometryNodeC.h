@@ -2,9 +2,8 @@
 
 // Includes
 #include "engine/scene/nodes/GeometryNode.h"
-#include "../../renderer/RendererBase.h"
+#include "engine/render_pipeline/objects/RenderGeometry.h"
 #include "./SceneNodeT.h"
-
 
 namespace gltut
 {
@@ -14,47 +13,32 @@ class GeometryNodeC final : public SceneNodeT<GeometryNode>
 {
 public:
 	GeometryNodeC(
-		const Mesh* mesh,
-		const Material* material,
+		RenderGeometry& geometry,
 		const Matrix4& transform,
 		SceneNode* parent) noexcept :
 
 		SceneNodeT<GeometryNode>(transform, parent),
-		mMesh(mesh),
-		mMaterial(material)
+		mGeometry(geometry)
 	{
+		GeometryNodeC::setTransform(transform);
 	}
 
-	/// Returns the mesh of this geometry node
-	const Mesh* getMesh() const noexcept final
+	/// Returns the geometry
+	RenderGeometry* getGeometry() noexcept final
 	{
-		return mMesh;
+		return &mGeometry;
 	}
 
-	/// Sets a mesh
-	void setMesh(const Mesh* mesh) noexcept final
+	/// Sets the transform
+	void setTransform(const Matrix4& transform) noexcept final
 	{
-		mMesh = mesh;
-	}
-
-	/// Returns the material for a specific render pass
-	const Material* getMaterial() const noexcept final
-	{
-		return mMaterial;
-	}
-
-	/// Sets a material
-	void setMaterial(const Material* material) noexcept final
-	{
-		mMaterial = material;
+		SceneNodeT<GeometryNode>::setTransform(transform);
+		mGeometry.setTransform(getGlobalTransform());
 	}
 
 private:
-	/// The mesh
-	const Mesh* mMesh = nullptr;
-
-	/// Material passes
-	const Material* mMaterial;
+	/// The geometry
+	RenderGeometry& mGeometry;
 };
 
 // End of the namespace gltut

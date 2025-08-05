@@ -4,8 +4,7 @@
 #include <deque>
 #include <map>
 #include "engine/core/NonCopyable.h"
-#include "engine/renderer/Renderer.h"
-#include "engine/scene/Scene.h"
+#include "engine/render_pipeline/RenderPipeline.h"
 #include "engine/factory/material/MaterialFactory.h"
 
 #include "./flat_color/FlatColorMaterialModelC.h"
@@ -18,37 +17,38 @@ class MaterialFactoryC final : public MaterialFactory, public NonCopyable
 {
 public:
 	// Constructor
-	explicit MaterialFactoryC(Renderer& renderer, Scene& scene) noexcept;
+	explicit MaterialFactoryC(
+		RenderPipeline& renderer,
+		Scene& scene) noexcept;
 
 	/// Creates a flat color material model
 	FlatColorMaterialModel* createFlatColorMaterial() noexcept final;
 
 	/// Creates a Phong shader
-	SceneShaderBinding* createPhongShader(
-		Renderer* renderer,
-		Scene* scene,
+	ShaderMaterialBinding* createPhongShader(
 		u32 maxDirectionalLights,
 		u32 maxPointLights,
 		u32 maxSpotLights) noexcept final;
 
 	///	Creates a Phong material model
-	PhongMaterialModel* createPhongMaterial(SceneShaderBinding* phongShader) noexcept final;
+	PhongMaterialModel* createPhongMaterial(
+		ShaderMaterialBinding* phongShader) noexcept final;
 
 private:
-	/// The renderer used to create shaders
-	Renderer& mRenderer;
+	/// The renderer
+	RenderPipeline& mRenderer;
 
-	/// The scene used to create materials
+	/// The scene
 	Scene& mScene;
 
 	/// Flat color shader binding
-	SceneShaderBinding* mFlatColorShader = nullptr;
+	ShaderMaterialBinding* mFlatColorShader = nullptr;
 
 	/// Flat color material models
 	std::deque<FlatColorMaterialModelC> mFlatColorModels;
 
 	/// Pointer to the Phong material shader
-	std::map<std::tuple<u32, u32, u32>, SceneShaderBinding*> mPhongShaders;
+	std::map<std::tuple<u32, u32, u32>, ShaderMaterialBinding*> mPhongShaders;
 
 	/// Phong material models
 	std::deque<PhongMaterialModelC> mPhongModels;

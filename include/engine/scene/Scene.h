@@ -1,10 +1,9 @@
 #pragma once
 
 // Includes
-#include "engine/scene/material/Material.h"
+#include "engine/render_pipeline/objects/RenderObject.h"
 #include "engine/scene/camera/CameraController.h"
 #include "engine/scene/shader/SceneShaderBinding.h"
-
 #include "engine/scene/nodes/GeometryNode.h"
 #include "engine/scene/nodes/LightNode.h"
 
@@ -17,6 +16,9 @@ class Scene
 public:
 	/// Virtual destructor
 	virtual ~Scene() noexcept = default;
+
+	/// Return the scene render object. It is used to create render passes.
+	virtual const RenderObject* getRenderObject() const noexcept = 0;
 
 	/// Returns the active camera
 	virtual Camera* getActiveCamera() const noexcept = 0;
@@ -73,12 +75,6 @@ public:
 
 	/// Returns the shader binding at the specified index
 	virtual SceneShaderBinding* getShaderBinding(u32 index) const noexcept = 0;
-
-	///	Creates a material
-	virtual Material* createMaterial() noexcept = 0;
-
-	/// Removes a material from the scene
-	virtual void removeMaterial(Material* material) noexcept = 0;
 
 	/// Creates a scene object
 	virtual GeometryNode* createGeometry(

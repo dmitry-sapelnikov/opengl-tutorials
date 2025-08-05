@@ -3,7 +3,7 @@
 // Includes
 #include "engine/math/Matrix4.h"
 #include "engine/renderer/mesh/Mesh.h"
-#include "engine/scene/material/Material.h"
+#include "engine/render_pipeline/objects/RenderGeometry.h"
 #include "engine/scene/nodes/SceneNode.h"
 
 namespace gltut
@@ -13,17 +13,8 @@ namespace gltut
 class GeometryNode : public SceneNode
 {
 public:
-	/// Returns the mesh of this geometry node
-	virtual const Mesh* getMesh() const noexcept = 0;
-
-	/// Adds a mesh
-	virtual void setMesh(const Mesh* mesh) noexcept = 0;
-
-	/// Returns the material
-	virtual const Material* getMaterial() const noexcept = 0;
-
-	/// Sets a material
-	virtual void setMaterial(const Material* material) noexcept = 0;
+	/// Returns the render geometry associated with this node
+	virtual RenderGeometry* getGeometry() = 0;
 };
 
 // End of the namespace gltut

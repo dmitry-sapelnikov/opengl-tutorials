@@ -3,7 +3,7 @@
 // Includes
 #include <vector>
 #include "engine/core/NonCopyable.h"
-#include "engine/scene/material/Material.h"
+#include "engine/render_pipeline/material/Material.h"
 
 namespace gltut
 {
@@ -17,7 +17,7 @@ public:
 	/// Creates a material pass by index
 	MaterialPass* createPass(
 		u32 index,
-		SceneShaderBinding* shader,
+		ShaderMaterialBinding* shader,
 		u32 textureSlotsCount) noexcept final;
 
 	/// Removes a material pass by index

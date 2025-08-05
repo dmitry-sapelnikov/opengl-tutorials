@@ -38,7 +38,7 @@ public:
 	}
 
 	/// Sets the transform
-	void setTransform(const Matrix4& transform) noexcept final
+	void setTransform(const Matrix4& transform) noexcept override
 	{
 		mTransform = transform;
 		updateGlobalTransform();

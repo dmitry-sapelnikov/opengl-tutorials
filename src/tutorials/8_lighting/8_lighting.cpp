@@ -174,8 +174,6 @@ int main()
 		auto* materialFactory = engine->getFactory()->getMaterial();
 
 		auto* phongShader = materialFactory->createPhongShader(
-			renderer,
-			scene,
 			1, // No directional lights
 			3, // Use 3 point lights
 			1); // Use 1 spot light
