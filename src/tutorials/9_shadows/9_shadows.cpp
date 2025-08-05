@@ -50,18 +50,21 @@ void createBoxes(
 }
 
 /// Creates lights
-
 gltut::GeometryNode* createLight(
+	gltut::RenderPipeline& renderer,
 	gltut::Scene& scene,
-	gltut::SceneShaderBinding* lightShaderBinding,
+	gltut::ShaderMaterialBinding* lightShaderBinding,
 	gltut::Mesh* lightMesh,
 	const gltut::LightNode::Type lightType,
 	const gltut::Vector3& position,
 	const gltut::Color& color)
 {
-	auto* lightMaterial = scene.createMaterial(lightShaderBinding);
+	auto* lightMaterial = renderer.createMaterial();
 	GLTUT_CHECK(lightMaterial, "Failed to create light material");
-	lightMaterial->getShaderArguments()->setVec3("lightColor", color.r, color.g, color.b);
+
+	auto* materialPass = lightMaterial->createPass(0, lightShaderBinding, 0);
+
+	materialPass->getShaderArguments()->setVec3("lightColor", color.r, color.g, color.b);
 	GLTUT_CHECK(lightMesh, "Failed to create light mesh");
 
 	auto* light = scene.createGeometry(lightMesh, lightMaterial);
@@ -83,28 +86,37 @@ void createLights(
 	directionalLight = nullptr;
 
 	gltut::Scene& scene = *engine.getScene();
+	gltut::RenderPipeline& renderer = *engine.getRenderPipeline();
 
 	auto* lightMesh = engine.getFactory()->getGeometry()->createSphere(0.2f, 10);
 	GLTUT_CHECK(lightMesh, "Failed to create light mesh");
 
-	auto* lightShader = engine.getRenderer()->loadShader(
+	auto* lightShader = renderer.getRenderer()->loadShader(
 		"assets/light_shader.vs",
 		"assets/light_shader.fs");
 	GLTUT_CHECK(lightShader, "Failed to create light shader program");
 
-	auto* lightShaderBinding = scene.createShaderBinding(lightShader);
-	GLTUT_CHECK(lightShaderBinding, "Failed to create light shader binding");
+	auto* materialBinding = renderer.createShaderMaterialBinding(lightShader);
+	GLTUT_CHECK(materialBinding, "Failed to create light shader material binding");
+	materialBinding->bind(
+		gltut::ShaderMaterialBinding::Parameter::GEOMETRY_MATRIX,
+		"model");
 
-	gltut::bindModelViewProjectionShaderParameters(
-		lightShaderBinding,
-		"model",
-		"view",
+	auto* viewpointBinding = renderer.createShaderViewpointBinding(lightShader);
+	GLTUT_CHECK(viewpointBinding, "Failed to create light shader viewpoint binding");
+	viewpointBinding->bind(
+		gltut::ShaderViewpointBinding::Parameter::VIEW_MATRIX,
+		"view");
+
+	viewpointBinding->bind(
+		gltut::ShaderViewpointBinding::Parameter::PROJECTION_MATRIX,
 		"projection");
 
 	// Create a directional light]
 	directionalLight = createLight(
+		renderer,
 		scene,
-		lightShaderBinding,
+		materialBinding,
 		lightMesh,
 		gltut::LightNode::Type::DIRECTIONAL,
 		DIR_LIGHT_POSITION,
@@ -133,8 +145,6 @@ int main()
 		auto* materialFactory = engine->getFactory()->getMaterial();
 
 		auto* phongShader = materialFactory->createPhongShader(
-			renderer,
-			scene,
 			1, // 1 directional light
 			0, // No point lights
 			0); // No spot lights
