@@ -67,6 +67,9 @@ private:
 	/// Cleans up the window resources
 	void cleanup() noexcept;
 
+	/// Updates the size of the window
+	void updateSize() noexcept;
+
 	/// The window
 	void* mWindow = nullptr;
 
@@ -81,6 +84,9 @@ private:
 
 	/// FPS counter
 	std::unique_ptr<FPSCounter> mFPSCounter;
+
+	/// The size of the window
+	Point2u mSize;
 };
 
 // End of the namespace gltut

@@ -4,17 +4,20 @@
 #include <unordered_map>
 #include "engine/core/NonCopyable.h"
 #include "engine/renderer/Renderer.h"
-#include "engine/window/EventHandler.h"
+#include "engine/window/Window.h"
 
 namespace gltut
 {
 
 /// Renderer base class
-class RendererBase : public Renderer, public EventHandler, public NonCopyable
+class RendererBase : public Renderer, public NonCopyable
 {
 public:
 	/// Invalid mesh index
 	static constexpr u32 INVALID_MESH_INDEX = std::numeric_limits<u32>::max();
+
+	/// Constructor
+	RendererBase(Window& window) noexcept;
 
 	/// Creates a mesh
 	Mesh* createMesh(
@@ -78,10 +81,24 @@ public:
 	/// Removes a framebuffer
 	void removeFramebuffer(Framebuffer* frameBuffer) noexcept final;
 
-	/// Called when an event occurs
-	void onEvent(const Event& event) noexcept final;
+	/// Activates a framebuffer
+	void activateFramebuffer(
+		Framebuffer* frameBuffer,
+		Rectangle2u* viewport) noexcept final;
+
+	/// Returns the window associated with this renderer
+	Window& getWindow() noexcept
+	{
+		return mWindow;
+	}
 
 private:
+	// Sets the framebuffer for rendering
+	virtual void setFramebuffer(Framebuffer* frameBuffer) noexcept = 0;
+
+	// Sets the viewport for rendering
+	virtual void setViewport(const Rectangle2u& viewport) noexcept = 0;
+
 	/// Creates a shader for a specific graphics backend
 	virtual std::unique_ptr<Mesh> createBackendMesh(
 		VertexFormat vertexFormat,
@@ -108,6 +125,9 @@ private:
 	virtual std::unique_ptr<Framebuffer> createBackendFramebuffer(
 		Texture* color,
 		Texture* depth) = 0;
+
+	/// The window associated with this renderer
+	Window& mWindow;
 
 	/// Meshes
 	std::vector<std::unique_ptr<Mesh>> mMeshes;

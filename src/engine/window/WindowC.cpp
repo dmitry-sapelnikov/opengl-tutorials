@@ -30,6 +30,11 @@ public:
 		{
 			callback->onEvent(event);
 		}
+
+		if (event.type == Event::Type::WINDOW_RESIZE)
+		{
+			mWindow.updateSize();
+		}
 	}
 
 	void swapBuffers() noexcept
@@ -199,6 +204,7 @@ WindowC::WindowC(
 	u32 width,
 	u32 height) :
 
+	mSize(width, height),
 	mCallback(std::make_unique<WindowCallback>(*this))
 {
 	GLTUT_CHECK(width > 0, "Window width must be greater than 0");
@@ -267,16 +273,7 @@ void WindowC::showFPS(bool show) noexcept
 
 Point2u WindowC::getSize() const noexcept
 {
-	RECT rect = {};
-	const bool result = GetClientRect((HWND)mWindow, &rect);
-	GLTUT_ASSERT(result);
-
-	int intWidth = rect.right - rect.left;
-	int intHeight = rect.bottom - rect.top;
-
-	GLTUT_ASSERT(intWidth > 0);
-	GLTUT_ASSERT(intHeight > 0);
-	return { static_cast<u32>(intWidth), static_cast<u32>(intHeight) };
+	return mSize;
 }
 
 void WindowC::addEventHandler(EventHandler* handler) noexcept
@@ -357,6 +354,20 @@ void WindowC::cleanup() noexcept
 	ReleaseDC((HWND)mWindow, (HDC)mDeviceContext);
 	DestroyWindow((HWND)mWindow);
 	UnregisterClass(WINDOW_CLASS_NAME, GetModuleHandle(nullptr));
+}
+
+void WindowC::updateSize() noexcept
+{
+	RECT rect = {};
+	const bool result = GetClientRect((HWND)mWindow, &rect);
+	GLTUT_ASSERT(result);
+
+	int intWidth = rect.right - rect.left;
+	int intHeight = rect.bottom - rect.top;
+
+	GLTUT_ASSERT(intWidth > 0);
+	GLTUT_ASSERT(intHeight > 0);
+	mSize = { static_cast<u32>(intWidth), static_cast<u32>(intHeight) };
 }
 
 // End of the namespace gltut

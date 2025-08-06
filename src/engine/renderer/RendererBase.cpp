@@ -43,6 +43,11 @@ void removeElement(
 
 }
 
+RendererBase::RendererBase(Window& window) noexcept :
+	mWindow(window)
+{
+}
+
 Mesh* RendererBase::createMesh(
 	VertexFormat vertexFormat,
 	u32 vertexCount,
@@ -234,12 +239,32 @@ void RendererBase::removeFramebuffer(Framebuffer* frameBuffer) noexcept
 	removeElement(mFramebuffers, frameBuffer, "Framebuffer");
 }
 
-void RendererBase::onEvent(const Event& event) noexcept
+void RendererBase::activateFramebuffer(
+	Framebuffer* frameBuffer,
+	Rectangle2u* viewport) noexcept
 {
-	if (event.type == Event::Type::WINDOW_RESIZE)
+	setFramebuffer(frameBuffer);
+	if (viewport != nullptr)
 	{
-		activateFramebuffer(0);
-		setViewport({ { 0, 0 }, event.windowResize.size });
+		setViewport(*viewport);
+	}
+	else
+	{
+		// If no framebuffer is provided, use the window size
+		if (frameBuffer == nullptr)
+		{
+			setViewport({ { 0, 0 }, mWindow.getSize() });
+		}
+		else if (
+			frameBuffer->getColor() != nullptr ||
+			frameBuffer->getDepth() != nullptr)
+		{
+			// If the framebuffer has a color or depth texture, set the viewport to its size
+			const Point2u size = frameBuffer->getColor() != nullptr ?
+				frameBuffer->getColor()->getSize() :
+				frameBuffer->getDepth()->getSize();
+			setViewport({ { 0, 0 }, size });
+		}
 	}
 }
 

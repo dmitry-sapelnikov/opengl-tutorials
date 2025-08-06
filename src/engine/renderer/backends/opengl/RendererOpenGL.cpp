@@ -22,12 +22,12 @@ typedef BOOL(WINAPI* PFNWGLSWAPINTERVALEXTPROC)(int interval);
 
 
 // Global classes
-RendererOpenGL::RendererOpenGL(void* deviceContext) :
-	mDeviceContext(deviceContext)
+RendererOpenGL::RendererOpenGL(Window& window) :
+	RendererBase(window)
 {
-	GLTUT_CHECK(mDeviceContext != nullptr, "Device context is null")
+	GLTUT_CHECK(window.getDeviceContext() != nullptr, "Device context is null")
 
-	HDC hdc = static_cast<HDC>(mDeviceContext);
+	HDC hdc = static_cast<HDC>(window.getDeviceContext());
 
 	PIXELFORMATDESCRIPTOR pfd = {};
 	pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
@@ -67,18 +67,6 @@ void RendererOpenGL::clear(const Color& color) noexcept
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void RendererOpenGL::activateFramebuffer(Framebuffer* frameBuffer) noexcept
-{
-	if (frameBuffer == nullptr)
-	{
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	}
-	else
-	{
-		frameBuffer->activate();
-	}
-}
-
 void RendererOpenGL::enableVSync(bool vSync) noexcept
 {
 	PFNWGLSWAPINTERVALEXTPROC wglSwapIntervalEXT =
@@ -91,6 +79,29 @@ void RendererOpenGL::enableVSync(bool vSync) noexcept
 	{
 		std::cerr << "wglSwapIntervalEXT is not supported, VSync cannot be enabled." << std::endl;
 	}
+}
+
+void RendererOpenGL::setFramebuffer(Framebuffer* frameBuffer) noexcept
+{
+	if (frameBuffer == nullptr)
+	{
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	}
+	else
+	{
+		frameBuffer->activate();
+	}
+}
+
+void RendererOpenGL::setViewport(const Rectangle2u& viewport) noexcept
+{
+	const auto& min = viewport.getMin();
+	const auto& max = viewport.getMax();
+	glViewport(
+		static_cast<GLint>(min.x),
+		static_cast<GLint>(min.y),
+		static_cast<GLsizei>(max.x - min.x),
+		static_cast<GLsizei>(max.y - min.y));
 }
 
 std::unique_ptr<Mesh> RendererOpenGL::createBackendMesh(
@@ -157,13 +168,6 @@ void RendererOpenGL::bindTexture(Texture* texture, u32 slot) noexcept
 	{
 		texture->bind(slot);
 	}
-}
-
-void RendererOpenGL::setViewport(const Rectangle2u& rectangle) noexcept
-{
-	glViewport(
-		rectangle.getMin().x, rectangle.getMin().y,
-		rectangle.getMax().x, rectangle.getMax().y);
 }
 
 // End of the namespace gltut

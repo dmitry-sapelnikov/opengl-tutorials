@@ -2,6 +2,7 @@
 
 // Includes
 #include <vector>
+#include <optional>
 #include "engine/core/NonCopyable.h"
 #include "engine/renderer/Renderer.h"
 #include "engine/render_pipeline/RenderPass.h"
@@ -25,7 +26,8 @@ public:
 		const RenderObject* object,
 		Framebuffer* target,
 		u32 materialPass,
-		const Color& clearColor,
+		const Color* clearColor,
+		const Rectangle2u* viewport,
 		Renderer& renderer,
 		const ShaderViewpointBindings& viewpointBindings) noexcept;
 
@@ -53,9 +55,15 @@ public:
 		return mMaterialPass;
 	}
 
-	const Color& getClearColor() const noexcept final
+	const Color* getClearColor() const noexcept final
 	{
-		return mClearColor;
+		return mClearColor.has_value() ? &mClearColor.value() : nullptr;
+	}
+
+	/// Returns the viewport rectangle for this render pass
+	const Rectangle2u* getViewport() const noexcept final
+	{
+		return mViewport.has_value() ? &mViewport.value() : nullptr;
 	}
 
 	/// Executes the render pass
@@ -81,7 +89,10 @@ private:
 	u32 mMaterialPass = 0;
 
 	/// The clear color for the render target
-	Color mClearColor;
+	std::optional<Color> mClearColor;
+
+	/// The viewport for this render pass
+	std::optional<Rectangle2u> mViewport;
 };
 
 // End of the namespace gltut

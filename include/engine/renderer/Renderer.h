@@ -81,10 +81,9 @@ public:
 	virtual void removeFramebuffer(Framebuffer* frameBuffer) noexcept = 0;
 
 	/// Activates a framebuffer
-	virtual void activateFramebuffer(Framebuffer* frameBuffer) noexcept = 0;
-
-	/// Set viewport for the current render target
-	virtual void setViewport(const Rectangle2u& rectangle) noexcept = 0;
+	virtual void activateFramebuffer(
+		Framebuffer* frameBuffer,
+		Rectangle2u* viewport) noexcept = 0;
 
 	/// Enables or disables vertical synchronization
 	virtual void enableVSync(bool vSync) noexcept = 0;
