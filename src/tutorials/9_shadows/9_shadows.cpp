@@ -198,14 +198,15 @@ int main()
 
 		// Create a render pass for the scene preview
 		gltut::Rectangle2u viewport({ 0, 0 }, { 256, 256 });
-		engine->getRenderPipeline()->createPass(
-			engine->getScene()->getActiveCameraViewpoint(),
-			engine->getScene()->getRenderObject(),
-			engine->getRenderer()->getWindowFramebuffer(),
-			0, // Material pass 0
-			nullptr, // Clear color
-			true, // Clear depth
-			&viewport);
+
+
+		/// Load a texture
+		gltut::Texture* boxTexture = renderer->loadTexture("assets/container2.png");
+		GLTUT_CHECK(boxTexture != nullptr, "Unable to load the container texture");
+
+		engine->getFactory()->getRenderPass()->createTextureToWindowRenderPass(
+			boxTexture,
+			viewport);
 
 		const auto startTime = std::chrono::high_resolution_clock::now();
 		while (true)
