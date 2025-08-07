@@ -7,7 +7,7 @@
 #include "engine/renderer/mesh/Mesh.h"
 #include "engine/renderer/shader/Shader.h"
 #include "engine/renderer/Texture.h"
-#include "engine/renderer/Framebuffer.h"
+#include "engine/renderer/framebuffer/TextureFramebuffer.h"
 
 namespace gltut
 {
@@ -75,12 +75,15 @@ public:
 		\brief Creates a framebuffer
 		\note At least one of texture parameters must be non-null
 	*/
-	virtual Framebuffer* createFramebuffer(
+	virtual TextureFramebuffer* createTextureFramebuffer(
 		Texture* color,
 		Texture* depth) noexcept = 0;
 
 	/// Removes a framebuffer
-	virtual void removeFramebuffer(Framebuffer* frameBuffer) noexcept = 0;
+	virtual void removeTextureFramebuffer(TextureFramebuffer* frameBuffer) noexcept = 0;
+
+	/// Returns the window framebuffer
+	virtual Framebuffer* getWindowFramebuffer() const noexcept = 0;
 
 	/// Activates a framebuffer
 	virtual void activateFramebuffer(

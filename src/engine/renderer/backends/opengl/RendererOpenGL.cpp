@@ -10,9 +10,9 @@
 #include "MeshOpenGL.h"
 #include "ShaderOpenGL.h"
 #include "TextureOpenGL.h"
-#include "FramebufferOpenGL.h"
 
 #include "../../../core/File.h"
+#include "./framebuffer/TextureFramebufferOpenGL.h"
 
 namespace gltut
 {
@@ -23,7 +23,8 @@ typedef BOOL(WINAPI* PFNWGLSWAPINTERVALEXTPROC)(int interval);
 
 // Global classes
 RendererOpenGL::RendererOpenGL(Window& window) :
-	RendererBase(window)
+	RendererBase(window),
+	mWindowFramebuffer(std::make_unique<WindowFramebufferOpenGL>(window))
 {
 	GLTUT_CHECK(window.getDeviceContext() != nullptr, "Device context is null")
 
@@ -157,11 +158,11 @@ std::unique_ptr<Texture> RendererOpenGL::createBackendTexture(
 		wrapMode);
 }
 
-std::unique_ptr<Framebuffer> RendererOpenGL::createBackendFramebuffer(
+std::unique_ptr<TextureFramebuffer> RendererOpenGL::createBackendTextureFramebuffer(
 	Texture* color,
 	Texture* depth)
 {
-	return std::make_unique<FramebufferOpenGL>(color, depth);
+	return std::make_unique<TextureFramebufferOpenGL>(color, depth);
 }
 
 void RendererOpenGL::bindTexture(Texture* texture, u32 slot) noexcept

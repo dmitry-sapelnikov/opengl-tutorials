@@ -38,7 +38,7 @@ EngineC::EngineC(u32 windowWidth, u32 windowHeight)
 	RenderPass* defaultPass = mRenderPipeline->createPass(
 		mScene->getActiveCameraViewpoint(),
 		mScene->getRenderObject(),
-		nullptr,
+		mRenderer->getWindowFramebuffer(),
 		0,
 		&clearColor,
 		true,
