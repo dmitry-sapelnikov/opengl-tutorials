@@ -19,8 +19,10 @@ public:
 	/// Virtual destructor
 	virtual ~Renderer() noexcept = default;
 
-	/// Clears the current render target with a specific color
-	virtual void clear(const Color& color) noexcept = 0;
+	/// Clears the current render target
+	virtual void clear(
+		const Color* color,
+		bool depth) noexcept = 0;
 
 	/// Creates a mesh
 	virtual Mesh* createMesh(

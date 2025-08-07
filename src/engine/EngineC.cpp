@@ -41,6 +41,7 @@ EngineC::EngineC(u32 windowWidth, u32 windowHeight)
 		nullptr,
 		0,
 		&clearColor,
+		true,
 		nullptr);
 	GLTUT_CHECK(defaultPass != nullptr, "Cannot create the default render pass");
 

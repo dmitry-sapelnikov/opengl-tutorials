@@ -61,10 +61,22 @@ RendererOpenGL::RendererOpenGL(Window& window) :
 	enableVSync(false);
 }
 
-void RendererOpenGL::clear(const Color& color) noexcept
+void RendererOpenGL::clear(
+	const Color* color,
+	bool depth) noexcept
 {
-	glClearColor(color.r, color.g, color.b, color.a);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	GLbitfield clearMask = 0;
+	if (color != nullptr)
+	{
+		clearMask |= GL_COLOR_BUFFER_BIT;
+		glClearColor(color->r, color->g, color->b, color->a);
+	}
+
+	if (depth)
+	{
+		clearMask |= GL_DEPTH_BUFFER_BIT;
+	}
+	glClear(clearMask);
 }
 
 void RendererOpenGL::enableVSync(bool vSync) noexcept

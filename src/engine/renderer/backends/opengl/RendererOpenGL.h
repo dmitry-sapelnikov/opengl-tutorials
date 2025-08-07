@@ -15,7 +15,9 @@ public:
 	RendererOpenGL(Window& window);
 
 	/// Clears the current render target with a specific color
-	void clear(const Color& color) noexcept final;
+	void clear(
+		const Color* color,
+		bool depth) noexcept final;
 
 	/// Enables or disables vertical synchronization
 	void enableVSync(bool vSync) noexcept final;
