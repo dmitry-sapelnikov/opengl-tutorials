@@ -37,9 +37,18 @@ void RenderPassC::execute() noexcept
 		mClearColor.has_value() ? &mClearColor.value() : nullptr,
 		mClearDepth);
 
+	const Point2u viewportSize = mViewport.has_value() ?
+		mViewport->getSize() :
+		mTarget->getSize();
+
+	const float aspectRatio =
+		viewportSize.x > 0 && viewportSize.y > 0 ?
+		static_cast<float>(viewportSize.x) / static_cast<float>(viewportSize.y) :
+		1.0f;
+
 	for (const auto& binding : mViewpointBindings)
 	{
-		binding->update(mViewpoint);
+		binding->update(mViewpoint, aspectRatio);
 	}
 
 	if (mObject != nullptr)

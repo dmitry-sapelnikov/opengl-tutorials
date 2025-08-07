@@ -60,6 +60,9 @@ public:
 	/// Returns the projection matrix
 	virtual const Matrix4& getMatrix() const noexcept = 0;
 
+	/// Returns the projection matrix with the given aspect ratio
+	virtual Matrix4 getMatrix(float aspectRatio) const noexcept = 0;
+
 	/// Return the field of view, in degrees
 	virtual float getFov() const noexcept = 0;
 
