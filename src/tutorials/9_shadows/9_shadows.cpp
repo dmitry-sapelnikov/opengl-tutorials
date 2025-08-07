@@ -196,6 +196,17 @@ int main()
 		GLTUT_CHECK(controller, "Failed to create camera controller");
 		engine->getScene()->addCameraController(controller.get());
 
+		// Create a render pass for the scene preview
+		gltut::Rectangle2u viewport({ 0, 0 }, { 256, 256 });
+		engine->getRenderPipeline()->createPass(
+			engine->getScene()->getActiveCameraViewpoint(),
+			engine->getScene()->getRenderObject(),
+			engine->getRenderer()->getWindowFramebuffer(),
+			0, // Material pass 0
+			nullptr, // Clear color
+			true, // Clear depth
+			&viewport);
+
 		const auto startTime = std::chrono::high_resolution_clock::now();
 		while (true)
 		{
