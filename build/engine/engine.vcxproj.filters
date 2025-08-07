@@ -129,6 +129,12 @@
     <Filter Include="src\renderer\backends\opengl\framebuffer">
       <UniqueIdentifier>{8b5e9297-76b1-4031-b2ea-f18183eac4f2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\factory\render_pass">
+      <UniqueIdentifier>{c03ab976-8b6d-4474-a07c-f7750738f09c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\factory\render_pass">
+      <UniqueIdentifier>{40398286-d9e8-4de5-8af8-660bd292dff1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\engine\Engine.h">
@@ -407,6 +413,12 @@
     <ClInclude Include="..\..\src\engine\renderer\backends\opengl\framebuffer\FramebufferBackupOpenGL.h">
       <Filter>src\renderer\backends\opengl\framebuffer</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\engine\factory\render_pass\RenderPassFactoryC.h">
+      <Filter>src\factory\render_pass</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\factory\render_pass\RenderPassFactory.h">
+      <Filter>include\factory\render_pass</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\engine\math\Vector2T.h">
       <Filter>include\math</Filter>
     </ClInclude>
@@ -504,6 +516,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\engine\renderer\framebuffer\TextureFramebufferBase.cpp">
       <Filter>src\renderer\framebuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\factory\render_pass\RenderPassFactoryC.cpp">
+      <Filter>src\factory\render_pass</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
