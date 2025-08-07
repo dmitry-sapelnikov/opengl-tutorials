@@ -30,6 +30,8 @@
     <ClInclude Include="..\..\include\engine\math\Rectangle.h" />
     <ClInclude Include="..\..\include\engine\math\Rng.h" />
     <ClInclude Include="..\..\include\engine\math\Point2.h" />
+    <ClInclude Include="..\..\include\engine\math\Vector2.h" />
+    <ClInclude Include="..\..\include\engine\math\Vector2T.h" />
     <ClInclude Include="..\..\include\engine\math\Vector3.h" />
     <ClInclude Include="..\..\include\engine\renderer\framebuffer\Framebuffer.h" />
     <ClInclude Include="..\..\include\engine\renderer\framebuffer\TextureFramebuffer.h" />

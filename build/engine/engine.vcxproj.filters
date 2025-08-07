@@ -407,6 +407,12 @@
     <ClInclude Include="..\..\src\engine\renderer\backends\opengl\framebuffer\FramebufferBackupOpenGL.h">
       <Filter>src\renderer\backends\opengl\framebuffer</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\engine\math\Vector2T.h">
+      <Filter>include\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\math\Vector2.h">
+      <Filter>include\math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\engine\EngineC.cpp">
