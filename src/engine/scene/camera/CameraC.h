@@ -108,6 +108,9 @@ public:
 		return mMatrix;
 	}
 
+	/// Returns the projection matrix with the given aspect ratio
+	Matrix4 getMatrix(float aspectRatio) const noexcept final;
+
 	/// Return the field of view, in degrees
 	float getFov() const noexcept final
 	{

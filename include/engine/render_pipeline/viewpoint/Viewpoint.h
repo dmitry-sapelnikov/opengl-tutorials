@@ -20,19 +20,7 @@ public:
 	virtual Matrix4 getViewMatrix() const noexcept = 0;
 
 	/// Returns the projection matrix
-	virtual Matrix4 getProjectionMatrix() const noexcept = 0;
-
-	/// Returns the projection-view matrix
-	Matrix4 getProjectionViewMatrix() const noexcept
-	{
-		return getProjectionMatrix() * getViewMatrix();
-	}
-
-	/// Returns the inverted projection-view matrix
-	Matrix4 getProjectionViewInverseMatrix() const noexcept
-	{
-		return getProjectionViewMatrix().getInverse();
-	}
+	virtual Matrix4 getProjectionMatrix(float aspectRatio) const noexcept = 0;
 };
 
 // End of the namespace gltut

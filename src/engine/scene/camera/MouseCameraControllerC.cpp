@@ -113,7 +113,10 @@ void MouseCameraControllerC::updateCamera(u64, u32) noexcept
 			mTranslating = true;
 			mInitialTarget = view.getTarget();
 			mInitialPosition = view.getPosition();
-			mProjectionViewInv = camera.getViewpoint().getProjectionViewInverseMatrix();
+			mProjectionViewInv = (
+				camera.getProjection().getMatrix() *
+				camera.getView().getMatrix()).getInverse();
+
 			mWindowSize = camera.getProjection().getWindow()->getSize();
 			mDragStart = screenToCameraRay(mMouseStart, mWindowSize, mInitialPosition, mProjectionViewInv);
 		}
