@@ -271,7 +271,7 @@ void WindowC::showFPS(bool show) noexcept
 	}
 }
 
-Point2u WindowC::getSize() const noexcept
+const Point2u& WindowC::getSize() const noexcept
 {
 	return mSize;
 }

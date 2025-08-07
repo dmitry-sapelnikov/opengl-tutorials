@@ -38,9 +38,10 @@ EngineC::EngineC(u32 windowWidth, u32 windowHeight)
 	RenderPass* defaultPass = mRenderPipeline->createPass(
 		mScene->getActiveCameraViewpoint(),
 		mScene->getRenderObject(),
-		nullptr,
+		mRenderer->getWindowFramebuffer(),
 		0,
 		&clearColor,
+		true,
 		nullptr);
 	GLTUT_CHECK(defaultPass != nullptr, "Cannot create the default render pass");
 

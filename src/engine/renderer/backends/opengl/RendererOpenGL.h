@@ -4,6 +4,7 @@
 #include <vector>
 #include <memory>
 #include "../../RendererBase.h"
+#include "./framebuffer/WindowFramebufferOpenGL.h"
 
 namespace gltut
 {
@@ -15,10 +16,18 @@ public:
 	RendererOpenGL(Window& window);
 
 	/// Clears the current render target with a specific color
-	void clear(const Color& color) noexcept final;
+	void clear(
+		const Color* color,
+		bool depth) noexcept final;
 
 	/// Enables or disables vertical synchronization
 	void enableVSync(bool vSync) noexcept final;
+
+	/// Returns the window framebuffer
+	Framebuffer* getWindowFramebuffer() const noexcept final
+	{
+		return mWindowFramebuffer.get();
+	}
 
 private:
 	void setFramebuffer(Framebuffer* frameBuffer) noexcept final;
@@ -48,12 +57,15 @@ private:
 		Texture::WrapMode wrapMode) final;
 
 	/// Creates a framebuffer
-	std::unique_ptr<Framebuffer> createBackendFramebuffer(
+	std::unique_ptr<TextureFramebuffer> createBackendTextureFramebuffer(
 		Texture* color,
 		Texture* depth) final;
 
 	/// Binds a texture to a slot
 	void bindTexture(Texture* texture, u32 slot) noexcept final;
+
+	/// The window framebuffer
+	std::unique_ptr<WindowFramebufferOpenGL> mWindowFramebuffer;
 };
 
 // End of the namespace gltut

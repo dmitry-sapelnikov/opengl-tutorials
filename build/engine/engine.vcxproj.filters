@@ -123,6 +123,12 @@
     <Filter Include="src\render_pipeline\objects">
       <UniqueIdentifier>{b5a660c9-6724-44eb-851c-776f1b92565d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\renderer\framebuffer">
+      <UniqueIdentifier>{38a5fcad-aadb-4e8b-853c-9a6da2f20c7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\renderer\backends\opengl\framebuffer">
+      <UniqueIdentifier>{8b5e9297-76b1-4031-b2ea-f18183eac4f2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\engine\Engine.h">
@@ -317,15 +323,6 @@
     <ClInclude Include="..\..\include\engine\math\Rectangle.h">
       <Filter>include\math</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\engine\renderer\backends\opengl\FramebufferOpenGL.h">
-      <Filter>src\renderer\backends\opengl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\engine\renderer\framebuffer\FramebufferBase.h">
-      <Filter>src\renderer\framebuffer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\engine\renderer\Framebuffer.h">
-      <Filter>include\renderer</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\engine\scene\camera\CameraViewpointC.h">
       <Filter>src\scene\camera</Filter>
     </ClInclude>
@@ -388,6 +385,27 @@
     </ClInclude>
     <ClInclude Include="..\..\src\engine\render_pipeline\objects\RenderGroupC.h">
       <Filter>src\render_pipeline\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\renderer\framebuffer\Framebuffer.h">
+      <Filter>include\renderer\framebuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\renderer\framebuffer\TextureFramebuffer.h">
+      <Filter>include\renderer\framebuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\renderer\backends\opengl\framebuffer\WindowFramebufferOpenGL.h">
+      <Filter>src\renderer\backends\opengl\framebuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\renderer\backends\opengl\framebuffer\TextureFramebufferOpenGL.h">
+      <Filter>src\renderer\backends\opengl\framebuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\renderer\framebuffer\TextureFramebufferBase.h">
+      <Filter>src\renderer\framebuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\renderer\framebuffer\WindowFramebufferBase.h">
+      <Filter>src\renderer\framebuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\renderer\backends\opengl\framebuffer\FramebufferBackupOpenGL.h">
+      <Filter>src\renderer\backends\opengl\framebuffer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -454,12 +472,6 @@
     <ClCompile Include="..\..\src\engine\factory\material\flat_color\FlatColorShader.cpp">
       <Filter>src\factory\material\flat_color</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\engine\renderer\backends\opengl\FramebufferOpenGL.cpp">
-      <Filter>src\renderer\backends\opengl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\engine\renderer\framebuffer\FramebufferBase.cpp">
-      <Filter>src\renderer\framebuffer</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\engine\render_pipeline\RenderPipelineC.cpp">
       <Filter>src\render_pipeline</Filter>
     </ClCompile>
@@ -480,6 +492,12 @@
     </ClCompile>
     <ClCompile Include="..\..\src\engine\render_pipeline\objects\RenderGeometryC.cpp">
       <Filter>src\render_pipeline\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\renderer\backends\opengl\framebuffer\TextureFramebufferOpenGL.cpp">
+      <Filter>src\renderer\backends\opengl\framebuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\renderer\framebuffer\TextureFramebufferBase.cpp">
+      <Filter>src\renderer\framebuffer</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

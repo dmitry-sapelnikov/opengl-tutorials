@@ -27,6 +27,7 @@ public:
 		Framebuffer* target,
 		u32 materialPass,
 		const Color* clearColor,
+		bool clearDepth,
 		const Rectangle2u* viewport,
 		Renderer& renderer,
 		const ShaderViewpointBindings& viewpointBindings) noexcept;
@@ -55,9 +56,17 @@ public:
 		return mMaterialPass;
 	}
 
+	/// Returns the clear color for the render target,
+	/// nullptr if the buffer should not be cleared
 	const Color* getClearColor() const noexcept final
 	{
 		return mClearColor.has_value() ? &mClearColor.value() : nullptr;
+	}
+
+	/// Returns if the depth clearing is enabled
+	bool isDepthCleared() const noexcept final
+	{
+		return mClearDepth;
 	}
 
 	/// Returns the viewport rectangle for this render pass
@@ -70,12 +79,6 @@ public:
 	void execute() noexcept final;
 
 private:
-	/// Renderer
-	Renderer& mRenderer;
-
-	/// Viewpoint bindings
-	const ShaderViewpointBindings& mViewpointBindings;
-
 	/// The viewpoint for this render pass
 	const Viewpoint* mViewpoint;
 
@@ -91,8 +94,17 @@ private:
 	/// The clear color for the render target
 	std::optional<Color> mClearColor;
 
+	/// If the depth clearing is enabled
+	bool mClearDepth = false;
+
 	/// The viewport for this render pass
 	std::optional<Rectangle2u> mViewport;
+
+	/// Renderer
+	Renderer& mRenderer;
+
+	/// Viewpoint bindings
+	const ShaderViewpointBindings& mViewpointBindings;
 };
 
 // End of the namespace gltut

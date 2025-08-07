@@ -2,41 +2,24 @@
 
 // Includes
 #include <glad/glad.h>
-#include "../../framebuffer/FramebufferBase.h"
+#include "../../../framebuffer/TextureFramebufferBase.h"
 
 namespace gltut
 {
 
-/// A RAII class to backup the currently bound framebuffer
-class FramebufferOpenGLBackup
-{
-public:
-	FramebufferOpenGLBackup() noexcept
-	{
-		glGetIntegerv(GL_FRAMEBUFFER_BINDING, &mFramebuffer);
-	}
-
-	~FramebufferOpenGLBackup() noexcept
-	{
-		glBindFramebuffer(GL_FRAMEBUFFER, mFramebuffer);
-	}
-private:
-	GLint mFramebuffer = 0;
-};
-
-class FramebufferOpenGL final : public FramebufferBase
+class TextureFramebufferOpenGL final : public TextureFramebufferBase
 {
 public:
 	/**
 		Constructor
 		\throw std::runtime_error If the framebuffer could not be created
 	*/
-	FramebufferOpenGL(
+	TextureFramebufferOpenGL(
 		Texture* color,
 		Texture* depth);
 
 	/// Destructor
-	~FramebufferOpenGL() noexcept final;
+	~TextureFramebufferOpenGL() noexcept final;
 
 	/// Sets the color texture
 	void setColor(Texture* texture) noexcept final;
