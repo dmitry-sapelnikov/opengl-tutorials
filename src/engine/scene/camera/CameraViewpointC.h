@@ -34,10 +34,10 @@ public:
 	}
 
 	/// Returns the projection matrix
-	Matrix4 getProjectionMatrix() const noexcept final
+	Matrix4 getProjectionMatrix(float aspectRatio) const noexcept final
 	{
-		return mCamera != nullptr ? 
-			mCamera->getProjection().getMatrix() :
+		return mCamera != nullptr ?
+			mCamera->getProjection().getMatrix(aspectRatio) :
 			Matrix4::identity();
 	}
 

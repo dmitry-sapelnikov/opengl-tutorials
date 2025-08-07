@@ -21,7 +21,7 @@ public:
 	virtual void showFPS(bool show) noexcept = 0;
 
 	/// Returns the size of the window in pixels
-	virtual Point2u getSize() const noexcept = 0;
+	virtual const Point2u& getSize() const noexcept = 0;
 
 	/// Adds an event handler
 	virtual void addEventHandler(EventHandler* handler) noexcept = 0;

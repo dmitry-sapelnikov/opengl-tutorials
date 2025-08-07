@@ -221,50 +221,42 @@ void RendererBase::removeTexture(Texture* texture) noexcept
 	removeElement(mTextures, texture, "Texture");
 }
 
-Framebuffer* RendererBase::createFramebuffer(
+TextureFramebuffer* RendererBase::createTextureFramebuffer(
 	Texture* color,
 	Texture* depth) noexcept
 {
-	Framebuffer* result = nullptr;
+	TextureFramebuffer* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN
-		result = mFramebuffers.emplace_back(createBackendFramebuffer(
+		result = mFramebuffers.emplace_back(createBackendTextureFramebuffer(
 			color,
 			depth)).get();
 	GLTUT_CATCH_ALL_END("Failed to create framebuffer")
 	return result;
 }
 
-void RendererBase::removeFramebuffer(Framebuffer* frameBuffer) noexcept
+void RendererBase::removeTextureFramebuffer(TextureFramebuffer* frameBuffer) noexcept
 {
 	removeElement(mFramebuffers, frameBuffer, "Framebuffer");
 }
 
 void RendererBase::activateFramebuffer(
-	Framebuffer* frameBuffer,
+	Framebuffer* framebuffer,
 	Rectangle2u* viewport) noexcept
 {
-	setFramebuffer(frameBuffer);
+	if (framebuffer == nullptr)
+	{
+		return;
+	}
+
+	framebuffer->activate();
 	if (viewport != nullptr)
 	{
 		setViewport(*viewport);
 	}
 	else
 	{
-		// If no framebuffer is provided, use the window size
-		if (frameBuffer == nullptr)
-		{
-			setViewport({ { 0, 0 }, mWindow.getSize() });
-		}
-		else if (
-			frameBuffer->getColor() != nullptr ||
-			frameBuffer->getDepth() != nullptr)
-		{
-			// If the framebuffer has a color or depth texture, set the viewport to its size
-			const Point2u size = frameBuffer->getColor() != nullptr ?
-				frameBuffer->getColor()->getSize() :
-				frameBuffer->getDepth()->getSize();
-			setViewport({ { 0, 0 }, size });
-		}
+		// If no viewport is provided, use the framebuffer size
+		setViewport({ { 0, 0 }, framebuffer->getSize() });
 	}
 }
 

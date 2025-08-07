@@ -15,7 +15,7 @@ public:
 	using ShaderBindingT<ShaderViewpointBinding>::ShaderBindingT;
 
 	/// Updates the shader binding for a scene
-	void update(const Viewpoint* viewpoint) const noexcept final;
+	void update(const Viewpoint* viewpoint, float aspectRatio) const noexcept final;
 };
 
 // End of the namespace gltut

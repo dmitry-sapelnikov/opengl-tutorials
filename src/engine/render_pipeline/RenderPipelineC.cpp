@@ -135,6 +135,7 @@ RenderPass* RenderPipelineC::createPass(
 	Framebuffer* target,
 	u32 materialPass,
 	const Color* clearColor,
+	bool clearDepth,
 	const Rectangle2u* viewport) noexcept
 {
 	RenderPass* result = nullptr;
@@ -145,6 +146,7 @@ RenderPass* RenderPipelineC::createPass(
 			target,
 			materialPass,
 			clearColor,
+			clearDepth,
 			viewport,
 			mRenderer,
 			mShaderViewpointBindings),

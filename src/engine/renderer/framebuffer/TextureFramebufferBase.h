@@ -2,13 +2,13 @@
 
 // Includes
 #include "engine/core/NonCopyable.h"
-#include "engine/renderer/Framebuffer.h"
+#include "engine/renderer/framebuffer/TextureFramebuffer.h"
 
 namespace gltut
 {
 
 /// Base class for frame buffers
-class FramebufferBase : public Framebuffer, public NonCopyable
+class TextureFramebufferBase : public TextureFramebuffer, public NonCopyable
 {
 public:
 	/// Returns the color texture
@@ -28,6 +28,9 @@ public:
 
 	/// Sets the depth texture
 	void setDepth(Texture* texture) noexcept;
+
+	/// Returns the size of the framebuffer
+	Point2u getSize() const noexcept final;
 
 private:
 	/// Color texture

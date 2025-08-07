@@ -4,7 +4,7 @@
 namespace gltut
 {
 // Global classes
-void ShaderViewpointBindingC::update(const Viewpoint* viewpoint) const noexcept
+void ShaderViewpointBindingC::update(const Viewpoint* viewpoint, float aspectRatio) const noexcept
 {
 	Shader* shader = getShader();
 
@@ -22,7 +22,7 @@ void ShaderViewpointBindingC::update(const Viewpoint* viewpoint) const noexcept
 	if (const char* cameraProjection = getBoundShaderParameter(Parameter::PROJECTION_MATRIX);
 		cameraProjection != nullptr)
 	{
-		shader->setMat4(cameraProjection, viewpoint->getProjectionMatrix().data());
+		shader->setMat4(cameraProjection, viewpoint->getProjectionMatrix(aspectRatio).data());
 	}
 
 	if (const char* cameraPosition = getBoundShaderParameter(Parameter::POSITION);

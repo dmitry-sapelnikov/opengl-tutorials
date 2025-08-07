@@ -2,7 +2,7 @@
 
 // Includes
 #include "engine/math/Color.h"
-#include "engine/renderer/Framebuffer.h"
+#include "engine/renderer/framebuffer/Framebuffer.h"
 #include "engine/render_pipeline/objects/RenderObject.h"
 #include "engine/render_pipeline/viewpoint/Viewpoint.h"
 
@@ -27,6 +27,9 @@ public:
 
 	/// Returns the clear color for the render target
 	virtual const Color* getClearColor() const noexcept = 0;
+
+	/// Returns if the depth clearing is enabled
+	virtual bool isDepthCleared() const noexcept = 0;
 
 	///	Returns the scene viewpoint
 	virtual const Viewpoint* getViewpoint() const noexcept = 0;

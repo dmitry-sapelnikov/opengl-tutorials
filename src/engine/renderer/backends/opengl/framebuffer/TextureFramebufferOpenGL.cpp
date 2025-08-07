@@ -1,11 +1,12 @@
 // Includes
-#include "FramebufferOpenGL.h"
+#include "TextureFramebufferOpenGL.h"
+#include "FramebufferBackupOpenGL.h"
 #include "engine/core/Check.h"
 
 namespace gltut
 {
 
-FramebufferOpenGL::FramebufferOpenGL(
+TextureFramebufferOpenGL::TextureFramebufferOpenGL(
 	Texture* color,
 	Texture* depth)
 {
@@ -16,15 +17,15 @@ FramebufferOpenGL::FramebufferOpenGL(
 	validate();
 }
 
-FramebufferOpenGL::~FramebufferOpenGL() noexcept
+TextureFramebufferOpenGL::~TextureFramebufferOpenGL() noexcept
 {
 	glDeleteFramebuffers(1, &mId);
 }
 
-void FramebufferOpenGL::setColor(Texture* texture) noexcept
+void TextureFramebufferOpenGL::setColor(Texture* texture) noexcept
 {
-	FramebufferBase::setColor(texture);
-	FramebufferOpenGLBackup backup;
+	TextureFramebufferBase::setColor(texture);
+	FramebufferBackupOpenGL backup;
 	activate();
 	glFramebufferTexture2D(
 		GL_FRAMEBUFFER,
@@ -34,10 +35,10 @@ void FramebufferOpenGL::setColor(Texture* texture) noexcept
 		0);
 }
 
-void FramebufferOpenGL::setDepth(Texture* texture) noexcept
+void TextureFramebufferOpenGL::setDepth(Texture* texture) noexcept
 {
-	FramebufferBase::setDepth(texture);
-	FramebufferOpenGLBackup backup;
+	TextureFramebufferBase::setDepth(texture);
+	FramebufferBackupOpenGL backup;
 	activate();
 	glFramebufferTexture2D(
 		GL_FRAMEBUFFER,
@@ -47,14 +48,14 @@ void FramebufferOpenGL::setDepth(Texture* texture) noexcept
 		0);
 }
 
-void FramebufferOpenGL::activate() const noexcept
+void TextureFramebufferOpenGL::activate() const noexcept
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, mId);
 }
 
-void FramebufferOpenGL::validate() const
+void TextureFramebufferOpenGL::validate() const
 {
-	FramebufferOpenGLBackup backup;
+	FramebufferBackupOpenGL backup;
 	activate();
 	if (GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 		status != GL_FRAMEBUFFER_COMPLETE)

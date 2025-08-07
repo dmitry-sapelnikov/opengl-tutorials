@@ -1,19 +1,14 @@
 #pragma once
 
 // Includes
-#include "engine/renderer/Texture.h"
+#include "engine/renderer/framebuffer/Framebuffer.h"
 
 namespace gltut
 {
-///	Represents a framebuffer
-/// A framebuffer is a collection of textures that
-/// can be used for off-screen rendering.
-class Framebuffer
-{
-public:
-	/// Virtual destructor
-	virtual ~Framebuffer() noexcept = default;
 
+/// Represents a framebuffer that contains textures
+class TextureFramebuffer : public Framebuffer
+{
 	/// Returns the color texture
 	virtual Texture* getColor() const noexcept = 0;
 
@@ -25,9 +20,6 @@ public:
 
 	/// Sets the depth texture
 	virtual void setDepth(Texture* texture) noexcept = 0;
-
-	/// Activates the framebuffer as the current rendering target
-	virtual void activate() const noexcept = 0;
 };
 
 // End of the namespace gltut

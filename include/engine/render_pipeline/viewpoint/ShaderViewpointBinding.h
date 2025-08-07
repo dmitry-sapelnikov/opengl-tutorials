@@ -35,7 +35,7 @@ public:
 	virtual const char* getBoundShaderParameter(Parameter parameter) const noexcept = 0;
 
 	/// Updates the shader binding for a viewpoint
-	virtual void update(const Viewpoint* viewpoint) const noexcept = 0;
+	virtual void update(const Viewpoint* viewpoint, float aspectRatio) const noexcept = 0;
 };
 
 // End of the namespace gltut

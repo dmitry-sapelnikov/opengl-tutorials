@@ -1,0 +1,24 @@
+#pragma once
+
+// Includes
+#include <glad/glad.h>
+#include "../../../framebuffer/WindowFramebufferBase.h"
+
+namespace gltut
+{
+
+class WindowFramebufferOpenGL final : public WindowFramebufferBase
+{
+public:
+	/// Constructor
+	using WindowFramebufferBase::WindowFramebufferBase;
+
+	/// Activates the framebuffer as the current rendering target
+	void activate() const noexcept final
+	{
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	}
+};
+
+// End of the namespace gltut
+}
