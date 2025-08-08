@@ -425,6 +425,9 @@
     <ClInclude Include="..\..\include\engine\math\Vector2.h">
       <Filter>include\math</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\engine\render_pipeline\viewpoint\ViewpointC.h">
+      <Filter>src\render_pipeline\viewpoint</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\engine\EngineC.cpp">
