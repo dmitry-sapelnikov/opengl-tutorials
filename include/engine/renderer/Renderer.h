@@ -69,7 +69,7 @@ public:
 	virtual void removeTexture(Texture* texture) noexcept = 0;
 
 	/// Binds a texture to a slot
-	virtual void bindTexture(Texture* texture, u32 slot) noexcept = 0;
+	virtual void bindTexture(const Texture* texture, u32 slot) noexcept = 0;
 
 	/**
 		\brief Creates a framebuffer

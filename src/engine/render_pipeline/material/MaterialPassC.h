@@ -29,10 +29,10 @@ public:
 	}
 
 	/// Returns the texture associated with the specified slot
-	Texture* getTexture(u32 slot) const noexcept final;
+	const Texture* getTexture(u32 slot) const noexcept final;
 
 	/// Sets a texture
-	void setTexture(Texture* texture, u32 slot) noexcept final;
+	void setTexture(const Texture* texture, u32 slot) noexcept final;
 
 	/// Returns the number of textures
 	u32 getTextureSlotsCount() const noexcept final
@@ -58,7 +58,7 @@ private:
 	ShaderArguments mShaderArguments;
 
 	/// Texture slots
-	std::array<Texture*, Texture::TEXTURE_SLOTS> mTextures;
+	std::array<const Texture*, Texture::TEXTURE_SLOTS> mTextures;
 
 	/// The number of texture slots
 	u32 mTextureSlotsCount = 0;

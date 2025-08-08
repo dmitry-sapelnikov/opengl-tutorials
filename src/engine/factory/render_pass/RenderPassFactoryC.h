@@ -22,7 +22,7 @@ public:
 
 	/// Creates a texture-to-window render pass
 	RenderPass* createTextureToWindowRenderPass(
-		Texture* texture,
+		const Texture* texture,
 		const Rectangle2u& viewport) noexcept final;
 
 private:

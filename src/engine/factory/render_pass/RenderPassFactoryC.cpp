@@ -62,7 +62,7 @@ Mesh* createRenderQuad(RenderPipeline& renderer) noexcept
 
 /// Creates a texture-to-window render pass
 RenderPass* RenderPassFactoryC::createTextureToWindowRenderPass(
-	Texture* texture,
+	const Texture* texture,
 	const Rectangle2u& viewport) noexcept
 {
 	RenderPass* result = nullptr;
