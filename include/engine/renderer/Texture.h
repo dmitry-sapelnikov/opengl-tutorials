@@ -14,7 +14,8 @@ public:
 	{
 		RGB,
 		RGBA,
-		FLOAT
+		FLOAT,
+		TOTAL_COUNT
 	};
 
 	enum class WrapMode

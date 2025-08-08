@@ -20,7 +20,18 @@ static const char* TEXTURE_TO_WINDOW_VERTEX_SHADER = R"(
 	};
 )";
 
-const char* TEXTURE_TO_WINDOW_FRAGMENT_SHADER = R"(
+const char* TEXTURE_TO_WINDOW_FRAGMENT_SHADER_RGB = R"(
+#version 330 core
+in vec2 texCoord;
+out vec4 outColor;
+uniform sampler2D textureSampler;
+void main()
+{
+	vec3 color = texture(textureSampler, texCoord).rgb;
+	outColor = vec4(color, 1.0);
+})";
+
+const char* TEXTURE_TO_WINDOW_FRAGMENT_SHADER_RGBA = R"(
 #version 330 core
 in vec2 texCoord;
 out vec4 outColor;
@@ -30,7 +41,57 @@ void main()
 	outColor = texture(textureSampler, texCoord);
 })";
 
+const char* TEXTURE_TO_WINDOW_FRAGMENT_SHADER_FLOAT = R"(
+#version 330 core
+in vec2 texCoord;
+out vec4 outColor;
+uniform sampler2D textureSampler;
+void main()
+{
+	float depth = texture(textureSampler, texCoord).r;
+	outColor = vec4(depth, depth, depth, 1.0);
+})";
+
+
 // Local functions
+/// Creates a texture-to-render target shader
+ShaderMaterialBinding* createShader(RenderPipeline& renderer, Texture::Format format)
+{
+	Shader* shader = nullptr;
+	switch (format)
+	{
+	case Texture::Format::RGB:
+	{
+		shader = renderer.getRenderer()->createShader(
+			TEXTURE_TO_WINDOW_VERTEX_SHADER,
+			TEXTURE_TO_WINDOW_FRAGMENT_SHADER_RGBA);
+	}
+	break;
+
+	case Texture::Format::RGBA:
+	{
+		shader = renderer.getRenderer()->createShader(
+			TEXTURE_TO_WINDOW_VERTEX_SHADER,
+			TEXTURE_TO_WINDOW_FRAGMENT_SHADER_RGBA);
+	}
+	break;
+
+	case Texture::Format::FLOAT:
+	{
+		shader = renderer.getRenderer()->createShader(
+			TEXTURE_TO_WINDOW_VERTEX_SHADER,
+			TEXTURE_TO_WINDOW_FRAGMENT_SHADER_FLOAT);
+	}
+	break;
+
+	GLTUT_UNEXPECTED_SWITCH_DEFAULT_CASE(format)
+	}
+
+	GLTUT_CHECK(shader != nullptr, "Failed to create texture-to-render-target shader");
+	shader->setInt("textureSampler", 0);
+	return renderer.createShaderMaterialBinding(shader);
+}
+
 /// Creates a render quad for texture-to-window rendering
 Mesh* createRenderQuad(RenderPipeline& renderer) noexcept
 {
@@ -69,22 +130,15 @@ RenderPass* RenderPassFactoryC::createTextureToWindowRenderPass(
 	GLTUT_CATCH_ALL_BEGIN
 		GLTUT_CHECK(texture != nullptr, "Texture must not be null");
 
-		if (mTextureToWindowShader == nullptr)
+		const size_t shaderIndex = static_cast<size_t>(texture->getFormat());
+		if (mShaders[shaderIndex] == nullptr)
 		{
-			Shader* shader = mRenderer.getRenderer()->createShader(
-				TEXTURE_TO_WINDOW_VERTEX_SHADER,
-				TEXTURE_TO_WINDOW_FRAGMENT_SHADER);
+			mShaders[shaderIndex] = createShader(mRenderer, texture->getFormat());
 			GLTUT_CHECK(
-				shader != nullptr,
-				"Failed to create texture-to-window shader");
-
-			shader->setInt("textureSampler", 0);
-
-			mTextureToWindowShader = mRenderer.createShaderMaterialBinding(shader);
-			GLTUT_CHECK(
-				mTextureToWindowShader != nullptr,
-				"Failed to create texture-to-window shader material binding");
+				mShaders[shaderIndex] != nullptr,
+				"Failed to create shader for texture-to-window render pass");
 		}
+		ShaderMaterialBinding* shader = mShaders[shaderIndex];
 
 		if (mRenderQuad == nullptr)
 		{
@@ -100,10 +154,7 @@ RenderPass* RenderPassFactoryC::createTextureToWindowRenderPass(
 			material != nullptr,
 			"Failed to create material for texture-to-window render pass");
 
-		MaterialPass* materialPass = material->createPass(
-			0,
-			mTextureToWindowShader,
-			1);
+		MaterialPass* materialPass = material->createPass(0, shader, 1);
 
 		GLTUT_CHECK(
 			materialPass != nullptr,

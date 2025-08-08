@@ -1,6 +1,7 @@
 #pragma once
 
 // Includes
+#include <array>
 #include "engine/core/NonCopyable.h"
 #include "engine/factory/render_pass/RenderPassFactory.h"
 #include "engine/factory/geometry/GeometryFactory.h"
@@ -12,11 +13,8 @@ class RenderPassFactoryC : public RenderPassFactory, public NonCopyable
 {
 public:
 	/// Constructor
-	RenderPassFactoryC(
-		RenderPipeline& renderer,
-		GeometryFactory& geometryFactory) noexcept :
-		mRenderer(renderer),
-		mGeometryFactory(geometryFactory)
+	RenderPassFactoryC(RenderPipeline& renderer) noexcept :
+		mRenderer(renderer)
 	{
 	}
 
@@ -29,11 +27,8 @@ private:
 	/// The render pipeline
 	RenderPipeline& mRenderer;
 
-	/// The geometry factory
-	GeometryFactory& mGeometryFactory;
-
-	/// The texture-to-window shader
-	ShaderMaterialBinding* mTextureToWindowShader = nullptr;
+	/// Depth texture shader
+	std::array<ShaderMaterialBinding*, static_cast<size_t>(Texture::Format::TOTAL_COUNT)> mShaders;
 
 	/// Render quad for the texture
 	Mesh* mRenderQuad = nullptr;
