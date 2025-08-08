@@ -11,7 +11,8 @@ FactoryC::FactoryC(
 
 	mGeometry(*renderer.getRenderer()),
 	mMaterial(renderer, scene),
-	mRenderPass(renderer)
+	mRenderPass(renderer),
+	mShadow(renderer)
 {
 }
 

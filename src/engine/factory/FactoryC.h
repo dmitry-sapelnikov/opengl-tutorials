@@ -7,6 +7,7 @@
 #include "./geometry/GeometryFactoryC.h"
 #include "./material/MaterialFactoryC.h"
 #include "./render_pass/RenderPassFactoryC.h"
+#include "./shadow/ShadowFactoryC.h"
 
 namespace gltut
 {
@@ -38,9 +39,16 @@ public:
 		return &mRenderPass;
 	}
 
+	/// Returns the shadow factory
+	ShadowFactory* getShadow() noexcept final
+	{
+		return &mShadow;
+	}
+
 	/// Updates the factory
 	void update() noexcept final
 	{
+		mShadow.update();
 		mMaterial.update();
 	}
 
@@ -53,6 +61,9 @@ private:
 
 	/// The render pass factory
 	RenderPassFactoryC mRenderPass;
+
+	/// The shadow factory
+	ShadowFactoryC mShadow;
 };
 
 // End of the namespace gltut
