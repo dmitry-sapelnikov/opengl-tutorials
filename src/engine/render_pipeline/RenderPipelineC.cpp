@@ -155,6 +155,22 @@ RenderPass* RenderPipelineC::createPass(
 	return result;
 }
 
+void RenderPipelineC::removePass(RenderPass* pass) noexcept
+{
+	auto findResult = std::find_if(
+		mPasses.begin(),
+		mPasses.end(),
+		[&pass](const auto& currentPass)
+		{
+			return currentPass.first.get() == pass;
+		});
+
+	if (findResult != mPasses.end())
+	{
+		mPasses.erase(findResult);
+	}
+}
+
 void RenderPipelineC::setPassPriority(RenderPass* pass, int32 priority) noexcept
 {
 	auto findResult = std::find_if(

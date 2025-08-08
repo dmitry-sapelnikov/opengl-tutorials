@@ -28,6 +28,9 @@ public:
 	///	Creates a Phong material model
 	virtual PhongMaterialModel* createPhongMaterial(
 		ShaderMaterialBinding* phongShader) noexcept = 0;
+
+	/// Updates the material factory
+	virtual void update() noexcept = 0;
 };
 
 // End of the namespace gltut

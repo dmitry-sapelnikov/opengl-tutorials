@@ -62,7 +62,7 @@ private:
 		Texture* depth) final;
 
 	/// Binds a texture to a slot
-	void bindTexture(Texture* texture, u32 slot) noexcept final;
+	void bindTexture(const Texture* texture, u32 slot) noexcept final;
 
 	/// The window framebuffer
 	std::unique_ptr<WindowFramebufferOpenGL> mWindowFramebuffer;

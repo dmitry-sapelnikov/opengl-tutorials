@@ -1,6 +1,7 @@
 #pragma once
 
 // Includes
+#include "engine/math/Vector2.h"
 #include "engine/renderer/mesh/Mesh.h"
 
 namespace gltut

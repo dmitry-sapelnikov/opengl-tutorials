@@ -167,7 +167,7 @@ std::unique_ptr<TextureFramebuffer> RendererOpenGL::createBackendTextureFramebuf
 	return std::make_unique<TextureFramebufferOpenGL>(color, depth);
 }
 
-void RendererOpenGL::bindTexture(Texture* texture, u32 slot) noexcept
+void RendererOpenGL::bindTexture(const Texture* texture, u32 slot) noexcept
 {
 	if (slot >= Texture::TEXTURE_SLOTS)
 	{

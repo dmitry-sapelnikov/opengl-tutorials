@@ -31,7 +31,14 @@ public:
 	void activate() const noexcept final;
 
 private:
-	void validate() const;
+	/// Sets the color texture without validation
+	void doSetColor(Texture* texture) noexcept;
+
+	/// Sets the depth texture without validation
+	void doSetDepth(Texture* texture) noexcept;
+
+	/// Checks if the framebuffer is valid
+	bool isValid() const noexcept;
 
 	/// Framebuffer ID
 	GLuint mId = 0;

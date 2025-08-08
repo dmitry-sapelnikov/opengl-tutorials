@@ -100,7 +100,6 @@ TextureOpenGL::TextureOpenGL(
 	mWrapMode(wrapMode),
 	mId(0)
 {
-	GLTUT_CHECK(data != nullptr, "Texture data is null");
 	GLTUT_CHECK(width > 0, "Texture width is 0");
 	GLTUT_CHECK(height > 0, "Texture height is 0");
 

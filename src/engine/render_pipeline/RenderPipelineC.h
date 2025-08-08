@@ -67,6 +67,9 @@ public:
 		bool clearDepth,
 		const Rectangle2u* viewport) noexcept final;
 
+	/// Removes a render pass
+	void removePass(RenderPass* pass) noexcept final;
+
 	/// Sets the priority of the render pass
 	void setPassPriority(RenderPass* pass, int32 priority) noexcept final;
 

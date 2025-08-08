@@ -12,9 +12,9 @@ TextureFramebufferOpenGL::TextureFramebufferOpenGL(
 {
 	glGenFramebuffers(1, &mId);
 	GLTUT_CHECK(mId != 0, "Failed to generate framebuffer");
-	setColor(color);
-	setDepth(depth);
-	validate();
+	doSetColor(color);
+	doSetDepth(depth);
+	GLTUT_CHECK(isValid(), "Framebuffer is not valid");
 }
 
 TextureFramebufferOpenGL::~TextureFramebufferOpenGL() noexcept
@@ -24,18 +24,47 @@ TextureFramebufferOpenGL::~TextureFramebufferOpenGL() noexcept
 
 void TextureFramebufferOpenGL::setColor(Texture* texture) noexcept
 {
-	TextureFramebufferBase::setColor(texture);
-	FramebufferBackupOpenGL backup;
-	activate();
-	glFramebufferTexture2D(
-		GL_FRAMEBUFFER,
-		GL_COLOR_ATTACHMENT0,
-		GL_TEXTURE_2D,
-		getColor() != nullptr ? getColor()->getId() : 0,
-		0);
+	Texture* prevColor = getColor();
+	doSetColor(texture);
+	if (!isValid())
+	{
+		doSetColor(prevColor);
+	}
 }
 
 void TextureFramebufferOpenGL::setDepth(Texture* texture) noexcept
+{
+	Texture* prevDepth = getDepth();
+	doSetDepth(texture);
+	if (!isValid())
+	{
+		doSetDepth(prevDepth);
+	}
+}
+
+void TextureFramebufferOpenGL::doSetColor(Texture* texture) noexcept
+{
+	TextureFramebufferBase::setColor(texture);
+	FramebufferBackupOpenGL backup;
+	activate();
+	const Texture* color = getColor();
+	if (color != nullptr)
+	{
+		glFramebufferTexture2D(
+			GL_FRAMEBUFFER,
+			GL_COLOR_ATTACHMENT0,
+			GL_TEXTURE_2D,
+			getColor()->getId(),
+			0);
+	}
+	else
+	{
+		glDrawBuffer(GL_NONE);
+		glReadBuffer(GL_NONE);
+	}
+}
+
+void TextureFramebufferOpenGL::doSetDepth(Texture* texture) noexcept
 {
 	TextureFramebufferBase::setDepth(texture);
 	FramebufferBackupOpenGL backup;
@@ -53,15 +82,11 @@ void TextureFramebufferOpenGL::activate() const noexcept
 	glBindFramebuffer(GL_FRAMEBUFFER, mId);
 }
 
-void TextureFramebufferOpenGL::validate() const
+bool TextureFramebufferOpenGL::isValid() const noexcept
 {
 	FramebufferBackupOpenGL backup;
 	activate();
-	if (GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-		status != GL_FRAMEBUFFER_COMPLETE)
-	{
-		throw std::runtime_error("Framebuffer is not complete");
-	}
+	return glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE;
 }
 
 // End of the namespace gltut

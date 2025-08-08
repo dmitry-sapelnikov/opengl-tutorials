@@ -39,12 +39,12 @@ void MaterialPassC::setShader(const ShaderMaterialBinding* shader) noexcept
 		nullptr);
 }
 
-Texture* MaterialPassC::getTexture(u32 slot) const noexcept
+const Texture* MaterialPassC::getTexture(u32 slot) const noexcept
 {
 	return slot < mTextureSlotsCount ? mTextures[slot] : nullptr;
 }
 
-void MaterialPassC::setTexture(Texture* texture, u32 slot) noexcept
+void MaterialPassC::setTexture(const Texture* texture, u32 slot) noexcept
 {
 	if (slot < mTextureSlotsCount)
 	{
