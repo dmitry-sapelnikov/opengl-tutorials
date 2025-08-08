@@ -38,8 +38,8 @@ public:
 	/// The number is truncated to Texture::TEXTURE_SLOTS
 	virtual void setTextureSlotsCount(u32 count) noexcept = 0;
 
-	/// Activates the material pass for a render geometry
-	virtual void activate(const RenderGeometry* geometry) const noexcept = 0;
+	/// Binds the material pass for a render geometry
+	virtual void bind(const RenderGeometry* geometry) const noexcept = 0;
 };
 
 // End of the namespace gltut

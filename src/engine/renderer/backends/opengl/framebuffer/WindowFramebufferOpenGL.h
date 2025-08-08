@@ -13,8 +13,8 @@ public:
 	/// Constructor
 	using WindowFramebufferBase::WindowFramebufferBase;
 
-	/// Activates the framebuffer as the current rendering target
-	void activate() const noexcept final
+	/// Binds the framebuffer as the current rendering target
+	void bind() const noexcept final
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}

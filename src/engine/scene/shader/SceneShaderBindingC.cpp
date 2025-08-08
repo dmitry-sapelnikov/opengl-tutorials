@@ -59,61 +59,9 @@ void SceneShaderBindingC::update(const Scene* scene) const noexcept
 	{
 		return;
 	}
-	getShader()->activate();
+	getShader()->bind();
 	updateLights(*scene);
 }
-
-//
-//void SceneShaderBindingC::update(const Viewpoint* viewer) const noexcept
-//{
-//	if (shader == nullptr || viewer == nullptr)
-//	{
-//		return;
-//	}
-//
-//	if (const char* cameraView = getBoundShaderParameter(Parameter::CAMERA_VIEW_MATRIX);
-//		cameraView != nullptr)
-//	{
-//		shader->setMat4(cameraView, viewer->getViewMatrix().data());
-//	}
-//
-//	if (const char* cameraProjection = getBoundShaderParameter(Parameter::CAMERA_PROJECTION_MATRIX);
-//		cameraProjection != nullptr)
-//	{
-//		shader->setMat4(cameraProjection, viewer->getProjectionMatrix().data());
-//	}
-//
-//	if (const char* cameraPosition = getBoundShaderParameter(Parameter::CAMERA_POSITION);
-//		cameraPosition != nullptr)
-//	{
-//		const Vector3& position = viewer->getPosition();
-//		shader->setVec3(cameraPosition, position.x, position.y, position.z);
-//	}
-//}
-//
-///// Activates the shader binding for a scene object
-//void SceneShaderBindingC::update(const GeometryNode* node) const noexcept
-//{
-//	if (shader == nullptr || node == nullptr)
-//	{
-//		return;
-//	}
-//
-//	shader->activate();
-//
-//	if (const char* objectMatrix = getBoundShaderParameter(Parameter::GEOMETRY_MATRIX);
-//		objectMatrix != nullptr)
-//	{
-//		shader->setMat4(objectMatrix, node->getGlobalTransform().data());
-//	}
-//
-//	if (const char* objectNormalMatrix = getBoundShaderParameter(Parameter::GEOMETRY_NORMAL_MATRIX);
-//		objectNormalMatrix != nullptr)
-//	{
-//		const Matrix3 normalMatrix = getNormalMatrix(node->getGlobalTransform().getMatrix3());
-//		shader->setMat3(objectNormalMatrix, normalMatrix.data());
-//	}
-//}
 
 void SceneShaderBindingC::updateLight(
 	const LightNode& light,

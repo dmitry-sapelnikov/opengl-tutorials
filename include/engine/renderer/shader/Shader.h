@@ -19,8 +19,8 @@ public:
 	/// Returns the renderer associated with this shader
 	virtual Renderer* getRenderer() const noexcept = 0;
 
-	/// Activates the shader
-	virtual void activate() const noexcept = 0;
+	/// Binds the shader
+	virtual void bind() const noexcept = 0;
 };
 
 // End of the namespace gltut

@@ -104,7 +104,7 @@ void RendererOpenGL::setFramebuffer(Framebuffer* frameBuffer) noexcept
 	}
 	else
 	{
-		frameBuffer->activate();
+		frameBuffer->bind();
 	}
 }
 

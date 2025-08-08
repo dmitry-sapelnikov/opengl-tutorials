@@ -11,7 +11,7 @@ void RenderGeometryC::render(u32 materialPass) const noexcept
 	if (mMaterial != nullptr &&
 		mMaterial->getPass(materialPass) != nullptr)
 	{
-		mMaterial->getPass(materialPass)->activate(this);
+		mMaterial->getPass(materialPass)->bind(this);
 	}
 
 	if (mGeometry != nullptr)

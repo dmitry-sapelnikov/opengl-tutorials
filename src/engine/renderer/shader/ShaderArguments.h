@@ -66,11 +66,8 @@ public:
 	/// Sets a 4x4 matrix to a shader parameter
 	void setMat4(int32 location, const float* data) noexcept final;
 
-	/**
-		\brief Sets the controlled shader as the current one,
-		then sets the shader parameters
-	*/
-	void activate() const noexcept;
+	/// Binds the controlled shader, then sets the shader parameters
+	void bind() const noexcept;
 
 private:
 	/// Associated shader

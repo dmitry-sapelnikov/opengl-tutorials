@@ -27,7 +27,7 @@ private:
 		SceneShaderBinding::Parameter diffuseColor,
 		SceneShaderBinding::Parameter specularColor) const noexcept;
 
-	/// Activates the shader binding for lights in a scene
+	/// Updates light binding
 	void updateLights(const Scene& scene) const;
 };
 

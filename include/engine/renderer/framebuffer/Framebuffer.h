@@ -17,8 +17,8 @@ public:
 	/// Returns the size of the framebuffer
 	virtual Point2u getSize() const noexcept = 0;
 
-	/// Activates the framebuffer as the current rendering target
-	virtual void activate() const noexcept = 0;
+	/// Binds the framebuffer as the current rendering target
+	virtual void bind() const noexcept = 0;
 };
 
 // End of the namespace gltut

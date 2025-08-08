@@ -47,8 +47,8 @@ public:
 		mTextureSlotsCount = std::min(count, Texture::TEXTURE_SLOTS);
 	}
 
-	/// Activates the material pass for a render geometry
-	void activate(const RenderGeometry* geometry) const noexcept final;
+	/// Binds the material pass for a render geometry
+	void bind(const RenderGeometry* geometry) const noexcept final;
 
 private:
 	/// The shader binding

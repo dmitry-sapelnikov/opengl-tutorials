@@ -85,7 +85,7 @@ ShaderOpenGL::~ShaderOpenGL() noexcept
 	glDeleteProgram(mProgram);
 }
 
-void ShaderOpenGL::activate() const noexcept
+void ShaderOpenGL::bind() const noexcept
 {
 	glUseProgram(mProgram);
 }
@@ -93,49 +93,49 @@ void ShaderOpenGL::activate() const noexcept
 int32 ShaderOpenGL::getParameterLocation(const char* name) const noexcept
 {
 	GLTUT_ASSERT_STRING(name);
-	activate();
+	bind();
 	return glGetUniformLocation(mProgram, name);
 }
 
 void ShaderOpenGL::setInt(int32 location, int value) noexcept
 {
-	activate();
+	bind();
 	glUniform1i(location, value);
 }
 
 void ShaderOpenGL::setFloat(int32 location, float value) noexcept
 {
-	activate();
+	bind();
 	glUniform1f(location, value);
 }
 
 void ShaderOpenGL::setVec2(int32 location, float x, float y) noexcept
 {
-	activate();
+	bind();
 	glUniform2f(location, x, y);
 }
 
 void ShaderOpenGL::setVec3(int32 location, float x, float y, float z) noexcept
 {
-	activate();
+	bind();
 	glUniform3f(location, x, y, z);
 }
 
 void ShaderOpenGL::setVec4(int32 location, float x, float y, float z, float w) noexcept
 {
-	activate();
+	bind();
 	glUniform4f(location, x, y, z, w);
 }
 
 void ShaderOpenGL::setMat3(int32 location, const float* data) noexcept
 {
-	activate();
+	bind();
 	glUniformMatrix3fv(location, 1, GL_FALSE, data);
 }
 
 void ShaderOpenGL::setMat4(int32 location, const float* data) noexcept
 {
-	activate();
+	bind();
 	glUniformMatrix4fv(location, 1, GL_FALSE, data);
 }
 

@@ -81,8 +81,8 @@ public:
 	/// Removes a framebuffer
 	void removeTextureFramebuffer(TextureFramebuffer* frameBuffer) noexcept final;
 
-	/// Activates a framebuffer
-	void activateFramebuffer(
+	/// Binds a framebuffer
+	void bindFramebuffer(
 		Framebuffer* framebuffer,
 		Rectangle2u* viewport) noexcept final;
 

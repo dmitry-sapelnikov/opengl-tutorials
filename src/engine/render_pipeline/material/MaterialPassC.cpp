@@ -52,7 +52,7 @@ void MaterialPassC::setTexture(const Texture* texture, u32 slot) noexcept
 	}
 }
 
-void MaterialPassC::activate(const RenderGeometry* geometry) const noexcept
+void MaterialPassC::bind(const RenderGeometry* geometry) const noexcept
 {
 	if (geometry == nullptr ||
 		mShaderBinding == nullptr || 
@@ -63,7 +63,7 @@ void MaterialPassC::activate(const RenderGeometry* geometry) const noexcept
 	}
 
 	mShaderBinding->update(geometry);
-	mShaderArguments.activate();
+	mShaderArguments.bind();
 	
 	Renderer& renderer = *mShaderBinding->getShader()->getRenderer();
 	for (u32 i = 0; i < mTextureSlotsCount; ++i)

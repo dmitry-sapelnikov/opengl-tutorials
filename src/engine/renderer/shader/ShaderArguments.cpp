@@ -92,14 +92,14 @@ void ShaderArguments::setMat4(int32 location, const float* value) noexcept
 	addParameterValue(mParameterValues, location, Matrix4(value));
 }
 
-void ShaderArguments::activate() const noexcept
+void ShaderArguments::bind() const noexcept
 {
 	if (mShader == nullptr)
 	{
 		return;
 	}
 	
-	mShader->activate();
+	mShader->bind();
 	for (const auto& [location, value] : mParameterValues)
 	{
 		switch (value.index())

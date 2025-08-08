@@ -51,8 +51,8 @@ public:
 		return &mRenderer;
 	}
 
-	/// Activates the shader
-	void activate() const noexcept final;
+	/// Binds the shader
+	void bind() const noexcept final;
 private:
 	/// Renderer
 	Renderer& mRenderer;

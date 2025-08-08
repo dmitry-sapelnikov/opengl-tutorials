@@ -29,7 +29,7 @@ RenderPassC::RenderPassC(
 
 void RenderPassC::execute() noexcept
 {
-	mRenderer.activateFramebuffer(
+	mRenderer.bindFramebuffer(
 		mTarget, 
 		mViewport.has_value() ? &mViewport.value() : nullptr);
 

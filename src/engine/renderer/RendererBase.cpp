@@ -239,7 +239,7 @@ void RendererBase::removeTextureFramebuffer(TextureFramebuffer* frameBuffer) noe
 	removeElement(mFramebuffers, frameBuffer, "Framebuffer");
 }
 
-void RendererBase::activateFramebuffer(
+void RendererBase::bindFramebuffer(
 	Framebuffer* framebuffer,
 	Rectangle2u* viewport) noexcept
 {
@@ -248,7 +248,7 @@ void RendererBase::activateFramebuffer(
 		return;
 	}
 
-	framebuffer->activate();
+	framebuffer->bind();
 	if (viewport != nullptr)
 	{
 		setViewport(*viewport);

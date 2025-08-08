@@ -27,8 +27,8 @@ public:
 	/// Sets the depth texture
 	void setDepth(Texture* texture) noexcept final;
 
-	/// Activates the framebuffer as the current rendering target
-	void activate() const noexcept final;
+	/// Binds the framebuffer as the current rendering target
+	void bind() const noexcept final;
 
 private:
 	/// Sets the color texture without validation

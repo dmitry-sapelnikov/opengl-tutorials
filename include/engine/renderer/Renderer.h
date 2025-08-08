@@ -85,8 +85,8 @@ public:
 	/// Returns the window framebuffer
 	virtual Framebuffer* getWindowFramebuffer() const noexcept = 0;
 
-	/// Activates a framebuffer
-	virtual void activateFramebuffer(
+	/// Binds a framebuffer
+	virtual void bindFramebuffer(
 		Framebuffer* frameBuffer,
 		Rectangle2u* viewport) noexcept = 0;
 

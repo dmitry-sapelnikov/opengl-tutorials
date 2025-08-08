@@ -46,7 +46,7 @@ void TextureFramebufferOpenGL::doSetColor(Texture* texture) noexcept
 {
 	TextureFramebufferBase::setColor(texture);
 	FramebufferBackupOpenGL backup;
-	activate();
+	bind();
 	const Texture* color = getColor();
 	if (color != nullptr)
 	{
@@ -68,7 +68,7 @@ void TextureFramebufferOpenGL::doSetDepth(Texture* texture) noexcept
 {
 	TextureFramebufferBase::setDepth(texture);
 	FramebufferBackupOpenGL backup;
-	activate();
+	bind();
 	glFramebufferTexture2D(
 		GL_FRAMEBUFFER,
 		GL_DEPTH_ATTACHMENT,
@@ -77,7 +77,7 @@ void TextureFramebufferOpenGL::doSetDepth(Texture* texture) noexcept
 		0);
 }
 
-void TextureFramebufferOpenGL::activate() const noexcept
+void TextureFramebufferOpenGL::bind() const noexcept
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, mId);
 }
@@ -85,7 +85,7 @@ void TextureFramebufferOpenGL::activate() const noexcept
 bool TextureFramebufferOpenGL::isValid() const noexcept
 {
 	FramebufferBackupOpenGL backup;
-	activate();
+	bind();
 	return glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE;
 }
 

@@ -14,7 +14,7 @@ void ShaderMaterialBindingC::update(const RenderGeometry* geometry) const noexce
 		return;
 	}
 
-	shader->activate();
+	shader->bind();
 
 	if (const char* objectMatrix = getBoundShaderParameter(Parameter::GEOMETRY_MATRIX);
 		objectMatrix != nullptr)
