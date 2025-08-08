@@ -22,11 +22,6 @@ void createBoxes(
 	const float STRIDE = 3.0f;
 	auto* boxMesh = engine.getFactory()->getGeometry()->createBox(
 		GEOMETRY_SIZE, GEOMETRY_SIZE, GEOMETRY_SIZE);
-
-		/*engine.getFactory()->getGeometry()->createSphere(
-		GEOMETRY_SIZE * 0.5,
-		8);*/
-
 	GLTUT_CHECK(boxMesh, "Failed to create mesh");
 
 	gltut::Rng rng;
