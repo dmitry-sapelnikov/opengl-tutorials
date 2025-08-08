@@ -115,6 +115,7 @@
     <ClCompile Include="..\..\src\engine\factory\geometry\GeometryFactoryC.cpp" />
     <ClCompile Include="..\..\src\engine\factory\material\flat_color\FlatColorShader.cpp" />
     <ClCompile Include="..\..\src\engine\factory\material\MaterialFactoryC.cpp" />
+    <ClCompile Include="..\..\src\engine\factory\material\phong\PhongMaterialModelC.cpp" />
     <ClCompile Include="..\..\src\engine\factory\material\phong\PhongShader.cpp" />
     <ClCompile Include="..\..\src\engine\factory\render_pass\RenderPassFactoryC.cpp" />
     <ClCompile Include="..\..\src\engine\renderer\backends\opengl\framebuffer\TextureFramebufferOpenGL.cpp" />

@@ -520,5 +520,8 @@
     <ClCompile Include="..\..\src\engine\factory\render_pass\RenderPassFactoryC.cpp">
       <Filter>src\factory\render_pass</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\engine\factory\material\phong\PhongMaterialModelC.cpp">
+      <Filter>src\factory\material\phong</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

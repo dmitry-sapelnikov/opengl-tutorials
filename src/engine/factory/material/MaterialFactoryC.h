@@ -34,6 +34,9 @@ public:
 	PhongMaterialModel* createPhongMaterial(
 		ShaderMaterialBinding* phongShader) noexcept final;
 
+	/// Updates the factory
+	void update() noexcept final;
+
 private:
 	/// The renderer
 	RenderPipeline& mRenderer;

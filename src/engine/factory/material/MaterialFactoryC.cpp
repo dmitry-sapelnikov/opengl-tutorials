@@ -113,5 +113,13 @@ PhongMaterialModel* MaterialFactoryC::createPhongMaterial(
 	return result;
 }
 
+void MaterialFactoryC::update() noexcept
+{
+	for (PhongMaterialModelC& model : mPhongModels)
+	{
+		model.update();
+	}
+}
+
 // End of the namespace gltut
 }

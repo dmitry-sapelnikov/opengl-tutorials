@@ -51,6 +51,7 @@ EngineC::EngineC(u32 windowWidth, u32 windowHeight)
 bool EngineC::update() noexcept
 {
 	mScene->update();
+	mFactory->update();
 	mRenderPipeline->execute();
 	return mWindow->update();
 }

@@ -38,6 +38,12 @@ public:
 		return &mRenderPass;
 	}
 
+	/// Updates the factory
+	void update() noexcept final
+	{
+		mMaterial.update();
+	}
+
 private:
 	/// The geometry factory
 	GeometryFactoryC mGeometry;

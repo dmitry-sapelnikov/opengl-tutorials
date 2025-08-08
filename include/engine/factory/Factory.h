@@ -20,6 +20,8 @@ public:
 
 	/// Returns the render pass factory
 	virtual RenderPassFactory* getRenderPass() noexcept = 0;
+	/// Updates the factory
+	virtual void update() noexcept = 0;
 };
 
 // End of the namespace gltut

@@ -32,6 +32,8 @@ public:
 	{
 		getMaterial()[0]->getShaderArguments()->setFloat("shininess", shininess);
 	}
+	/// Updates the material
+	virtual void update() noexcept final;
 };
 
 // End of the namespace gltut
