@@ -6,44 +6,7 @@ namespace gltut
 {
 //	 Constants and enums
 
-// Vertex shader source code for Phong shading
-static const char* PHONG_VERTEX_SHADER = R"(
-#version 330 core
-
-// Uniforms
-uniform mat4 model;
-uniform mat4 view;
-uniform vec3 viewPos;
-uniform mat4 projection;
-uniform mat3 normalMat;
-
-// Inputs
-layout (location = 0) in vec3 inPos;
-layout (location = 1) in vec3 inNormal;
-layout (location = 2) in vec2 inTexCoord;
-
-// Outputs
-out vec3 pos;
-out vec3 normal;
-out vec2 texCoord;
-
-void main()
-{
-	gl_Position = projection * view * model * vec4(inPos, 1.0f);
-	pos = vec3(model * vec4(inPos, 1.0f));
-	normal = normalMat * inNormal;
-	texCoord = inTexCoord;
-})";
-
-// Fragment shader source code for Phong shading
-static const char* PHONG_FRAGMENT_SHADER = R"(
-
-// Uniforms
-uniform sampler2D diffuseSampler;
-uniform sampler2D specularSampler;
-uniform float shininess;
-uniform vec3 viewPos;
-
+static const char* LIGHT_UNIFORMS = R"(
 struct Color
 {
 	vec3 ambient;
@@ -56,8 +19,10 @@ struct DirectionalLight
 {
 	Color color;
 	vec3 dir;
+	mat4 shadowMatrix;
 };
 uniform DirectionalLight directionalLights[MAX_DIRECTIONAL_LIGHTS];
+uniform sampler2D directionalLightShadowSamplers[MAX_DIRECTIONAL_LIGHTS];
 #endif
 
 #if MAX_POINT_LIGHTS > 0
@@ -86,11 +51,64 @@ struct SpotLight
 
 uniform SpotLight spotLights[MAX_SPOT_LIGHTS];
 #endif
+)";
+
+// Vertex shader source code for Phong shading
+static const char* PHONG_VERTEX_SHADER = R"(
+// Uniforms
+uniform mat4 model;
+uniform mat4 view;
+uniform vec3 viewPos;
+uniform mat4 projection;
+uniform mat3 normalMat;
+
+// Inputs
+layout (location = 0) in vec3 inPos;
+layout (location = 1) in vec3 inNormal;
+layout (location = 2) in vec2 inTexCoord;
+
+// Outputs
+out vec3 pos;
+out vec3 normal;
+out vec2 texCoord;
+
+#if MAX_DIRECTIONAL_LIGHTS > 0
+out vec4 shadowSpacePos[MAX_DIRECTIONAL_LIGHTS];
+#endif
+
+void main()
+{
+	vec4 modelPos = model * vec4(inPos, 1.0f);
+	gl_Position = projection * view * modelPos;
+	pos = vec3(modelPos);
+	normal = normalMat * inNormal;
+	texCoord = inTexCoord;
+
+#if MAX_DIRECTIONAL_LIGHTS > 0
+	for (int i = 0; i < MAX_DIRECTIONAL_LIGHTS; ++i)
+	{
+		shadowSpacePos[i] = directionalLights[i].shadowMatrix * vec4(pos, 1.0f);
+	}
+#endif
+})";
+
+// Fragment shader source code for Phong shading
+static const char* PHONG_FRAGMENT_SHADER = R"(
+
+// Uniforms
+uniform sampler2D diffuseSampler;
+uniform sampler2D specularSampler;
+uniform float shininess;
+uniform vec3 viewPos;
 
 // Inputs
 in vec3 pos;
 in vec3 normal;
 in vec2 texCoord;
+
+#if MAX_DIRECTIONAL_LIGHTS > 0
+in vec4 shadowSpacePos[MAX_DIRECTIONAL_LIGHTS];
+#endif
 
 // Outputs
 out vec4 outColor;
@@ -109,18 +127,24 @@ void main()
 	for (int i = 0; i < MAX_DIRECTIONAL_LIGHTS; ++i)
 	{
 		// Ambient
-		vec3 ambient = directionalLights[i].color.ambient * geomDiffuse;
+		result += directionalLights[i].color.ambient * geomDiffuse;
 
 		// Diffuse
 		vec3 lightDir = -directionalLights[i].dir;
-		vec3 diffuse = max(0.0f, dot(norm, lightDir)) * directionalLights[i].color.diffuse * geomDiffuse;
+		float dot_diffuse = max(0.0f, dot(norm, lightDir));
+		vec3 diffuse = dot_diffuse * directionalLights[i].color.diffuse * geomDiffuse;
 
 		// Specular
 		vec3 reflectDir = reflect(-lightDir, norm);
-		float spec = pow(max(dot(viewDir, reflectDir), 0.0), shininess);
+		float dot_specular = max(dot(viewDir, reflectDir), 0.0);
+		float spec = pow(dot_specular, shininess);
 		vec3 specular = spec * directionalLights[i].color.specular * texture(specularSampler, texCoord).rgb;
 
-		result += ambient + diffuse + specular;
+		// Shadow mapping
+		vec3 projCoords = shadowSpacePos[i].xyz * (0.5 / shadowSpacePos[i].w) + 0.5;
+		float closestDepth = texture(directionalLightShadowSamplers[i], projCoords.xy).r;
+		float bias = 0.001;
+		result += (diffuse + specular) * float(projCoords.z - bias < closestDepth);
 	}
 #endif
 
@@ -207,15 +231,18 @@ ShaderMaterialBinding* createPhongShader(
 		return nullptr;
 	}
 
-	std::string fragmentShader = "#version 330 core\n";
-	fragmentShader += "#define MAX_DIRECTIONAL_LIGHTS " + std::to_string(maxDirectionalLights) + "\n";
-	fragmentShader += "#define MAX_POINT_LIGHTS " + std::to_string(maxPointLights) + "\n";
-	fragmentShader += "#define MAX_SPOT_LIGHTS " + std::to_string(maxSpotLights) + "\n";
-	fragmentShader += PHONG_FRAGMENT_SHADER;
+	std::string shaderHeader = "#version 330 core\n";
+	shaderHeader += "#define MAX_DIRECTIONAL_LIGHTS " + std::to_string(maxDirectionalLights) + "\n";
+	shaderHeader += "#define MAX_POINT_LIGHTS " + std::to_string(maxPointLights) + "\n";
+	shaderHeader += "#define MAX_SPOT_LIGHTS " + std::to_string(maxSpotLights) + "\n";
+	shaderHeader += LIGHT_UNIFORMS;
 
 	Renderer* backend = renderer.getRenderer();
 
-	Shader* shader = backend->createShader(PHONG_VERTEX_SHADER, fragmentShader.c_str());
+	Shader* shader = backend->createShader(
+		(shaderHeader + PHONG_VERTEX_SHADER).c_str(),
+		(shaderHeader + PHONG_FRAGMENT_SHADER).c_str());
+
 	if (shader == nullptr)
 	{
 		return nullptr;
@@ -224,6 +251,11 @@ ShaderMaterialBinding* createPhongShader(
 	shader->setInt("diffuseSampler", 0);
 	shader->setInt("specularSampler", 1);
 	shader->setFloat("shininess", DEFAULT_SHINESS);
+
+	for (u32 i = 0; i < maxDirectionalLights; ++i)
+	{
+		shader->setInt(("directionalLightShadowSamplers[" + std::to_string(i) + "]").c_str(), 2 + i);
+	}
 
 	ShaderMaterialBinding* materialBinding = renderer.createShaderMaterialBinding(shader);
 	if (materialBinding == nullptr)

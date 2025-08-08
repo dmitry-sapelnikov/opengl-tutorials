@@ -1,6 +1,8 @@
 #pragma once
 
 // Includes
+#include <string>
+#include <unordered_map>
 #include "engine/factory/material/PhongMaterialModel.h"
 #include "../MaterialModelT.h"
 
@@ -32,8 +34,17 @@ public:
 	{
 		getMaterial()[0]->getShaderArguments()->setFloat("shininess", shininess);
 	}
+
+	void setDirectinalLightShadow(
+		u32 lightIndex,
+		const Viewpoint* shadowView,
+		const Texture* shadowMap) noexcept final;
+	
 	/// Updates the material
-	virtual void update() noexcept final;
+	void update() noexcept final;
+
+private:
+	std::unordered_map<u32, const Viewpoint*> mDirectionalLightShadows;
 };
 
 // End of the namespace gltut
