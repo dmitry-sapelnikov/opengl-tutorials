@@ -135,6 +135,12 @@
     <Filter Include="include\factory\render_pass">
       <UniqueIdentifier>{40398286-d9e8-4de5-8af8-660bd292dff1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\factory\shadow">
+      <UniqueIdentifier>{5ecd1918-d83a-46a9-ba20-89dc6cc327ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\factory\shadow">
+      <UniqueIdentifier>{88b6f597-53f7-4284-af68-ecee44790142}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\engine\Engine.h">
@@ -425,8 +431,17 @@
     <ClInclude Include="..\..\include\engine\math\Vector2.h">
       <Filter>include\math</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\engine\factory\shadow\ShadowFactory.h">
+      <Filter>include\factory\shadow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\factory\shadow\ShadowFactoryC.h">
+      <Filter>src\factory\shadow</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\engine\render_pipeline\viewpoint\ViewpointC.h">
       <Filter>src\render_pipeline\viewpoint</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\factory\shadow\ShadowMap.h">
+      <Filter>src\factory\shadow</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -522,6 +537,12 @@
     </ClCompile>
     <ClCompile Include="..\..\src\engine\factory\render_pass\RenderPassFactoryC.cpp">
       <Filter>src\factory\render_pass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\factory\shadow\ShadowFactoryC.cpp">
+      <Filter>src\factory\shadow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\factory\shadow\ShadowMap.cpp">
+      <Filter>src\factory\shadow</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\engine\factory\material\phong\PhongMaterialModelC.cpp">
       <Filter>src\factory\material\phong</Filter>
