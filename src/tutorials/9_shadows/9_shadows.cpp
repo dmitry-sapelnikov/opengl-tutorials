@@ -9,8 +9,8 @@
 #include "engine/Engine.h"
 
 // Slightly yellowish light
-const gltut::Vector3 DIR_LIGHT_POSITION = { 10.0f, 10.0f, 0.0f };
-const gltut::Color DIR_LIGHT_COLOR = { 1.0f, 1.0f, 1.0f };
+const gltut::Vector3 DIR_LIGHT_POSITION = { 10.0f, 5.0f, 0.0f };
+const gltut::Color DIR_LIGHT_COLOR = { 1.5f, 1.5f, 1.5f };
 
 /// Creates boxes
 void createBoxes(
@@ -18,11 +18,14 @@ void createBoxes(
 	gltut::PhongMaterialModel* phongMaterialModel)
 {
 	const int COUNT = 3;
-	const float GEOMETRY_SIZE = 2.0f;
+	const float GEOMETRY_SIZE = 1.0f;
 	const float STRIDE = 3.0f;
-	auto* boxMesh = engine.getFactory()->getGeometry()->createSphere(
+	auto* boxMesh = engine.getFactory()->getGeometry()->createBox(
+		GEOMETRY_SIZE, GEOMETRY_SIZE, GEOMETRY_SIZE);
+
+		/*engine.getFactory()->getGeometry()->createSphere(
 		GEOMETRY_SIZE * 0.5,
-		8);
+		8);*/
 
 	GLTUT_CHECK(boxMesh, "Failed to create mesh");
 
@@ -31,9 +34,10 @@ void createBoxes(
 	{
 		for (int j = 0; j < COUNT; ++j)
 		{
+			const float size = rng.nextFloat(0.5f, 2.0f);
 			const gltut::Vector3 position(
 				(i - (COUNT - 1.0f) * 0.5f) * STRIDE,
-				GEOMETRY_SIZE * 0.5f + rng.nextFloat(0.0, GEOMETRY_SIZE * 2.0f),
+				0.5f * size,
 				(j - (COUNT - 1.0f) * 0.5f) * STRIDE);
 
 			auto* object = engine.getScene()->createGeometry(
@@ -42,7 +46,7 @@ void createBoxes(
 				gltut::Matrix4::transformMatrix(
 					position,
 					{ 0.0f, 0.0, 0.0f },
-					rng.nextFloat(0.5f, 2.0f) * gltut::Vector3(1.0f, 1.0f, 1.0f)));
+					size * gltut::Vector3(1.0f, 1.0f, 1.0f)));
 
 			GLTUT_CHECK(object, "Failed to create object");
 		}
@@ -72,7 +76,7 @@ gltut::GeometryNode* createLight(
 	light->setTransform(gltut::Matrix4::translationMatrix(position));
 
 	auto* lightSource = scene.createLight(lightType, gltut::Matrix4::identity(), light);
-	lightSource->setAmbient(gltut::Color(color.r * 0.5f, color.g * 0.5f, color.b * 0.5f, 1.0f));
+	lightSource->setAmbient(gltut::Color(color.r * 0.7f, color.g * 0.7f, color.b * 0.7f, 1.0f));
 	lightSource->setDiffuse(color);
 	lightSource->setSpecular(color);
 
@@ -151,31 +155,27 @@ int main()
 
 		GLTUT_CHECK(phongShader, "Failed to create Phong shader");
 
-		gltut::PhongMaterialModel* floorMaterialModel = materialFactory->createPhongMaterial(phongShader);
-		GLTUT_CHECK(floorMaterialModel, "Failed to create Phong material model");
-		floorMaterialModel->setDiffuse(renderer->createSolidColorTexture(0.5f, 0.5f, 0.5f, 1.0f));
-		floorMaterialModel->setSpecular(renderer->createSolidColorTexture(0.0f, 0.0f, 0.0f, 1.0f));
+		gltut::PhongMaterialModel* phongMaterialModel = materialFactory->createPhongMaterial(phongShader);
+		GLTUT_CHECK(phongMaterialModel, "Failed to create Phong material model");
+
+		gltut::Texture* diffuseTexture = renderer->loadTexture("assets/container2.png");
+		//gltut::Texture* diffuseTexture = renderer->createSolidColorTexture(1.0f, 0.5f, 0.31f, 1.0f);
+		GLTUT_CHECK(diffuseTexture, "Failed to create diffuse texture");
+
+		gltut::Texture* specularTexture = renderer->loadTexture("assets/container2_specular.png");
+		//renderer->createSolidColorTexture(0.0f, 0.0f, 0.0f, 1.0f);
+		GLTUT_CHECK(specularTexture, "Failed to create specular texture");
+
+		phongMaterialModel->setDiffuse(diffuseTexture);
+		phongMaterialModel->setSpecular(specularTexture);
+		phongMaterialModel->setShininess(32.0f);
 
 		auto* floorGeometry = engine->getFactory()->getGeometry()->createBox(20.0f, 1.0f, 20.0f);
 		GLTUT_CHECK(floorGeometry, "Failed to create floor geometry");
 		scene->createGeometry(
 			floorGeometry,
-			floorMaterialModel->getMaterial(),
+			phongMaterialModel->getMaterial(),
 			gltut::Matrix4::translationMatrix({ 0.0f, -0.5f, 0.0f }));
-
-
-		gltut::PhongMaterialModel* phongMaterialModel = materialFactory->createPhongMaterial(phongShader);
-		GLTUT_CHECK(phongMaterialModel, "Failed to create Phong material model");
-
-		gltut::Texture* diffuseTexture = renderer->createSolidColorTexture(1.0f, 0.5f, 0.31f, 1.0f);
-		GLTUT_CHECK(diffuseTexture, "Failed to create diffuse texture");
-
-		gltut::Texture* specularTexture = renderer->createSolidColorTexture(1.0f, 1.0f, 1.0f, 1.0f);
-		GLTUT_CHECK(specularTexture, "Failed to create specular texture");
-
-		phongMaterialModel->setDiffuse(diffuseTexture);
-		phongMaterialModel->setSpecular(specularTexture);
-		phongMaterialModel->setShininess(64.0f);
 
 		createBoxes(*engine, phongMaterialModel);
 
@@ -196,17 +196,23 @@ int main()
 		GLTUT_CHECK(controller, "Failed to create camera controller");
 		engine->getScene()->addCameraController(controller.get());
 
-		// Create a render pass for the scene preview
-		gltut::Rectangle2u viewport({ 0, 0 }, { 256, 256 });
+		gltut::LightNode* directionalLightSource =
+			dynamic_cast<gltut::LightNode*>(directionalLight->getChild(0));
+		GLTUT_CHECK(directionalLightSource, "Failed to get directional light source");
 
+		auto [shadowViewpoint, shadowMap] = engine->getFactory()->getShadow()->createShadowMap(
+			directionalLightSource,
+			scene->getRenderObject(),
+			40.0f, // Frustum size
+			0.5f,  // Near plane
+			50.0f, // Far plane
+			2048);  // Shadow map size
+		GLTUT_CHECK(shadowMap, "Failed to create shadow map");
 
-		/// Load a texture
-		gltut::Texture* boxTexture = renderer->loadTexture("assets/container2.png");
-		GLTUT_CHECK(boxTexture != nullptr, "Unable to load the container texture");
-
-		engine->getFactory()->getRenderPass()->createTextureToWindowRenderPass(
-			boxTexture,
-			viewport);
+		phongMaterialModel->setDirectinalLightShadow(
+			0, // Light index
+			shadowViewpoint, // Viewpoint
+			shadowMap); // Shadow map
 
 		const auto startTime = std::chrono::high_resolution_clock::now();
 		while (true)
