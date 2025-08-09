@@ -23,6 +23,9 @@ public:
 	/// Returns the size of the window in pixels
 	virtual const Point2u& getSize() const noexcept = 0;
 
+	/// Returns the current frames per second (FPS)
+	virtual u32 getFPS() noexcept = 0;
+
 	/// Adds an event handler
 	virtual void addEventHandler(EventHandler* handler) noexcept = 0;
 
