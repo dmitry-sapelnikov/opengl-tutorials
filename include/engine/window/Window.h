@@ -35,6 +35,9 @@ public:
 	/// Sets the cursor position
 	virtual void setCursorPosition(const Point2i& position) noexcept = 0;
 
+	/// Returns the window handle
+	virtual void* getHandle() const noexcept = 0;
+
 	/// Returns the device context for the window
 	virtual void* getDeviceContext() const noexcept = 0;
 

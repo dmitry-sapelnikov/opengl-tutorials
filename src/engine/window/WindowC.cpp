@@ -60,6 +60,9 @@ static WindowCallback* getWindowCallback(HWND hwnd)
 /// The window procedure
 static LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+	Event event;
+	event.raw = { message, (void*)wParam, (void*)lParam };
+
 	switch (message)
 	{
 	case WM_MOUSEMOVE:
@@ -71,7 +74,6 @@ static LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 	case WM_MBUTTONUP:
 	case WM_MOUSEWHEEL:
 	{
-		gltut::Event event;
 		event.type = gltut::Event::Type::MOUSE;
 		event.mouse.position = { LOWORD(lParam), HIWORD(lParam) };
 		event.mouse.buttons.left = (wParam & MK_LBUTTON) != 0;
@@ -134,8 +136,6 @@ static LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 	case WM_KEYUP:
 	{
 		BYTE allKeys[256];
-
-		gltut::Event event;
 		event.type = gltut::Event::Type::KEYBOARD;
 		event.keyboard.key = (gltut::KeyCode)wParam;
 		event.keyboard.pressedDown = (message == WM_KEYDOWN || message == WM_SYSKEYDOWN);
@@ -178,7 +178,6 @@ static LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 
 	case WM_SIZE:
 	{
-		Event event;
 		event.type = Event::Type::WINDOW_RESIZE;
 		event.windowResize.size = { LOWORD(lParam), HIWORD(lParam) };
 		auto* callback = getWindowCallback(hWnd);
