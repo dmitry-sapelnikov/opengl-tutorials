@@ -28,7 +28,7 @@ int main()
 			0, 1, 2,  // first Triangle
 		};
 
-		auto* renderer = engine->getRenderer();
+		auto* renderer = engine->getDevice();
 		auto* scene = engine->getScene();
 
 		gltut::Shader* shader = renderer->createShader(

@@ -237,7 +237,7 @@ ShaderMaterialBinding* createPhongShader(
 	shaderHeader += "#define MAX_SPOT_LIGHTS " + std::to_string(maxSpotLights) + "\n";
 	shaderHeader += LIGHT_UNIFORMS;
 
-	Renderer* backend = renderer.getRenderer();
+	GraphicsDevice* backend = renderer.getRenderer();
 
 	Shader* shader = backend->createShader(
 		(shaderHeader + PHONG_VERTEX_SHADER).c_str(),

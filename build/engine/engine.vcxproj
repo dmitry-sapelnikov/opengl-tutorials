@@ -39,7 +39,7 @@
     <ClInclude Include="..\..\include\engine\renderer\framebuffer\TextureFramebuffer.h" />
     <ClInclude Include="..\..\include\engine\renderer\mesh\Mesh.h" />
     <ClInclude Include="..\..\include\engine\renderer\mesh\VertexFormat.h" />
-    <ClInclude Include="..\..\include\engine\renderer\Renderer.h" />
+    <ClInclude Include="..\..\include\engine\renderer\GraphicsDevice.h" />
     <ClInclude Include="..\..\include\engine\renderer\shader\Shader.h" />
     <ClInclude Include="..\..\include\engine\renderer\shader\ShaderBinding.h" />
     <ClInclude Include="..\..\include\engine\renderer\shader\ShaderParameters.h" />

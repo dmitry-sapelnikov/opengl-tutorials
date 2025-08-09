@@ -30,7 +30,7 @@ int main()
 			 1, 2, 3  // second triangle
 		};
 
-		auto* renderer = engine->getRenderer();
+		auto* renderer = engine->getDevice();
 		auto* scene = engine->getScene();
 		auto* mesh = renderer->createMesh(
 			gltut::VERTEX_FORMAT_POS3_TEX2,

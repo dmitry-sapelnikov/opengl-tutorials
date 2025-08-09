@@ -1,7 +1,7 @@
 #pragma once
 
 // Includes
-#include "engine/renderer/Renderer.h"
+#include "engine/renderer/GraphicsDevice.h"
 #include "engine/render_pipeline/viewpoint/ShaderViewpointBinding.h"
 #include "engine/render_pipeline/objects/RenderGeometry.h"
 #include "engine/render_pipeline/objects/RenderGroup.h"
@@ -18,7 +18,7 @@ public:
 	virtual ~RenderPipeline() noexcept = default;
 
 	/// Returns the renderer
-	virtual Renderer* getRenderer() noexcept = 0;
+	virtual GraphicsDevice* getRenderer() noexcept = 0;
 
 	/// Creates a shader material binding
 	virtual ShaderMaterialBinding* createShaderMaterialBinding(

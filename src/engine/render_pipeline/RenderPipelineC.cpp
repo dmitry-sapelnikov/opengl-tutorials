@@ -32,8 +32,8 @@ namespace
 }
 
 //	Global classes
-RenderPipelineC::RenderPipelineC(Renderer& renderer) noexcept :
-	mRenderer(renderer)
+RenderPipelineC::RenderPipelineC(GraphicsDevice& device) noexcept :
+	mDevice(device)
 {
 }
 
@@ -148,7 +148,7 @@ RenderPass* RenderPipelineC::createPass(
 			clearColor,
 			clearDepth,
 			viewport,
-			mRenderer,
+			mDevice,
 			mShaderViewpointBindings),
 			0).first.get();
 	GLTUT_CATCH_ALL_END("Cannot create a scene render pass")

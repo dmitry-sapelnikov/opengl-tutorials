@@ -56,7 +56,7 @@ int main()
 			1, 2, 3   // second Triangle
 		};
 
-		auto* renderer = engine->getRenderer();
+		auto* renderer = engine->getDevice();
 		auto* scene = engine->getScene();
 		auto* mesh1 = renderer->createMesh(
 			gltut::VERTEX_FORMAT_POS3,

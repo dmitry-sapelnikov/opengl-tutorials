@@ -12,12 +12,12 @@
 namespace gltut
 {
 //	Global classes
-///	The renderer
-class Renderer
+///	The graphics device
+class GraphicsDevice
 {
 public:
 	/// Virtual destructor
-	virtual ~Renderer() noexcept = default;
+	virtual ~GraphicsDevice() noexcept = default;
 
 	/// Clears the current render target
 	virtual void clear(

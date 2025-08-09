@@ -6,7 +6,7 @@
 
 #include "engine/core/NonCopyable.h"
 #include "engine/render_pipeline/RenderPipeline.h"
-#include "engine/renderer/Renderer.h"
+#include "engine/renderer/GraphicsDevice.h"
 #include "engine/scene/Scene.h"
 
 namespace gltut
@@ -17,12 +17,12 @@ class RenderPipelineC final : public RenderPipeline, public NonCopyable
 {
 public:
 	/// Constructor
-	explicit RenderPipelineC(Renderer& renderer) noexcept;
+	explicit RenderPipelineC(GraphicsDevice& renderer) noexcept;
 
 	/// Returns the renderer
-	Renderer* getRenderer() noexcept
+	GraphicsDevice* getRenderer() noexcept
 	{
-		return &mRenderer;
+		return &mDevice;
 	}
 
 	/// Creates a shader material binding
@@ -78,7 +78,7 @@ public:
 
 private:
 	/// Renderer
-	Renderer& mRenderer;
+	GraphicsDevice& mDevice;
 
 	/// Shader viewpoint bindings
 	std::vector<std::unique_ptr<ShaderViewpointBinding>> mShaderViewpointBindings;

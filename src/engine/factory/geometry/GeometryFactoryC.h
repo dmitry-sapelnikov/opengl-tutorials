@@ -2,7 +2,7 @@
 
 // Includes
 #include "engine/core/NonCopyable.h"
-#include "engine/renderer/Renderer.h"
+#include "engine/renderer/GraphicsDevice.h"
 #include "engine/factory/geometry/GeometryFactory.h"
 
 namespace gltut
@@ -13,7 +13,7 @@ class GeometryFactoryC final : public GeometryFactory, public NonCopyable
 {
 public:
 	// Constructor
-	explicit GeometryFactoryC(Renderer& renderer) noexcept :
+	explicit GeometryFactoryC(GraphicsDevice& renderer) noexcept :
 		mRenderer(renderer)
 	{
 	}
@@ -51,7 +51,7 @@ public:
 
 private:
 	/// The renderer used to create the geometries
-	Renderer& mRenderer;
+	GraphicsDevice& mRenderer;
 };
 
 // End of the namespace gltut

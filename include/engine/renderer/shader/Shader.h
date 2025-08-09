@@ -6,9 +6,6 @@
 
 namespace gltut
 {
-//	Global classes
-class Renderer;
-
 ///	Represents a shader
 class Shader: public ShaderParameters
 {

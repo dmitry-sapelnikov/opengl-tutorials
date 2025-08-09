@@ -138,7 +138,7 @@ int main()
 		engine->getWindow()->setTitle("Lighting");
 		engine->getWindow()->showFPS(true);
 
-		auto* renderer = engine->getRenderer();
+		auto* renderer = engine->getDevice();
 		auto* scene = engine->getScene();
 
 		auto* materialFactory = engine->getFactory()->getMaterial();

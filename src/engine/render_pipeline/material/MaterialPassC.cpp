@@ -2,7 +2,7 @@
 #include "MaterialPassC.h"
 
 #include "engine/core/Check.h"
-#include "engine/renderer/Renderer.h"
+#include "engine/renderer/GraphicsDevice.h"
 #include "engine/scene/nodes/GeometryNode.h"
 
 namespace gltut

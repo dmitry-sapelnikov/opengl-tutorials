@@ -30,7 +30,7 @@ public:
 	}
 
 	/// Returns the renderer
-	Renderer* getRenderer() noexcept final
+	GraphicsDevice* getDevice() noexcept final
 	{
 		return mRenderer.get();
 	}

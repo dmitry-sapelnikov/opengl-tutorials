@@ -3,14 +3,14 @@
 // Includes
 #include <unordered_map>
 #include "engine/core/NonCopyable.h"
-#include "engine/renderer/Renderer.h"
+#include "engine/renderer/GraphicsDevice.h"
 #include "engine/window/Window.h"
 
 namespace gltut
 {
 
 /// Renderer base class
-class RendererBase : public Renderer, public NonCopyable
+class RendererBase : public GraphicsDevice, public NonCopyable
 {
 public:
 	/// Invalid mesh index

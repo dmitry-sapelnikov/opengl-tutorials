@@ -12,7 +12,7 @@ RenderPassC::RenderPassC(
 	const Color* clearColor,
 	bool clearDepth,
 	const Rectangle2u* viewport,
-	Renderer& renderer,
+	GraphicsDevice& renderer,
 	const ShaderViewpointBindings& viewpointBindings) noexcept :
 
 	mViewpoint(viewpoint),
