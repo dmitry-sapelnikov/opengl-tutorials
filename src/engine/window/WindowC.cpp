@@ -255,24 +255,17 @@ void WindowC::setTitle(const char* title) noexcept
 
 void WindowC::showFPS(bool show) noexcept
 {
-	if (show)
-	{
-		if (mFPSCounter == nullptr)
-		{
-			GLTUT_CATCH_ALL_BEGIN
-				mFPSCounter = std::make_unique<FPSCounter>();
-			GLTUT_CATCH_ALL_END("Failed to show FPS")
-		}
-	}
-	else
-	{
-		mFPSCounter.reset();
-	}
+	mShowFPS = show;
 }
 
 const Point2u& WindowC::getSize() const noexcept
 {
 	return mSize;
+}
+
+u32 WindowC::getFPS() noexcept
+{
+	return mFPS;
 }
 
 void WindowC::addEventHandler(EventHandler* handler) noexcept
@@ -337,14 +330,15 @@ bool WindowC::update() noexcept
 
 	CALL_WINAPI_WITH_ASSERT(SwapBuffers((HDC)mDeviceContext));
 
-	if (mFPSCounter != nullptr)
+	if (u32 fps = static_cast<u32>(mFPSCounter.tick()))
 	{
-		if (auto fps = mFPSCounter->tick())
-		{
-			setTitle((" [FPS: " + std::to_string(fps) + "]").c_str());
-		}
+		mFPS = fps;
 	}
 
+	if (mShowFPS)
+	{
+		setTitle((" [FPS: " + std::to_string(mFPS) + "]").c_str());
+	}
 	return true;
 }
 
