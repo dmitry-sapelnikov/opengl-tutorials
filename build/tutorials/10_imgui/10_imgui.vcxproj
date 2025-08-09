@@ -22,18 +22,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\src\tutorials\9_shadows\assets\light_shader.fs" />
-    <None Include="..\..\..\src\tutorials\9_shadows\assets\light_shader.vs" />
-    <None Include="copy_assets.targets" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\..\src\tutorials\9_shadows\9_shadows.cpp" />
+    <ClCompile Include="..\..\..\src\tutorials\10_imgui\10_imgui.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{2D482011-36B4-4120-B295-589B4B4904E4}</ProjectGuid>
-    <RootNamespace>9_shadows</RootNamespace>
+    <ProjectGuid>{75F3418A-4E07-470C-90E3-28E7FEF531C4}</ProjectGuid>
+    <RootNamespace>10_imgui</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -106,6 +101,5 @@
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="copy_assets.targets" />
   </ImportGroup>
 </Project>

@@ -54,8 +54,14 @@ public:
 	*/
 	bool update() noexcept;
 
+	/// Returns the window handle
+	void* getHandle() const noexcept final
+	{
+		return mWindow;
+	}
+
 	/// Returns the device context
-	void* getDeviceContext() const noexcept
+	void* getDeviceContext() const noexcept final
 	{
 		return mDeviceContext;
 	}
