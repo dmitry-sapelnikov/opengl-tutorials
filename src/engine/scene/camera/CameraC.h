@@ -166,12 +166,14 @@ public:
 	void setAspectRatio(const float* aspectRatio) noexcept final;
 
 	/// Called when the window is resized
-	void onEvent(const Event& event) noexcept final
+	bool onEvent(const Event& event) noexcept final
 	{
 		if (event.type == Event::Type::WINDOW_RESIZE)
 		{
 			update();
 		}
+		// Don't stop event propagation
+		return false;
 	}
 
 private:

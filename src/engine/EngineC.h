@@ -54,7 +54,7 @@ public:
 	}
 
 	/// Called when the window is resized
-	void onEvent(const Event& event) noexcept final;
+	bool onEvent(const Event& event) noexcept final;
 
 private:
 	/// The window

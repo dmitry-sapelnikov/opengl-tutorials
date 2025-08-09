@@ -94,7 +94,7 @@ void FPSCameraControllerC::updateCamera(
 	}
 }
 
-void FPSCameraControllerC::onEvent(const Event& event) noexcept
+bool FPSCameraControllerC::onEvent(const Event& event) noexcept
 {
 	switch (event.type)
 	{
@@ -123,6 +123,8 @@ void FPSCameraControllerC::onEvent(const Event& event) noexcept
 		mMousePosition = event.mouse.position;
 		break;
 	}
+	/// Dont't stop the event propagation
+	return false;
 }
 
 //	Global functions
