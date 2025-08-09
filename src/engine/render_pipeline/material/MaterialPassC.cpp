@@ -56,19 +56,19 @@ void MaterialPassC::bind(const RenderGeometry* geometry) const noexcept
 {
 	if (geometry == nullptr ||
 		mShaderBinding == nullptr || 
-		mShaderBinding->getShader() == nullptr ||
-		mShaderBinding->getShader()->getRenderer() == nullptr)
+		mShaderBinding->getShader() == nullptr)
 	{
 		return;
 	}
 
 	mShaderBinding->update(geometry);
 	mShaderArguments.bind();
-	
-	Renderer& renderer = *mShaderBinding->getShader()->getRenderer();
 	for (u32 i = 0; i < mTextureSlotsCount; ++i)
 	{
-		renderer.bindTexture(mTextures[i], i);
+		if (mTextures[i] != nullptr)
+		{
+			mTextures[i]->bind(i);
+		}
 	}
 }
 

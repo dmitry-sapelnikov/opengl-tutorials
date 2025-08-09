@@ -43,11 +43,9 @@ unsigned createShader(
 }
 
 ShaderOpenGL::ShaderOpenGL(
-	Renderer& renderer,
 	const std::string& vertexCode,
 	const std::string& fragmentCode) :
 
-	mRenderer(renderer),
 	mProgram(0)
 {
 	unsigned vertexShader = createShader(

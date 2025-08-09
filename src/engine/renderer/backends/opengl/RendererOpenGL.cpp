@@ -138,7 +138,7 @@ std::unique_ptr<Shader> RendererOpenGL::createBackendShader(
 	const char* vertexShader,
 	const char* fragmentShader)
 {
-	return std::make_unique<ShaderOpenGL>(*this, vertexShader, fragmentShader);
+	return std::make_unique<ShaderOpenGL>(vertexShader, fragmentShader);
 }
 
 std::unique_ptr<Texture> RendererOpenGL::createBackendTexture(
