@@ -9,28 +9,34 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
+    <Filter Include="src\imgui">
+      <UniqueIdentifier>{39d35ed3-6aaa-49c9-9a39-922d586c48bb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\imgui\imgui.cpp">
+    <ClCompile Include="..\..\src\imgui\EngineImguiC.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\imgui\imgui_impl_opengl3.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="..\..\src\imgui\imgui\imgui.cpp">
+      <Filter>src\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\imgui\imgui_draw.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="..\..\src\imgui\imgui\imgui_demo.cpp">
+      <Filter>src\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\imgui\imgui_widgets.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="..\..\src\imgui\imgui\imgui_draw.cpp">
+      <Filter>src\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\imgui\imgui_tables.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="..\..\src\imgui\imgui\imgui_impl_opengl3.cpp">
+      <Filter>src\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\imgui\imgui_impl_win32.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="..\..\src\imgui\imgui\imgui_impl_win32.cpp">
+      <Filter>src\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\imgui\imgui_demo.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="..\..\src\imgui\imgui\imgui_tables.cpp">
+      <Filter>src\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\imgui\imgui\imgui_widgets.cpp">
+      <Filter>src\imgui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -40,26 +46,32 @@
     <ClInclude Include="..\..\include\imgui\imgui.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\imgui\imgui_impl_opengl3.h">
+    <ClInclude Include="..\..\include\imgui\EngineImgui.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\imgui\imgui_impl_opengl3_loader.h">
-      <Filter>include</Filter>
+    <ClInclude Include="..\..\src\imgui\EngineImguiC.h">
+      <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\imgui\imgui_internal.h">
-      <Filter>include</Filter>
+    <ClInclude Include="..\..\src\imgui\imgui\imgui_impl_opengl3.h">
+      <Filter>src\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\imgui\imgui_impl_win32.h">
-      <Filter>include</Filter>
+    <ClInclude Include="..\..\src\imgui\imgui\imgui_impl_opengl3_loader.h">
+      <Filter>src\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\imgui\imstb_rectpack.h">
-      <Filter>include</Filter>
+    <ClInclude Include="..\..\src\imgui\imgui\imgui_impl_win32.h">
+      <Filter>src\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\imgui\imstb_textedit.h">
-      <Filter>include</Filter>
+    <ClInclude Include="..\..\src\imgui\imgui\imgui_internal.h">
+      <Filter>src\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\imgui\imstb_truetype.h">
-      <Filter>include</Filter>
+    <ClInclude Include="..\..\src\imgui\imgui\imstb_rectpack.h">
+      <Filter>src\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\imgui\imgui\imstb_textedit.h">
+      <Filter>src\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\imgui\imgui\imstb_truetype.h">
+      <Filter>src\imgui</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
