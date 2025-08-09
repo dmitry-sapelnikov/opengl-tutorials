@@ -141,7 +141,6 @@ int main()
 		GLTUT_CHECK(engine, "Failed to create engine");
 
 		engine->getWindow()->setTitle("Lighting");
-		engine->getWindow()->showFPS(true);
 
 		// Create the Imgui connector
 		imgui = gltut::createEngineImgui(engine.get());
@@ -232,6 +231,7 @@ int main()
 			ImGui::SetNextWindowSize({ 200, 400 }, ImGuiCond_FirstUseEver);
 			ImGui::Begin("Settings");
 
+			ImGui::Text("FPS: %u", engine->getWindow()->getFPS());
 			ImGui::Text("Time: %.2f seconds", time);
 
 			// Right azimuth numeric control with range 0 to 360 degrees
