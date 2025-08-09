@@ -143,11 +143,12 @@ void MouseCameraControllerC::updateCamera(u64, u32) noexcept
 	}
 }
 
-void MouseCameraControllerC::onEvent(const Event& event) noexcept
+bool MouseCameraControllerC::onEvent(const Event& event) noexcept
 {
 	if (event.type != Event::Type::MOUSE)
 	{
-		return;
+		// Don't stop event propagation
+		return false;
 	}
 
 	mMousePosition = event.mouse.position;
@@ -164,6 +165,8 @@ void MouseCameraControllerC::onEvent(const Event& event) noexcept
 			mTargetMinDistance,
 			mTargetMaxDistance);
 	}
+	// Don't stop event propagation
+	return false;
 }
 
 //	Global functions

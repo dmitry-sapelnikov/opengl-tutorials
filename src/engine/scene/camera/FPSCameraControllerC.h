@@ -35,8 +35,11 @@ public:
 		u64 timeMs,
 		u32 timeDeltaMs) noexcept final;
 
-	///	Event handler
-	virtual void onEvent(const Event& event) noexcept final;
+	/**
+		\brief Called when an event occurs
+		\return True if the event was handled, false to continue processing
+	*/
+	virtual bool onEvent(const Event& event) noexcept final;
 
 private:
 	/// The camera

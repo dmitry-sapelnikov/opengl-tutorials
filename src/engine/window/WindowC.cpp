@@ -24,17 +24,23 @@ public:
 	{
 	}
 
-	void onEvent(const Event& event) noexcept override
+	bool onEvent(const Event& event) noexcept override
 	{
-		for (auto callback : mWindow.mEventHandlers)
-		{
-			callback->onEvent(event);
-		}
-
 		if (event.type == Event::Type::WINDOW_RESIZE)
 		{
 			mWindow.updateSize();
 		}
+
+		for (auto callback : mWindow.mEventHandlers)
+		{
+			if (callback->onEvent(event))
+			{
+				break;
+			}
+		}
+		/// It is the root event handler, 
+		/// so we stop the event propagation
+		return true;
 	}
 
 	void swapBuffers() noexcept

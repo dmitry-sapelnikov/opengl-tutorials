@@ -684,11 +684,15 @@ IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandlerEx(HWND hwnd, UINT msg, WPA
         if (msg == WM_RBUTTONDOWN || msg == WM_RBUTTONDBLCLK) { button = 1; }
         if (msg == WM_MBUTTONDOWN || msg == WM_MBUTTONDBLCLK) { button = 2; }
         if (msg == WM_XBUTTONDOWN || msg == WM_XBUTTONDBLCLK) { button = (GET_XBUTTON_WPARAM(wParam) == XBUTTON1) ? 3 : 4; }
-        HWND hwnd_with_capture = ::GetCapture();
-        if (bd->MouseButtonsDown != 0 && hwnd_with_capture != hwnd) // Did we externally lost capture?
-            bd->MouseButtonsDown = 0;
-        if (bd->MouseButtonsDown == 0 && hwnd_with_capture == nullptr)
-            ::SetCapture(hwnd); // Allow us to read mouse coordinates when dragging mouse outside of our window bounds.
+        
+        /// \FIXME: this code is currently commented because it causes jitter of the camera drag
+
+        //HWND hwnd_with_capture = ::GetCapture();
+        //if (bd->MouseButtonsDown != 0 && hwnd_with_capture != hwnd) // Did we externally lost capture?
+        //    bd->MouseButtonsDown = 0;
+        //if (bd->MouseButtonsDown == 0 && hwnd_with_capture == nullptr)
+        //    ::SetCapture(hwnd); // Allow us to read mouse coordinates when dragging mouse outside of our window bounds.
+
         bd->MouseButtonsDown |= 1 << button;
         io.AddMouseSourceEvent(mouse_source);
         io.AddMouseButtonEvent(button, true);

@@ -50,13 +50,16 @@ public:
 	{
 	}
 
-	void onEvent(const Event& event) noexcept
+	bool onEvent(const Event& event) noexcept
 	{
 		ImGui_ImplWin32_WndProcHandler(
 			mHwnd,
 			(UINT)event.raw.message,
 			(WPARAM)event.raw.wParam,
 			(LPARAM)event.raw.lParam);
+
+		/// Stop event propagation when the user interacts with GUI
+		return ImGui::IsAnyItemActive();
 	}
 
 private:

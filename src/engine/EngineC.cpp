@@ -22,7 +22,6 @@ EngineC::EngineC(u32 windowWidth, u32 windowHeight)
 	auto renderer = std::make_unique<RendererOpenGL>(*mWindow);
 	GLTUT_CHECK(renderer != nullptr, "Failed to create the renderer");
 
-	//	First add the renderer as a handler, then the engine
 	mWindow->addEventHandler(this);
 
 	mRenderPipeline = std::make_unique<RenderPipelineC>(*renderer);
@@ -56,12 +55,14 @@ bool EngineC::update() noexcept
 	return mWindow->update();
 }
 
-void EngineC::onEvent(const Event& event) noexcept
+bool EngineC::onEvent(const Event& event) noexcept
 {
 	if (event.type == Event::Type::WINDOW_RESIZE)
 	{
 		mRenderPipeline->execute();
 	}
+	// Don't stop event propagation
+	return false;
 }
 
 // Global functions
