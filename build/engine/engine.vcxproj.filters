@@ -218,9 +218,6 @@
     <ClInclude Include="..\..\src\engine\scene\SceneC.h">
       <Filter>src\scene</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\engine\window\FPSCounter.h">
-      <Filter>src\window</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\engine\window\WindowC.h">
       <Filter>src\window</Filter>
     </ClInclude>
@@ -443,6 +440,9 @@
     <ClInclude Include="..\..\include\engine\graphics\shader\ShaderParameters.h">
       <Filter>include\graphics\shader</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\engine\core\FPSCounter.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\engine\EngineC.cpp">
@@ -465,9 +465,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\engine\scene\SceneC.cpp">
       <Filter>src\scene</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\engine\window\FPSCounter.cpp">
-      <Filter>src\window</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\engine\window\WindowC.cpp">
       <Filter>src\window</Filter>
@@ -546,6 +543,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\engine\graphics\backends\opengl\TextureOpenGL.cpp">
       <Filter>src\graphics\backends\opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\core\FPSCounter.cpp">
+      <Filter>src\core</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

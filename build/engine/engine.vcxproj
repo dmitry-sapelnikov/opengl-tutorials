@@ -66,6 +66,7 @@
     <ClInclude Include="..\..\include\engine\window\Keycodes.h" />
     <ClInclude Include="..\..\include\engine\window\Window.h" />
     <ClInclude Include="..\..\src\engine\core\File.h" />
+    <ClInclude Include="..\..\src\engine\core\FPSCounter.h" />
     <ClInclude Include="..\..\src\engine\EngineC.h" />
     <ClInclude Include="..\..\src\engine\factory\FactoryC.h" />
     <ClInclude Include="..\..\src\engine\factory\geometry\GeometryFactoryC.h" />
@@ -109,11 +110,11 @@
     <ClInclude Include="..\..\src\engine\scene\nodes\SceneNodeT.h" />
     <ClInclude Include="..\..\src\engine\scene\SceneC.h" />
     <ClInclude Include="..\..\src\engine\scene\shader\SceneShaderBindingC.h" />
-    <ClInclude Include="..\..\src\engine\window\FPSCounter.h" />
     <ClInclude Include="..\..\src\engine\window\WindowC.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\engine\core\File.cpp" />
+    <ClCompile Include="..\..\src\engine\core\FPSCounter.cpp" />
     <ClCompile Include="..\..\src\engine\EngineC.cpp" />
     <ClCompile Include="..\..\src\engine\factory\FactoryC.cpp" />
     <ClCompile Include="..\..\src\engine\factory\geometry\GeometryFactoryC.cpp" />
@@ -145,7 +146,6 @@
     <ClCompile Include="..\..\src\engine\scene\camera\MouseCameraControllerC.cpp" />
     <ClCompile Include="..\..\src\engine\scene\SceneC.cpp" />
     <ClCompile Include="..\..\src\engine\scene\shader\SceneShaderBindingC.cpp" />
-    <ClCompile Include="..\..\src\engine\window\FPSCounter.cpp" />
     <ClCompile Include="..\..\src\engine\window\WindowC.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
