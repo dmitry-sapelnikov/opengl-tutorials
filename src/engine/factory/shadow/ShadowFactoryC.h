@@ -13,7 +13,7 @@ class ShadowFactoryC : public ShadowFactory, public NonCopyable
 {
 public:
 	/// Constructor
-	ShadowFactoryC(RenderPipeline& renderer) noexcept :
+	ShadowFactoryC(Renderer& renderer) noexcept :
 		mRenderer(renderer)
 	{
 	}
@@ -32,7 +32,7 @@ public:
 
 private:
 	/// The device
-	RenderPipeline& mRenderer;
+	Renderer& mRenderer;
 
 	/// The shadow maps
 	std::unordered_map<const LightNode*, ShadowMap> mShadowMaps;

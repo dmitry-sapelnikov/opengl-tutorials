@@ -1,7 +1,7 @@
 #pragma once
 
 // Includes
-#include "RenderPipelineC.h"
+#include "RendererC.h"
 #include <algorithm>
 #include "./RenderPassC.h"
 #include "./material/ShaderMaterialBindingC.h"
@@ -32,12 +32,12 @@ namespace
 }
 
 //	Global classes
-RenderPipelineC::RenderPipelineC(GraphicsDevice& device) noexcept :
+RendererC::RendererC(GraphicsDevice& device) noexcept :
 	mDevice(device)
 {
 }
 
-ShaderViewpointBinding* RenderPipelineC::createShaderViewpointBinding(
+ShaderViewpointBinding* RendererC::createShaderViewpointBinding(
 	Shader* shader) noexcept
 {
 	return createElement<ShaderViewpointBinding, ShaderViewpointBindingC>(
@@ -46,7 +46,7 @@ ShaderViewpointBinding* RenderPipelineC::createShaderViewpointBinding(
 		shader);
 }
 
-void RenderPipelineC::removeShaderMaterialBinding(
+void RendererC::removeShaderMaterialBinding(
 	ShaderMaterialBinding* binding) noexcept
 {
 	auto it = std::find_if(
@@ -62,7 +62,7 @@ void RenderPipelineC::removeShaderMaterialBinding(
 	}
 }
 
-ShaderMaterialBinding* RenderPipelineC::createShaderMaterialBinding(
+ShaderMaterialBinding* RendererC::createShaderMaterialBinding(
 	Shader* shader) noexcept
 {
 	return createElement<ShaderMaterialBinding, ShaderMaterialBindingC>(
@@ -71,7 +71,7 @@ ShaderMaterialBinding* RenderPipelineC::createShaderMaterialBinding(
 		shader);
 }
 
-void RenderPipelineC::removeShaderViewpointBinding(
+void RendererC::removeShaderViewpointBinding(
 	ShaderViewpointBinding* binding) noexcept
 {
 	auto it = std::find_if(
@@ -87,14 +87,14 @@ void RenderPipelineC::removeShaderViewpointBinding(
 	}
 }
 
-Material* RenderPipelineC::createMaterial() noexcept
+Material* RendererC::createMaterial() noexcept
 {
 	return createElement<Material, MaterialC>(
 		mMaterials,
 		"material");
 }
 
-void RenderPipelineC::removeMaterial(Material* material) noexcept
+void RendererC::removeMaterial(Material* material) noexcept
 {
 	auto it = std::find_if(
 		mMaterials.begin(),
@@ -109,7 +109,7 @@ void RenderPipelineC::removeMaterial(Material* material) noexcept
 	}
 }
 
-RenderGeometry* RenderPipelineC::createGeometry(
+RenderGeometry* RendererC::createGeometry(
 	const Mesh* geometry,
 	const Material* material,
 	const Matrix4& transform) noexcept
@@ -122,14 +122,14 @@ RenderGeometry* RenderPipelineC::createGeometry(
 		transform);
 }
 
-RenderGroup* RenderPipelineC::createGroup() noexcept
+RenderGroup* RendererC::createGroup() noexcept
 {
 	return createElement<RenderGroup, RenderGroupC>(
 		mGroups,
 		"render group");
 }
 
-RenderPass* RenderPipelineC::createPass(
+RenderPass* RendererC::createPass(
 	const Viewpoint* viewpoint,
 	const RenderObject* object,
 	Framebuffer* target,
@@ -155,7 +155,7 @@ RenderPass* RenderPipelineC::createPass(
 	return result;
 }
 
-void RenderPipelineC::removePass(RenderPass* pass) noexcept
+void RendererC::removePass(RenderPass* pass) noexcept
 {
 	auto findResult = std::find_if(
 		mPasses.begin(),
@@ -171,7 +171,7 @@ void RenderPipelineC::removePass(RenderPass* pass) noexcept
 	}
 }
 
-void RenderPipelineC::setPassPriority(RenderPass* pass, int32 priority) noexcept
+void RendererC::setPassPriority(RenderPass* pass, int32 priority) noexcept
 {
 	auto findResult = std::find_if(
 		mPasses.begin(),
@@ -194,7 +194,7 @@ void RenderPipelineC::setPassPriority(RenderPass* pass, int32 priority) noexcept
 	}
 }
 
-void RenderPipelineC::execute() noexcept
+void RendererC::execute() noexcept
 {
 	for (const auto& pass : mPasses)
 	{

@@ -219,7 +219,7 @@ static constexpr float DEFAULT_SHINESS = 32.0f;
 
 // Global functions
 ShaderMaterialBinding* createPhongShader(
-	RenderPipeline& renderer,
+	Renderer& renderer,
 	Scene& scene,
 	u32 maxDirectionalLights,
 	u32 maxPointLights,

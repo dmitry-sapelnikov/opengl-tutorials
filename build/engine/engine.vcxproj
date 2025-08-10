@@ -51,7 +51,7 @@
     <ClInclude Include="..\..\include\engine\renderer\objects\RenderGroup.h" />
     <ClInclude Include="..\..\include\engine\renderer\objects\RenderObject.h" />
     <ClInclude Include="..\..\include\engine\renderer\RenderPass.h" />
-    <ClInclude Include="..\..\include\engine\renderer\RenderPipeline.h" />
+    <ClInclude Include="..\..\include\engine\renderer\Renderer.h" />
     <ClInclude Include="..\..\include\engine\renderer\viewpoint\ShaderViewpointBinding.h" />
     <ClInclude Include="..\..\include\engine\renderer\viewpoint\Viewpoint.h" />
     <ClInclude Include="..\..\include\engine\scene\camera\Camera.h" />
@@ -97,7 +97,7 @@
     <ClInclude Include="..\..\src\engine\renderer\objects\RenderGeometryC.h" />
     <ClInclude Include="..\..\src\engine\renderer\objects\RenderGroupC.h" />
     <ClInclude Include="..\..\src\engine\renderer\RenderPassC.h" />
-    <ClInclude Include="..\..\src\engine\renderer\RenderPipelineC.h" />
+    <ClInclude Include="..\..\src\engine\renderer\RendererC.h" />
     <ClInclude Include="..\..\src\engine\renderer\viewpoint\ShaderViewpointBindingC.h" />
     <ClInclude Include="..\..\src\engine\renderer\viewpoint\ViewpointC.h" />
     <ClInclude Include="..\..\src\engine\scene\camera\CameraC.h" />
@@ -138,7 +138,7 @@
     <ClCompile Include="..\..\src\engine\renderer\material\ShaderMaterialBindingC.cpp" />
     <ClCompile Include="..\..\src\engine\renderer\objects\RenderGeometryC.cpp" />
     <ClCompile Include="..\..\src\engine\renderer\RenderPassC.cpp" />
-    <ClCompile Include="..\..\src\engine\renderer\RenderPipelineC.cpp" />
+    <ClCompile Include="..\..\src\engine\renderer\RendererC.cpp" />
     <ClCompile Include="..\..\src\engine\renderer\viewpoint\ShaderViewpointBindingC.cpp" />
     <ClCompile Include="..\..\src\engine\scene\camera\CameraC.cpp" />
     <ClCompile Include="..\..\src\engine\scene\camera\FPSCameraControllerC.cpp" />

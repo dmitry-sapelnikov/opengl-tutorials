@@ -62,7 +62,7 @@ int main()
 
 		GLTUT_CHECK(mesh != nullptr, "Failed to create mesh");
 
-		auto* renderPipeline = engine->getRenderPipeline();
+		auto* renderPipeline = engine->getRenderer();
 		auto* binding = renderPipeline->createShaderMaterialBinding(shader);
 		GLTUT_CHECK(binding != nullptr, "Failed to create shader binding");
 

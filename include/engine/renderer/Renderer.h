@@ -11,11 +11,11 @@ namespace gltut
 {
 //	Global classes
 ///	Represents a render pipeline for the scene
-class RenderPipeline
+class Renderer
 {
 public:
 	/// Virtual destructor
-	virtual ~RenderPipeline() noexcept = default;
+	virtual ~Renderer() noexcept = default;
 
 	/// Returns the device
 	virtual GraphicsDevice* getDevice() noexcept = 0;

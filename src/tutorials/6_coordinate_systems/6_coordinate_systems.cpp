@@ -35,7 +35,7 @@ int main()
 		shader->setInt("texture1", 0);
 		shader->setInt("texture2", 1);
 
-		auto* renderPipeline = engine->getRenderPipeline();
+		auto* renderPipeline = engine->getRenderer();
 		auto* shaderBinding = renderPipeline->createShaderMaterialBinding(shader);
 		GLTUT_CHECK(shaderBinding != nullptr, "Failed to create shader binding");
 		shaderBinding->bind(gltut::ShaderMaterialBinding::Parameter::GEOMETRY_MATRIX, "model");

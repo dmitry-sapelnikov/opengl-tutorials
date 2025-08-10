@@ -5,7 +5,7 @@
 #include <chrono>
 #include "engine/core/NonCopyable.h"
 #include "engine/scene/Scene.h"
-#include "engine/renderer/RenderPipeline.h"
+#include "engine/renderer/Renderer.h"
 
 #include "./camera/CameraC.h"
 #include "./shader/SceneShaderBindingC.h"
@@ -22,7 +22,7 @@ public:
 	/// Constructor
 	SceneC(
 		Window& window,
-		RenderPipeline& renderer);
+		Renderer& renderer);
 
 	/// Returns the render object for the scene
 	const RenderObject* getRenderObject() const noexcept final
@@ -105,7 +105,7 @@ private:
 	Window& mWindow;
 
 	/// The device
-	RenderPipeline& mRenderer;
+	Renderer& mRenderer;
 
 	/// The scene render group
 	RenderGroup* mRenderGroup = nullptr;

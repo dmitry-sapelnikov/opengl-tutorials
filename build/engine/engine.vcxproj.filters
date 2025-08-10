@@ -308,10 +308,10 @@
     <ClInclude Include="..\..\src\engine\scene\camera\CameraViewpointC.h">
       <Filter>src\scene\camera</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\engine\renderer\RenderPipelineC.h">
+    <ClInclude Include="..\..\src\engine\renderer\RendererC.h">
       <Filter>src\renderer</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\engine\renderer\RenderPipeline.h">
+    <ClInclude Include="..\..\include\engine\renderer\Renderer.h">
       <Filter>include\renderer</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\engine\renderer\objects\RenderGeometry.h">
@@ -496,7 +496,7 @@
     <ClCompile Include="..\..\src\engine\factory\material\flat_color\FlatColorShader.cpp">
       <Filter>src\factory\material\flat_color</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\engine\renderer\RenderPipelineC.cpp">
+    <ClCompile Include="..\..\src\engine\renderer\RendererC.cpp">
       <Filter>src\renderer</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\engine\renderer\RenderPassC.cpp">

@@ -5,7 +5,7 @@ namespace gltut
 {
 // Global classes
 ShadowMap::ShadowMap(
-	RenderPipeline& renderer,
+	Renderer& renderer,
 	const LightNode& light,
 	const RenderObject& shadowCaster,
 	float frustumSize,

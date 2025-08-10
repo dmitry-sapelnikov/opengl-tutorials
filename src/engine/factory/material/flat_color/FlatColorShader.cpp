@@ -47,7 +47,7 @@ void main()
 })";
 
 // Global functions
-ShaderMaterialBinding* createFlatColorShader(RenderPipeline& renderPipeline) noexcept
+ShaderMaterialBinding* createFlatColorShader(Renderer& renderPipeline) noexcept
 {
 	Shader* shader = nullptr;
 	ShaderViewpointBinding* viewpointBinding = nullptr;

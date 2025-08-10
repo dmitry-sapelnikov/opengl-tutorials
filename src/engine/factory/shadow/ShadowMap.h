@@ -21,7 +21,7 @@ public:
 		\throw std::runtime_error If the shadow map could not be created
 	*/
 	ShadowMap(
-		RenderPipeline& renderer,
+		Renderer& renderer,
 		const LightNode& light,
 		const RenderObject& shadowCaster,
 		float frustumSize,
@@ -49,7 +49,7 @@ public:
 
 private:
 	/// The device
-	RenderPipeline& mRenderer;
+	Renderer& mRenderer;
 
 	/// The light node for which the shadow map is created
 	const LightNode& mLight;

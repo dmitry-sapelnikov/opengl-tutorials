@@ -5,7 +5,7 @@
 #include <memory>
 
 #include "engine/core/NonCopyable.h"
-#include "engine/renderer/RenderPipeline.h"
+#include "engine/renderer/Renderer.h"
 #include "engine/graphics/GraphicsDevice.h"
 #include "engine/scene/Scene.h"
 
@@ -13,11 +13,11 @@ namespace gltut
 {
 //	Global classes
 ///	Represents a render pipeline for the scene
-class RenderPipelineC final : public RenderPipeline, public NonCopyable
+class RendererC final : public Renderer, public NonCopyable
 {
 public:
 	/// Constructor
-	explicit RenderPipelineC(GraphicsDevice& device) noexcept;
+	explicit RendererC(GraphicsDevice& device) noexcept;
 
 	/// Returns the device
 	GraphicsDevice* getDevice() noexcept

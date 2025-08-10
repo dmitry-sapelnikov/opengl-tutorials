@@ -7,7 +7,7 @@ namespace gltut
 
 SceneC::SceneC(
 	Window& window,
-	RenderPipeline& renderer) :
+	Renderer& renderer) :
 
 	mWindow(window),
 	mRenderer(renderer)

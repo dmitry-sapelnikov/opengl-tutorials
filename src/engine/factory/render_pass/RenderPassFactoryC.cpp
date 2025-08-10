@@ -55,7 +55,7 @@ void main()
 
 // Local functions
 /// Creates a texture-to-render target shader
-ShaderMaterialBinding* createShader(RenderPipeline& renderer, Texture::Format format)
+ShaderMaterialBinding* createShader(Renderer& renderer, Texture::Format format)
 {
 	Shader* shader = nullptr;
 	switch (format)
@@ -93,7 +93,7 @@ ShaderMaterialBinding* createShader(RenderPipeline& renderer, Texture::Format fo
 }
 
 /// Creates a render quad for texture-to-window rendering
-Mesh* createRenderQuad(RenderPipeline& renderer) noexcept
+Mesh* createRenderQuad(Renderer& renderer) noexcept
 {
 	Mesh* result = nullptr;
 

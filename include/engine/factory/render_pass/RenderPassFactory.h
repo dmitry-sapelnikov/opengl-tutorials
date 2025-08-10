@@ -1,7 +1,7 @@
 #pragma once
 
 // Includes
-#include "engine/renderer/RenderPipeline.h"
+#include "engine/renderer/Renderer.h"
 
 namespace gltut
 {

@@ -53,7 +53,7 @@ void createBoxes(
 
 /// Creates lights
 gltut::GeometryNode* createLight(
-	gltut::RenderPipeline& renderer,
+	gltut::Renderer& renderer,
 	gltut::Scene& scene,
 	gltut::ShaderMaterialBinding* lightShaderBinding,
 	gltut::Mesh* lightMesh,
@@ -88,7 +88,7 @@ void createLights(
 	directionalLight = nullptr;
 
 	gltut::Scene& scene = *engine.getScene();
-	gltut::RenderPipeline& renderer = *engine.getRenderPipeline();
+	gltut::Renderer& renderer = *engine.getRenderer();
 
 	auto* lightMesh = engine.getFactory()->getGeometry()->createSphere(0.2f, 10);
 	GLTUT_CHECK(lightMesh, "Failed to create light mesh");

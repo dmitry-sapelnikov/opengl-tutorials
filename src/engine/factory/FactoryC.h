@@ -18,7 +18,7 @@ class FactoryC final : public Factory, public NonCopyable
 public:
 	// Constructor
 	FactoryC(
-		RenderPipeline& renderer,
+		Renderer& renderer,
 		Scene& scene) noexcept;
 
 	/// Returns the geometry factory

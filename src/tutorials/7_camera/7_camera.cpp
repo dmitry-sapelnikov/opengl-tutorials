@@ -22,7 +22,7 @@ int main()
 		engine->getWindow()->setTitle("Camera");
 		engine->getWindow()->showFPS(true);
 
-		auto* device = engine->getRenderPipeline();
+		auto* device = engine->getRenderer();
 		auto* scene = engine->getScene();
 		auto* mesh = engine->getFactory()->getGeometry()->createBox(1.0f, 1.0f, 1.0f);
 

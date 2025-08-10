@@ -80,7 +80,7 @@ int main()
 			VERTEX_SHADER_SOURCE_CODE,
 			FRAGMENT_SHADER_SOURCE_CODE);
 
-		auto* renderPipeline = engine->getRenderPipeline();
+		auto* renderPipeline = engine->getRenderer();
 
 		auto* shaderBinding = renderPipeline->createShaderMaterialBinding(shader);
 		

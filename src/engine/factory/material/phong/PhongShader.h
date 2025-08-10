@@ -2,14 +2,14 @@
 
 // Includes
 #include "engine/scene/Scene.h"
-#include "engine/renderer/RenderPipeline.h"
+#include "engine/renderer/Renderer.h"
 
 namespace gltut
 {
 // Global functions
 /// Creates a Phong shader
 ShaderMaterialBinding* createPhongShader(
-	RenderPipeline& renderer,
+	Renderer& renderer,
 	Scene& scene,
 	u32 maxDirectionalLights,
 	u32 maxPointLights,

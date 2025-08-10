@@ -49,7 +49,7 @@ int main()
 		shader->setInt("texture1", 0);
 		shader->setInt("texture2", 1);
 
-		auto* renderPipeline = engine->getRenderPipeline();
+		auto* renderPipeline = engine->getRenderer();
 		auto* binding = renderPipeline->createShaderMaterialBinding(shader);
 		GLTUT_CHECK(binding != nullptr, "Failed to create shader binding");
 

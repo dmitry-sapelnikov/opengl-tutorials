@@ -6,7 +6,7 @@ namespace gltut
 
 // Constructor
 FactoryC::FactoryC(
-	RenderPipeline& renderer,
+	Renderer& renderer,
 	Scene& scene) noexcept :
 
 	mGeometry(*renderer.getDevice()),

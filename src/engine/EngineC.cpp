@@ -24,9 +24,9 @@ EngineC::EngineC(u32 windowWidth, u32 windowHeight)
 
 	mWindow->addEventHandler(this);
 
-	mRenderPipeline = std::make_unique<RenderPipelineC>(*device);
-	mScene = std::make_unique<SceneC>(*mWindow, *mRenderPipeline);
-	mRenderer = std::move(device);
+	mRenderer = std::make_unique<RendererC>(*device);
+	mScene = std::make_unique<SceneC>(*mWindow, *mRenderer);
+	mDevice = std::move(device);
 
 	// Create the default render pass
 	// It uses:
@@ -34,24 +34,24 @@ EngineC::EngineC(u32 windowWidth, u32 windowHeight)
 	// - the current active scene camera
 	// - the window frame buffer
 	const Color clearColor(0.1f, 0.3f, 0.3f);
-	RenderPass* defaultPass = mRenderPipeline->createPass(
+	RenderPass* defaultPass = mRenderer->createPass(
 		mScene->getActiveCameraViewpoint(),
 		mScene->getRenderObject(),
-		mRenderer->getWindowFramebuffer(),
+		mDevice->getWindowFramebuffer(),
 		0,
 		&clearColor,
 		true,
 		nullptr);
 	GLTUT_CHECK(defaultPass != nullptr, "Cannot create the default render pass");
 
-	mFactory = std::make_unique<FactoryC>(*mRenderPipeline, *mScene);
+	mFactory = std::make_unique<FactoryC>(*mRenderer, *mScene);
 }
 
 bool EngineC::update() noexcept
 {
 	mScene->update();
 	mFactory->update();
-	mRenderPipeline->execute();
+	mRenderer->execute();
 	return mWindow->update();
 }
 
@@ -59,7 +59,7 @@ bool EngineC::onEvent(const Event& event) noexcept
 {
 	if (event.type == Event::Type::WINDOW_RESIZE)
 	{
-		mRenderPipeline->execute();
+		mRenderer->execute();
 	}
 	// Don't stop event propagation
 	return false;

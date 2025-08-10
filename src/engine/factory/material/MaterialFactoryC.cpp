@@ -7,7 +7,7 @@ namespace gltut
 {
 
 MaterialFactoryC::MaterialFactoryC(
-	RenderPipeline& renderer,
+	Renderer& renderer,
 	Scene& scene) noexcept :
 
 	mRenderer(renderer),
