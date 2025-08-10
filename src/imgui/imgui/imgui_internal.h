@@ -3794,7 +3794,7 @@ struct ImFontAtlasBuilder
     ImVec2i                     MaxRectSize;            // Largest rectangle to pack (de-facto used as a "minimum texture size")
     ImVec2i                     MaxRectBounds;          // Bottom-right most used pixels
     bool                        LockDisableResize;      // Disable resizing texture
-    bool                        PreloadedAllGlyphsRanges; // Set when missing ImGuiBackendFlags_RendererHasTextures features forces atlas to preload everything.
+    bool                        PreloadedAllGlyphsRanges; // Set when missing ImGuiBackendFlags_GraphicsDeviceHasTextures features forces atlas to preload everything.
 
     // Cache of all ImFontBaked
     ImStableVector<ImFontBaked,32> BakedPool;

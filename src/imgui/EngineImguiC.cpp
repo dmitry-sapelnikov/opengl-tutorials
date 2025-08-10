@@ -104,10 +104,10 @@ EngineImguiC::EngineImguiC(Engine& engine) :
 	mRenderObject = std::make_unique<ImguiRenderObject>();
 	GLTUT_CHECK(mRenderObject != nullptr, "Failed to create ImguiRenderObject");
 
-	mRenderPass = engine.getRenderPipeline()->createPass(
+	mRenderPass = engine.getRenderer()->createPass(
 		nullptr,
 		mRenderObject.get(),
-		engine.getRenderer()->getWindowFramebuffer(),
+		engine.getDevice()->getWindowFramebuffer(),
 		0,
 		nullptr,
 		false,
@@ -124,7 +124,7 @@ EngineImguiC::~EngineImguiC() noexcept
 {
 	if (mRenderPass != nullptr)
 	{
-		mEngine.getRenderPipeline()->removePass(mRenderPass);
+		mEngine.getRenderer()->removePass(mRenderPass);
 	}
 
 	if (mEventHandler != nullptr)

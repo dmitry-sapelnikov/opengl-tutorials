@@ -13,7 +13,7 @@ class RenderPassFactoryC : public RenderPassFactory, public NonCopyable
 {
 public:
 	/// Constructor
-	RenderPassFactoryC(RenderPipeline& renderer) noexcept :
+	RenderPassFactoryC(Renderer& renderer) noexcept :
 		mRenderer(renderer)
 	{
 	}
@@ -25,7 +25,7 @@ public:
 
 private:
 	/// The render pipeline
-	RenderPipeline& mRenderer;
+	Renderer& mRenderer;
 
 	/// Depth texture shader
 	std::array<ShaderMaterialBinding*, static_cast<size_t>(Texture::Format::TOTAL_COUNT)> mShaders;

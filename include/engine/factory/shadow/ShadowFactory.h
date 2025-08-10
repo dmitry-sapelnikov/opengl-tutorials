@@ -1,9 +1,9 @@
 #pragma once
 
 // Includes
-#include "engine/renderer/Texture.h"
-#include "engine/render_pipeline/viewpoint/Viewpoint.h"
-#include "engine/render_pipeline/objects/RenderObject.h"
+#include "engine/graphics/Texture.h"
+#include "engine/renderer/viewpoint/Viewpoint.h"
+#include "engine/renderer/objects/RenderObject.h"
 #include "engine/scene/nodes/LightNode.h"
 
 namespace gltut

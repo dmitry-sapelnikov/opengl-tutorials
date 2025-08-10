@@ -6,10 +6,10 @@
 #include "engine/Engine.h"
 #include "engine/factory/Factory.h"
 
-#include "./renderer/RendererBase.h"
+#include "./graphics/GraphicsDeviceBase.h"
 #include "./scene/SceneC.h"
 #include "./window/WindowC.h"
-#include "./render_pipeline/RenderPipelineC.h"
+#include "./renderer/RendererC.h"
 
 namespace gltut
 {
@@ -29,16 +29,16 @@ public:
 		return mWindow.get();
 	}
 
-	/// Returns the renderer
-	Renderer* getRenderer() noexcept final
+	/// Returns the device
+	GraphicsDevice* getDevice() noexcept final
 	{
-		return mRenderer.get();
+		return mDevice.get();
 	}
 
 	/// Returns the render pipeline
-	RenderPipeline* getRenderPipeline() noexcept final
+	Renderer* getRenderer() noexcept final
 	{
-		return mRenderPipeline.get();
+		return mRenderer.get();
 	}
 
 	/// Returns the scene
@@ -60,14 +60,14 @@ private:
 	/// The window
 	std::unique_ptr<WindowC> mWindow;
 
-	///	The renderer
-	std::unique_ptr<RendererBase> mRenderer;
+	///	The device
+	std::unique_ptr<GraphicsDeviceBase> mDevice;
 
 	/// The scene
 	std::unique_ptr<SceneC> mScene;
 
 	/// The render pipeline
-	std::unique_ptr<RenderPipelineC> mRenderPipeline;
+	std::unique_ptr<RendererC> mRenderer;
 
 	/// The geometry factory
 	std::unique_ptr<Factory> mFactory;

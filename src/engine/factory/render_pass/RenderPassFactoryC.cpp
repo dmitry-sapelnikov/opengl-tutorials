@@ -55,14 +55,14 @@ void main()
 
 // Local functions
 /// Creates a texture-to-render target shader
-ShaderMaterialBinding* createShader(RenderPipeline& renderer, Texture::Format format)
+ShaderMaterialBinding* createShader(Renderer& renderer, Texture::Format format)
 {
 	Shader* shader = nullptr;
 	switch (format)
 	{
 	case Texture::Format::RGB:
 	{
-		shader = renderer.getRenderer()->createShader(
+		shader = renderer.getDevice()->createShader(
 			TEXTURE_TO_WINDOW_VERTEX_SHADER,
 			TEXTURE_TO_WINDOW_FRAGMENT_SHADER_RGBA);
 	}
@@ -70,7 +70,7 @@ ShaderMaterialBinding* createShader(RenderPipeline& renderer, Texture::Format fo
 
 	case Texture::Format::RGBA:
 	{
-		shader = renderer.getRenderer()->createShader(
+		shader = renderer.getDevice()->createShader(
 			TEXTURE_TO_WINDOW_VERTEX_SHADER,
 			TEXTURE_TO_WINDOW_FRAGMENT_SHADER_RGBA);
 	}
@@ -78,7 +78,7 @@ ShaderMaterialBinding* createShader(RenderPipeline& renderer, Texture::Format fo
 
 	case Texture::Format::FLOAT:
 	{
-		shader = renderer.getRenderer()->createShader(
+		shader = renderer.getDevice()->createShader(
 			TEXTURE_TO_WINDOW_VERTEX_SHADER,
 			TEXTURE_TO_WINDOW_FRAGMENT_SHADER_FLOAT);
 	}
@@ -93,7 +93,7 @@ ShaderMaterialBinding* createShader(RenderPipeline& renderer, Texture::Format fo
 }
 
 /// Creates a render quad for texture-to-window rendering
-Mesh* createRenderQuad(RenderPipeline& renderer) noexcept
+Mesh* createRenderQuad(Renderer& renderer) noexcept
 {
 	Mesh* result = nullptr;
 
@@ -110,7 +110,7 @@ Mesh* createRenderQuad(RenderPipeline& renderer) noexcept
 		1, 2, 3   // second Triangle
 	};
 
-	result = renderer.getRenderer()->createMesh(
+	result = renderer.getDevice()->createMesh(
 		gltut::VERTEX_FORMAT_POS3_TEX2,
 		4,
 		vertices1,
@@ -174,7 +174,7 @@ RenderPass* RenderPassFactoryC::createTextureToWindowRenderPass(
 		result = mRenderer.createPass(
 			nullptr, // No viewpoint
 			object,
-			mRenderer.getRenderer()->getWindowFramebuffer(),
+			mRenderer.getDevice()->getWindowFramebuffer(),
 			0, // Material pass 0
 			nullptr, // No clear color
 			true, // Depth clearing

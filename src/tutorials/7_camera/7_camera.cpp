@@ -22,13 +22,13 @@ int main()
 		engine->getWindow()->setTitle("Camera");
 		engine->getWindow()->showFPS(true);
 
-		auto* renderer = engine->getRenderPipeline();
+		auto* device = engine->getRenderer();
 		auto* scene = engine->getScene();
 		auto* mesh = engine->getFactory()->getGeometry()->createBox(1.0f, 1.0f, 1.0f);
 
 		GLTUT_CHECK(mesh != nullptr, "Failed to create mesh")
 
-		gltut::Shader* shader = renderer->getRenderer()->loadShader(
+		gltut::Shader* shader = device->getDevice()->loadShader(
 			"assets/shader.vs",
 			"assets/shader.fs");
 
@@ -36,13 +36,13 @@ int main()
 		shader->setInt("texture1", 0);
 		shader->setInt("texture2", 1);
 
-		auto* materialBinding = renderer->createShaderMaterialBinding(shader);
+		auto* materialBinding = device->createShaderMaterialBinding(shader);
 		GLTUT_CHECK(materialBinding, "Failed to create light shader material binding");
 		materialBinding->bind(
 			gltut::ShaderMaterialBinding::Parameter::GEOMETRY_MATRIX,
 			"model");
 
-		auto* viewpointBinding = renderer->createShaderViewpointBinding(shader);
+		auto* viewpointBinding = device->createShaderViewpointBinding(shader);
 		GLTUT_CHECK(viewpointBinding, "Failed to create light shader viewpoint binding");
 		viewpointBinding->bind(
 			gltut::ShaderViewpointBinding::Parameter::VIEW_MATRIX,
@@ -52,13 +52,13 @@ int main()
 			gltut::ShaderViewpointBinding::Parameter::PROJECTION_MATRIX,
 			"projection");
 
-		gltut::Texture* texture1 = renderer->getRenderer()->loadTexture("assets/container.jpg");
+		gltut::Texture* texture1 = device->getDevice()->loadTexture("assets/container.jpg");
 		GLTUT_CHECK(texture1 != nullptr, "Failed to load texture");
 
-		gltut::Texture* texture2 = renderer->getRenderer()->loadTexture("assets/awesomeface.png");
+		gltut::Texture* texture2 = device->getDevice()->loadTexture("assets/awesomeface.png");
 		GLTUT_CHECK(texture2 != nullptr, "Failed to load texture");
 
-		auto* material = renderer->createMaterial();
+		auto* material = device->createMaterial();
 		GLTUT_CHECK(material != nullptr, "Failed to create material");
 
 		auto* materialPass = material->createPass(0, materialBinding, 2);

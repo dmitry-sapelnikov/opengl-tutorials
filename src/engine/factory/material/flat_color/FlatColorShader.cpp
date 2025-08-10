@@ -47,14 +47,14 @@ void main()
 })";
 
 // Global functions
-ShaderMaterialBinding* createFlatColorShader(RenderPipeline& renderPipeline) noexcept
+ShaderMaterialBinding* createFlatColorShader(Renderer& renderPipeline) noexcept
 {
 	Shader* shader = nullptr;
 	ShaderViewpointBinding* viewpointBinding = nullptr;
 	ShaderMaterialBinding* materialBinding = nullptr;
 
 	GLTUT_CATCH_ALL_BEGIN
-		Shader* shader = renderPipeline.getRenderer()->createShader(
+		Shader* shader = renderPipeline.getDevice()->createShader(
 			FLAT_COLOR_VERTEX_SHADER,
 			FLAT_COLOR_FRAGMENT_SHADER);
 
@@ -86,7 +86,7 @@ ShaderMaterialBinding* createFlatColorShader(RenderPipeline& renderPipeline) noe
 
 	if (shader != nullptr)
 	{
-		renderPipeline.getRenderer()->removeShader(shader);
+		renderPipeline.getDevice()->removeShader(shader);
 	}
 
 	return nullptr;

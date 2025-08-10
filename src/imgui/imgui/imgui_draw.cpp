@@ -1845,7 +1845,7 @@ struct ImTriangulator
 };
 
 // Distribute storage for nodes, ears and reflexes.
-// FIXME-OPT: if everything is convex, we could report it to caller and let it switch to an convex renderer
+// FIXME-OPT: if everything is convex, we could report it to caller and let it switch to an convex device
 // (this would require first building reflexes to bail to convex if empty, without even building nodes)
 void ImTriangulator::Init(const ImVec2* points, int points_count, void* scratch_buffer)
 {
@@ -2274,10 +2274,10 @@ void ImGui::AddDrawListToDrawDataEx(ImDrawData* draw_data, ImVector<ImDrawList*>
     // - First, make sure you are coarse clipping yourself and not trying to draw many things outside visible bounds.
     //   Be mindful that the lower-level ImDrawList API doesn't filter vertices. Use the Metrics/Debugger window to inspect draw list contents.
     // - If you want large meshes with more than 64K vertices, you can either:
-    //   (A) Handle the ImDrawCmd::VtxOffset value in your renderer backend, and set 'io.BackendFlags |= ImGuiBackendFlags_RendererHasVtxOffset'.
+    //   (A) Handle the ImDrawCmd::VtxOffset value in your device backend, and set 'io.BackendFlags |= ImGuiBackendFlags_GraphicsDeviceHasVtxOffset'.
     //       Most example backends already support this from 1.71. Pre-1.71 backends won't.
     //       Some graphics API such as GL ES 1/2 don't have a way to offset the starting vertex so it is not supported for them.
-    //   (B) Or handle 32-bit indices in your renderer backend, and uncomment '#define ImDrawIdx unsigned int' line in imconfig.h.
+    //   (B) Or handle 32-bit indices in your device backend, and uncomment '#define ImDrawIdx unsigned int' line in imconfig.h.
     //       Most example backends already support this. For example, the OpenGL example code detect index size at compile-time:
     //         glDrawElements(GL_TRIANGLES, (GLsizei)pcmd->ElemCount, sizeof(ImDrawIdx) == 2 ? GL_UNSIGNED_SHORT : GL_UNSIGNED_INT, idx_buffer_offset);
     //       Your own engine or render API may use different parameters or function calls to specify index sizes.
@@ -2632,7 +2632,7 @@ ImFontAtlas::ImFontAtlas()
     TexMaxWidth = 8192;
     TexMaxHeight = 8192;
     TexRef._TexID = ImTextureID_Invalid;
-    RendererHasTextures = false; // Assumed false by default, as apps can call e.g Atlas::Build() after backend init and before ImGui can update.
+    GraphicsDeviceHasTextures = false; // Assumed false by default, as apps can call e.g Atlas::Build() after backend init and before ImGui can update.
     TexNextUniqueID = 1;
     FontNextUniqueID = 1;
     Builder = NULL;
@@ -2641,7 +2641,7 @@ ImFontAtlas::ImFontAtlas()
 ImFontAtlas::~ImFontAtlas()
 {
     IM_ASSERT(!Locked && "Cannot modify a locked ImFontAtlas!");
-    RendererHasTextures = false; // Full Clear() is supported, but ClearTexData() only isn't.
+    GraphicsDeviceHasTextures = false; // Full Clear() is supported, but ClearTexData() only isn't.
     ClearFonts();
     ClearTexData();
     TexList.clear_delete();
@@ -2650,11 +2650,11 @@ ImFontAtlas::~ImFontAtlas()
 
 void ImFontAtlas::Clear()
 {
-    bool backup_renderer_has_textures = RendererHasTextures;
-    RendererHasTextures = false; // Full Clear() is supported, but ClearTexData() only isn't.
+    bool backup_renderer_has_textures = GraphicsDeviceHasTextures;
+    GraphicsDeviceHasTextures = false; // Full Clear() is supported, but ClearTexData() only isn't.
     ClearFonts();
     ClearTexData();
-    RendererHasTextures = backup_renderer_has_textures;
+    GraphicsDeviceHasTextures = backup_renderer_has_textures;
 }
 
 void ImFontAtlas::CompactCache()
@@ -2688,7 +2688,7 @@ void ImFontAtlas::ClearInputData()
 void ImFontAtlas::ClearTexData()
 {
     IM_ASSERT(!Locked && "Cannot modify a locked ImFontAtlas!");
-    IM_ASSERT(RendererHasTextures == false && "Not supported for dynamic atlases, but you may call Clear().");
+    IM_ASSERT(GraphicsDeviceHasTextures == false && "Not supported for dynamic atlases, but you may call Clear().");
     for (ImTextureData* tex : TexList)
         tex->DestroyPixels();
     //Locked = true; // Hoped to be able to lock this down but some reload patterns may not be happy with it.
@@ -2710,9 +2710,9 @@ void ImFontAtlas::ClearFonts()
         }
 }
 
-static void ImFontAtlasBuildUpdateRendererHasTexturesFromContext(ImFontAtlas* atlas)
+static void ImFontAtlasBuildUpdateGraphicsDeviceHasTexturesFromContext(ImFontAtlas* atlas)
 {
-    // [LEGACY] Copy back the ImGuiBackendFlags_RendererHasTextures flag from ImGui context.
+    // [LEGACY] Copy back the ImGuiBackendFlags_GraphicsDeviceHasTextures flag from ImGui context.
     // - This is the 1% exceptional case where that dependency if useful, to bypass an issue where otherwise at the
     //   time of an early call to Build(), it would be impossible for us to tell if the backend supports texture update.
     // - Without this hack, we would have quite a pitfall as many legacy codebases have an early call to Build().
@@ -2720,7 +2720,7 @@ static void ImFontAtlasBuildUpdateRendererHasTexturesFromContext(ImFontAtlas* at
     for (ImDrawListSharedData* shared_data : atlas->DrawListSharedDatas)
         if (ImGuiContext* imgui_ctx = shared_data->Context)
         {
-            atlas->RendererHasTextures = (imgui_ctx->IO.BackendFlags & ImGuiBackendFlags_RendererHasTextures) != 0;
+            atlas->GraphicsDeviceHasTextures = (imgui_ctx->IO.BackendFlags & ImGuiBackendFlags_GraphicsDeviceHasTextures) != 0;
             break;
         }
 }
@@ -2732,20 +2732,20 @@ static void ImFontAtlasBuildUpdateRendererHasTexturesFromContext(ImFontAtlas* at
 void ImFontAtlasUpdateNewFrame(ImFontAtlas* atlas, int frame_count, bool renderer_has_textures)
 {
     IM_ASSERT(atlas->Builder == NULL || atlas->Builder->FrameCount < frame_count); // Protection against being called twice.
-    atlas->RendererHasTextures = renderer_has_textures;
+    atlas->GraphicsDeviceHasTextures = renderer_has_textures;
 
     // Check that font atlas was built or backend support texture reload in which case we can build now
-    if (atlas->RendererHasTextures)
+    if (atlas->GraphicsDeviceHasTextures)
     {
         atlas->TexIsBuilt = true;
         if (atlas->Builder == NULL) // This will only happen if fonts were not already loaded.
             ImFontAtlasBuildMain(atlas);
     }
     // Legacy backend
-    if (!atlas->RendererHasTextures)
-        IM_ASSERT_USER_ERROR(atlas->TexIsBuilt, "Backend does not support ImGuiBackendFlags_RendererHasTextures, and font atlas is not built! Update backend OR make sure you called ImGui_ImplXXXX_NewFrame() function for renderer backend, which should call io.Fonts->GetTexDataAsRGBA32() / GetTexDataAsAlpha8().");
+    if (!atlas->GraphicsDeviceHasTextures)
+        IM_ASSERT_USER_ERROR(atlas->TexIsBuilt, "Backend does not support ImGuiBackendFlags_GraphicsDeviceHasTextures, and font atlas is not built! Update backend OR make sure you called ImGui_ImplXXXX_NewFrame() function for device backend, which should call io.Fonts->GetTexDataAsRGBA32() / GetTexDataAsAlpha8().");
     if (atlas->TexIsBuilt && atlas->Builder->PreloadedAllGlyphsRanges)
-        IM_ASSERT_USER_ERROR(atlas->RendererHasTextures == false, "Called ImFontAtlas::Build() before ImGuiBackendFlags_RendererHasTextures got set! With new backends: you don't need to call Build().");
+        IM_ASSERT_USER_ERROR(atlas->GraphicsDeviceHasTextures == false, "Called ImFontAtlas::Build() before ImGuiBackendFlags_GraphicsDeviceHasTextures got set! With new backends: you don't need to call Build().");
 
     // Clear BakedCurrent cache, this is important because it ensure the uncached path gets taken once.
     // We also rely on ImFontBaked* pointers never crossing frames.
@@ -2785,7 +2785,7 @@ void ImFontAtlasUpdateNewFrame(ImFontAtlas* atlas, int frame_count, bool rendere
             tex->UpdateRect.x = tex->UpdateRect.y = (unsigned short)~0;
             tex->UpdateRect.w = tex->UpdateRect.h = 0;
         }
-        if (tex->Status == ImTextureStatus_WantCreate && atlas->RendererHasTextures)
+        if (tex->Status == ImTextureStatus_WantCreate && atlas->GraphicsDeviceHasTextures)
             IM_ASSERT(tex->TexID == ImTextureID_Invalid && tex->BackendUserData == NULL && "Backend set texture's TexID/BackendUserData but did not update Status to OK.");
 
         if (tex->Status == ImTextureStatus_Destroyed)
@@ -2936,7 +2936,7 @@ void ImFontAtlasTextureBlockCopy(ImTextureData* src_tex, int src_x, int src_y, I
         memcpy(dst_tex->GetPixelsAt(dst_x, dst_y + y), src_tex->GetPixelsAt(src_x, src_y + y), w * dst_tex->BytesPerPixel);
 }
 
-// Queue texture block update for renderer backend
+// Queue texture block update for device backend
 void ImFontAtlasTextureBlockQueueUpload(ImFontAtlas* atlas, ImTextureData* tex, int x, int y, int w, int h)
 {
     IM_ASSERT(tex->Status != ImTextureStatus_WantDestroy && tex->Status != ImTextureStatus_Destroyed);
@@ -3256,7 +3256,7 @@ ImFontAtlasRectId ImFontAtlas::AddCustomRect(int width, int height, ImFontAtlasR
     if (out_r != NULL)
         GetCustomRect(r_id, out_r);
 
-    if (RendererHasTextures)
+    if (GraphicsDeviceHasTextures)
     {
         ImTextureRect* r = ImFontAtlasPackGetRect(this, r_id);
         ImFontAtlasTextureBlockQueueUpload(this, TexData, r->x, r->y, r->w, r->h);
@@ -3300,7 +3300,7 @@ ImFontAtlasRectId ImFontAtlas::AddCustomRectFontGlyphForSize(ImFont* font, float
     if (r_id == ImFontAtlasRectId_Invalid)
         return ImFontAtlasRectId_Invalid;
     ImTextureRect* r = ImFontAtlasPackGetRect(this, r_id);
-    if (RendererHasTextures)
+    if (GraphicsDeviceHasTextures)
         ImFontAtlasTextureBlockQueueUpload(this, TexData, r->x, r->y, r->w, r->h);
 
     if (baked->IsGlyphLoaded(codepoint))
@@ -3358,7 +3358,7 @@ bool ImFontAtlasGetMouseCursorTexData(ImFontAtlas* atlas, ImGuiMouseCursor curso
     return true;
 }
 
-// When atlas->RendererHasTextures = true, this is only called if no font were loaded.
+// When atlas->GraphicsDeviceHasTextures = true, this is only called if no font were loaded.
 void ImFontAtlasBuildMain(ImFontAtlas* atlas)
 {
     IM_ASSERT(!atlas->Locked && "Cannot modify a locked ImFontAtlas!");
@@ -3372,9 +3372,9 @@ void ImFontAtlasBuildMain(ImFontAtlas* atlas)
     if (atlas->Sources.Size == 0)
         atlas->AddFontDefault();
 
-    // [LEGACY] For backends not supporting RendererHasTextures: preload all glyphs
-    ImFontAtlasBuildUpdateRendererHasTexturesFromContext(atlas);
-    if (atlas->RendererHasTextures == false) // ~ImGuiBackendFlags_RendererHasTextures
+    // [LEGACY] For backends not supporting GraphicsDeviceHasTextures: preload all glyphs
+    ImFontAtlasBuildUpdateGraphicsDeviceHasTexturesFromContext(atlas);
+    if (atlas->GraphicsDeviceHasTextures == false) // ~ImGuiBackendFlags_GraphicsDeviceHasTextures
         ImFontAtlasBuildLegacyPreloadAllGlyphRanges(atlas);
     atlas->TexIsBuilt = true;
 }
@@ -4197,7 +4197,7 @@ void ImFontAtlasBuildInit(ImFontAtlas* atlas)
     if (atlas->FontLoader->LoaderInit)
         atlas->FontLoader->LoaderInit(atlas);
 
-    ImFontAtlasBuildUpdateRendererHasTexturesFromContext(atlas);
+    ImFontAtlasBuildUpdateGraphicsDeviceHasTexturesFromContext(atlas);
 
     ImFontAtlasPackInit(atlas);
 
@@ -4510,7 +4510,7 @@ void ImFontAtlasDebugLogTextureRequests(ImFontAtlas* atlas)
     IM_UNUSED(g);
     for (ImTextureData* tex : atlas->TexList)
     {
-        if ((g.IO.BackendFlags & ImGuiBackendFlags_RendererHasTextures) == 0)
+        if ((g.IO.BackendFlags & ImGuiBackendFlags_GraphicsDeviceHasTextures) == 0)
             IM_ASSERT(tex->Updates.Size == 0);
         if (tex->Status == ImTextureStatus_WantCreate)
             IMGUI_DEBUG_LOG_FONT("[font] Texture #%03d: create %dx%d\n", tex->UniqueID, tex->Width, tex->Height);
@@ -5325,7 +5325,7 @@ ImFontBaked* ImFontAtlasBakedGetOrAdd(ImFontAtlas* atlas, ImFont* font, float fo
             return baked;
         if (atlas->Locked)
         {
-            IM_ASSERT(!atlas->Locked && "Cannot use dynamic font size with a locked ImFontAtlas!"); // Locked because rendering backend does not support ImGuiBackendFlags_RendererHasTextures!
+            IM_ASSERT(!atlas->Locked && "Cannot use dynamic font size with a locked ImFontAtlas!"); // Locked because rendering backend does not support ImGuiBackendFlags_GraphicsDeviceHasTextures!
             return NULL;
         }
     }

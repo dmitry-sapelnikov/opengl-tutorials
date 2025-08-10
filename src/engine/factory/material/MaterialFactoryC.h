@@ -4,7 +4,7 @@
 #include <deque>
 #include <map>
 #include "engine/core/NonCopyable.h"
-#include "engine/render_pipeline/RenderPipeline.h"
+#include "engine/renderer/Renderer.h"
 #include "engine/factory/material/MaterialFactory.h"
 
 #include "./flat_color/FlatColorMaterialModelC.h"
@@ -18,7 +18,7 @@ class MaterialFactoryC final : public MaterialFactory, public NonCopyable
 public:
 	// Constructor
 	explicit MaterialFactoryC(
-		RenderPipeline& renderer,
+		Renderer& renderer,
 		Scene& scene) noexcept;
 
 	/// Creates a flat color material model
@@ -38,8 +38,8 @@ public:
 	void update() noexcept final;
 
 private:
-	/// The renderer
-	RenderPipeline& mRenderer;
+	/// The device
+	Renderer& mRenderer;
 
 	/// The scene
 	Scene& mScene;

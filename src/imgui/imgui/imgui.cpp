@@ -285,7 +285,7 @@ CODE
      // TODO: Fill optional fields of the io structure later.
      // TODO: Load TTF/OTF fonts if you don't want to use the default font.
 
-     // Initialize helper Platform and Renderer backends (here we are using imgui_impl_win32.cpp and imgui_impl_dx11.cpp)
+     // Initialize helper Platform and GraphicsDevice backends (here we are using imgui_impl_win32.cpp and imgui_impl_dx11.cpp)
      ImGui_ImplWin32_Init(hwnd);
      ImGui_ImplDX11_Init(g_pd3dDevice, g_pd3dDeviceContext);
 
@@ -325,11 +325,11 @@ IMPLEMENTING YOUR PLATFORM BACKEND:
 
 IMPLEMENTING YOUR RenderDrawData() function:
  -> see https://github.com/ocornut/imgui/blob/master/docs/BACKENDS.md
- -> the Renderer Backends in impl_impl_XXX.cpp files contain many implementations of a ImGui_ImplXXXX_RenderDrawData() function.
+ -> the GraphicsDevice Backends in impl_impl_XXX.cpp files contain many implementations of a ImGui_ImplXXXX_RenderDrawData() function.
 
-IMPLEMENTING SUPPORT for ImGuiBackendFlags_RendererHasTextures:
+IMPLEMENTING SUPPORT for ImGuiBackendFlags_GraphicsDeviceHasTextures:
  -> see https://github.com/ocornut/imgui/blob/master/docs/BACKENDS.md
- -> the Renderer Backends in impl_impl_XXX.cpp files contain many implementations of a ImGui_ImplXXXX_UpdateTexture() function.
+ -> the GraphicsDevice Backends in impl_impl_XXX.cpp files contain many implementations of a ImGui_ImplXXXX_UpdateTexture() function.
 
  Basic application/backend skeleton:
 
@@ -595,7 +595,7 @@ IMPLEMENTING SUPPORT for ImGuiBackendFlags_RendererHasTextures:
  - 2024/05/16 (1.90.7) - inputs: on macOS X, Cmd and Ctrl keys are now automatically swapped by io.AddKeyEvent() as this naturally align with how macOS X uses those keys.
                            - it shouldn't really affect you unless you had custom shortcut swapping in place for macOS X apps.
                            - removed ImGuiMod_Shortcut which was previously dynamically remapping to Ctrl or Cmd/Super. It is now unnecessary to specific cross-platform idiomatic shortcuts. (#2343, #4084, #5923, #456)
- - 2024/05/14 (1.90.7) - backends: SDL_Renderer2 and SDL_Renderer3 backend now take a SDL_Renderer* in their RenderDrawData() functions.
+ - 2024/05/14 (1.90.7) - backends: SDL_GraphicsDevice2 and SDL_GraphicsDevice3 backend now take a SDL_GraphicsDevice* in their RenderDrawData() functions.
  - 2024/04/18 (1.90.6) - TreeNode: Fixed a layout inconsistency when using an empty/hidden label followed by a SameLine() call. (#7505, #282)
                            - old: TreeNode("##Hidden"); SameLine(); Text("Hello");     // <-- This was actually incorrect! BUT appeared to look ok with the default style where ItemSpacing.x == FramePadding.x * 2 (it didn't look aligned otherwise).
                            - new: TreeNode("##Hidden"); SameLine(0, 0); Text("Hello"); // <-- This is correct for all styles values.
@@ -868,7 +868,7 @@ IMPLEMENTING SUPPORT for ImGuiBackendFlags_RendererHasTextures:
  - 2018/08/01 (1.63) - renamed io.OptCursorBlink to io.ConfigCursorBlink [-> io.ConfigInputTextCursorBlink in 1.65], io.OptMacOSXBehaviors to ConfigMacOSXBehaviors for consistency.
  - 2018/07/22 (1.63) - changed ImGui::GetTime() return value from float to double to avoid accumulating floating point imprecisions over time.
  - 2018/07/08 (1.63) - style: renamed ImGuiCol_ModalWindowDarkening to ImGuiCol_ModalWindowDimBg for consistency with other features. Kept redirection enum (will obsolete).
- - 2018/06/08 (1.62) - examples: the imgui_impl_XXX files have been split to separate platform (Win32, GLFW, SDL2, etc.) from renderer (DX11, OpenGL, Vulkan,  etc.).
+ - 2018/06/08 (1.62) - examples: the imgui_impl_XXX files have been split to separate platform (Win32, GLFW, SDL2, etc.) from device (DX11, OpenGL, Vulkan,  etc.).
                        old backends will still work as is, however prefer using the separated backends as they will be updated to support multi-viewports.
                        when adopting new backends follow the main.cpp code of your preferred examples/ folder to know which functions to call.
                        in particular, note that old backends called ImGui::NewFrame() at the end of their ImGui_ImplXXXX_NewFrame() function.
@@ -883,7 +883,7 @@ IMPLEMENTING SUPPORT for ImGuiBackendFlags_RendererHasTextures:
  - 2018/04/09 (1.61) - IM_DELETE() helper function added in 1.60 doesn't clear the input _pointer_ reference, more consistent with expectation and allows passing r-value.
  - 2018/03/20 (1.60) - renamed io.WantMoveMouse to io.WantSetMousePos for consistency and ease of understanding (was added in 1.52, _not_ used by core and only honored by some backend ahead of merging the Nav branch).
  - 2018/03/12 (1.60) - removed ImGuiCol_CloseButton, ImGuiCol_CloseButtonActive, ImGuiCol_CloseButtonHovered as the closing cross uses regular button colors now.
- - 2018/03/08 (1.60) - changed ImFont::DisplayOffset.y to default to 0 instead of +1. Fixed rounding of Ascent/Descent to match TrueType renderer. If you were adding or subtracting to ImFont::DisplayOffset check if your fonts are correctly aligned vertically.
+ - 2018/03/08 (1.60) - changed ImFont::DisplayOffset.y to default to 0 instead of +1. Fixed rounding of Ascent/Descent to match TrueType device. If you were adding or subtracting to ImFont::DisplayOffset check if your fonts are correctly aligned vertically.
  - 2018/03/03 (1.60) - renamed ImGuiStyleVar_Count_ to ImGuiStyleVar_COUNT and ImGuiMouseCursor_Count_ to ImGuiMouseCursor_COUNT for consistency with other public enums.
  - 2018/02/18 (1.60) - BeginDragDropSource(): temporarily removed the optional mouse_button=0 parameter because it is not really usable in many situations at the moment.
  - 2018/02/16 (1.60) - obsoleted the io.RenderDrawListsFn callback, you can call your graphics engine render function after ImGui::Render(). Use ImGui::GetDrawData() to retrieve the ImDrawData* to display.
@@ -954,7 +954,7 @@ IMPLEMENTING SUPPORT for ImGuiBackendFlags_RendererHasTextures:
  - 2016/05/07 (1.49) - removed confusing set of GetInternalState(), GetInternalStateSize(), SetInternalState() functions. Now using CreateContext(), DestroyContext(), GetCurrentContext(), SetCurrentContext().
  - 2016/05/02 (1.49) - renamed SetNextTreeNodeOpened() to SetNextTreeNodeOpen(), no redirection.
  - 2016/05/01 (1.49) - obsoleted old signature of CollapsingHeader(const char* label, const char* str_id = NULL, bool display_frame = true, bool default_open = false) as extra parameters were badly designed and rarely used. You can replace the "default_open = true" flag in new API with CollapsingHeader(label, ImGuiTreeNodeFlags_DefaultOpen).
- - 2016/04/26 (1.49) - changed ImDrawList::PushClipRect(ImVec4 rect) to ImDrawList::PushClipRect(Imvec2 min,ImVec2 max,bool intersect_with_current_clip_rect=false). Note that higher-level ImGui::PushClipRect() is preferable because it will clip at logic/widget level, whereas ImDrawList::PushClipRect() only affect your renderer.
+ - 2016/04/26 (1.49) - changed ImDrawList::PushClipRect(ImVec4 rect) to ImDrawList::PushClipRect(Imvec2 min,ImVec2 max,bool intersect_with_current_clip_rect=false). Note that higher-level ImGui::PushClipRect() is preferable because it will clip at logic/widget level, whereas ImDrawList::PushClipRect() only affect your device.
  - 2016/04/03 (1.48) - removed style.WindowFillAlphaDefault setting which was redundant. Bake default BG alpha inside style.Colors[ImGuiCol_WindowBg] and all other Bg color values. (ref GitHub issue #337).
  - 2016/04/03 (1.48) - renamed ImGuiCol_TooltipBg to ImGuiCol_PopupBg, used by popups/menus and tooltips. popups/menus were previously using ImGuiCol_WindowBg. (ref github issue #337)
  - 2016/03/21 (1.48) - renamed GetWindowFont() to GetFont(), GetWindowFontSize() to GetFontSize(). Kept inline redirection function (will obsolete).
@@ -1568,8 +1568,8 @@ ImGuiIO::ImGuiIO()
 
     // Platform Functions
     // Note: Initialize() will setup default clipboard/ime handlers.
-    BackendPlatformName = BackendRendererName = NULL;
-    BackendPlatformUserData = BackendRendererUserData = BackendLanguageUserData = NULL;
+    BackendPlatformName = BackendGraphicsDeviceName = NULL;
+    BackendPlatformUserData = BackendGraphicsDeviceUserData = BackendLanguageUserData = NULL;
 
     // Input (NB: we already have memset zero the entire structure!)
     MousePos = ImVec2(-FLT_MAX, -FLT_MAX);
@@ -4293,7 +4293,7 @@ void ImGui::Shutdown()
 {
     ImGuiContext& g = *GImGui;
     IM_ASSERT_USER_ERROR(g.IO.BackendPlatformUserData == NULL, "Forgot to shutdown Platform backend?");
-    IM_ASSERT_USER_ERROR(g.IO.BackendRendererUserData == NULL, "Forgot to shutdown Renderer backend?");
+    IM_ASSERT_USER_ERROR(g.IO.BackendGraphicsDeviceUserData == NULL, "Forgot to shutdown GraphicsDevice backend?");
 
     // The fonts atlas can be used prior to calling NewFrame(), so we clear it even if g.Initialized is FALSE (which would happen if we never called NewFrame)
     for (ImFontAtlas* atlas : g.FontAtlases)
@@ -4455,7 +4455,7 @@ static void SetCurrentWindow(ImGuiWindow* window)
     {
         bool backup_skip_items = window->SkipItems;
         window->SkipItems = false;
-        if (g.IO.BackendFlags & ImGuiBackendFlags_RendererHasTextures)
+        if (g.IO.BackendFlags & ImGuiBackendFlags_GraphicsDeviceHasTextures)
         {
             ImGuiViewport* viewport = window->Viewport;
             g.FontRasterizerDensity = (viewport->FramebufferScale.x != 0.0f) ? viewport->FramebufferScale.x : g.IO.DisplayFramebufferScale.x; // == SetFontRasterizerDensity()
@@ -5305,7 +5305,7 @@ static void SetupDrawListSharedData()
         g.DrawListSharedData.InitialFlags |= ImDrawListFlags_AntiAliasedLinesUseTex;
     if (g.Style.AntiAliasedFill)
         g.DrawListSharedData.InitialFlags |= ImDrawListFlags_AntiAliasedFill;
-    if (g.IO.BackendFlags & ImGuiBackendFlags_RendererHasVtxOffset)
+    if (g.IO.BackendFlags & ImGuiBackendFlags_GraphicsDeviceHasVtxOffset)
         g.DrawListSharedData.InitialFlags |= ImDrawListFlags_AllowVtxOffset;
     g.DrawListSharedData.InitialFringeScale = 1.0f; // FIXME-DPI: Change this for some DPI scaling experiments.
 }
@@ -5876,7 +5876,7 @@ void ImGui::EndFrame()
 
 // Prepare the data for rendering so you can call GetDrawData()
 // (As with anything within the ImGui:: namespace this doesn't touch your GPU or graphics API at all:
-// it is the role of the ImGui_ImplXXXX_RenderDrawData() function provided by the renderer backend)
+// it is the role of the ImGui_ImplXXXX_RenderDrawData() function provided by the device backend)
 void ImGui::Render()
 {
     ImGuiContext& g = *GImGui;
@@ -5941,7 +5941,7 @@ void ImGui::Render()
     }
 
 #ifndef IMGUI_DISABLE_DEBUG_TOOLS
-    if (g.IO.BackendFlags & ImGuiBackendFlags_RendererHasTextures)
+    if (g.IO.BackendFlags & ImGuiBackendFlags_GraphicsDeviceHasTextures)
         for (ImFontAtlas* atlas : g.FontAtlases)
             ImFontAtlasDebugLogTextureRequests(atlas);
 #endif
@@ -8688,7 +8688,7 @@ static void ImGui::UpdateTexturesNewFrame()
 {
     // Cannot update every atlases based on atlas's FrameCount < g.FrameCount, because an atlas may be shared by multiple contexts with different frame count.
     ImGuiContext& g = *GImGui;
-    const bool has_textures = (g.IO.BackendFlags & ImGuiBackendFlags_RendererHasTextures) != 0;
+    const bool has_textures = (g.IO.BackendFlags & ImGuiBackendFlags_GraphicsDeviceHasTextures) != 0;
     for (ImFontAtlas* atlas : g.FontAtlases)
     {
         if (atlas->OwnerContext == &g)
@@ -8699,10 +8699,10 @@ static void ImGui::UpdateTexturesNewFrame()
         {
             // (1) If you manage font atlases yourself, e.g. create a ImFontAtlas yourself you need to call ImFontAtlasUpdateNewFrame() on it.
             // Otherwise, calling ImGui::CreateContext() without parameter will create an atlas owned by the context.
-            // (2) If you have multiple font atlases, make sure the 'atlas->RendererHasTextures' as specified in the ImFontAtlasUpdateNewFrame() call matches for that.
-            // (3) If you have multiple imgui contexts, they also need to have a matching value for ImGuiBackendFlags_RendererHasTextures.
+            // (2) If you have multiple font atlases, make sure the 'atlas->GraphicsDeviceHasTextures' as specified in the ImFontAtlasUpdateNewFrame() call matches for that.
+            // (3) If you have multiple imgui contexts, they also need to have a matching value for ImGuiBackendFlags_GraphicsDeviceHasTextures.
             IM_ASSERT(atlas->Builder != NULL && atlas->Builder->FrameCount != -1);
-            IM_ASSERT(atlas->RendererHasTextures == has_textures);
+            IM_ASSERT(atlas->GraphicsDeviceHasTextures == has_textures);
         }
     }
 }
@@ -8727,7 +8727,7 @@ static void ImGui::UpdateTexturesEndFrame()
 void ImGui::UpdateFontsNewFrame()
 {
     ImGuiContext& g = *GImGui;
-    if ((g.IO.BackendFlags & ImGuiBackendFlags_RendererHasTextures) == 0)
+    if ((g.IO.BackendFlags & ImGuiBackendFlags_GraphicsDeviceHasTextures) == 0)
         for (ImFontAtlas* atlas : g.FontAtlases)
             atlas->Locked = true;
 
@@ -8875,7 +8875,7 @@ void ImGui::UpdateCurrentFontSize(float restore_font_size_after_scaling)
     // - We may support it better later and remove this rounding.
     final_size = GetRoundedFontSize(final_size);
     final_size = ImClamp(final_size, 1.0f, IMGUI_FONT_SIZE_MAX);
-    if (g.Font != NULL && (g.IO.BackendFlags & ImGuiBackendFlags_RendererHasTextures))
+    if (g.Font != NULL && (g.IO.BackendFlags & ImGuiBackendFlags_GraphicsDeviceHasTextures))
         g.Font->CurrentRasterizerDensity = g.FontRasterizerDensity;
     g.FontSize = final_size;
     g.FontBaked = (g.Font != NULL && window != NULL) ? g.Font->GetFontBaked(final_size) : NULL;
@@ -8889,7 +8889,7 @@ void ImGui::UpdateCurrentFontSize(float restore_font_size_after_scaling)
 void ImGui::SetFontRasterizerDensity(float rasterizer_density)
 {
     ImGuiContext& g = *GImGui;
-    IM_ASSERT(g.IO.BackendFlags & ImGuiBackendFlags_RendererHasTextures);
+    IM_ASSERT(g.IO.BackendFlags & ImGuiBackendFlags_GraphicsDeviceHasTextures);
     if (g.FontRasterizerDensity == rasterizer_density)
         return;
     g.FontRasterizerDensity = rasterizer_density;
@@ -15940,10 +15940,10 @@ void ImGui::ShowFontAtlas(ImFontAtlas* atlas)
     ImGuiStyle& style = g.Style;
 
     BeginDisabled();
-    CheckboxFlags("io.BackendFlags: RendererHasTextures", &io.BackendFlags, ImGuiBackendFlags_RendererHasTextures);
+    CheckboxFlags("io.BackendFlags: GraphicsDeviceHasTextures", &io.BackendFlags, ImGuiBackendFlags_GraphicsDeviceHasTextures);
     EndDisabled();
     ShowFontSelector("Font");
-    //BeginDisabled((io.BackendFlags & ImGuiBackendFlags_RendererHasTextures) == 0);
+    //BeginDisabled((io.BackendFlags & ImGuiBackendFlags_GraphicsDeviceHasTextures) == 0);
     if (DragFloat("FontSizeBase", &style.FontSizeBase, 0.20f, 5.0f, 100.0f, "%.0f"))
         style._NextFrameFontSizeBase = style.FontSizeBase; // FIXME: Temporary hack until we finish remaining work.
     SameLine(0.0f, 0.0f); Text(" (out %.2f)", GetFontSize());
@@ -15953,9 +15953,9 @@ void ImGui::ShowFontAtlas(ImFontAtlas* atlas)
     DragFloat("FontScaleDpi", &style.FontScaleDpi, 0.02f, 0.5f, 4.0f);
     //SetItemTooltip("When io.ConfigDpiScaleFonts is set, this value is automatically overwritten.");
     //EndDisabled();
-    if ((io.BackendFlags & ImGuiBackendFlags_RendererHasTextures) == 0)
+    if ((io.BackendFlags & ImGuiBackendFlags_GraphicsDeviceHasTextures) == 0)
     {
-        BulletText("Warning: Font scaling will NOT be smooth, because\nImGuiBackendFlags_RendererHasTextures is not set!");
+        BulletText("Warning: Font scaling will NOT be smooth, because\nImGuiBackendFlags_GraphicsDeviceHasTextures is not set!");
         BulletText("For instructions, see:");
         SameLine();
         TextLinkOpenURL("docs/BACKENDS.md", "https://github.com/ocornut/imgui/blob/master/docs/BACKENDS.md");
@@ -15976,7 +15976,7 @@ void ImGui::ShowFontAtlas(ImFontAtlas* atlas)
     if (TreeNode("Loader", "Loader: \'%s\'", atlas->FontLoaderName ? atlas->FontLoaderName : "NULL"))
     {
         const ImFontLoader* loader_current = atlas->FontLoader;
-        BeginDisabled(!atlas->RendererHasTextures);
+        BeginDisabled(!atlas->GraphicsDeviceHasTextures);
 #ifdef IMGUI_ENABLE_STB_TRUETYPE
         const ImFontLoader* loader_stbtruetype = ImFontAtlasGetFontLoaderForStbTruetype();
         if (RadioButton("stb_truetype", loader_current == loader_stbtruetype))
@@ -16825,7 +16825,7 @@ void ImGui::DebugNodeDrawList(ImGuiWindow* window, ImGuiViewportP* viewport, con
             continue;
 
         // Calculate approximate coverage area (touched pixel count)
-        // This will be in pixels squared as long there's no post-scaling happening to the renderer output.
+        // This will be in pixels squared as long there's no post-scaling happening to the device output.
         const ImDrawIdx* idx_buffer = (draw_list->IdxBuffer.Size > 0) ? draw_list->IdxBuffer.Data : NULL;
         const ImDrawVert* vtx_buffer = draw_list->VtxBuffer.Data + pcmd->VtxOffset;
         float total_area = 0.0f;
@@ -17831,7 +17831,7 @@ void ImGui::ShowFontSelector(const char* label)
         EndCombo();
     }
     SameLine();
-    if (io.BackendFlags & ImGuiBackendFlags_RendererHasTextures)
+    if (io.BackendFlags & ImGuiBackendFlags_GraphicsDeviceHasTextures)
         MetricsHelpMarker(
             "- Load additional fonts with io.Fonts->AddFontXXX() functions.\n"
             "- Read FAQ and docs/FONTS.md for more details.");

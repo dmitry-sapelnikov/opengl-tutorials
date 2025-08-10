@@ -73,7 +73,7 @@ gltut::GeometryNode* createLight(
 	const gltut::Vector3& position,
 	const gltut::Color& color)
 {
-	auto* colorTexture = engine.getRenderer()->createSolidColorTexture(
+	auto* colorTexture = engine.getDevice()->createSolidColorTexture(
 		color.r, color.g, color.b, color.a);
 	GLTUT_CHECK(colorTexture, "Failed to create color texture");
 
@@ -168,7 +168,7 @@ int main()
 		engine->getWindow()->setTitle("Lighting");
 		engine->getWindow()->showFPS(true);
 
-		auto* renderer = engine->getRenderer();
+		auto* device = engine->getDevice();
 		auto* scene = engine->getScene();
 
 		auto* materialFactory = engine->getFactory()->getMaterial();
@@ -183,10 +183,10 @@ int main()
 		gltut::PhongMaterialModel* phongMaterialModel = materialFactory->createPhongMaterial(phongShader);
 		GLTUT_CHECK(phongMaterialModel, "Failed to create Phong material model");
 
-		gltut::Texture* diffuseTexture = renderer->loadTexture("assets/container2.png");
+		gltut::Texture* diffuseTexture = device->loadTexture("assets/container2.png");
 		GLTUT_CHECK(diffuseTexture, "Failed to create diffuse texture");
 
-		gltut::Texture* specularTexture = renderer->loadTexture("assets/container2_specular.png");
+		gltut::Texture* specularTexture = device->loadTexture("assets/container2_specular.png");
 		GLTUT_CHECK(specularTexture, "Failed to create specular texture");
 
 		phongMaterialModel->setDiffuse(diffuseTexture);

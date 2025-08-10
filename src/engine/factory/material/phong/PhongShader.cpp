@@ -219,7 +219,7 @@ static constexpr float DEFAULT_SHINESS = 32.0f;
 
 // Global functions
 ShaderMaterialBinding* createPhongShader(
-	RenderPipeline& renderer,
+	Renderer& renderer,
 	Scene& scene,
 	u32 maxDirectionalLights,
 	u32 maxPointLights,
@@ -237,9 +237,9 @@ ShaderMaterialBinding* createPhongShader(
 	shaderHeader += "#define MAX_SPOT_LIGHTS " + std::to_string(maxSpotLights) + "\n";
 	shaderHeader += LIGHT_UNIFORMS;
 
-	Renderer* backend = renderer.getRenderer();
+	GraphicsDevice* device = renderer.getDevice();
 
-	Shader* shader = backend->createShader(
+	Shader* shader = device->createShader(
 		(shaderHeader + PHONG_VERTEX_SHADER).c_str(),
 		(shaderHeader + PHONG_FRAGMENT_SHADER).c_str());
 
@@ -260,7 +260,7 @@ ShaderMaterialBinding* createPhongShader(
 	ShaderMaterialBinding* materialBinding = renderer.createShaderMaterialBinding(shader);
 	if (materialBinding == nullptr)
 	{
-		backend->removeShader(shader);
+		device->removeShader(shader);
 		return nullptr;
 	}
 	materialBinding->bind(ShaderMaterialBinding::Parameter::GEOMETRY_MATRIX, "model");
@@ -269,7 +269,7 @@ ShaderMaterialBinding* createPhongShader(
 	ShaderViewpointBinding* viewpointBinding = renderer.createShaderViewpointBinding(shader);
 	if (viewpointBinding == nullptr)
 	{
-		backend->removeShader(shader);
+		device->removeShader(shader);
 		return nullptr;
 	}
 	viewpointBinding->bind(ShaderViewpointBinding::Parameter::VIEW_MATRIX, "view");

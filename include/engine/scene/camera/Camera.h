@@ -3,7 +3,7 @@
 // Includes
 #include "engine/math/Matrix4.h"
 #include "engine/window/Window.h"
-#include "engine/render_pipeline/viewpoint/Viewpoint.h"
+#include "engine/renderer/viewpoint/Viewpoint.h"
 
 namespace gltut
 {

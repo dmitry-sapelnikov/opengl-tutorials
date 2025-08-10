@@ -2,8 +2,8 @@
 
 // Includes
 #include "engine/math/Matrix4.h"
-#include "engine/renderer/mesh/Mesh.h"
-#include "engine/render_pipeline/objects/RenderGeometry.h"
+#include "engine/graphics/mesh/Mesh.h"
+#include "engine/renderer/objects/RenderGeometry.h"
 #include "engine/scene/nodes/SceneNode.h"
 
 namespace gltut
