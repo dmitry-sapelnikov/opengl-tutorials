@@ -160,7 +160,7 @@ RenderPass* RenderPassFactoryC::createTextureToWindowRenderPass(
 			materialPass != nullptr,
 			"Failed to create material pass for texture-to-window render pass");
 
-		materialPass->setTexture(texture, 0);
+		materialPass->getTextures()->setTexture(texture, 0);
 
 		RenderObject* object = mRenderer.createGeometry(
 			mRenderQuad,

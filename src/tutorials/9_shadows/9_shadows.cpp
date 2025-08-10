@@ -203,19 +203,16 @@ int main()
 			dynamic_cast<gltut::LightNode*>(directionalLight->getChild(0));
 		GLTUT_CHECK(directionalLightSource, "Failed to get directional light source");
 
-		auto [shadowViewpoint, shadowMap] = engine->getFactory()->getShadow()->createShadowMap(
+		gltut::ShadowMap* shadow = engine->getFactory()->getShadow()->createShadowMap(
 			directionalLightSource,
 			scene->getRenderObject(),
 			40.0f, // Frustum size
 			0.5f,  // Near plane
 			50.0f, // Far plane
 			2048);  // Shadow map size
-		GLTUT_CHECK(shadowMap, "Failed to create shadow map");
+		GLTUT_CHECK(shadow, "Failed to create shadow map");
 
-		phongMaterialModel->setDirectinalLightShadow(
-			0, // Light index
-			shadowViewpoint, // Viewpoint
-			shadowMap); // Shadow map
+		directionalLightSource->setShadowMap(shadow);
 
 		const auto startTime = std::chrono::high_resolution_clock::now();
 
@@ -247,6 +244,13 @@ int main()
 
 				directionalLight->setTransform(lightTransform);
 			}
+
+			// Display the shadow map texture
+			ImGui::Text("Shadow Map:");
+			const float windowWidth = ImGui::GetWindowWidth() - ImGui::GetStyle().WindowPadding.x * 2.0f;
+			ImGui::Image(
+				shadow->getTexture()->getId(),
+				{ windowWidth, windowWidth });
 
 			ImGui::End();
 

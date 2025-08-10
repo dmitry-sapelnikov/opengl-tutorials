@@ -3,7 +3,7 @@
 // Includes
 #include <unordered_map>
 #include "engine/factory/shadow/ShadowFactory.h"
-#include "./ShadowMap.h"
+#include "./ShadowMapC.h"
 
 
 namespace gltut
@@ -19,7 +19,7 @@ public:
 	}
 
 	/// Creates a shadow map for the given light
-	std::pair<const Viewpoint*, const Texture*> createShadowMap(
+	ShadowMap* createShadowMap(
 		const LightNode* light,
 		const RenderObject* shadowCaster,
 		float frustumSize,
@@ -35,7 +35,7 @@ private:
 	Renderer& mRenderer;
 
 	/// The shadow maps
-	std::unordered_map<const LightNode*, ShadowMap> mShadowMaps;
+	std::unordered_map<const LightNode*, ShadowMapC> mShadowMaps;
 };
 
 // End of the namespace gltut

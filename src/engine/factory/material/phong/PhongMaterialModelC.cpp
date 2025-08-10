@@ -4,46 +4,47 @@
 namespace gltut
 {
 // Global classes
-void PhongMaterialModelC::setDirectinalLightShadow(
-	u32 lightIndex,
-	const Viewpoint* shadowView,
-	const Texture* shadowMap) noexcept
-{
-	auto* materialPass = getMaterial()[0];
-	if (materialPass == nullptr)
-	{
-		return;
-	}
+PhongMaterialModelC::PhongMaterialModelC(
+	Renderer& renderer,
+	Scene& scene,
+	PhongShaderModel& phongShader) :
 
-	const u32 slot = 2 + lightIndex;
-	if (shadowView == nullptr || shadowMap == nullptr)
-	{
-		mDirectionalLightShadows.erase(lightIndex);
-		materialPass->setTexture(nullptr, slot);
-	}
-	else
-	{
-		mDirectionalLightShadows[lightIndex] = shadowView;
-		materialPass->setTextureSlotsCount(
-			std::max(slot + 1, materialPass->getTextureSlotsCount()));
-		materialPass->setTexture(shadowMap, slot);
-	}
+	MaterialModelT<PhongMaterialModel>(renderer),
+	mScene(scene),
+	mPhongShader(phongShader)
+{
+	MaterialPass* materialPass = getMaterial().createPass(
+		0,
+		phongShader.getMaterialBinding(),
+		PhongShaderModel::TEXTURE_SLOTS_COUNT + phongShader.getMaxDirectionalLights());
+	GLTUT_CHECK(materialPass != nullptr, "Failed to create a material pass");
+
+	mTextureSetBinding = mScene.createTextureSetBinding(materialPass->getTextures());
+	GLTUT_CHECK(mTextureSetBinding != nullptr, "Failed to create a texture set binding");
+	
+	mTextureSetBinding->bind(
+		SceneTextureSetBinding::Parameter::DIRECTIONAL_LIGHT_SHADOW_MAP,
+		PhongShaderModel::TEXTURE_SLOTS_COUNT);
 }
 
-void PhongMaterialModelC::update() noexcept
+PhongMaterialModelC::~PhongMaterialModelC() noexcept
 {
-	for (const auto& [lightIndex, shadowView] : mDirectionalLightShadows)
-	{
-		const Matrix4 shadowMatrix =
-			shadowView->getProjectionMatrix(1.0f) * shadowView->getViewMatrix();
+	mScene.removeTextureSetBinding(mTextureSetBinding);
+}
 
-		const std::string argumentName =
-			"directionalLights[" + std::to_string(lightIndex) + "].shadowMatrix";
+void PhongMaterialModelC::setDiffuse(Texture* diffuse) noexcept
+{
+	getMaterial()[0]->getTextures()->setTexture(diffuse, 0);
+}
 
-		getMaterial()[0]->getShaderArguments()->setMat4(
-			argumentName.c_str(),
-			shadowMatrix.data());
-	}
+void PhongMaterialModelC::setSpecular(Texture* specular) noexcept
+{
+	getMaterial()[0]->getTextures()->setTexture(specular, 1);
+}
+
+void PhongMaterialModelC::setShininess(float shininess) noexcept
+{
+	getMaterial()[0]->getShaderArguments()->setFloat("shininess", shininess);
 }
 
 // End of the namespace gltut

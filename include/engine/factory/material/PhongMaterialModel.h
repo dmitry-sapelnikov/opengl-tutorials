@@ -3,6 +3,7 @@
 // Includes
 #include "engine/renderer/viewpoint/Viewpoint.h"
 #include "engine/renderer/material/Material.h"
+#include "engine/factory/material/PhongShaderModel.h"
 
 namespace gltut
 {
@@ -12,6 +13,8 @@ class PhongMaterialModel
 public:
 	virtual ~PhongMaterialModel() noexcept = default;
 
+	virtual PhongShaderModel* getPhongShader() const noexcept = 0;
+
 	virtual const Material* getMaterial() const noexcept = 0;
 
 	virtual void setDiffuse(Texture* diffuse) noexcept = 0;
@@ -19,14 +22,6 @@ public:
 	virtual void setSpecular(Texture* specular) noexcept = 0;
 
 	virtual void setShininess(float shininess) noexcept = 0;
-
-	virtual void setDirectinalLightShadow(
-		u32 lightIndex,
-		const Viewpoint* shadowView,
-		const Texture* shadowMap) noexcept = 0;
-
-	/// Updates the model before rendering
-	virtual void update() noexcept = 0;
 };
 
 // End of the namespace gltut

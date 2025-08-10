@@ -151,6 +151,18 @@ public:
 		mSpecular = specular;
 	}
 
+	/// Returns the shadow map
+	ShadowMap* getShadowMap() const noexcept final
+	{
+		return mShadowMap;
+	}
+
+	/// Sets the shadow map`
+	void setShadowMap(ShadowMap* shadowMap) noexcept final
+	{
+		mShadowMap = shadowMap;
+	}
+
 private:
 	/// The light type
 	LightNode::Type mType;
@@ -178,6 +190,9 @@ private:
 
 	/// The specular color
 	Color mSpecular{ DEFAULT_SPECULAR };
+
+	/// The shadow map
+	ShadowMap* mShadowMap = nullptr;
 };
 
 // End of the namespace gltut

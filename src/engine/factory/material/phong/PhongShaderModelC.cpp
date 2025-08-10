@@ -1,6 +1,6 @@
 // Includes
 #include <string>
-#include "PhongShader.h"
+#include "PhongShaderModelC.h"
 
 namespace gltut
 {
@@ -214,22 +214,26 @@ void main()
 	outColor = vec4(result, 1.0f);
 })";
 
-// Default shininess value
-static constexpr float DEFAULT_SHINESS = 32.0f;
-
-// Global functions
-ShaderMaterialBinding* createPhongShader(
+// Global classes
+PhongShaderModelC::PhongShaderModelC(
 	Renderer& renderer,
 	Scene& scene,
 	u32 maxDirectionalLights,
 	u32 maxPointLights,
-	u32 maxSpotLights) noexcept
+	u32 maxSpotLights) :
+
+	mRenderer(renderer),
+	mScene(scene),
+	mMaxDirectionalLights(maxDirectionalLights),
+	mMaxPointLights(maxPointLights),
+	mMaxSpotLights(maxSpotLights)
 {
-	// No lights, no shader
-	if (maxDirectionalLights + maxPointLights + maxSpotLights == 0)
-	{
-		return nullptr;
-	}
+	GLTUT_CHECK(
+		mMaxDirectionalLights + mMaxDirectionalLights + mMaxSpotLights > 0,
+		"At least one amount of lights must be greater than 0");
+
+	GraphicsDevice* device = renderer.getDevice();
+	GLTUT_CHECK(device, "Failed to get graphics device");
 
 	std::string shaderHeader = "#version 330 core\n";
 	shaderHeader += "#define MAX_DIRECTIONAL_LIGHTS " + std::to_string(maxDirectionalLights) + "\n";
@@ -237,69 +241,71 @@ ShaderMaterialBinding* createPhongShader(
 	shaderHeader += "#define MAX_SPOT_LIGHTS " + std::to_string(maxSpotLights) + "\n";
 	shaderHeader += LIGHT_UNIFORMS;
 
-	GraphicsDevice* device = renderer.getDevice();
-
-	Shader* shader = device->createShader(
+	mShader = device->createShader(
 		(shaderHeader + PHONG_VERTEX_SHADER).c_str(),
 		(shaderHeader + PHONG_FRAGMENT_SHADER).c_str());
 
-	if (shader == nullptr)
-	{
-		return nullptr;
-	}
+	GLTUT_CHECK(mShader, "Failed to create Phong shader");
 
-	shader->setInt("diffuseSampler", 0);
-	shader->setInt("specularSampler", 1);
-	shader->setFloat("shininess", DEFAULT_SHINESS);
-
+	mShader->setInt("diffuseSampler", 0);
+	mShader->setInt("specularSampler", 1);
+	mShader->setFloat("shininess", DEFAULT_SHINESS);
 	for (u32 i = 0; i < maxDirectionalLights; ++i)
 	{
-		shader->setInt(("directionalLightShadowSamplers[" + std::to_string(i) + "]").c_str(), 2 + i);
+		mShader->setInt(
+			("directionalLightShadowSamplers[" + std::to_string(i) + "]").c_str(),
+			PhongShaderModel::TEXTURE_SLOTS_COUNT + i);
 	}
 
-	ShaderMaterialBinding* materialBinding = renderer.createShaderMaterialBinding(shader);
-	if (materialBinding == nullptr)
+	mMaterialBinding = renderer.createShaderMaterialBinding(mShader);
+	GLTUT_CHECK(mMaterialBinding != nullptr, "Failed to create shader material binding");
+
+	mMaterialBinding->bind(ShaderMaterialBinding::Parameter::GEOMETRY_MATRIX, "model");
+	mMaterialBinding->bind(ShaderMaterialBinding::Parameter::GEOMETRY_NORMAL_MATRIX, "normalMat");
+
+	mViewpointBinding = renderer.createShaderViewpointBinding(mShader);
+	GLTUT_CHECK(mViewpointBinding != nullptr, "Failed to create shader viewpoint binding");
+
+	mViewpointBinding->bind(ShaderViewpointBinding::Parameter::VIEW_MATRIX, "view");
+	mViewpointBinding->bind(ShaderViewpointBinding::Parameter::PROJECTION_MATRIX, "projection");
+	mViewpointBinding->bind(ShaderViewpointBinding::Parameter::POSITION, "viewPos");
+
+	mSceneBinding = scene.createShaderBinding(mShader);
+	GLTUT_CHECK(mSceneBinding != nullptr, "Failed to create scene shader binding");
+
+	mSceneBinding->bind(SceneShaderBinding::Parameter::DIRECTIONAL_LIGHT_DIRECTION, "directionalLights.dir");
+	mSceneBinding->bind(SceneShaderBinding::Parameter::DIRECTIONAL_LIGHT_AMBIENT_COLOR, "directionalLights.color.ambient");
+	mSceneBinding->bind(SceneShaderBinding::Parameter::DIRECTIONAL_LIGHT_DIFFUSE_COLOR, "directionalLights.color.diffuse");
+	mSceneBinding->bind(SceneShaderBinding::Parameter::DIRECTIONAL_LIGHT_SPECULAR_COLOR, "directionalLights.color.specular");
+	mSceneBinding->bind(SceneShaderBinding::Parameter::DIRECTIONAL_LIGHT_SHADOW_MATRIX, "directionalLights.shadowMatrix");
+
+	mSceneBinding->bind(SceneShaderBinding::Parameter::POINT_LIGHT_POSITION, "pointLights.pos");
+	mSceneBinding->bind(SceneShaderBinding::Parameter::POINT_LIGHT_AMBIENT_COLOR, "pointLights.color.ambient");
+	mSceneBinding->bind(SceneShaderBinding::Parameter::POINT_LIGHT_DIFFUSE_COLOR, "pointLights.color.diffuse");
+	mSceneBinding->bind(SceneShaderBinding::Parameter::POINT_LIGHT_SPECULAR_COLOR, "pointLights.color.specular");
+	mSceneBinding->bind(SceneShaderBinding::Parameter::POINT_LIGHT_LINEAR_ATTENUATION, "pointLights.linAttenuation");
+	mSceneBinding->bind(SceneShaderBinding::Parameter::POINT_LIGHT_QUADRATIC_ATTENUATION, "pointLights.quadAttenuation");
+
+	mSceneBinding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_POSITION, "spotLights.pos");
+	mSceneBinding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_DIRECTION, "spotLights.dir");
+	mSceneBinding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_INNER_ANGLE_COS, "spotLights.innerAngleCos");
+	mSceneBinding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_OUTER_ANGLE_COS, "spotLights.outerAngleCos");
+	mSceneBinding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_AMBIENT_COLOR, "spotLights.color.ambient");
+	mSceneBinding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_DIFFUSE_COLOR, "spotLights.color.diffuse");
+	mSceneBinding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_SPECULAR_COLOR, "spotLights.color.specular");
+	mSceneBinding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_LINEAR_ATTENUATION, "spotLights.linAttenuation");
+	mSceneBinding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_QUADRATIC_ATTENUATION, "spotLights.quadAttenuation");
+}
+
+PhongShaderModelC::~PhongShaderModelC() noexcept
+{
+	if (mRenderer.getDevice() != nullptr)
 	{
-		device->removeShader(shader);
-		return nullptr;
+		mRenderer.getDevice()->removeShader(mShader);
 	}
-	materialBinding->bind(ShaderMaterialBinding::Parameter::GEOMETRY_MATRIX, "model");
-	materialBinding->bind(ShaderMaterialBinding::Parameter::GEOMETRY_NORMAL_MATRIX, "normalMat");
-
-	ShaderViewpointBinding* viewpointBinding = renderer.createShaderViewpointBinding(shader);
-	if (viewpointBinding == nullptr)
-	{
-		device->removeShader(shader);
-		return nullptr;
-	}
-	viewpointBinding->bind(ShaderViewpointBinding::Parameter::VIEW_MATRIX, "view");
-	viewpointBinding->bind(ShaderViewpointBinding::Parameter::PROJECTION_MATRIX, "projection");
-	viewpointBinding->bind(ShaderViewpointBinding::Parameter::POSITION, "viewPos");
-
-	auto* sceneBinding = scene.createShaderBinding(shader);
-	sceneBinding->bind(SceneShaderBinding::Parameter::DIRECTIONAL_LIGHT_DIRECTION, "directionalLights.dir");
-	sceneBinding->bind(SceneShaderBinding::Parameter::DIRECTIONAL_LIGHT_AMBIENT_COLOR, "directionalLights.color.ambient");
-	sceneBinding->bind(SceneShaderBinding::Parameter::DIRECTIONAL_LIGHT_DIFFUSE_COLOR, "directionalLights.color.diffuse");
-	sceneBinding->bind(SceneShaderBinding::Parameter::DIRECTIONAL_LIGHT_SPECULAR_COLOR, "directionalLights.color.specular");
-
-	sceneBinding->bind(SceneShaderBinding::Parameter::POINT_LIGHT_POSITION, "pointLights.pos");
-	sceneBinding->bind(SceneShaderBinding::Parameter::POINT_LIGHT_AMBIENT_COLOR, "pointLights.color.ambient");
-	sceneBinding->bind(SceneShaderBinding::Parameter::POINT_LIGHT_DIFFUSE_COLOR, "pointLights.color.diffuse");
-	sceneBinding->bind(SceneShaderBinding::Parameter::POINT_LIGHT_SPECULAR_COLOR, "pointLights.color.specular");
-	sceneBinding->bind(SceneShaderBinding::Parameter::POINT_LIGHT_LINEAR_ATTENUATION, "pointLights.linAttenuation");
-	sceneBinding->bind(SceneShaderBinding::Parameter::POINT_LIGHT_QUADRATIC_ATTENUATION, "pointLights.quadAttenuation");
-
-	sceneBinding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_POSITION, "spotLights.pos");
-	sceneBinding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_DIRECTION, "spotLights.dir");
-	sceneBinding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_INNER_ANGLE_COS, "spotLights.innerAngleCos");
-	sceneBinding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_OUTER_ANGLE_COS, "spotLights.outerAngleCos");
-	sceneBinding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_AMBIENT_COLOR, "spotLights.color.ambient");
-	sceneBinding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_DIFFUSE_COLOR, "spotLights.color.diffuse");
-	sceneBinding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_SPECULAR_COLOR, "spotLights.color.specular");
-	sceneBinding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_LINEAR_ATTENUATION, "spotLights.linAttenuation");
-	sceneBinding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_QUADRATIC_ATTENUATION, "spotLights.quadAttenuation");
-
-	return materialBinding;
+	mRenderer.removeShaderViewpointBinding(mViewpointBinding);
+	mRenderer.removeShaderMaterialBinding(mMaterialBinding);
+	mScene.removeShaderBinding(mSceneBinding);
 }
 
 // End of the namespace gltut

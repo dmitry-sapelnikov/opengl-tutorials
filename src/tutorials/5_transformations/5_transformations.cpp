@@ -66,8 +66,8 @@ int main()
 		auto* materialPass = material->createPass(0, binding, 2);
 		GLTUT_CHECK(materialPass != nullptr, "Failed to create material pass");
 
-		materialPass->setTexture(texture1, 0);
-		materialPass->setTexture(texture2, 1);
+		materialPass->getTextures()->setTexture(texture1, 0);
+		materialPass->getTextures()->setTexture(texture2, 1);
 
 		auto* object = scene->createGeometry(mesh, material);
 

@@ -1,50 +1,50 @@
 #pragma once
 
 // Includes
-#include <string>
-#include <unordered_map>
 #include "engine/factory/material/PhongMaterialModel.h"
+#include "engine/scene/Scene.h"
 #include "../MaterialModelT.h"
 
 namespace gltut
 {
 // Global classes
-
 /// Implementation of the PhongMaterialModel interface
 class PhongMaterialModelC final : public MaterialModelT<PhongMaterialModel>
 {
 public:
 	/// Constructor
-	using MaterialModelT<PhongMaterialModel>::MaterialModelT;
+	PhongMaterialModelC(
+		Renderer& renderer,
+		Scene& scene,
+		PhongShaderModel& phongShader);
+
+	/// Virtual destructor
+	~PhongMaterialModelC() noexcept final;
+
+	// Returns the Phong shader model
+	PhongShaderModel* getPhongShader() const noexcept final
+	{
+		return &mPhongShader;
+	}
 
 	// Sets the diffuse texture
-	void setDiffuse(Texture* diffuse) noexcept final
-	{
-		getMaterial()[0]->setTexture(diffuse, 0);
-	}
+	void setDiffuse(Texture* diffuse) noexcept final;
 
 	// Sets the specular texture
-	void setSpecular(Texture* specular) noexcept final
-	{
-		getMaterial()[0]->setTexture(specular, 1);
-	}
+	void setSpecular(Texture* specular) noexcept final;
 
 	// Sets the shininess value
-	void setShininess(float shininess) noexcept final
-	{
-		getMaterial()[0]->getShaderArguments()->setFloat("shininess", shininess);
-	}
-
-	void setDirectinalLightShadow(
-		u32 lightIndex,
-		const Viewpoint* shadowView,
-		const Texture* shadowMap) noexcept final;
-	
-	/// Updates the material
-	void update() noexcept final;
+	void setShininess(float shininess) noexcept final;
 
 private:
-	std::unordered_map<u32, const Viewpoint*> mDirectionalLightShadows;
+	/// The scene
+	Scene& mScene;
+
+	/// The Phong shader model
+	PhongShaderModel& mPhongShader;
+
+	/// The texture set binding
+	SceneTextureSetBinding* mTextureSetBinding = nullptr;
 };
 
 // End of the namespace gltut

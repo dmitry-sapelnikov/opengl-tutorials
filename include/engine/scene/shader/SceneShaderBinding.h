@@ -29,6 +29,8 @@ public:
 		DIRECTIONAL_LIGHT_DIFFUSE_COLOR,
 		/// Directional light specular color
 		DIRECTIONAL_LIGHT_SPECULAR_COLOR,
+		/// Directional light shadow matrix
+		DIRECTIONAL_LIGHT_SHADOW_MATRIX,
 
 		/// Point light position
 		POINT_LIGHT_POSITION,
