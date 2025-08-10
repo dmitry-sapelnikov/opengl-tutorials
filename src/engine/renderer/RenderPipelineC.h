@@ -5,7 +5,7 @@
 #include <memory>
 
 #include "engine/core/NonCopyable.h"
-#include "engine/render_pipeline/RenderPipeline.h"
+#include "engine/renderer/RenderPipeline.h"
 #include "engine/graphics/GraphicsDevice.h"
 #include "engine/scene/Scene.h"
 

@@ -4,7 +4,7 @@
 #include <deque>
 #include <map>
 #include "engine/core/NonCopyable.h"
-#include "engine/render_pipeline/RenderPipeline.h"
+#include "engine/renderer/RenderPipeline.h"
 #include "engine/factory/material/MaterialFactory.h"
 
 #include "./flat_color/FlatColorMaterialModelC.h"

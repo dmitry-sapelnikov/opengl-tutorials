@@ -2,7 +2,7 @@
 
 // Includes
 #include "engine/scene/Scene.h"
-#include "engine/render_pipeline/RenderPipeline.h"
+#include "engine/renderer/RenderPipeline.h"
 
 namespace gltut
 {

@@ -1,7 +1,7 @@
 #pragma once
 
 // Includes
-#include "engine/render_pipeline/objects/RenderObject.h"
+#include "engine/renderer/objects/RenderObject.h"
 #include "engine/scene/camera/CameraController.h"
 #include "engine/scene/shader/SceneShaderBinding.h"
 #include "engine/scene/nodes/GeometryNode.h"

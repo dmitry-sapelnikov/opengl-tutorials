@@ -2,7 +2,7 @@
 
 // Includes
 #include "engine/core/NonCopyable.h"
-#include "engine/render_pipeline/material/MaterialPass.h"
+#include "engine/renderer/material/MaterialPass.h"
 #include "../../graphics/shader/ShaderArguments.h"
 
 namespace gltut

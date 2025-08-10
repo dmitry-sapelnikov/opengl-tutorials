@@ -5,7 +5,7 @@
 #include "engine/graphics/Texture.h"
 #include "engine/scene/nodes/LightNode.h"
 #include "engine/factory/render_pass/RenderPassFactory.h"
-#include "../../render_pipeline/viewpoint/ViewpointC.h"
+#include "../../renderer/viewpoint/ViewpointC.h"
 
 namespace gltut
 {

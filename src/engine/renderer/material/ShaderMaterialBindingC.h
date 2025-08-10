@@ -2,7 +2,7 @@
 
 // Includes
 #include "../../graphics/shader/ShaderBindingT.h"
-#include "engine/render_pipeline/material/ShaderMaterialBinding.h"
+#include "engine/renderer/material/ShaderMaterialBinding.h"
 
 namespace gltut
 {

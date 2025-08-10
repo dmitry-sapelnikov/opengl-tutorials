@@ -2,7 +2,7 @@
 
 // Includes
 #include "../../graphics/shader/ShaderBindingT.h"
-#include "engine/render_pipeline/viewpoint/ShaderViewpointBinding.h"
+#include "engine/renderer/viewpoint/ShaderViewpointBinding.h"
 
 namespace gltut
 {

@@ -5,7 +5,7 @@
 #include <chrono>
 #include "engine/core/NonCopyable.h"
 #include "engine/scene/Scene.h"
-#include "engine/render_pipeline/RenderPipeline.h"
+#include "engine/renderer/RenderPipeline.h"
 
 #include "./camera/CameraC.h"
 #include "./shader/SceneShaderBindingC.h"

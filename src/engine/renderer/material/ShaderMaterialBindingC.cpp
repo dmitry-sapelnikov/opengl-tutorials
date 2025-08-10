@@ -1,6 +1,6 @@
 // Includes
 #include "ShaderMaterialBindingC.h"
-#include "engine/render_pipeline/objects/RenderGeometry.h"
+#include "engine/renderer/objects/RenderGeometry.h"
 
 namespace gltut
 {

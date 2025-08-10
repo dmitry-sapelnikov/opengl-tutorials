@@ -72,16 +72,16 @@
     <Filter Include="src\factory\material\flat_color">
       <UniqueIdentifier>{670fe105-b12a-47fa-a712-4bb9859301ab}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\render_pipeline">
+    <Filter Include="src\renderer">
       <UniqueIdentifier>{02e12331-ca12-4be6-9803-3c1f90d59d46}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\render_pipeline\material">
+    <Filter Include="src\renderer\material">
       <UniqueIdentifier>{83dadf21-59a5-4df0-b01b-f5dde07b993a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\render_pipeline\viewpoint">
+    <Filter Include="src\renderer\viewpoint">
       <UniqueIdentifier>{2ba68344-fdc8-4771-971e-ddb0f8080e87}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\render_pipeline\objects">
+    <Filter Include="src\renderer\objects">
       <UniqueIdentifier>{b5a660c9-6724-44eb-851c-776f1b92565d}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\factory\render_pass">
@@ -96,16 +96,16 @@
     <Filter Include="src\factory\shadow">
       <UniqueIdentifier>{88b6f597-53f7-4284-af68-ecee44790142}</UniqueIdentifier>
     </Filter>
-    <Filter Include="include\render_pipeline">
+    <Filter Include="include\renderer">
       <UniqueIdentifier>{4ea6f70e-cc24-4c14-89f8-f5e39cfd7029}</UniqueIdentifier>
     </Filter>
-    <Filter Include="include\render_pipeline\objects">
+    <Filter Include="include\renderer\objects">
       <UniqueIdentifier>{4690bdcf-a658-4557-8604-af62f24fff1c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="include\render_pipeline\material">
+    <Filter Include="include\renderer\material">
       <UniqueIdentifier>{1842b9e9-432a-4936-b86a-a182b18d6199}</UniqueIdentifier>
     </Filter>
-    <Filter Include="include\render_pipeline\viewpoint">
+    <Filter Include="include\renderer\viewpoint">
       <UniqueIdentifier>{039145a4-2c27-418f-b795-fcfe81d22ab8}</UniqueIdentifier>
     </Filter>
     <Filter Include="include\graphics">
@@ -308,62 +308,62 @@
     <ClInclude Include="..\..\src\engine\scene\camera\CameraViewpointC.h">
       <Filter>src\scene\camera</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\engine\render_pipeline\RenderPipelineC.h">
-      <Filter>src\render_pipeline</Filter>
+    <ClInclude Include="..\..\src\engine\renderer\RenderPipelineC.h">
+      <Filter>src\renderer</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\engine\render_pipeline\RenderPipeline.h">
-      <Filter>include\render_pipeline</Filter>
+    <ClInclude Include="..\..\include\engine\renderer\RenderPipeline.h">
+      <Filter>include\renderer</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\engine\render_pipeline\objects\RenderGeometry.h">
-      <Filter>include\render_pipeline\objects</Filter>
+    <ClInclude Include="..\..\include\engine\renderer\objects\RenderGeometry.h">
+      <Filter>include\renderer\objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\engine\render_pipeline\objects\RenderGroup.h">
-      <Filter>include\render_pipeline\objects</Filter>
+    <ClInclude Include="..\..\include\engine\renderer\objects\RenderGroup.h">
+      <Filter>include\renderer\objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\engine\render_pipeline\objects\RenderObject.h">
-      <Filter>include\render_pipeline\objects</Filter>
+    <ClInclude Include="..\..\include\engine\renderer\objects\RenderObject.h">
+      <Filter>include\renderer\objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\engine\render_pipeline\material\MaterialPass.h">
-      <Filter>include\render_pipeline\material</Filter>
+    <ClInclude Include="..\..\include\engine\renderer\material\MaterialPass.h">
+      <Filter>include\renderer\material</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\engine\render_pipeline\material\Material.h">
-      <Filter>include\render_pipeline\material</Filter>
+    <ClInclude Include="..\..\include\engine\renderer\material\Material.h">
+      <Filter>include\renderer\material</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\engine\render_pipeline\material\ShaderMaterialBinding.h">
-      <Filter>include\render_pipeline\material</Filter>
+    <ClInclude Include="..\..\include\engine\renderer\material\ShaderMaterialBinding.h">
+      <Filter>include\renderer\material</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\engine\render_pipeline\RenderPass.h">
-      <Filter>include\render_pipeline</Filter>
+    <ClInclude Include="..\..\include\engine\renderer\RenderPass.h">
+      <Filter>include\renderer</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\engine\render_pipeline\viewpoint\ShaderViewpointBinding.h">
-      <Filter>include\render_pipeline\viewpoint</Filter>
+    <ClInclude Include="..\..\include\engine\renderer\viewpoint\ShaderViewpointBinding.h">
+      <Filter>include\renderer\viewpoint</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\engine\render_pipeline\viewpoint\Viewpoint.h">
-      <Filter>include\render_pipeline\viewpoint</Filter>
+    <ClInclude Include="..\..\include\engine\renderer\viewpoint\Viewpoint.h">
+      <Filter>include\renderer\viewpoint</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\engine\render_pipeline\RenderPassC.h">
-      <Filter>src\render_pipeline</Filter>
+    <ClInclude Include="..\..\src\engine\renderer\RenderPassC.h">
+      <Filter>src\renderer</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\engine\render_pipeline\material\MaterialC.h">
-      <Filter>src\render_pipeline\material</Filter>
+    <ClInclude Include="..\..\src\engine\renderer\material\MaterialC.h">
+      <Filter>src\renderer\material</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\engine\render_pipeline\material\MaterialPassC.h">
-      <Filter>src\render_pipeline\material</Filter>
+    <ClInclude Include="..\..\src\engine\renderer\material\MaterialPassC.h">
+      <Filter>src\renderer\material</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\engine\graphics\shader\ShaderBindingT.h">
       <Filter>src\graphics\shader</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\engine\render_pipeline\material\ShaderMaterialBindingC.h">
-      <Filter>src\render_pipeline\material</Filter>
+    <ClInclude Include="..\..\src\engine\renderer\material\ShaderMaterialBindingC.h">
+      <Filter>src\renderer\material</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\engine\render_pipeline\viewpoint\ShaderViewpointBindingC.h">
-      <Filter>src\render_pipeline\viewpoint</Filter>
+    <ClInclude Include="..\..\src\engine\renderer\viewpoint\ShaderViewpointBindingC.h">
+      <Filter>src\renderer\viewpoint</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\engine\render_pipeline\objects\RenderGeometryC.h">
-      <Filter>src\render_pipeline\objects</Filter>
+    <ClInclude Include="..\..\src\engine\renderer\objects\RenderGeometryC.h">
+      <Filter>src\renderer\objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\engine\render_pipeline\objects\RenderGroupC.h">
-      <Filter>src\render_pipeline\objects</Filter>
+    <ClInclude Include="..\..\src\engine\renderer\objects\RenderGroupC.h">
+      <Filter>src\renderer\objects</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\engine\graphics\framebuffer\TextureFramebufferBase.h">
       <Filter>src\graphics\framebuffer</Filter>
@@ -389,8 +389,8 @@
     <ClInclude Include="..\..\src\engine\factory\shadow\ShadowFactoryC.h">
       <Filter>src\factory\shadow</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\engine\render_pipeline\viewpoint\ViewpointC.h">
-      <Filter>src\render_pipeline\viewpoint</Filter>
+    <ClInclude Include="..\..\src\engine\renderer\viewpoint\ViewpointC.h">
+      <Filter>src\renderer\viewpoint</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\engine\factory\shadow\ShadowMap.h">
       <Filter>src\factory\shadow</Filter>
@@ -496,26 +496,26 @@
     <ClCompile Include="..\..\src\engine\factory\material\flat_color\FlatColorShader.cpp">
       <Filter>src\factory\material\flat_color</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\engine\render_pipeline\RenderPipelineC.cpp">
-      <Filter>src\render_pipeline</Filter>
+    <ClCompile Include="..\..\src\engine\renderer\RenderPipelineC.cpp">
+      <Filter>src\renderer</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\engine\render_pipeline\RenderPassC.cpp">
-      <Filter>src\render_pipeline</Filter>
+    <ClCompile Include="..\..\src\engine\renderer\RenderPassC.cpp">
+      <Filter>src\renderer</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\engine\render_pipeline\material\MaterialC.cpp">
-      <Filter>src\render_pipeline\material</Filter>
+    <ClCompile Include="..\..\src\engine\renderer\material\MaterialC.cpp">
+      <Filter>src\renderer\material</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\engine\render_pipeline\material\MaterialPassC.cpp">
-      <Filter>src\render_pipeline\material</Filter>
+    <ClCompile Include="..\..\src\engine\renderer\material\MaterialPassC.cpp">
+      <Filter>src\renderer\material</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\engine\render_pipeline\material\ShaderMaterialBindingC.cpp">
-      <Filter>src\render_pipeline\material</Filter>
+    <ClCompile Include="..\..\src\engine\renderer\material\ShaderMaterialBindingC.cpp">
+      <Filter>src\renderer\material</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\engine\render_pipeline\viewpoint\ShaderViewpointBindingC.cpp">
-      <Filter>src\render_pipeline\viewpoint</Filter>
+    <ClCompile Include="..\..\src\engine\renderer\viewpoint\ShaderViewpointBindingC.cpp">
+      <Filter>src\renderer\viewpoint</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\engine\render_pipeline\objects\RenderGeometryC.cpp">
-      <Filter>src\render_pipeline\objects</Filter>
+    <ClCompile Include="..\..\src\engine\renderer\objects\RenderGeometryC.cpp">
+      <Filter>src\renderer\objects</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\engine\graphics\backends\opengl\framebuffer\TextureFramebufferOpenGL.cpp">
       <Filter>src\graphics\backends\opengl\framebuffer</Filter>

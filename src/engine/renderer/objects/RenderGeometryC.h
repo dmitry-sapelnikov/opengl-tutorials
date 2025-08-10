@@ -2,7 +2,7 @@
 
 // Includes
 #include "engine/core/NonCopyable.h"
-#include "engine/render_pipeline/objects/RenderGeometry.h"
+#include "engine/renderer/objects/RenderGeometry.h"
 
 namespace gltut
 {

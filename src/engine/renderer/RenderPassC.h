@@ -5,8 +5,8 @@
 #include <optional>
 #include "engine/core/NonCopyable.h"
 #include "engine/graphics/GraphicsDevice.h"
-#include "engine/render_pipeline/RenderPass.h"
-#include "engine/render_pipeline/viewpoint/ShaderViewpointBinding.h"
+#include "engine/renderer/RenderPass.h"
+#include "engine/renderer/viewpoint/ShaderViewpointBinding.h"
 
 namespace gltut
 {

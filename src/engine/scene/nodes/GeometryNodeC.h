@@ -2,7 +2,7 @@
 
 // Includes
 #include "engine/scene/nodes/GeometryNode.h"
-#include "engine/render_pipeline/objects/RenderGeometry.h"
+#include "engine/renderer/objects/RenderGeometry.h"
 #include "./SceneNodeT.h"
 
 namespace gltut

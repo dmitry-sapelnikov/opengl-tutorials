@@ -9,7 +9,7 @@
 #include "./graphics/GraphicsDeviceBase.h"
 #include "./scene/SceneC.h"
 #include "./window/WindowC.h"
-#include "./render_pipeline/RenderPipelineC.h"
+#include "./renderer/RenderPipelineC.h"
 
 namespace gltut
 {

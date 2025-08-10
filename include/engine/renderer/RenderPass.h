@@ -4,8 +4,8 @@
 #include "engine/math/Color.h"
 #include "engine/math/Rectangle.h"
 #include "engine/graphics/framebuffer/Framebuffer.h"
-#include "engine/render_pipeline/objects/RenderObject.h"
-#include "engine/render_pipeline/viewpoint/Viewpoint.h"
+#include "engine/renderer/objects/RenderObject.h"
+#include "engine/renderer/viewpoint/Viewpoint.h"
 
 namespace gltut
 {

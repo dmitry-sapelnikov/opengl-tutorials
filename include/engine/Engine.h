@@ -3,7 +3,7 @@
 // Includes
 #include "engine/factory/Factory.h"
 #include "engine/graphics/GraphicsDevice.h"
-#include "engine/render_pipeline/RenderPipeline.h"
+#include "engine/renderer/RenderPipeline.h"
 #include "engine/scene/Scene.h"
 #include "engine/window/Window.h"
 

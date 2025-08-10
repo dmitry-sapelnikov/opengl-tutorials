@@ -3,7 +3,7 @@
 // Includes
 #include <vector>
 #include "engine/core/NonCopyable.h"
-#include "engine/render_pipeline/material/Material.h"
+#include "engine/renderer/material/Material.h"
 
 namespace gltut
 {

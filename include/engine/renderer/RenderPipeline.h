@@ -2,10 +2,10 @@
 
 // Includes
 #include "engine/graphics/GraphicsDevice.h"
-#include "engine/render_pipeline/viewpoint/ShaderViewpointBinding.h"
-#include "engine/render_pipeline/objects/RenderGeometry.h"
-#include "engine/render_pipeline/objects/RenderGroup.h"
-#include "engine/render_pipeline/RenderPass.h"
+#include "engine/renderer/viewpoint/ShaderViewpointBinding.h"
+#include "engine/renderer/objects/RenderGeometry.h"
+#include "engine/renderer/objects/RenderGroup.h"
+#include "engine/renderer/RenderPass.h"
 
 namespace gltut
 {

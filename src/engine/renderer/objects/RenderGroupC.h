@@ -2,7 +2,7 @@
 
 // Includes
 #include <vector>
-#include "engine/render_pipeline/objects/RenderGroup.h"
+#include "engine/renderer/objects/RenderGroup.h"
 
 namespace gltut
 {

@@ -1,7 +1,7 @@
 #pragma once
 
 // Includes
-#include "engine/render_pipeline/viewpoint/Viewpoint.h"
+#include "engine/renderer/viewpoint/Viewpoint.h"
 
 namespace gltut
 {
