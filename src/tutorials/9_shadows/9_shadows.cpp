@@ -8,6 +8,9 @@
 #include "engine/math/Rng.h"
 #include "engine/Engine.h"
 
+#include "imgui/EngineImgui.h"
+
+
 // Slightly yellowish light
 const gltut::Vector3 DIR_LIGHT_POSITION = { 10.0f, 5.0f, 0.0f };
 const gltut::Color DIR_LIGHT_COLOR = { 1.5f, 1.5f, 1.5f };
@@ -130,13 +133,18 @@ void createLights(
 ///	The program entry point
 int main()
 {
-	try
-	{
-		std::unique_ptr<gltut::Engine> engine(gltut::createEngine(1024, 768));
+	gltut::EngineImgui* imgui = nullptr;
+	std::unique_ptr<gltut::Engine> engine;
+
+	GLTUT_CATCH_ALL_BEGIN
+		engine.reset(gltut::createEngine(1024, 768));
 		GLTUT_CHECK(engine, "Failed to create engine");
 
 		engine->getWindow()->setTitle("Lighting");
-		engine->getWindow()->showFPS(true);
+
+		// Create the Imgui connector
+		imgui = gltut::createEngineImgui(engine.get());
+		GLTUT_CHECK(imgui, "Failed to create ImGui instance");
 
 		auto* renderer = engine->getDevice();
 		auto* scene = engine->getScene();
@@ -210,23 +218,45 @@ int main()
 			shadowMap); // Shadow map
 
 		const auto startTime = std::chrono::high_resolution_clock::now();
+
+		float lightAzimuth = 0.0f;
+
 		while (true)
 		{
 			const auto now = std::chrono::high_resolution_clock::now();
 			const float time = std::chrono::duration<float>(now - startTime).count();
 
-			gltut::Matrix4 lightTransform =
-				gltut::Matrix4::rotationMatrix({ 0.0f, time * 0.5f, 0.0f }) *
-				gltut::Matrix4::translationMatrix(DIR_LIGHT_POSITION);
+			imgui->newFrame();
+			ImGui::SetNextWindowPos({ 10, 10 }, ImGuiCond_FirstUseEver);
+			ImGui::SetNextWindowSize({ 200, 400 }, ImGuiCond_FirstUseEver);
+			ImGui::Begin("Settings");
 
-			directionalLight->setTransform(lightTransform);
+			ImGui::Text("FPS: %u", engine->getWindow()->getFPS());
+			ImGui::Text("Time: %.2f seconds", time);
+
+			// Right azimuth numeric control with range 0 to 360 degrees
+			if (ImGui::SliderAngle(
+				"Light Azimuth",
+				&lightAzimuth,
+				0.0f, 360.0f,
+				"%0.1f degrees"))
+			{
+				gltut::Matrix4 lightTransform =
+					gltut::Matrix4::rotationMatrix({ 0, lightAzimuth, 0 }) *
+					gltut::Matrix4::translationMatrix(DIR_LIGHT_POSITION);
+
+				directionalLight->setTransform(lightTransform);
+			}
+
+			ImGui::End();
 
 			if (!engine->update())
 			{
 				break;
 			}
 		}
-	}
-	GLTUT_APPLICATION_CATCH;
+	GLTUT_CATCH_ALL_END("Failed to run 9_shadows example");
+
+	gltut::deleteEngineImgui(imgui);
 	return 0;
 }

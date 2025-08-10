@@ -24,17 +24,23 @@ public:
 	{
 	}
 
-	void onEvent(const Event& event) noexcept override
+	bool onEvent(const Event& event) noexcept override
 	{
-		for (auto callback : mWindow.mEventHandlers)
-		{
-			callback->onEvent(event);
-		}
-
 		if (event.type == Event::Type::WINDOW_RESIZE)
 		{
 			mWindow.updateSize();
 		}
+
+		for (auto callback : mWindow.mEventHandlers)
+		{
+			if (callback->onEvent(event))
+			{
+				break;
+			}
+		}
+		/// It is the root event handler, 
+		/// so we stop the event propagation
+		return true;
 	}
 
 	void swapBuffers() noexcept
@@ -60,6 +66,9 @@ static WindowCallback* getWindowCallback(HWND hwnd)
 /// The window procedure
 static LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+	Event event;
+	event.raw = { message, (void*)wParam, (void*)lParam };
+
 	switch (message)
 	{
 	case WM_MOUSEMOVE:
@@ -71,7 +80,6 @@ static LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 	case WM_MBUTTONUP:
 	case WM_MOUSEWHEEL:
 	{
-		gltut::Event event;
 		event.type = gltut::Event::Type::MOUSE;
 		event.mouse.position = { LOWORD(lParam), HIWORD(lParam) };
 		event.mouse.buttons.left = (wParam & MK_LBUTTON) != 0;
@@ -134,8 +142,6 @@ static LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 	case WM_KEYUP:
 	{
 		BYTE allKeys[256];
-
-		gltut::Event event;
 		event.type = gltut::Event::Type::KEYBOARD;
 		event.keyboard.key = (gltut::KeyCode)wParam;
 		event.keyboard.pressedDown = (message == WM_KEYDOWN || message == WM_SYSKEYDOWN);
@@ -178,7 +184,6 @@ static LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 
 	case WM_SIZE:
 	{
-		Event event;
 		event.type = Event::Type::WINDOW_RESIZE;
 		event.windowResize.size = { LOWORD(lParam), HIWORD(lParam) };
 		auto* callback = getWindowCallback(hWnd);
@@ -256,24 +261,17 @@ void WindowC::setTitle(const char* title) noexcept
 
 void WindowC::showFPS(bool show) noexcept
 {
-	if (show)
-	{
-		if (mFPSCounter == nullptr)
-		{
-			GLTUT_CATCH_ALL_BEGIN
-				mFPSCounter = std::make_unique<FPSCounter>();
-			GLTUT_CATCH_ALL_END("Failed to show FPS")
-		}
-	}
-	else
-	{
-		mFPSCounter.reset();
-	}
+	mShowFPS = show;
 }
 
 const Point2u& WindowC::getSize() const noexcept
 {
 	return mSize;
+}
+
+u32 WindowC::getFPS() noexcept
+{
+	return mFPS;
 }
 
 void WindowC::addEventHandler(EventHandler* handler) noexcept
@@ -338,14 +336,15 @@ bool WindowC::update() noexcept
 
 	CALL_WINAPI_WITH_ASSERT(SwapBuffers((HDC)mDeviceContext));
 
-	if (mFPSCounter != nullptr)
+	if (u32 fps = static_cast<u32>(mFPSCounter.tick()))
 	{
-		if (auto fps = mFPSCounter->tick())
-		{
-			setTitle((" [FPS: " + std::to_string(fps) + "]").c_str());
-		}
+		mFPS = fps;
 	}
 
+	if (mShowFPS)
+	{
+		setTitle((" [FPS: " + std::to_string(mFPS) + "]").c_str());
+	}
 	return true;
 }
 

@@ -7,7 +7,7 @@
 
 #include "engine/core/NonCopyable.h"
 #include "engine/window/Window.h"
-#include "FPSCounter.h"
+#include "./FPSCounter.h"
 
 struct GLFWwindow;
 class FPSCounter;
@@ -36,6 +36,9 @@ public:
 	/// Returns the size of the window in pixels
 	const Point2u& getSize() const noexcept final;
 
+	/// Returns the current frames per second (FPS)
+	u32 getFPS() noexcept final;
+
 	/// Adds an event handler
 	void addEventHandler(EventHandler* handler) noexcept final;
 
@@ -54,8 +57,14 @@ public:
 	*/
 	bool update() noexcept;
 
+	/// Returns the window handle
+	void* getHandle() const noexcept final
+	{
+		return mWindow;
+	}
+
 	/// Returns the device context
-	void* getDeviceContext() const noexcept
+	void* getDeviceContext() const noexcept final
 	{
 		return mDeviceContext;
 	}
@@ -83,10 +92,16 @@ private:
 	std::vector<EventHandler*> mEventHandlers;
 
 	/// FPS counter
-	std::unique_ptr<FPSCounter> mFPSCounter;
+	FPSCounter mFPSCounter;
 
 	/// The size of the window
 	Point2u mSize;
+
+	/// Show FPS flag
+	bool mShowFPS = false;
+
+	/// FPS
+	u32 mFPS = 0;
 };
 
 // End of the namespace gltut

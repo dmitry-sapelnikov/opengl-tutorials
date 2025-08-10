@@ -27,6 +27,14 @@ struct Event
 		WINDOW_RESIZE
 	};
 
+	/// Platform-specific raw event data
+	struct RawEvent
+	{
+		u64 message = 0;
+		void* wParam = nullptr;
+		void* lParam = nullptr;
+	};
+
 	/// Any kind of mouse event.
 	struct MouseEvent
 	{
@@ -106,6 +114,8 @@ struct Event
 
 	/// Event type
 	Type type = Type::NONE;
+
+	RawEvent raw;
 
 	MouseEvent mouse;
 

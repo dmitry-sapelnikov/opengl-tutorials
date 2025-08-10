@@ -23,6 +23,9 @@ public:
 	/// Returns the size of the window in pixels
 	virtual const Point2u& getSize() const noexcept = 0;
 
+	/// Returns the current frames per second (FPS)
+	virtual u32 getFPS() noexcept = 0;
+
 	/// Adds an event handler
 	virtual void addEventHandler(EventHandler* handler) noexcept = 0;
 
@@ -34,6 +37,9 @@ public:
 
 	/// Sets the cursor position
 	virtual void setCursorPosition(const Point2i& position) noexcept = 0;
+
+	/// Returns the window handle
+	virtual void* getHandle() const noexcept = 0;
 
 	/// Returns the device context for the window
 	virtual void* getDeviceContext() const noexcept = 0;
