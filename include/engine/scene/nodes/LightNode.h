@@ -3,6 +3,7 @@
 // Includes
 #include "engine/math/Color.h"
 #include "engine/scene/nodes/SceneNode.h"
+#include "engine/scene/nodes/ShadowMap.h"
 
 namespace gltut
 {
@@ -107,6 +108,18 @@ public:
 
 	/// Sets the specular color of the light
 	virtual void setSpecular(const Color& color) noexcept = 0;
+
+	/**
+		\brief Returns the shadow map for this light source
+		\return nullptr if shadows are not enabled or the light type does not support shadows
+	*/
+	virtual ShadowMap* getShadowMap() const noexcept = 0;
+
+	/**
+		\brief Sets the shadow map for this light source
+		\param shadowMap The shadow map to set, nullptr to disable shadows
+	*/
+	virtual void setShadowMap(ShadowMap* shadowMap) noexcept = 0;
 };
 
 // End of the namespace gltut

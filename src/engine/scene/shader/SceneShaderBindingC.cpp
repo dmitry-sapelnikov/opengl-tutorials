@@ -37,6 +37,19 @@ static void setVector3(
 	}
 }
 
+static void setMatrix4(
+	Shader& shader,
+	const std::pair<std::string, std::string>& parameterAttribute,
+	u32 index,
+	const Matrix4& value) noexcept
+{
+	if (const auto fullName = getFullParameter(parameterAttribute, index);
+		!fullName.empty())
+	{
+		shader.setMat4(fullName.c_str(), value.data());
+	}
+}
+
 static void setFloat(
 	Shader& shader,
 	const std::pair<std::string, std::string>& parameterAttribute,
@@ -134,6 +147,14 @@ void SceneShaderBindingC::updateLights(const Scene& scene) const
 				lightInd,
 				light->getGlobalDirection());
 
+			if (light->getShadowMap() != nullptr)
+			{
+				setMatrix4(
+					*shader,
+					getShaderParameterParts(Parameter::DIRECTIONAL_LIGHT_SHADOW_MATRIX),
+					directionalInd,
+					light->getShadowMap()->getShadowMatrix());
+			}
 			++directionalInd;
 		}
 		break;

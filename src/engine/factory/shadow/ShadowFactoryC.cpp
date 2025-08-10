@@ -5,7 +5,7 @@ namespace gltut
 {
 
 /// Creates a shadow map for the given light
-std::pair<const Viewpoint*, const Texture*> ShadowFactoryC::createShadowMap(
+ShadowMap* ShadowFactoryC::createShadowMap(
 	const LightNode* light,
 	const RenderObject* shadowCaster,
 	float frustumSize,
@@ -13,15 +13,10 @@ std::pair<const Viewpoint*, const Texture*> ShadowFactoryC::createShadowMap(
 	float frustumFar,
 	u32 shadowMapSize) noexcept
 {
-	if (light == nullptr || shadowCaster == nullptr)
+	if (light == nullptr || shadowCaster == nullptr ||
+		light->getType() != LightNode::Type::DIRECTIONAL)
 	{
-		return { nullptr, nullptr };
-	}
-
-	// Currently only directional lights are supported
-	if (light->getType() != LightNode::Type::DIRECTIONAL)
-	{
-		return { nullptr, nullptr };
+		return nullptr;
 	}
 
 	ShadowMap* result = nullptr;
@@ -45,8 +40,7 @@ std::pair<const Viewpoint*, const Texture*> ShadowFactoryC::createShadowMap(
 				shadowMapSize).first->second;
 		}
 	GLTUT_CATCH_ALL_END("Failed to create shadow map for the light");
-	
-	return { &result->getViewpoint(), result->getTexture() };
+	return result;
 }
 
 /// Updates the shadow factory

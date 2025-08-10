@@ -21,6 +21,7 @@
     <ClInclude Include="..\..\include\engine\factory\material\FlatColorMaterialModel.h" />
     <ClInclude Include="..\..\include\engine\factory\material\MaterialModel.h" />
     <ClInclude Include="..\..\include\engine\factory\material\PhongMaterialModel.h" />
+    <ClInclude Include="..\..\include\engine\factory\material\PhongShaderModel.h" />
     <ClInclude Include="..\..\include\engine\factory\render_pass\RenderPassFactory.h" />
     <ClInclude Include="..\..\include\engine\factory\shadow\ShadowFactory.h" />
     <ClInclude Include="..\..\include\engine\graphics\framebuffer\Framebuffer.h" />
@@ -46,12 +47,12 @@
     <ClInclude Include="..\..\include\engine\math\Vector3.h" />
     <ClInclude Include="..\..\include\engine\renderer\material\Material.h" />
     <ClInclude Include="..\..\include\engine\renderer\material\MaterialPass.h" />
-    <ClInclude Include="..\..\include\engine\renderer\material\ShaderMaterialBinding.h" />
     <ClInclude Include="..\..\include\engine\renderer\objects\RenderGeometry.h" />
     <ClInclude Include="..\..\include\engine\renderer\objects\RenderGroup.h" />
     <ClInclude Include="..\..\include\engine\renderer\objects\RenderObject.h" />
     <ClInclude Include="..\..\include\engine\renderer\RenderPass.h" />
     <ClInclude Include="..\..\include\engine\renderer\Renderer.h" />
+    <ClInclude Include="..\..\include\engine\renderer\texture\TextureSet.h" />
     <ClInclude Include="..\..\include\engine\renderer\viewpoint\ShaderViewpointBinding.h" />
     <ClInclude Include="..\..\include\engine\renderer\viewpoint\Viewpoint.h" />
     <ClInclude Include="..\..\include\engine\scene\camera\Camera.h" />
@@ -59,8 +60,10 @@
     <ClInclude Include="..\..\include\engine\scene\nodes\GeometryNode.h" />
     <ClInclude Include="..\..\include\engine\scene\nodes\LightNode.h" />
     <ClInclude Include="..\..\include\engine\scene\nodes\SceneNode.h" />
+    <ClInclude Include="..\..\include\engine\scene\nodes\ShadowMap.h" />
     <ClInclude Include="..\..\include\engine\scene\Scene.h" />
     <ClInclude Include="..\..\include\engine\scene\shader\SceneShaderBinding.h" />
+    <ClInclude Include="..\..\include\engine\scene\texture\SceneTextureSetBinding.h" />
     <ClInclude Include="..\..\include\engine\window\Event.h" />
     <ClInclude Include="..\..\include\engine\window\EventHandler.h" />
     <ClInclude Include="..\..\include\engine\window\Keycodes.h" />
@@ -75,10 +78,10 @@
     <ClInclude Include="..\..\src\engine\factory\material\MaterialFactoryC.h" />
     <ClInclude Include="..\..\src\engine\factory\material\MaterialModelT.h" />
     <ClInclude Include="..\..\src\engine\factory\material\phong\PhongMaterialModelC.h" />
-    <ClInclude Include="..\..\src\engine\factory\material\phong\PhongShader.h" />
+    <ClInclude Include="..\..\src\engine\factory\material\phong\PhongShaderModelC.h" />
     <ClInclude Include="..\..\src\engine\factory\render_pass\RenderPassFactoryC.h" />
     <ClInclude Include="..\..\src\engine\factory\shadow\ShadowFactoryC.h" />
-    <ClInclude Include="..\..\src\engine\factory\shadow\ShadowMap.h" />
+    <ClInclude Include="..\..\src\engine\factory\shadow\ShadowMapC.h" />
     <ClInclude Include="..\..\src\engine\graphics\backends\opengl\framebuffer\FramebufferBackupOpenGL.h" />
     <ClInclude Include="..\..\src\engine\graphics\backends\opengl\framebuffer\TextureFramebufferOpenGL.h" />
     <ClInclude Include="..\..\src\engine\graphics\backends\opengl\framebuffer\WindowFramebufferOpenGL.h" />
@@ -99,6 +102,7 @@
     <ClInclude Include="..\..\src\engine\renderer\objects\RenderGroupC.h" />
     <ClInclude Include="..\..\src\engine\renderer\RenderPassC.h" />
     <ClInclude Include="..\..\src\engine\renderer\RendererC.h" />
+    <ClInclude Include="..\..\src\engine\renderer\texture\TextureSetC.h" />
     <ClInclude Include="..\..\src\engine\renderer\viewpoint\ShaderViewpointBindingC.h" />
     <ClInclude Include="..\..\src\engine\renderer\viewpoint\ViewpointC.h" />
     <ClInclude Include="..\..\src\engine\scene\camera\CameraC.h" />
@@ -110,6 +114,7 @@
     <ClInclude Include="..\..\src\engine\scene\nodes\SceneNodeT.h" />
     <ClInclude Include="..\..\src\engine\scene\SceneC.h" />
     <ClInclude Include="..\..\src\engine\scene\shader\SceneShaderBindingC.h" />
+    <ClInclude Include="..\..\src\engine\scene\texture\SceneTextureSetBindingC.h" />
     <ClInclude Include="..\..\src\engine\window\WindowC.h" />
   </ItemGroup>
   <ItemGroup>
@@ -121,10 +126,10 @@
     <ClCompile Include="..\..\src\engine\factory\material\flat_color\FlatColorShader.cpp" />
     <ClCompile Include="..\..\src\engine\factory\material\MaterialFactoryC.cpp" />
     <ClCompile Include="..\..\src\engine\factory\material\phong\PhongMaterialModelC.cpp" />
-    <ClCompile Include="..\..\src\engine\factory\material\phong\PhongShader.cpp" />
+    <ClCompile Include="..\..\src\engine\factory\material\phong\PhongShaderModelC.cpp" />
     <ClCompile Include="..\..\src\engine\factory\render_pass\RenderPassFactoryC.cpp" />
     <ClCompile Include="..\..\src\engine\factory\shadow\ShadowFactoryC.cpp" />
-    <ClCompile Include="..\..\src\engine\factory\shadow\ShadowMap.cpp" />
+    <ClCompile Include="..\..\src\engine\factory\shadow\ShadowMapC.cpp" />
     <ClCompile Include="..\..\src\engine\graphics\backends\opengl\framebuffer\TextureFramebufferOpenGL.cpp" />
     <ClCompile Include="..\..\src\engine\graphics\backends\opengl\MeshOpenGL.cpp" />
     <ClCompile Include="..\..\src\engine\graphics\backends\opengl\OpenGLDevice.cpp" />
@@ -140,12 +145,14 @@
     <ClCompile Include="..\..\src\engine\renderer\objects\RenderGeometryC.cpp" />
     <ClCompile Include="..\..\src\engine\renderer\RenderPassC.cpp" />
     <ClCompile Include="..\..\src\engine\renderer\RendererC.cpp" />
+    <ClCompile Include="..\..\src\engine\renderer\texture\TextureSetC.cpp" />
     <ClCompile Include="..\..\src\engine\renderer\viewpoint\ShaderViewpointBindingC.cpp" />
     <ClCompile Include="..\..\src\engine\scene\camera\CameraC.cpp" />
     <ClCompile Include="..\..\src\engine\scene\camera\FPSCameraControllerC.cpp" />
     <ClCompile Include="..\..\src\engine\scene\camera\MouseCameraControllerC.cpp" />
     <ClCompile Include="..\..\src\engine\scene\SceneC.cpp" />
     <ClCompile Include="..\..\src\engine\scene\shader\SceneShaderBindingC.cpp" />
+    <ClCompile Include="..\..\src\engine\scene\texture\SceneTextureSetBindingC.cpp" />
     <ClCompile Include="..\..\src\engine\window\WindowC.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

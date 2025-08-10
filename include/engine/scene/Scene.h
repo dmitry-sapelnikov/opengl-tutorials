@@ -4,6 +4,7 @@
 #include "engine/renderer/objects/RenderObject.h"
 #include "engine/scene/camera/CameraController.h"
 #include "engine/scene/shader/SceneShaderBinding.h"
+#include "engine/scene/texture/SceneTextureSetBinding.h"
 #include "engine/scene/nodes/GeometryNode.h"
 #include "engine/scene/nodes/LightNode.h"
 
@@ -70,11 +71,27 @@ public:
 	///	Creates a binding between a shader and the scene
 	virtual SceneShaderBinding* createShaderBinding(Shader* shader) noexcept = 0;
 
+	/// Removes a shader binding from the scene
+	virtual void removeShaderBinding(SceneShaderBinding* binding) noexcept = 0;
+
 	/// Returns the number of shader bindings in the scene
 	virtual u32 getShaderBindingCount() const noexcept = 0;
 
 	/// Returns the shader binding at the specified index
 	virtual SceneShaderBinding* getShaderBinding(u32 index) const noexcept = 0;
+
+	/// Creates a binding between a texture set and the scene
+	virtual SceneTextureSetBinding* createTextureSetBinding(
+		TextureSet* textureSet) noexcept = 0;
+
+	/// Returns the number of texture set bindings in the scene
+	virtual u32 getTextureSetBindingCount() const noexcept = 0;
+
+	/// Returns the texture set binding at the specified index
+	virtual SceneTextureSetBinding* getTextureSetBinding(u32 index) const noexcept = 0;
+
+	/// Removes a texture set binding from the scene
+	virtual void removeTextureSetBinding(SceneTextureSetBinding* binding) noexcept = 0;
 
 	/// Creates a scene object
 	virtual GeometryNode* createGeometry(

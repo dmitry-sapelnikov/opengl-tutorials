@@ -9,6 +9,7 @@
 
 #include "./camera/CameraC.h"
 #include "./shader/SceneShaderBindingC.h"
+#include "./texture/SceneTextureSetBindingC.h"
 #include "./nodes/GeometryNodeC.h"
 #include "./nodes/LightNodeC.h"
 
@@ -32,6 +33,8 @@ public:
 
 	SceneShaderBinding* createShaderBinding(Shader* shader) noexcept final;
 
+	void removeShaderBinding(SceneShaderBinding* binding) noexcept final;
+
 	u32 getShaderBindingCount() const noexcept final
 	{
 		return static_cast<u32>(mShaderBindings.size());
@@ -39,7 +42,22 @@ public:
 
 	SceneShaderBinding* getShaderBinding(u32 index) const noexcept final
 	{
-		return &const_cast<SceneShaderBindingC&>(mShaderBindings[index]);
+		return mShaderBindings[index].get();
+	}
+
+	SceneTextureSetBinding* createTextureSetBinding(
+		TextureSet* textureSet) noexcept final;
+
+	void removeTextureSetBinding(SceneTextureSetBinding* binding) noexcept final;
+
+	u32 getTextureSetBindingCount() const noexcept final
+	{
+		return static_cast<u32>(mTextureSetBindings.size());
+	}
+
+	SceneTextureSetBinding* getTextureSetBinding(u32 index) const noexcept final
+	{
+		return mTextureSetBindings[index].get();
 	}
 
 	GeometryNode* createGeometry(
@@ -111,7 +129,10 @@ private:
 	RenderGroup* mRenderGroup = nullptr;
 
 	/// The shader bindings
-	std::deque<SceneShaderBindingC> mShaderBindings;
+	std::vector<std::unique_ptr<SceneShaderBindingC>> mShaderBindings;
+
+	/// The texture set bindings
+	std::vector<std::unique_ptr<SceneTextureSetBindingC>> mTextureSetBindings;
 
 	/// Geometry nodes
 	std::deque<GeometryNodeC> mGeometries;

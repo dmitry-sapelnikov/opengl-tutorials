@@ -10,7 +10,7 @@
 namespace gltut
 {
 
-class ShadowMap : public NonCopyable
+class ShadowMapC : public NonCopyable, public ShadowMap
 {
 public:
 	/// The priority of the shadow pass in the render pipeline
@@ -20,7 +20,7 @@ public:
 		Constructor
 		\throw std::runtime_error If the shadow map could not be created
 	*/
-	ShadowMap(
+	ShadowMapC(
 		Renderer& renderer,
 		const LightNode& light,
 		const RenderObject& shadowCaster,
@@ -30,22 +30,31 @@ public:
 		u32 shadowMapSize);
 
 	/// Destructor
-	~ShadowMap() noexcept;
+	~ShadowMapC() noexcept;
 
 	/// Returns the shadow map texture
-	Texture* getTexture() const noexcept
+	Texture* getTexture() const noexcept final
 	{
 		return mTexture;
 	}
 
 	/// Returns the viewpoint
-	const Viewpoint& getViewpoint() noexcept
+	const Viewpoint* getViewpoint() const noexcept final
 	{
-		return mViewpoint;
+		return &mViewpoint;
+	}
+
+	/// Returns the shadow matrix
+	Matrix4 getShadowMatrix() const noexcept final
+	{
+		const float aspectRatio = mTexture != nullptr ?
+			static_cast<float>(mTexture->getSize().x) / mTexture->getSize().y :
+			1.0f;
+		return mViewpoint.getProjectionMatrix(aspectRatio) * mViewpoint.getViewMatrix();
 	}
 
 	/// Updates the shadow map
-	void update() noexcept;
+	void update() noexcept final;
 
 private:
 	/// The device

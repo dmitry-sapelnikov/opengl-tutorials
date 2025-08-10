@@ -93,9 +93,6 @@
     <Filter Include="include\factory\shadow">
       <UniqueIdentifier>{5ecd1918-d83a-46a9-ba20-89dc6cc327ee}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\factory\shadow">
-      <UniqueIdentifier>{88b6f597-53f7-4284-af68-ecee44790142}</UniqueIdentifier>
-    </Filter>
     <Filter Include="include\renderer">
       <UniqueIdentifier>{4ea6f70e-cc24-4c14-89f8-f5e39cfd7029}</UniqueIdentifier>
     </Filter>
@@ -140,6 +137,21 @@
     </Filter>
     <Filter Include="src\graphics\framebuffer">
       <UniqueIdentifier>{af636d3a-379f-45fd-9805-48c829ef2714}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\scene\texture">
+      <UniqueIdentifier>{1ec4330d-31bf-4736-aad6-75874cc85ff5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\renderer\texture">
+      <UniqueIdentifier>{176f9cda-f8bc-4793-a897-f999214bb133}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\renderer\texture">
+      <UniqueIdentifier>{6e1705a2-1650-4fcc-b87e-8b69775ae910}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\factory\shadow">
+      <UniqueIdentifier>{20bf9bd1-b9ce-4421-89be-cea4e68c5d2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\scene\texture">
+      <UniqueIdentifier>{af858d0c-7ac3-4e49-a821-d93d03eecf2d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -263,7 +275,7 @@
     <ClInclude Include="..\..\src\engine\factory\material\phong\PhongMaterialModelC.h">
       <Filter>src\factory\material\phong</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\engine\factory\material\phong\PhongShader.h">
+    <ClInclude Include="..\..\src\engine\factory\material\phong\PhongShaderModelC.h">
       <Filter>src\factory\material\phong</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\engine\factory\geometry\GeometryFactoryC.h">
@@ -326,9 +338,6 @@
     <ClInclude Include="..\..\include\engine\renderer\material\Material.h">
       <Filter>include\renderer\material</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\engine\renderer\material\ShaderMaterialBinding.h">
-      <Filter>include\renderer\material</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\engine\renderer\RenderPass.h">
       <Filter>include\renderer</Filter>
     </ClInclude>
@@ -383,14 +392,8 @@
     <ClInclude Include="..\..\include\engine\factory\shadow\ShadowFactory.h">
       <Filter>include\factory\shadow</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\engine\factory\shadow\ShadowFactoryC.h">
-      <Filter>src\factory\shadow</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\engine\renderer\viewpoint\ViewpointC.h">
       <Filter>src\renderer\viewpoint</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\engine\factory\shadow\ShadowMap.h">
-      <Filter>src\factory\shadow</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\engine\graphics\backends\opengl\framebuffer\FramebufferBackupOpenGL.h">
       <Filter>src\graphics\backends\opengl\framebuffer</Filter>
@@ -443,6 +446,30 @@
     <ClInclude Include="..\..\src\engine\core\FPSCounter.h">
       <Filter>src\core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\engine\scene\nodes\ShadowMap.h">
+      <Filter>include\scene\nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\scene\texture\SceneTextureSetBindingC.h">
+      <Filter>src\scene\texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\renderer\texture\TextureSet.h">
+      <Filter>include\renderer\texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\renderer\texture\TextureSetC.h">
+      <Filter>src\renderer\texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\factory\material\PhongShaderModel.h">
+      <Filter>include\factory\material</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\factory\shadow\ShadowFactoryC.h">
+      <Filter>src\factory\shadow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\factory\shadow\ShadowMapC.h">
+      <Filter>src\factory\shadow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\scene\texture\SceneTextureSetBinding.h">
+      <Filter>include\scene\texture</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\engine\EngineC.cpp">
@@ -484,7 +511,7 @@
     <ClCompile Include="..\..\src\engine\factory\material\MaterialFactoryC.cpp">
       <Filter>src\factory\material</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\engine\factory\material\phong\PhongShader.cpp">
+    <ClCompile Include="..\..\src\engine\factory\material\phong\PhongShaderModelC.cpp">
       <Filter>src\factory\material\phong</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\engine\factory\geometry\GeometryFactoryC.cpp">
@@ -523,12 +550,6 @@
     <ClCompile Include="..\..\src\engine\factory\render_pass\RenderPassFactoryC.cpp">
       <Filter>src\factory\render_pass</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\engine\factory\shadow\ShadowFactoryC.cpp">
-      <Filter>src\factory\shadow</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\engine\factory\shadow\ShadowMap.cpp">
-      <Filter>src\factory\shadow</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\engine\factory\material\phong\PhongMaterialModelC.cpp">
       <Filter>src\factory\material\phong</Filter>
     </ClCompile>
@@ -546,6 +567,18 @@
     </ClCompile>
     <ClCompile Include="..\..\src\engine\core\FPSCounter.cpp">
       <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\scene\texture\SceneTextureSetBindingC.cpp">
+      <Filter>src\scene\texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\renderer\texture\TextureSetC.cpp">
+      <Filter>src\renderer\texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\factory\shadow\ShadowFactoryC.cpp">
+      <Filter>src\factory\shadow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\factory\shadow\ShadowMapC.cpp">
+      <Filter>src\factory\shadow</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

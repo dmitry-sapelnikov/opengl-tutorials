@@ -13,12 +13,20 @@ class FlatColorMaterialModelC final : public MaterialModelT<FlatColorMaterialMod
 {
 public:
 	/// Constructor
-	using MaterialModelT<FlatColorMaterialModel>::MaterialModelT;
+	FlatColorMaterialModelC(
+		Renderer& renderer,
+		ShaderMaterialBinding& shader) :
+		MaterialModelT<FlatColorMaterialModel>(renderer)
+	{
+		// Create a material pass with the flat color shader binding
+		auto* materialPass = getMaterial().createPass(0, &shader, 1);
+		GLTUT_CHECK(materialPass != nullptr, "Failed to create a material pass");
+	}
 
 	/// Sets the color texture
 	void setColor(Texture* color) noexcept final
 	{
-		getMaterial()[0]->setTexture(color, 0);
+		getMaterial()[0]->getTextures()->setTexture(color, 0);
 	}
 };
 

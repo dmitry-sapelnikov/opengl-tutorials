@@ -4,6 +4,7 @@
 #include "engine/core/NonCopyable.h"
 #include "engine/renderer/material/MaterialPass.h"
 #include "../../graphics/shader/ShaderArguments.h"
+#include "../texture/TextureSetC.h"
 
 namespace gltut
 {
@@ -23,28 +24,15 @@ public:
 	void setShader(const ShaderMaterialBinding* shader) noexcept final;
 
 	/// Returns the shader controller
-	ShaderParameters* getShaderArguments() final
+	ShaderParameters* getShaderArguments() noexcept final
 	{
 		return &mShaderArguments;
 	}
 
 	/// Returns the texture associated with the specified slot
-	const Texture* getTexture(u32 slot) const noexcept final;
-
-	/// Sets a texture
-	void setTexture(const Texture* texture, u32 slot) noexcept final;
-
-	/// Returns the number of textures
-	u32 getTextureSlotsCount() const noexcept final
+	TextureSet* getTextures() noexcept final
 	{
-		return mTextureSlotsCount;
-	}
-
-	/// Sets the number of used texture slots
-	/// The number is truncated to Texture::TEXTURE_SLOTS
-	void setTextureSlotsCount(u32 count) noexcept final
-	{
-		mTextureSlotsCount = std::min(count, Texture::TEXTURE_SLOTS);
+		return &mTextures;
 	}
 
 	/// Binds the material pass for a render geometry
@@ -57,11 +45,8 @@ private:
 	/// The shader arguments
 	ShaderArguments mShaderArguments;
 
-	/// Texture slots
-	std::array<const Texture*, Texture::TEXTURE_SLOTS> mTextures;
-
-	/// The number of texture slots
-	u32 mTextureSlotsCount = 0;
+	/// The textures
+	TextureSetC mTextures;
 };
 
 // End of the namespace gltut

@@ -1,17 +1,17 @@
 // Includes
-#include "ShadowMap.h"
+#include "ShadowMapC.h"
 
 namespace gltut
 {
 // Global classes
-ShadowMap::ShadowMap(
+ShadowMapC::ShadowMapC(
 	Renderer& renderer,
 	const LightNode& light,
 	const RenderObject& shadowCaster,
 	float frustumSize,
 	float frustumNear,
 	float frustumFar,
-	u32 shadowMapSize) :
+	u32 ShadowMapCSize) :
 
 	mRenderer(renderer),
 	mLight(light)
@@ -19,7 +19,7 @@ ShadowMap::ShadowMap(
 	GLTUT_CHECK(frustumSize > 0.0f, "Frustum size must be greater than 0.0f");
 	GLTUT_CHECK(frustumNear > 0.0f, "Frustum near must be greater than 0.0f");
 	GLTUT_CHECK(frustumFar > frustumNear, "Frustum far must be greater than frustum near");
-	GLTUT_CHECK(shadowMapSize > 0, "Shadow map size must be greater than 0");
+	GLTUT_CHECK(ShadowMapCSize > 0, "Shadow map size must be greater than 0");
 
 	mViewpoint.setProjectionMatrix(
 		Matrix4::orthographicProjectionMatrix(
@@ -30,8 +30,8 @@ ShadowMap::ShadowMap(
 
 	mTexture = mRenderer.getDevice()->createTexture(
 		nullptr, // No data, we will render to it
-		shadowMapSize,
-		shadowMapSize,
+		ShadowMapCSize,
+		ShadowMapCSize,
 		gltut::Texture::Format::FLOAT,
 		gltut::Texture::FilterMode::NEAREST,
 		gltut::Texture::FilterMode::NEAREST,
@@ -58,25 +58,14 @@ ShadowMap::ShadowMap(
 	update();
 }
 
-ShadowMap::~ShadowMap() noexcept
+ShadowMapC::~ShadowMapC() noexcept
 {
-	if (mRenderPass != nullptr)
-	{
-		mRenderer.removePass(mRenderPass);
-	}
-
-	if (mFramebuffer != nullptr)
-	{
-		mRenderer.getDevice()->removeTextureFramebuffer(mFramebuffer);
-	}
-
-	if (mTexture != nullptr)
-	{
-		mRenderer.getDevice()->removeTexture(mTexture);
-	}
+	mRenderer.removePass(mRenderPass);
+	mRenderer.getDevice()->removeTextureFramebuffer(mFramebuffer);
+	mRenderer.getDevice()->removeTexture(mTexture);
 }
 
-void ShadowMap::update() noexcept
+void ShadowMapC::update() noexcept
 {
 	const Vector3 position = mLight.getGlobalTransform().getTranslation();
 	const Vector3 target = position + mLight.getGlobalDirection();

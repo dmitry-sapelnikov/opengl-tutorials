@@ -16,7 +16,7 @@ public:
 	virtual ~ShadowFactory() noexcept = default;
 
 	/// Creates a texture-to-window render pass
-	virtual std::pair<const Viewpoint*, const Texture*>createShadowMap(
+	virtual ShadowMap* createShadowMap(
 		const LightNode* light,
 		const RenderObject* shadowCaster,
 		float frustumSize,

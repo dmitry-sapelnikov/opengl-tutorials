@@ -2,7 +2,7 @@
 
 // Includes
 #include "engine/core/NonCopyable.h"
-#include "engine/factory/material/MaterialModel.h"
+#include "engine/renderer/Renderer.h"
 
 namespace gltut
 {
@@ -14,26 +14,38 @@ class MaterialModelT : public MaterialModelInterface, public NonCopyable
 {
 public:
 	// Constructor
-	explicit MaterialModelT(Material& material) noexcept :
-		mMaterial(material)
+	explicit MaterialModelT(Renderer& renderer) :
+		mRenderer(renderer),
+		mMaterial(renderer.createMaterial())
 	{
+		GLTUT_CHECK(mMaterial != nullptr, "Failed to create a material");
+	}
+
+	// Virtual destructor
+	virtual ~MaterialModelT() noexcept
+	{
+		mRenderer.removeMaterial(mMaterial);
 	}
 
 	// Returns the material associated with this model
 	const Material* getMaterial() const noexcept final
 	{
-		return &mMaterial;
-	}
-
-protected:
-	// Returns the material associated with this model
-	Material& getMaterial() noexcept
-	{
 		return mMaterial;
 	}
 
+protected:
+	Material& getMaterial()
+	{
+		GLTUT_ASSERT(mMaterial != nullptr);
+		return *mMaterial;
+	}
+
 private:
-	Material& mMaterial;
+	/// The renderer
+	Renderer& mRenderer;
+
+	/// The material
+	Material* mMaterial;
 };
 
 // End of the namespace gltut

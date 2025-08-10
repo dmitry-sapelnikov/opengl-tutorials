@@ -25,9 +25,54 @@ SceneShaderBinding* SceneC::createShaderBinding(Shader* shader) noexcept
 {
 	SceneShaderBinding* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN
-		result = &mShaderBindings.emplace_back(shader);
+		result = mShaderBindings.emplace_back(
+			std::make_unique<SceneShaderBindingC>(shader)).get();
 	GLTUT_CATCH_ALL_END("Cannot create a shader binding")
 	return result;
+}
+
+void SceneC::removeShaderBinding(SceneShaderBinding* binding) noexcept
+{
+	GLTUT_CATCH_ALL_BEGIN
+		auto it = std::find_if(
+			mShaderBindings.begin(),
+			mShaderBindings.end(),
+			[binding](const auto& b) {
+				return b.get() == binding;
+			});
+		if (it != mShaderBindings.end())
+		{
+			mShaderBindings.erase(it);
+		}
+	GLTUT_CATCH_ALL_END("Cannot remove a shader binding")
+}
+
+SceneTextureSetBinding* SceneC::createTextureSetBinding(
+	TextureSet* textureSet) noexcept
+{
+	SceneTextureSetBinding* result = nullptr;
+	GLTUT_CATCH_ALL_BEGIN
+		result = mTextureSetBindings.emplace_back(
+			std::make_unique<SceneTextureSetBindingC>(textureSet)).get();
+	GLTUT_CATCH_ALL_END("Cannot create a texture set binding")
+	return result;
+}
+
+void SceneC::removeTextureSetBinding(SceneTextureSetBinding* binding) noexcept
+{
+	GLTUT_CATCH_ALL_BEGIN
+		auto it = std::find_if(
+			mTextureSetBindings.begin(),
+			mTextureSetBindings.end(),
+			[binding](const auto& b)
+			{
+				return b.get() == binding;
+			});
+		if (it != mTextureSetBindings.end())
+		{
+			mTextureSetBindings.erase(it);
+		}
+	GLTUT_CATCH_ALL_END("Cannot remove a texture set binding")
 }
 
 GeometryNode* SceneC::createGeometry(
@@ -147,7 +192,12 @@ void SceneC::update() noexcept
 
 	for (auto& shaderBinding : mShaderBindings)
 	{
-		shaderBinding.update(this);
+		shaderBinding->update(this);
+	}
+
+	for (auto& textureSetBinding : mTextureSetBindings)
+	{
+		textureSetBinding->update(this);
 	}
 }
 

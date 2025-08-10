@@ -8,6 +8,7 @@
 #include "engine/factory/material/MaterialFactory.h"
 
 #include "./flat_color/FlatColorMaterialModelC.h"
+#include "./phong/PhongShaderModelC.h"
 #include "./phong/PhongMaterialModelC.h"
 
 namespace gltut
@@ -25,14 +26,14 @@ public:
 	FlatColorMaterialModel* createFlatColorMaterial() noexcept final;
 
 	/// Creates a Phong shader
-	ShaderMaterialBinding* createPhongShader(
+	PhongShaderModel* createPhongShader(
 		u32 maxDirectionalLights,
 		u32 maxPointLights,
 		u32 maxSpotLights) noexcept final;
 
 	///	Creates a Phong material model
 	PhongMaterialModel* createPhongMaterial(
-		ShaderMaterialBinding* phongShader) noexcept final;
+		PhongShaderModel* phongShader) noexcept final;
 
 	/// Updates the factory
 	void update() noexcept final;
@@ -51,7 +52,7 @@ private:
 	std::deque<FlatColorMaterialModelC> mFlatColorModels;
 
 	/// Pointer to the Phong material shader
-	std::map<std::tuple<u32, u32, u32>, ShaderMaterialBinding*> mPhongShaders;
+	std::map<std::tuple<u32, u32, u32>, PhongShaderModelC> mPhongShaders;
 
 	/// Phong material models
 	std::deque<PhongMaterialModelC> mPhongModels;
