@@ -1,7 +1,7 @@
 #pragma once
 
 // Includes
-#include "engine/renderer/shader/ShaderBinding.h"
+#include "engine/graphics/shader/ShaderBinding.h"
 
 namespace gltut
 {

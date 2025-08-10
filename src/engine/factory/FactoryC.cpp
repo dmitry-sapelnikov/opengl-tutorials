@@ -9,7 +9,7 @@ FactoryC::FactoryC(
 	RenderPipeline& renderer,
 	Scene& scene) noexcept :
 
-	mGeometry(*renderer.getRenderer()),
+	mGeometry(*renderer.getDevice()),
 	mMaterial(renderer, scene),
 	mRenderPass(renderer),
 	mShadow(renderer)

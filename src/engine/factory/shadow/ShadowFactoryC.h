@@ -31,7 +31,7 @@ public:
 	void update() noexcept final;
 
 private:
-	/// The renderer
+	/// The device
 	RenderPipeline& mRenderer;
 
 	/// The shadow maps

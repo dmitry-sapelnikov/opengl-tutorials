@@ -2,7 +2,7 @@
 
 // Includes
 #include "engine/core/NonCopyable.h"
-#include "engine/renderer/framebuffer/Framebuffer.h"
+#include "engine/graphics/framebuffer/Framebuffer.h"
 #include "engine/window/Window.h"
 
 namespace gltut

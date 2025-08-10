@@ -6,7 +6,7 @@
 
 #include "engine/core/NonCopyable.h"
 #include "engine/render_pipeline/RenderPipeline.h"
-#include "engine/renderer/GraphicsDevice.h"
+#include "engine/graphics/GraphicsDevice.h"
 #include "engine/scene/Scene.h"
 
 namespace gltut
@@ -17,10 +17,10 @@ class RenderPipelineC final : public RenderPipeline, public NonCopyable
 {
 public:
 	/// Constructor
-	explicit RenderPipelineC(GraphicsDevice& renderer) noexcept;
+	explicit RenderPipelineC(GraphicsDevice& device) noexcept;
 
-	/// Returns the renderer
-	GraphicsDevice* getRenderer() noexcept
+	/// Returns the device
+	GraphicsDevice* getDevice() noexcept
 	{
 		return &mDevice;
 	}
@@ -77,7 +77,7 @@ public:
 	void execute() noexcept;
 
 private:
-	/// Renderer
+	/// GraphicsDevice
 	GraphicsDevice& mDevice;
 
 	/// Shader viewpoint bindings

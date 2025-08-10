@@ -1,8 +1,8 @@
 #pragma once
 
 // Includes
-#include "engine/renderer/Texture.h"
-#include "engine/renderer/shader/ShaderParameters.h"
+#include "engine/graphics/Texture.h"
+#include "engine/graphics/shader/ShaderParameters.h"
 #include "engine/render_pipeline/material/ShaderMaterialBinding.h"
 
 namespace gltut

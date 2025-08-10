@@ -2,7 +2,7 @@
 
 // Includes
 #include "engine/factory/Factory.h"
-#include "engine/renderer/GraphicsDevice.h"
+#include "engine/graphics/GraphicsDevice.h"
 #include "engine/render_pipeline/RenderPipeline.h"
 #include "engine/scene/Scene.h"
 #include "engine/window/Window.h"
@@ -26,7 +26,7 @@ public:
 	/// Returns the window
 	virtual Window* getWindow() noexcept = 0;
 
-	/// Returns the renderer
+	/// Returns the device
 	virtual GraphicsDevice* getDevice() noexcept = 0;
 
 	/// Returns the scene

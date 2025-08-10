@@ -2,7 +2,7 @@
 
 // Includes
 #include "engine/core/NonCopyable.h"
-#include "engine/renderer/Texture.h"
+#include "engine/graphics/Texture.h"
 #include "engine/scene/nodes/LightNode.h"
 #include "engine/factory/render_pass/RenderPassFactory.h"
 #include "../../render_pipeline/viewpoint/ViewpointC.h"
@@ -48,7 +48,7 @@ public:
 	void update() noexcept;
 
 private:
-	/// The renderer
+	/// The device
 	RenderPipeline& mRenderer;
 
 	/// The light node for which the shadow map is created

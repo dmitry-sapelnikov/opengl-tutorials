@@ -1,6 +1,6 @@
 // Includes
 #include "SceneShaderBindingC.h"
-#include "engine/renderer/shader/Shader.h"
+#include "engine/graphics/shader/Shader.h"
 #include "engine/scene/Scene.h"
 
 namespace gltut

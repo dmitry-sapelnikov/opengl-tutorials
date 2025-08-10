@@ -575,8 +575,8 @@ void ImGui::ShowDemoWindow(bool* p_open)
             ImGui::CheckboxFlags("io.BackendFlags: HasGamepad",           &io.BackendFlags, ImGuiBackendFlags_HasGamepad);
             ImGui::CheckboxFlags("io.BackendFlags: HasMouseCursors",      &io.BackendFlags, ImGuiBackendFlags_HasMouseCursors);
             ImGui::CheckboxFlags("io.BackendFlags: HasSetMousePos",       &io.BackendFlags, ImGuiBackendFlags_HasSetMousePos);
-            ImGui::CheckboxFlags("io.BackendFlags: RendererHasVtxOffset", &io.BackendFlags, ImGuiBackendFlags_RendererHasVtxOffset);
-            ImGui::CheckboxFlags("io.BackendFlags: RendererHasTextures",  &io.BackendFlags, ImGuiBackendFlags_RendererHasTextures);
+            ImGui::CheckboxFlags("io.BackendFlags: GraphicsDeviceHasVtxOffset", &io.BackendFlags, ImGuiBackendFlags_GraphicsDeviceHasVtxOffset);
+            ImGui::CheckboxFlags("io.BackendFlags: GraphicsDeviceHasTextures",  &io.BackendFlags, ImGuiBackendFlags_GraphicsDeviceHasTextures);
             ImGui::EndDisabled();
 
             ImGui::TreePop();
@@ -1772,12 +1772,12 @@ static void DemoWindowWidgetsImages()
         // Read description about ImTextureID/ImTextureRef and FAQ for details about texture identifiers.
         // If you use one of the default imgui_impl_XXXX.cpp rendering backend, they all have comments at the top
         // of their respective source file to specify what they are using as texture identifier, for example:
-        // - The imgui_impl_dx11.cpp renderer expect a 'ID3D11ShaderResourceView*' pointer.
-        // - The imgui_impl_opengl3.cpp renderer expect a GLuint OpenGL texture identifier, etc.
+        // - The imgui_impl_dx11.cpp device expect a 'ID3D11ShaderResourceView*' pointer.
+        // - The imgui_impl_opengl3.cpp device expect a GLuint OpenGL texture identifier, etc.
         // So with the DirectX11 backend, you call ImGui::Image() with a 'ID3D11ShaderResourceView*' cast to ImTextureID.
         // - If you decided that ImTextureID = MyEngineTexture*, then you can pass your MyEngineTexture* pointers
         //   to ImGui::Image(), and gather width/height through your own functions, etc.
-        // - You can use ShowMetricsWindow() to inspect the draw data that are being passed to your renderer,
+        // - You can use ShowMetricsWindow() to inspect the draw data that are being passed to your device,
         //   it will help you debug issues if you are confused about it.
         // - Consider using the lower-level ImDrawList::AddImage() API, via ImGui::GetWindowDrawList()->AddImage().
         // - Read https://github.com/ocornut/imgui/blob/master/docs/FAQ.md
@@ -8168,7 +8168,7 @@ void ImGui::ShowAboutWindow(bool* p_open)
 #endif
         ImGui::Separator();
         ImGui::Text("io.BackendPlatformName: %s", io.BackendPlatformName ? io.BackendPlatformName : "NULL");
-        ImGui::Text("io.BackendRendererName: %s", io.BackendRendererName ? io.BackendRendererName : "NULL");
+        ImGui::Text("io.BackendGraphicsDeviceName: %s", io.BackendGraphicsDeviceName ? io.BackendGraphicsDeviceName : "NULL");
         ImGui::Text("io.ConfigFlags: 0x%08X", io.ConfigFlags);
         if (io.ConfigFlags & ImGuiConfigFlags_NavEnableKeyboard)        ImGui::Text(" NavEnableKeyboard");
         if (io.ConfigFlags & ImGuiConfigFlags_NavEnableGamepad)         ImGui::Text(" NavEnableGamepad");
@@ -8187,8 +8187,8 @@ void ImGui::ShowAboutWindow(bool* p_open)
         if (io.BackendFlags & ImGuiBackendFlags_HasGamepad)             ImGui::Text(" HasGamepad");
         if (io.BackendFlags & ImGuiBackendFlags_HasMouseCursors)        ImGui::Text(" HasMouseCursors");
         if (io.BackendFlags & ImGuiBackendFlags_HasSetMousePos)         ImGui::Text(" HasSetMousePos");
-        if (io.BackendFlags & ImGuiBackendFlags_RendererHasVtxOffset)   ImGui::Text(" RendererHasVtxOffset");
-        if (io.BackendFlags & ImGuiBackendFlags_RendererHasTextures)    ImGui::Text(" RendererHasTextures");
+        if (io.BackendFlags & ImGuiBackendFlags_GraphicsDeviceHasVtxOffset)   ImGui::Text(" GraphicsDeviceHasVtxOffset");
+        if (io.BackendFlags & ImGuiBackendFlags_GraphicsDeviceHasTextures)    ImGui::Text(" GraphicsDeviceHasTextures");
         ImGui::Separator();
         ImGui::Text("io.Fonts: %d fonts, Flags: 0x%08X, TexSize: %d,%d", io.Fonts->Fonts.Size, io.Fonts->Flags, io.Fonts->TexData->Width, io.Fonts->TexData->Height);
         ImGui::Text("io.Fonts->FontLoaderName: %s", io.Fonts->FontLoaderName ? io.Fonts->FontLoaderName : "NULL");
@@ -8269,9 +8269,9 @@ void ImGui::ShowStyleEditor(ImGuiStyle* ref)
     {
         // General
         SeparatorText("General");
-        if ((GetIO().BackendFlags & ImGuiBackendFlags_RendererHasTextures) == 0)
+        if ((GetIO().BackendFlags & ImGuiBackendFlags_GraphicsDeviceHasTextures) == 0)
         {
-            BulletText("Warning: Font scaling will NOT be smooth, because\nImGuiBackendFlags_RendererHasTextures is not set!");
+            BulletText("Warning: Font scaling will NOT be smooth, because\nImGuiBackendFlags_GraphicsDeviceHasTextures is not set!");
             BulletText("For instructions, see:");
             SameLine();
             TextLinkOpenURL("docs/BACKENDS.md", "https://github.com/ocornut/imgui/blob/master/docs/BACKENDS.md");

@@ -3,17 +3,17 @@
 // Includes
 #include <vector>
 #include <memory>
-#include "../../RendererBase.h"
+#include "../../GraphicsDeviceBase.h"
 #include "./framebuffer/WindowFramebufferOpenGL.h"
 
 namespace gltut
 {
-/// OpenGL renderer
-class RendererOpenGL final : public RendererBase
+/// OpenGL device
+class OpenGLDevice final : public GraphicsDeviceBase
 {
 public:
 	/// Constructor
-	RendererOpenGL(Window& window);
+	OpenGLDevice(Window& window);
 
 	/// Clears the current render target with a specific color
 	void clear(

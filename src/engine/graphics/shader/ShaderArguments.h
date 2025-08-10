@@ -11,7 +11,7 @@
 #include "engine/math/Vector3.h"
 #include "engine/math/Matrix3.h"
 #include "engine/math/Matrix4.h"
-#include "engine/renderer/shader/Shader.h"
+#include "engine/graphics/shader/Shader.h"
 
 namespace gltut
 {

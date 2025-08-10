@@ -12,7 +12,7 @@ RenderPassC::RenderPassC(
 	const Color* clearColor,
 	bool clearDepth,
 	const Rectangle2u* viewport,
-	GraphicsDevice& renderer,
+	GraphicsDevice& device,
 	const ShaderViewpointBindings& viewpointBindings) noexcept :
 
 	mViewpoint(viewpoint),
@@ -22,7 +22,7 @@ RenderPassC::RenderPassC(
 	mClearColor(clearColor ? std::make_optional(*clearColor) : std::nullopt),
 	mClearDepth(clearDepth),
 	mViewport(viewport ? std::make_optional(*viewport) : std::nullopt),
-	mRenderer(renderer),
+	mRenderer(device),
 	mViewpointBindings(viewpointBindings)
 {
 }

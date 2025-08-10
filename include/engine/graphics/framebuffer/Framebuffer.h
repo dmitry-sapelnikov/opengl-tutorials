@@ -1,7 +1,7 @@
 #pragma once
 
 // Includes
-#include "engine/renderer/Texture.h"
+#include "engine/graphics/Texture.h"
 
 namespace gltut
 {

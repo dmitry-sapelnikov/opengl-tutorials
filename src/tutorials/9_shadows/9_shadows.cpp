@@ -93,7 +93,7 @@ void createLights(
 	auto* lightMesh = engine.getFactory()->getGeometry()->createSphere(0.2f, 10);
 	GLTUT_CHECK(lightMesh, "Failed to create light mesh");
 
-	auto* lightShader = renderer.getRenderer()->loadShader(
+	auto* lightShader = renderer.getDevice()->loadShader(
 		"assets/light_shader.vs",
 		"assets/light_shader.fs");
 	GLTUT_CHECK(lightShader, "Failed to create light shader program");
@@ -146,7 +146,7 @@ int main()
 		imgui = gltut::createEngineImgui(engine.get());
 		GLTUT_CHECK(imgui, "Failed to create ImGui instance");
 
-		auto* renderer = engine->getDevice();
+		auto* device = engine->getDevice();
 		auto* scene = engine->getScene();
 
 		auto* materialFactory = engine->getFactory()->getMaterial();
@@ -161,12 +161,12 @@ int main()
 		gltut::PhongMaterialModel* phongMaterialModel = materialFactory->createPhongMaterial(phongShader);
 		GLTUT_CHECK(phongMaterialModel, "Failed to create Phong material model");
 
-		gltut::Texture* diffuseTexture = renderer->loadTexture("assets/container2.png");
-		//gltut::Texture* diffuseTexture = renderer->createSolidColorTexture(1.0f, 0.5f, 0.31f, 1.0f);
+		gltut::Texture* diffuseTexture = device->loadTexture("assets/container2.png");
+		//gltut::Texture* diffuseTexture = device->createSolidColorTexture(1.0f, 0.5f, 0.31f, 1.0f);
 		GLTUT_CHECK(diffuseTexture, "Failed to create diffuse texture");
 
-		gltut::Texture* specularTexture = renderer->loadTexture("assets/container2_specular.png");
-		//renderer->createSolidColorTexture(0.0f, 0.0f, 0.0f, 1.0f);
+		gltut::Texture* specularTexture = device->loadTexture("assets/container2_specular.png");
+		//device->createSolidColorTexture(0.0f, 0.0f, 0.0f, 1.0f);
 		GLTUT_CHECK(specularTexture, "Failed to create specular texture");
 
 		phongMaterialModel->setDiffuse(diffuseTexture);

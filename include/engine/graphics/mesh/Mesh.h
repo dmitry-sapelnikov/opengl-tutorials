@@ -1,7 +1,7 @@
 #pragma once
 
 // Includes
-#include "engine/renderer/mesh/VertexFormat.h"
+#include "engine/graphics/mesh/VertexFormat.h"
 
 namespace gltut
 {

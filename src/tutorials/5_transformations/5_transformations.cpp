@@ -30,9 +30,9 @@ int main()
 			 1, 2, 3  // second triangle
 		};
 
-		auto* renderer = engine->getDevice();
+		auto* device = engine->getDevice();
 		auto* scene = engine->getScene();
-		auto* mesh = renderer->createMesh(
+		auto* mesh = device->createMesh(
 			gltut::VERTEX_FORMAT_POS3_TEX2,
 			4,
 			vertices,
@@ -41,7 +41,7 @@ int main()
 
 		GLTUT_CHECK(mesh != nullptr, "Failed to create mesh");
 
-		gltut::Shader* shader = renderer->loadShader(
+		gltut::Shader* shader = device->loadShader(
 			"assets/shader.vs",
 			"assets/shader.fs");
 
@@ -55,10 +55,10 @@ int main()
 
 		binding->bind(gltut::ShaderMaterialBinding::Parameter::GEOMETRY_MATRIX, "model");
 
-		gltut::Texture* texture1 = renderer->loadTexture("assets/container.jpg");
+		gltut::Texture* texture1 = device->loadTexture("assets/container.jpg");
 		GLTUT_CHECK(texture1 != nullptr, "Failed to load texture")
 
-			gltut::Texture* texture2 = renderer->loadTexture("assets/awesomeface.png");
+			gltut::Texture* texture2 = device->loadTexture("assets/awesomeface.png");
 		GLTUT_CHECK(texture2 != nullptr, "Failed to load texture")
 
 		auto* material = renderPipeline->createMaterial();

@@ -6,7 +6,7 @@
 #include "engine/Engine.h"
 #include "engine/factory/Factory.h"
 
-#include "./renderer/RendererBase.h"
+#include "./graphics/GraphicsDeviceBase.h"
 #include "./scene/SceneC.h"
 #include "./window/WindowC.h"
 #include "./render_pipeline/RenderPipelineC.h"
@@ -29,7 +29,7 @@ public:
 		return mWindow.get();
 	}
 
-	/// Returns the renderer
+	/// Returns the device
 	GraphicsDevice* getDevice() noexcept final
 	{
 		return mRenderer.get();
@@ -60,8 +60,8 @@ private:
 	/// The window
 	std::unique_ptr<WindowC> mWindow;
 
-	///	The renderer
-	std::unique_ptr<RendererBase> mRenderer;
+	///	The device
+	std::unique_ptr<GraphicsDeviceBase> mRenderer;
 
 	/// The scene
 	std::unique_ptr<SceneC> mScene;

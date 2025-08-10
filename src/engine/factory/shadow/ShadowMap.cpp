@@ -28,7 +28,7 @@ ShadowMap::ShadowMap(
 			frustumNear,
 			frustumFar));
 
-	mTexture = mRenderer.getRenderer()->createTexture(
+	mTexture = mRenderer.getDevice()->createTexture(
 		nullptr, // No data, we will render to it
 		shadowMapSize,
 		shadowMapSize,
@@ -39,7 +39,7 @@ ShadowMap::ShadowMap(
 
 	GLTUT_CHECK(mTexture != nullptr, "Failed to create depth texture");
 
-	mFramebuffer = mRenderer.getRenderer()->createTextureFramebuffer(
+	mFramebuffer = mRenderer.getDevice()->createTextureFramebuffer(
 		nullptr,
 		mTexture);
 	GLTUT_CHECK(mFramebuffer, "Failed to create framebuffer");
@@ -67,12 +67,12 @@ ShadowMap::~ShadowMap() noexcept
 
 	if (mFramebuffer != nullptr)
 	{
-		mRenderer.getRenderer()->removeTextureFramebuffer(mFramebuffer);
+		mRenderer.getDevice()->removeTextureFramebuffer(mFramebuffer);
 	}
 
 	if (mTexture != nullptr)
 	{
-		mRenderer.getRenderer()->removeTexture(mTexture);
+		mRenderer.getDevice()->removeTexture(mTexture);
 	}
 }
 

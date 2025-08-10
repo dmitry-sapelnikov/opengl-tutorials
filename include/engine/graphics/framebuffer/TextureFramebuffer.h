@@ -1,7 +1,7 @@
 #pragma once
 
 // Includes
-#include "engine/renderer/framebuffer/Framebuffer.h"
+#include "engine/graphics/framebuffer/Framebuffer.h"
 
 namespace gltut
 {

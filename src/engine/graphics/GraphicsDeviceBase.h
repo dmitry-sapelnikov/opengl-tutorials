@@ -3,21 +3,21 @@
 // Includes
 #include <unordered_map>
 #include "engine/core/NonCopyable.h"
-#include "engine/renderer/GraphicsDevice.h"
+#include "engine/graphics/GraphicsDevice.h"
 #include "engine/window/Window.h"
 
 namespace gltut
 {
 
-/// Renderer base class
-class RendererBase : public GraphicsDevice, public NonCopyable
+/// GraphicsDevice base class
+class GraphicsDeviceBase : public GraphicsDevice, public NonCopyable
 {
 public:
 	/// Invalid mesh index
 	static constexpr u32 INVALID_MESH_INDEX = std::numeric_limits<u32>::max();
 
 	/// Constructor
-	RendererBase(Window& window) noexcept;
+	GraphicsDeviceBase(Window& window) noexcept;
 
 	/// Creates a mesh
 	Mesh* createMesh(
@@ -86,7 +86,7 @@ public:
 		Framebuffer* framebuffer,
 		Rectangle2u* viewport) noexcept final;
 
-	/// Returns the window associated with this renderer
+	/// Returns the window associated with this device
 	Window& getWindow() noexcept
 	{
 		return mWindow;
@@ -126,7 +126,7 @@ private:
 		Texture* color,
 		Texture* depth) = 0;
 
-	/// The window associated with this renderer
+	/// The window associated with this device
 	Window& mWindow;
 
 	/// Meshes

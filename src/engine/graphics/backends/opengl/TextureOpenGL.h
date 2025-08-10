@@ -5,7 +5,7 @@
 #include <glad/glad.h>
 #include "engine/core/NonCopyable.h"
 #include "engine/core/Types.h"
-#include "engine/renderer/Texture.h"
+#include "engine/graphics/Texture.h"
 
 namespace gltut
 {

@@ -33,23 +33,8 @@
     <Filter Include="src\core">
       <UniqueIdentifier>{960d7f4d-126d-41f0-a0ff-cf76836182d6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\renderer">
-      <UniqueIdentifier>{16c9ebd8-f316-4a5c-9e1f-8af83e20d8b0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\renderer\backends">
-      <UniqueIdentifier>{183fd48e-fbd9-4040-a021-3837b32655e8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\renderer\backends\opengl">
-      <UniqueIdentifier>{9b5564b2-8a63-48a6-b2f4-7946e48c0d72}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\window">
       <UniqueIdentifier>{d54b616e-958a-471b-b8a1-5638041e83d6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\renderer\shader">
-      <UniqueIdentifier>{e7c3f6a9-34a3-4764-918f-2dc7225e27ab}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\renderer\texture">
-      <UniqueIdentifier>{10f245eb-1517-43f3-aef1-4b4c3d47e5b7}</UniqueIdentifier>
     </Filter>
     <Filter Include="include\scene\shader">
       <UniqueIdentifier>{37d44eac-24a7-493e-991f-ac2e7d04e4ff}</UniqueIdentifier>
@@ -87,9 +72,6 @@
     <Filter Include="src\factory\material\flat_color">
       <UniqueIdentifier>{670fe105-b12a-47fa-a712-4bb9859301ab}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\renderer\framebuffer">
-      <UniqueIdentifier>{af636d3a-379f-45fd-9805-48c829ef2714}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\render_pipeline">
       <UniqueIdentifier>{02e12331-ca12-4be6-9803-3c1f90d59d46}</UniqueIdentifier>
     </Filter>
@@ -101,9 +83,6 @@
     </Filter>
     <Filter Include="src\render_pipeline\objects">
       <UniqueIdentifier>{b5a660c9-6724-44eb-851c-776f1b92565d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\renderer\backends\opengl\framebuffer">
-      <UniqueIdentifier>{8b5e9297-76b1-4031-b2ea-f18183eac4f2}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\factory\render_pass">
       <UniqueIdentifier>{c03ab976-8b6d-4474-a07c-f7750738f09c}</UniqueIdentifier>
@@ -129,17 +108,38 @@
     <Filter Include="include\render_pipeline\viewpoint">
       <UniqueIdentifier>{039145a4-2c27-418f-b795-fcfe81d22ab8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="include\device">
+    <Filter Include="include\graphics">
       <UniqueIdentifier>{60f8fe05-fa3b-4f2e-b60a-e160be743b98}</UniqueIdentifier>
     </Filter>
-    <Filter Include="include\device\shader">
+    <Filter Include="include\graphics\shader">
       <UniqueIdentifier>{27e6d763-5e9c-45da-bec8-893d309569dd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="include\device\mesh">
+    <Filter Include="include\graphics\mesh">
       <UniqueIdentifier>{7b7e2a01-d409-4e63-bdcf-3793738c8d14}</UniqueIdentifier>
     </Filter>
-    <Filter Include="include\device\framebuffer">
+    <Filter Include="include\graphics\framebuffer">
       <UniqueIdentifier>{38a5fcad-aadb-4e8b-853c-9a6da2f20c7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\graphics">
+      <UniqueIdentifier>{16c9ebd8-f316-4a5c-9e1f-8af83e20d8b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\graphics\backends">
+      <UniqueIdentifier>{183fd48e-fbd9-4040-a021-3837b32655e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\graphics\backends\opengl">
+      <UniqueIdentifier>{9b5564b2-8a63-48a6-b2f4-7946e48c0d72}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\graphics\backends\opengl\framebuffer">
+      <UniqueIdentifier>{8b5e9297-76b1-4031-b2ea-f18183eac4f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\graphics\shader">
+      <UniqueIdentifier>{e7c3f6a9-34a3-4764-918f-2dc7225e27ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\graphics\texture">
+      <UniqueIdentifier>{10f245eb-1517-43f3-aef1-4b4c3d47e5b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\graphics\framebuffer">
+      <UniqueIdentifier>{af636d3a-379f-45fd-9805-48c829ef2714}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -209,32 +209,11 @@
     <ClInclude Include="..\..\include\engine\window\EventHandler.h">
       <Filter>include\window</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\engine\renderer\GraphicsDevice.h">
-      <Filter>include\device</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\engine\renderer\Texture.h">
-      <Filter>include\device</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\engine\renderer\shader\Shader.h">
-      <Filter>include\device\shader</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\engine\renderer\shader\ShaderParameters.h">
-      <Filter>include\device\shader</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\engine\core\File.h">
       <Filter>src\core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\engine\renderer\RendererBase.h">
-      <Filter>src\renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\engine\renderer\backends\opengl\RendererOpenGL.h">
-      <Filter>src\renderer\backends\opengl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\engine\renderer\backends\opengl\ShaderOpenGL.h">
-      <Filter>src\renderer\backends\opengl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\engine\renderer\backends\opengl\TextureOpenGL.h">
-      <Filter>src\renderer\backends\opengl</Filter>
+    <ClInclude Include="..\..\src\engine\graphics\GraphicsDeviceBase.h">
+      <Filter>src\graphics</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\engine\scene\SceneC.h">
       <Filter>src\scene</Filter>
@@ -245,20 +224,11 @@
     <ClInclude Include="..\..\src\engine\window\WindowC.h">
       <Filter>src\window</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\engine\renderer\shader\ShaderArguments.h">
-      <Filter>src\renderer\shader</Filter>
+    <ClInclude Include="..\..\src\engine\graphics\shader\ShaderArguments.h">
+      <Filter>src\graphics\shader</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\engine\renderer\texture\stb_image.h">
-      <Filter>src\renderer\texture</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\engine\renderer\backends\opengl\MeshOpenGL.h">
-      <Filter>src\renderer\backends\opengl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\engine\renderer\mesh\Mesh.h">
-      <Filter>include\device\mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\engine\renderer\mesh\VertexFormat.h">
-      <Filter>include\device\mesh</Filter>
+    <ClInclude Include="..\..\src\engine\graphics\texture\stb_image.h">
+      <Filter>src\graphics\texture</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\engine\scene\shader\SceneShaderBinding.h">
       <Filter>include\scene\shader</Filter>
@@ -362,9 +332,6 @@
     <ClInclude Include="..\..\include\engine\render_pipeline\material\ShaderMaterialBinding.h">
       <Filter>include\render_pipeline\material</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\engine\renderer\shader\ShaderBinding.h">
-      <Filter>include\device\shader</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\engine\render_pipeline\RenderPass.h">
       <Filter>include\render_pipeline</Filter>
     </ClInclude>
@@ -383,8 +350,8 @@
     <ClInclude Include="..\..\src\engine\render_pipeline\material\MaterialPassC.h">
       <Filter>src\render_pipeline\material</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\engine\renderer\shader\ShaderBindingT.h">
-      <Filter>src\renderer\shader</Filter>
+    <ClInclude Include="..\..\src\engine\graphics\shader\ShaderBindingT.h">
+      <Filter>src\graphics\shader</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\engine\render_pipeline\material\ShaderMaterialBindingC.h">
       <Filter>src\render_pipeline\material</Filter>
@@ -398,26 +365,11 @@
     <ClInclude Include="..\..\src\engine\render_pipeline\objects\RenderGroupC.h">
       <Filter>src\render_pipeline\objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\engine\renderer\framebuffer\Framebuffer.h">
-      <Filter>include\device\framebuffer</Filter>
+    <ClInclude Include="..\..\src\engine\graphics\framebuffer\TextureFramebufferBase.h">
+      <Filter>src\graphics\framebuffer</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\engine\renderer\framebuffer\TextureFramebuffer.h">
-      <Filter>include\device\framebuffer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\engine\renderer\backends\opengl\framebuffer\WindowFramebufferOpenGL.h">
-      <Filter>src\renderer\backends\opengl\framebuffer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\engine\renderer\backends\opengl\framebuffer\TextureFramebufferOpenGL.h">
-      <Filter>src\renderer\backends\opengl\framebuffer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\engine\renderer\framebuffer\TextureFramebufferBase.h">
-      <Filter>src\renderer\framebuffer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\engine\renderer\framebuffer\WindowFramebufferBase.h">
-      <Filter>src\renderer\framebuffer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\engine\renderer\backends\opengl\framebuffer\FramebufferBackupOpenGL.h">
-      <Filter>src\renderer\backends\opengl\framebuffer</Filter>
+    <ClInclude Include="..\..\src\engine\graphics\framebuffer\WindowFramebufferBase.h">
+      <Filter>src\graphics\framebuffer</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\engine\factory\render_pass\RenderPassFactoryC.h">
       <Filter>src\factory\render_pass</Filter>
@@ -443,6 +395,54 @@
     <ClInclude Include="..\..\src\engine\factory\shadow\ShadowMap.h">
       <Filter>src\factory\shadow</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\engine\graphics\backends\opengl\framebuffer\FramebufferBackupOpenGL.h">
+      <Filter>src\graphics\backends\opengl\framebuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\graphics\backends\opengl\framebuffer\TextureFramebufferOpenGL.h">
+      <Filter>src\graphics\backends\opengl\framebuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\graphics\backends\opengl\framebuffer\WindowFramebufferOpenGL.h">
+      <Filter>src\graphics\backends\opengl\framebuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\graphics\backends\opengl\MeshOpenGL.h">
+      <Filter>src\graphics\backends\opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\graphics\backends\opengl\OpenGLDevice.h">
+      <Filter>src\graphics\backends\opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\graphics\backends\opengl\ShaderOpenGL.h">
+      <Filter>src\graphics\backends\opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\graphics\backends\opengl\TextureOpenGL.h">
+      <Filter>src\graphics\backends\opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\graphics\GraphicsDevice.h">
+      <Filter>include\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\graphics\Texture.h">
+      <Filter>include\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\graphics\framebuffer\Framebuffer.h">
+      <Filter>include\graphics\framebuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\graphics\framebuffer\TextureFramebuffer.h">
+      <Filter>include\graphics\framebuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\graphics\mesh\Mesh.h">
+      <Filter>include\graphics\mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\graphics\mesh\VertexFormat.h">
+      <Filter>include\graphics\mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\graphics\shader\Shader.h">
+      <Filter>include\graphics\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\graphics\shader\ShaderBinding.h">
+      <Filter>include\graphics\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\graphics\shader\ShaderParameters.h">
+      <Filter>include\graphics\shader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\engine\EngineC.cpp">
@@ -460,17 +460,8 @@
     <ClCompile Include="..\..\src\engine\core\File.cpp">
       <Filter>src\core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\engine\renderer\RendererBase.cpp">
-      <Filter>src\renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\engine\renderer\backends\opengl\RendererOpenGL.cpp">
-      <Filter>src\renderer\backends\opengl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\engine\renderer\backends\opengl\ShaderOpenGL.cpp">
-      <Filter>src\renderer\backends\opengl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\engine\renderer\backends\opengl\TextureOpenGL.cpp">
-      <Filter>src\renderer\backends\opengl</Filter>
+    <ClCompile Include="..\..\src\engine\graphics\GraphicsDeviceBase.cpp">
+      <Filter>src\graphics</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\engine\scene\SceneC.cpp">
       <Filter>src\scene</Filter>
@@ -481,14 +472,11 @@
     <ClCompile Include="..\..\src\engine\window\WindowC.cpp">
       <Filter>src\window</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\engine\renderer\shader\ShaderArguments.cpp">
-      <Filter>src\renderer\shader</Filter>
+    <ClCompile Include="..\..\src\engine\graphics\shader\ShaderArguments.cpp">
+      <Filter>src\graphics\shader</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\engine\renderer\texture\stb_image.cpp">
-      <Filter>src\renderer\texture</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\engine\renderer\backends\opengl\MeshOpenGL.cpp">
-      <Filter>src\renderer\backends\opengl</Filter>
+    <ClCompile Include="..\..\src\engine\graphics\texture\stb_image.cpp">
+      <Filter>src\graphics\texture</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\engine\scene\shader\SceneShaderBindingC.cpp">
       <Filter>src\scene\shader</Filter>
@@ -529,11 +517,11 @@
     <ClCompile Include="..\..\src\engine\render_pipeline\objects\RenderGeometryC.cpp">
       <Filter>src\render_pipeline\objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\engine\renderer\backends\opengl\framebuffer\TextureFramebufferOpenGL.cpp">
-      <Filter>src\renderer\backends\opengl\framebuffer</Filter>
+    <ClCompile Include="..\..\src\engine\graphics\backends\opengl\framebuffer\TextureFramebufferOpenGL.cpp">
+      <Filter>src\graphics\backends\opengl\framebuffer</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\engine\renderer\framebuffer\TextureFramebufferBase.cpp">
-      <Filter>src\renderer\framebuffer</Filter>
+    <ClCompile Include="..\..\src\engine\graphics\framebuffer\TextureFramebufferBase.cpp">
+      <Filter>src\graphics\framebuffer</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\engine\factory\render_pass\RenderPassFactoryC.cpp">
       <Filter>src\factory\render_pass</Filter>
@@ -546,6 +534,18 @@
     </ClCompile>
     <ClCompile Include="..\..\src\engine\factory\material\phong\PhongMaterialModelC.cpp">
       <Filter>src\factory\material\phong</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\graphics\backends\opengl\MeshOpenGL.cpp">
+      <Filter>src\graphics\backends\opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\graphics\backends\opengl\OpenGLDevice.cpp">
+      <Filter>src\graphics\backends\opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\graphics\backends\opengl\ShaderOpenGL.cpp">
+      <Filter>src\graphics\backends\opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\graphics\backends\opengl\TextureOpenGL.cpp">
+      <Filter>src\graphics\backends\opengl</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

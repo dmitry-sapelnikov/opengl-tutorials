@@ -1,7 +1,7 @@
 #pragma once
 
 // Includes
-#include "engine/renderer/shader/Shader.h"
+#include "engine/graphics/shader/Shader.h"
 
 namespace gltut
 {

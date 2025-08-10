@@ -104,7 +104,7 @@ private:
 	/// The window
 	Window& mWindow;
 
-	/// The renderer
+	/// The device
 	RenderPipeline& mRenderer;
 
 	/// The scene render group

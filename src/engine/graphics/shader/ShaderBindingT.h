@@ -4,7 +4,7 @@
 #include <array>
 #include <string>
 #include "engine/core/NonCopyable.h"
-#include "engine/renderer/shader/Shader.h"
+#include "engine/graphics/shader/Shader.h"
 
 namespace gltut
 {

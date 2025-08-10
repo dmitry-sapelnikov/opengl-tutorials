@@ -4,7 +4,7 @@
 #include <stdexcept>
 #include <iostream>
 
-#include "renderer/backends/opengl/RendererOpenGL.h"
+#include "graphics/backends/opengl/OpenGLDevice.h"
 #include "scene/SceneC.h"
 #include "window/WindowC.h"
 #include "factory/FactoryC.h"
@@ -19,14 +19,14 @@ EngineC::EngineC(u32 windowWidth, u32 windowHeight)
 		windowHeight);
 	GLTUT_CHECK(mWindow != nullptr, "Failed to create the window");
 
-	auto renderer = std::make_unique<RendererOpenGL>(*mWindow);
-	GLTUT_CHECK(renderer != nullptr, "Failed to create the renderer");
+	auto device = std::make_unique<OpenGLDevice>(*mWindow);
+	GLTUT_CHECK(device != nullptr, "Failed to create the device");
 
 	mWindow->addEventHandler(this);
 
-	mRenderPipeline = std::make_unique<RenderPipelineC>(*renderer);
+	mRenderPipeline = std::make_unique<RenderPipelineC>(*device);
 	mScene = std::make_unique<SceneC>(*mWindow, *mRenderPipeline);
-	mRenderer = std::move(renderer);
+	mRenderer = std::move(device);
 
 	// Create the default render pass
 	// It uses:

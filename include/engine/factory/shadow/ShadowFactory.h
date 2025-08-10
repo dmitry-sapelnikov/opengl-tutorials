@@ -1,7 +1,7 @@
 #pragma once
 
 // Includes
-#include "engine/renderer/Texture.h"
+#include "engine/graphics/Texture.h"
 #include "engine/render_pipeline/viewpoint/Viewpoint.h"
 #include "engine/render_pipeline/objects/RenderObject.h"
 #include "engine/scene/nodes/LightNode.h"

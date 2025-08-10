@@ -1,7 +1,7 @@
 #pragma once
 
 // Includes
-#include "engine/renderer/GraphicsDevice.h"
+#include "engine/graphics/GraphicsDevice.h"
 #include "engine/scene/Scene.h"
 #include "engine/factory/material/FlatColorMaterialModel.h"
 #include "engine/factory/material/PhongMaterialModel.h"

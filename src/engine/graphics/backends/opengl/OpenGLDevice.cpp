@@ -1,5 +1,5 @@
 // Includes
-#include "RendererOpenGL.h"
+#include "OpenGLDevice.h"
 
 #include <iostream>
 #undef APIENTRY
@@ -22,8 +22,8 @@ typedef BOOL(WINAPI* PFNWGLSWAPINTERVALEXTPROC)(int interval);
 
 
 // Global classes
-RendererOpenGL::RendererOpenGL(Window& window) :
-	RendererBase(window),
+OpenGLDevice::OpenGLDevice(Window& window) :
+	GraphicsDeviceBase(window),
 	mWindowFramebuffer(std::make_unique<WindowFramebufferOpenGL>(window))
 {
 	GLTUT_CHECK(window.getDeviceContext() != nullptr, "Device context is null")
@@ -64,7 +64,7 @@ RendererOpenGL::RendererOpenGL(Window& window) :
 	enableVSync(false);
 }
 
-void RendererOpenGL::clear(
+void OpenGLDevice::clear(
 	const Color* color,
 	bool depth) noexcept
 {
@@ -82,7 +82,7 @@ void RendererOpenGL::clear(
 	glClear(clearMask);
 }
 
-void RendererOpenGL::enableVSync(bool vSync) noexcept
+void OpenGLDevice::enableVSync(bool vSync) noexcept
 {
 	PFNWGLSWAPINTERVALEXTPROC wglSwapIntervalEXT =
 		(PFNWGLSWAPINTERVALEXTPROC)wglGetProcAddress("wglSwapIntervalEXT");
@@ -96,7 +96,7 @@ void RendererOpenGL::enableVSync(bool vSync) noexcept
 	}
 }
 
-void RendererOpenGL::setFramebuffer(Framebuffer* frameBuffer) noexcept
+void OpenGLDevice::setFramebuffer(Framebuffer* frameBuffer) noexcept
 {
 	if (frameBuffer == nullptr)
 	{
@@ -108,7 +108,7 @@ void RendererOpenGL::setFramebuffer(Framebuffer* frameBuffer) noexcept
 	}
 }
 
-void RendererOpenGL::setViewport(const Rectangle2u& viewport) noexcept
+void OpenGLDevice::setViewport(const Rectangle2u& viewport) noexcept
 {
 	const auto& min = viewport.getMin();
 	const auto& max = viewport.getMax();
@@ -119,7 +119,7 @@ void RendererOpenGL::setViewport(const Rectangle2u& viewport) noexcept
 		static_cast<GLsizei>(max.y - min.y));
 }
 
-std::unique_ptr<Mesh> RendererOpenGL::createBackendMesh(
+std::unique_ptr<Mesh> OpenGLDevice::createBackendMesh(
 	VertexFormat vertexFormat,
 	u32 vertexCount,
 	const float* vertices,
@@ -134,14 +134,14 @@ std::unique_ptr<Mesh> RendererOpenGL::createBackendMesh(
 		indices);
 }
 
-std::unique_ptr<Shader> RendererOpenGL::createBackendShader(
+std::unique_ptr<Shader> OpenGLDevice::createBackendShader(
 	const char* vertexShader,
 	const char* fragmentShader)
 {
 	return std::make_unique<ShaderOpenGL>(vertexShader, fragmentShader);
 }
 
-std::unique_ptr<Texture> RendererOpenGL::createBackendTexture(
+std::unique_ptr<Texture> OpenGLDevice::createBackendTexture(
 	const void* data,
 	u32 width,
 	u32 height,
@@ -160,14 +160,14 @@ std::unique_ptr<Texture> RendererOpenGL::createBackendTexture(
 		wrapMode);
 }
 
-std::unique_ptr<TextureFramebuffer> RendererOpenGL::createBackendTextureFramebuffer(
+std::unique_ptr<TextureFramebuffer> OpenGLDevice::createBackendTextureFramebuffer(
 	Texture* color,
 	Texture* depth)
 {
 	return std::make_unique<TextureFramebufferOpenGL>(color, depth);
 }
 
-void RendererOpenGL::bindTexture(const Texture* texture, u32 slot) noexcept
+void OpenGLDevice::bindTexture(const Texture* texture, u32 slot) noexcept
 {
 	if (slot >= Texture::TEXTURE_SLOTS)
 	{

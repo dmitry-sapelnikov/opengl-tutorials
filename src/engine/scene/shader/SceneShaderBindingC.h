@@ -2,7 +2,7 @@
 
 // Includes
 #include "engine/scene/Scene.h"
-#include "../../renderer/shader/ShaderBindingT.h"
+#include "../../graphics/shader/ShaderBindingT.h"
 
 namespace gltut
 {

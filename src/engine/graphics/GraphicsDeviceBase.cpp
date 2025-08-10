@@ -1,5 +1,5 @@
 // Includes
-#include "RendererBase.h"
+#include "GraphicsDeviceBase.h"
 
 #include <iostream>
 #include "../core/File.h"
@@ -43,12 +43,12 @@ void removeElement(
 
 }
 
-RendererBase::RendererBase(Window& window) noexcept :
+GraphicsDeviceBase::GraphicsDeviceBase(Window& window) noexcept :
 	mWindow(window)
 {
 }
 
-Mesh* RendererBase::createMesh(
+Mesh* GraphicsDeviceBase::createMesh(
 	VertexFormat vertexFormat,
 	u32 vertexCount,
 	const float* vertices,
@@ -67,12 +67,12 @@ Mesh* RendererBase::createMesh(
 	return result;
 }
 
-void RendererBase::removeMesh(Mesh* mesh) noexcept
+void GraphicsDeviceBase::removeMesh(Mesh* mesh) noexcept
 {
 	removeElement(mMeshes, mesh, "Mesh");
 }
 
-Shader* RendererBase::createShader(
+Shader* GraphicsDeviceBase::createShader(
 	const char* vertexShader,
 	const char* fragmentShader) noexcept
 {
@@ -84,7 +84,7 @@ Shader* RendererBase::createShader(
 	return result;
 }
 
-Shader* RendererBase::loadShader(
+Shader* GraphicsDeviceBase::loadShader(
 	const char* vertexShaderPath,
 	const char* fragmentShaderPath) noexcept
 {
@@ -97,12 +97,12 @@ Shader* RendererBase::loadShader(
 	return result;
 }
 
-void RendererBase::removeShader(Shader* shader) noexcept
+void GraphicsDeviceBase::removeShader(Shader* shader) noexcept
 {
 	removeElement(mShaders, shader, "Shader");
 }
 
-Texture* RendererBase::createTexture(
+Texture* GraphicsDeviceBase::createTexture(
 	const void* data,
 	u32 width,
 	u32 height,
@@ -125,7 +125,7 @@ Texture* RendererBase::createTexture(
 	return result;
 }
 
-Texture* RendererBase::loadTexture(
+Texture* GraphicsDeviceBase::loadTexture(
 	const char* imagePath,
 	Texture::FilterMode minFilter,
 	Texture::FilterMode magFilter,
@@ -163,7 +163,7 @@ Texture* RendererBase::loadTexture(
 	return result;
 }
 
-Texture* RendererBase::createSolidColorTexture(
+Texture* GraphicsDeviceBase::createSolidColorTexture(
 	float r,
 	float g,
 	float b,
@@ -201,7 +201,7 @@ Texture* RendererBase::createSolidColorTexture(
 	return result;
 }
 
-void RendererBase::removeTexture(Texture* texture) noexcept
+void GraphicsDeviceBase::removeTexture(Texture* texture) noexcept
 {
 	// If the texture is a solid color texture, remove it from the map
 	GLTUT_CATCH_ALL_BEGIN
@@ -221,7 +221,7 @@ void RendererBase::removeTexture(Texture* texture) noexcept
 	removeElement(mTextures, texture, "Texture");
 }
 
-TextureFramebuffer* RendererBase::createTextureFramebuffer(
+TextureFramebuffer* GraphicsDeviceBase::createTextureFramebuffer(
 	Texture* color,
 	Texture* depth) noexcept
 {
@@ -234,12 +234,12 @@ TextureFramebuffer* RendererBase::createTextureFramebuffer(
 	return result;
 }
 
-void RendererBase::removeTextureFramebuffer(TextureFramebuffer* frameBuffer) noexcept
+void GraphicsDeviceBase::removeTextureFramebuffer(TextureFramebuffer* frameBuffer) noexcept
 {
 	removeElement(mFramebuffers, frameBuffer, "Framebuffer");
 }
 
-void RendererBase::bindFramebuffer(
+void GraphicsDeviceBase::bindFramebuffer(
 	Framebuffer* framebuffer,
 	Rectangle2u* viewport) noexcept
 {

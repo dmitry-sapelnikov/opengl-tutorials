@@ -4,7 +4,7 @@
 #include <vector>
 #include <optional>
 #include "engine/core/NonCopyable.h"
-#include "engine/renderer/GraphicsDevice.h"
+#include "engine/graphics/GraphicsDevice.h"
 #include "engine/render_pipeline/RenderPass.h"
 #include "engine/render_pipeline/viewpoint/ShaderViewpointBinding.h"
 
@@ -29,7 +29,7 @@ public:
 		const Color* clearColor,
 		bool clearDepth,
 		const Rectangle2u* viewport,
-		GraphicsDevice& renderer,
+		GraphicsDevice& device,
 		const ShaderViewpointBindings& viewpointBindings) noexcept;
 
 	/// Returns the scene viewpoint
@@ -100,7 +100,7 @@ private:
 	/// The viewport for this render pass
 	std::optional<Rectangle2u> mViewport;
 
-	/// Renderer
+	/// GraphicsDevice
 	GraphicsDevice& mRenderer;
 
 	/// Viewpoint bindings
