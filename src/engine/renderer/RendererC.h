@@ -50,7 +50,7 @@ public:
 
 	/// Creates a render geometry
 	RenderGeometry* createGeometry(
-		const Mesh* geometry,
+		const Geometry* geometry,
 		const Material* material,
 		const Matrix4& transform) noexcept final;
 

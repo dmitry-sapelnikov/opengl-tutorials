@@ -58,23 +58,23 @@ int main()
 
 		auto* device = engine->getDevice();
 		auto* scene = engine->getScene();
-		auto* mesh1 = device->createMesh(
+		auto* mesh1 = device->createGeometry(
 			gltut::VERTEX_FORMAT_POS3,
 			4,
 			vertices1,
 			6,
 			indices);
 
-		GLTUT_CHECK(mesh1 != nullptr, "Failed to create mesh #1")
+		GLTUT_CHECK(mesh1 != nullptr, "Failed to create geometry #1")
 
-		auto* mesh2 = device->createMesh(
+		auto* mesh2 = device->createGeometry(
 			gltut::VERTEX_FORMAT_POS3,
 			4,
 			vertices2,
 			6,
 			indices);
 
-		GLTUT_CHECK(mesh2 != nullptr, "Failed to create mesh #2")
+		GLTUT_CHECK(mesh2 != nullptr, "Failed to create geometry #2")
 		
 		auto* shader = device->createShader(
 			VERTEX_SHADER_SOURCE_CODE,

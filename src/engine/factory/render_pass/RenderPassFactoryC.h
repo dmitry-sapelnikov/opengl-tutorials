@@ -31,7 +31,7 @@ private:
 	std::array<ShaderMaterialBinding*, static_cast<size_t>(TextureFormat::TOTAL_COUNT)> mShaders;
 
 	/// Render quad for the texture
-	Mesh* mRenderQuad = nullptr;
+	Geometry* mRenderQuad = nullptr;
 };
 
 // End of the namespace gltut

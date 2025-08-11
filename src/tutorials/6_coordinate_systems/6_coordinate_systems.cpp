@@ -23,9 +23,9 @@ int main()
 
 		auto* device = engine->getDevice();
 		auto* scene = engine->getScene();
-		auto* mesh = engine->getFactory()->getGeometry()->createBox(1.0f, 1.0f, 1.0f);
+		auto* geometry = engine->getFactory()->getGeometry()->createBox(1.0f, 1.0f, 1.0f);
 
-		GLTUT_CHECK(mesh != nullptr, "Failed to create mesh");
+		GLTUT_CHECK(geometry != nullptr, "Failed to create geometry");
 
 		gltut::Shader* shader = device->loadShader(
 			"assets/shader.vs",
@@ -60,7 +60,7 @@ int main()
 		std::vector<gltut::Vector3> boxPositions;
 		for (size_t i = 0; i < BOX_COUNT; ++i)
 		{
-			boxes.push_back(scene->createGeometry(mesh, material));
+			boxes.push_back(scene->createGeometry(geometry, material));
 			boxPositions.emplace_back(
 				rng.nextFloat(-POSITION_RANGE, POSITION_RANGE),
 				rng.nextFloat(-POSITION_RANGE, POSITION_RANGE),

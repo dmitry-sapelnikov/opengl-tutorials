@@ -76,13 +76,13 @@ void SceneC::removeTextureSetBinding(SceneTextureSetBinding* binding) noexcept
 }
 
 GeometryNode* SceneC::createGeometry(
-	const Mesh* mesh,
+	const Geometry* geometry,
 	const Material* material,
 	const Matrix4& transform,
 	SceneNode* parent) noexcept
 {
 	RenderGeometry* renderGeometry = mRenderer.createGeometry(
-		mesh,
+		geometry,
 		material,
 		Matrix4::identity());
 

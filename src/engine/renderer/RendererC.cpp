@@ -110,7 +110,7 @@ void RendererC::removeMaterial(Material* material) noexcept
 }
 
 RenderGeometry* RendererC::createGeometry(
-	const Mesh* geometry,
+	const Geometry* geometry,
 	const Material* material,
 	const Matrix4& transform) noexcept
 {

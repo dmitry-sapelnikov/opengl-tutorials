@@ -32,14 +32,14 @@ int main()
 
 		auto* device = engine->getDevice();
 		auto* scene = engine->getScene();
-		auto* mesh = device->createMesh(
+		auto* geometry = device->createGeometry(
 			gltut::VERTEX_FORMAT_POS3_TEX2,
 			4,
 			vertices,
 			6,
 			indices);
 
-		GLTUT_CHECK(mesh != nullptr, "Failed to create mesh");
+		GLTUT_CHECK(geometry != nullptr, "Failed to create geometry");
 
 		gltut::Shader* shader = device->loadShader(
 			"assets/shader.vs",
@@ -69,7 +69,7 @@ int main()
 		materialPass->getTextures()->setTexture(texture1, 0);
 		materialPass->getTextures()->setTexture(texture2, 1);
 
-		auto* object = scene->createGeometry(mesh, material);
+		auto* object = scene->createGeometry(geometry, material);
 
 		auto start = std::chrono::high_resolution_clock::now();
 		while (engine->update())

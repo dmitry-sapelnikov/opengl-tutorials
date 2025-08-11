@@ -39,12 +39,12 @@ void createBoxes(
 	const int COUNT = 3;
 	const float GEOMETRY_SIZE = 1.0f;
 	const float STRIDE = 3.0f;
-	auto* boxMesh = engine.getFactory()->getGeometry()->createBox(
+	auto* boxGeometry = engine.getFactory()->getGeometry()->createBox(
 		GEOMETRY_SIZE,
 		GEOMETRY_SIZE,
 		GEOMETRY_SIZE);
 
-	GLTUT_CHECK(boxMesh, "Failed to create mesh");
+	GLTUT_CHECK(boxGeometry, "Failed to create geometry");
 
 	for (int i = 0; i < COUNT; ++i)
 	{
@@ -56,7 +56,7 @@ void createBoxes(
 				(j - (COUNT - 1.0f) * 0.5f) * STRIDE);
 
 			auto* object = engine.getScene()->createGeometry(
-				boxMesh,
+				boxGeometry,
 				phongMaterialModel->getMaterial(),
 				gltut::Matrix4::translationMatrix(position));
 			GLTUT_CHECK(object, "Failed to create object");
@@ -68,7 +68,7 @@ void createBoxes(
 
 gltut::GeometryNode* createLight(
 	gltut::Engine& engine,
-	gltut::Mesh* lightMesh,
+	gltut::Geometry* lightGeometry,
 	const gltut::LightNode::Type lightType,
 	const gltut::Vector3& position,
 	const gltut::Color& color)
@@ -81,7 +81,7 @@ gltut::GeometryNode* createLight(
 	GLTUT_CHECK(lightMaterial, "Failed to create light material");
 	lightMaterial->setColor(colorTexture);
 
-	auto* light = engine.getScene()->createGeometry(lightMesh, lightMaterial->getMaterial());
+	auto* light = engine.getScene()->createGeometry(lightGeometry, lightMaterial->getMaterial());
 	GLTUT_CHECK(light, "Failed to create light object");
 	light->setTransform(gltut::Matrix4::translationMatrix(position));
 
@@ -104,13 +104,13 @@ void createLights(
 	pointLights.clear();
 	spotLight = nullptr;
 
-	auto* lightMesh = engine.getFactory()->getGeometry()->createSphere(0.2f, 10);
-	GLTUT_CHECK(lightMesh, "Failed to create light mesh");
+	auto* lightGeometry = engine.getFactory()->getGeometry()->createSphere(0.2f, 10);
+	GLTUT_CHECK(lightGeometry, "Failed to create light geometry");
 
 	// Create a directional light]
 	directionalLight = createLight(
 		engine,
-		lightMesh,
+		lightGeometry,
 		gltut::LightNode::Type::DIRECTIONAL,
 		gltut::Vector3(0.0f, 10.0f, 0.0f),
 		directionalLightColor);
@@ -130,7 +130,7 @@ void createLights(
 		const gltut::Color& color = POINT_LIGHT_COLORS[i % POINT_LIGHT_COLORS.size()];
 		auto* pointLight = createLight(
 			engine,
-			lightMesh,
+			lightGeometry,
 			gltut::LightNode::Type::POINT,
 			position,
 			color);
@@ -141,7 +141,7 @@ void createLights(
 	// Create a spot light
 	spotLight = createLight(
 		engine,
-		lightMesh,
+		lightGeometry,
 		gltut::LightNode::Type::SPOT,
 		gltut::Vector3(0.0f, SPOT_LIGHT_Y, SPOT_LIGHT_Z),
 		SPOT_LIGHT_COLOR);

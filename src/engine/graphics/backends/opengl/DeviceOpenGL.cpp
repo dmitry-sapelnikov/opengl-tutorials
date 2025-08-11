@@ -7,7 +7,7 @@
 #include <glad/glad.h>
 
 #include "engine/core/Check.h"
-#include "MeshOpenGL.h"
+#include "GeometryOpenGL.h"
 #include "ShaderOpenGL.h"
 #include "TextureOpenGL.h"
 
@@ -119,14 +119,14 @@ void DeviceOpenGL::setViewport(const Rectangle2u& viewport) noexcept
 		static_cast<GLsizei>(max.y - min.y));
 }
 
-std::unique_ptr<Mesh> DeviceOpenGL::createBackendMesh(
+std::unique_ptr<Geometry> DeviceOpenGL::createBackendGeometry(
 	VertexFormat vertexFormat,
 	u32 vertexCount,
 	const float* vertices,
 	u32 indexCount,
 	const u32* indices)
 {
-	return std::make_unique<MeshOpenGL>(
+	return std::make_unique<GeometryOpenGL>(
 		vertexFormat,
 		vertexCount,
 		vertices,

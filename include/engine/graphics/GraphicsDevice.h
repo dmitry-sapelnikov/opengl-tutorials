@@ -5,7 +5,7 @@
 #include "engine/core/ItemManager.h"
 #include "engine/math/Color.h"
 #include "engine/math/Rectangle.h"
-#include "engine/graphics/mesh/Mesh.h"
+#include "engine/graphics/geometry/Geometry.h"
 #include "engine/graphics/shader/Shader.h"
 #include "engine/graphics/texture/TextureManager.h"
 #include "engine/graphics/framebuffer/TextureFramebuffer.h"
@@ -25,16 +25,16 @@ public:
 		const Color* color,
 		bool depth) noexcept = 0;
 
-	/// Creates a mesh
-	virtual Mesh* createMesh(
+	/// Creates a geometry
+	virtual Geometry* createGeometry(
 		VertexFormat vertexFormat,
 		u32 vertexCount,
 		const float* vertices,
 		u32 indexCount,
 		const u32* indices) noexcept = 0;
 
-	/// Removes a mesh
-	virtual void removeMesh(Mesh* mesh) noexcept = 0;
+	/// Removes a geometry
+	virtual void removeGeometry(Geometry* geometry) noexcept = 0;
 
 	/// Creates a shader from strings
 	virtual Shader* createShader(

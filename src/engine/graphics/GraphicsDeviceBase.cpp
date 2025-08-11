@@ -48,28 +48,28 @@ GraphicsDeviceBase::GraphicsDeviceBase(Window& window) noexcept :
 {
 }
 
-Mesh* GraphicsDeviceBase::createMesh(
+Geometry* GraphicsDeviceBase::createGeometry(
 	VertexFormat vertexFormat,
 	u32 vertexCount,
 	const float* vertices,
 	u32 indexCount,
 	const u32* indices) noexcept
 {
-	Mesh* result = nullptr;
+	Geometry* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN
-		result = mMeshes.emplace_back(createBackendMesh(
+		result = mGeometryes.emplace_back(createBackendGeometry(
 			vertexFormat,
 			vertexCount,
 			vertices,
 			indexCount,
 			indices)).get();
-	GLTUT_CATCH_ALL_END("Failed to create mesh")
+	GLTUT_CATCH_ALL_END("Failed to create geometry")
 	return result;
 }
 
-void GraphicsDeviceBase::removeMesh(Mesh* mesh) noexcept
+void GraphicsDeviceBase::removeGeometry(Geometry* geometry) noexcept
 {
-	removeElement(mMeshes, mesh, "Mesh");
+	removeElement(mGeometryes, geometry, "Geometry");
 }
 
 Shader* GraphicsDeviceBase::createShader(

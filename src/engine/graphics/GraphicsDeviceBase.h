@@ -15,22 +15,22 @@ namespace gltut
 class GraphicsDeviceBase : public GraphicsDevice, public NonCopyable
 {
 public:
-	/// Invalid mesh index
+	/// Invalid geometry index
 	static constexpr u32 INVALID_MESH_INDEX = std::numeric_limits<u32>::max();
 
 	/// Constructor
 	GraphicsDeviceBase(Window& window) noexcept;
 
-	/// Creates a mesh
-	Mesh* createMesh(
+	/// Creates a geometry
+	Geometry* createGeometry(
 		VertexFormat vertexFormat,
 		u32 vertexCount,
 		const float* vertices,
 		u32 indexCount,
 		const u32* indices) noexcept final;
 
-	/// Removes a mesh
-	void removeMesh(Mesh* mesh) noexcept final;
+	/// Removes a geometry
+	void removeGeometry(Geometry* geometry) noexcept final;
 
 	/// Creates a shader from strings
 	Shader* createShader(
@@ -81,7 +81,7 @@ public:
 	}
 
 	/// Creates a shader for a specific graphics backend
-	virtual std::unique_ptr<Mesh> createBackendMesh(
+	virtual std::unique_ptr<Geometry> createBackendGeometry(
 		VertexFormat vertexFormat,
 		u32 vertexCount,
 		const float* vertices,
@@ -114,8 +114,8 @@ private:
 	/// The window associated with this device
 	Window& mWindow;
 
-	/// Meshes
-	std::vector<std::unique_ptr<Mesh>> mMeshes;
+	/// Geometryes
+	std::vector<std::unique_ptr<Geometry>> mGeometryes;
 
 	/// Shaders
 	std::vector<std::unique_ptr<Shader>> mShaders;

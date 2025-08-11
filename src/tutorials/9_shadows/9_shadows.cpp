@@ -30,9 +30,9 @@ void createBoxes(
 	const int COUNT = 3;
 	const float GEOMETRY_SIZE = 1.0f;
 	const float STRIDE = 3.0f;
-	auto* boxMesh = engine.getFactory()->getGeometry()->createBox(
+	auto* boxGeometry = engine.getFactory()->getGeometry()->createBox(
 		GEOMETRY_SIZE, GEOMETRY_SIZE, GEOMETRY_SIZE);
-	GLTUT_CHECK(boxMesh, "Failed to create mesh");
+	GLTUT_CHECK(boxGeometry, "Failed to create geometry");
 
 	gltut::Rng rng;
 	for (int i = 0; i < COUNT; ++i)
@@ -46,7 +46,7 @@ void createBoxes(
 				(j - (COUNT - 1.0f) * 0.5f) * STRIDE);
 
 			auto* object = engine.getScene()->createGeometry(
-				boxMesh,
+				boxGeometry,
 				phongMaterialModel->getMaterial(),
 				gltut::Matrix4::transformMatrix(
 					position,
@@ -62,12 +62,12 @@ void createBoxes(
 std::pair<gltut::GeometryNode*, gltut::LightNode*> createLight(
 	gltut::Scene& scene,
 	const gltut::Material& material,
-	const gltut::Mesh& mesh,
+	const gltut::Geometry& geometry,
 	const gltut::LightNode::Type lightType,
 	const gltut::Vector3& position,
 	const gltut::Color& color)
 {
-	auto* light = scene.createGeometry(&mesh, &material);
+	auto* light = scene.createGeometry(&geometry, &material);
 	GLTUT_CHECK(light, "Failed to create light object");
 	light->setTransform(gltut::Matrix4::translationMatrix(position));
 
@@ -86,8 +86,8 @@ void createLights(
 	std::vector<gltut::LightNode*>& lightSources,
 	std::vector<gltut::ShadowMap*>& shadows)
 {
-	auto* lightMesh = engine.getFactory()->getGeometry()->createSphere(0.5f, 16);
-	GLTUT_CHECK(lightMesh, "Failed to create light mesh");
+	auto* lightGeometry = engine.getFactory()->getGeometry()->createSphere(0.5f, 16);
+	GLTUT_CHECK(lightGeometry, "Failed to create light geometry");
 
 	for (size_t i = 0; i < DIRECTIONAL_LIGHT_COUNT; ++i)
 	{
@@ -102,7 +102,7 @@ void createLights(
 		const auto [light, lightSource] = createLight(
 			*engine.getScene(),
 			*lightMaterial->getMaterial(),
-			*lightMesh,
+			*lightGeometry,
 			gltut::LightNode::Type::DIRECTIONAL,
 			DIR_LIGHT_POSITIONS[i],
 			DIR_LIGHT_COLORS[i]);
