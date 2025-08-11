@@ -93,11 +93,8 @@ void createLights(
 	{
 		auto* lightMaterial = engine.getFactory()->getMaterial()->createFlatColorMaterial();
 		GLTUT_CHECK(lightMaterial, "Failed to create light material");
-		lightMaterial->setColor(engine.getDevice()->createSolidColorTexture(
-			DIR_LIGHT_COLORS[i].r,
-			DIR_LIGHT_COLORS[i].g,
-			DIR_LIGHT_COLORS[i].b,
-			1.0f));
+		lightMaterial->setColor(engine.getDevice()->getTextures()->createSolidColor(
+			DIR_LIGHT_COLORS[i]));
 
 		const auto [light, lightSource] = createLight(
 			*engine.getScene(),
