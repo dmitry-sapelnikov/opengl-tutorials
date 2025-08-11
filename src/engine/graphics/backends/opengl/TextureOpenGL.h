@@ -19,8 +19,7 @@ public:
 	*/
 	TextureOpenGL(
 		const void* data,
-		u32 width,
-		u32 height,
+		const Point2u& size,
 		TextureFormat format,
 		const TextureParameters& parameters);
 

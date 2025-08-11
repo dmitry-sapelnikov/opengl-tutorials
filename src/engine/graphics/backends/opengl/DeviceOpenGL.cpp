@@ -143,15 +143,13 @@ std::unique_ptr<Shader> DeviceOpenGL::createBackendShader(
 
 std::unique_ptr<Texture> DeviceOpenGL::createBackendTexture(
 	const void* data,
-	u32 width,
-	u32 height,
+	const Point2u& size,
 	TextureFormat format,
 	const TextureParameters& parameters)
 {
 	return std::make_unique<TextureOpenGL>(
 		data,
-		width,
-		height,
+		size,
 		format,
 		parameters);
 }

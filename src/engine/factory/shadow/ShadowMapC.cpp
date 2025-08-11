@@ -11,7 +11,7 @@ ShadowMapC::ShadowMapC(
 	float frustumSize,
 	float frustumNear,
 	float frustumFar,
-	u32 ShadowMapCSize) :
+	u32 textureSize) :
 
 	mRenderer(renderer),
 	mLight(light)
@@ -19,7 +19,7 @@ ShadowMapC::ShadowMapC(
 	GLTUT_CHECK(frustumSize > 0.0f, "Frustum size must be greater than 0.0f");
 	GLTUT_CHECK(frustumNear > 0.0f, "Frustum near must be greater than 0.0f");
 	GLTUT_CHECK(frustumFar > frustumNear, "Frustum far must be greater than frustum near");
-	GLTUT_CHECK(ShadowMapCSize > 0, "Shadow map size must be greater than 0");
+	GLTUT_CHECK(textureSize > 0, "Shadow map texture size must be greater than 0");
 
 	mViewpoint.setProjectionMatrix(
 		Matrix4::orthographicProjectionMatrix(
@@ -30,8 +30,7 @@ ShadowMapC::ShadowMapC(
 
 	mTexture = mRenderer.getDevice()->getTextures()->create(
 		nullptr, // No data, we will render to it
-		ShadowMapCSize,
-		ShadowMapCSize,
+		{ textureSize, textureSize },
 		gltut::TextureFormat::FLOAT,
 		{ gltut::TextureFilterMode::NEAREST,
 		gltut::TextureFilterMode::NEAREST,

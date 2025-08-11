@@ -86,17 +86,16 @@ u32 getChannelType(TextureFormat format) noexcept
 // Global classes
 TextureOpenGL::TextureOpenGL(
 	const void* data,
-	u32 width,
-	u32 height,
+	const Point2u& size,
 	TextureFormat format,
 	const TextureParameters& parameters) :
 
-	mSize(width, height),
+	mSize(size),
 	mFormat(format),
 	mId(0)
 {
-	GLTUT_CHECK(width > 0, "Texture width is 0");
-	GLTUT_CHECK(height > 0, "Texture height is 0");
+	GLTUT_CHECK(mSize.x > 0, "Texture width is 0");
+	GLTUT_CHECK(mSize.y > 0, "Texture height is 0");
 
 	//	Get the currently bound texture to restore it after
 	GLint currentTexture;
@@ -111,8 +110,8 @@ TextureOpenGL::TextureOpenGL(
 		GL_TEXTURE_2D,
 		0,
 		toOpenGLFormat(format),
-		width,
-		height,
+		mSize.x,
+		mSize.y,
 		0,
 		toOpenGLFormat(format),
 		getChannelType(format),

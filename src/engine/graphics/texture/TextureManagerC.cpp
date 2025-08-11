@@ -1,5 +1,6 @@
 // Includes
 #include "TextureManagerC.h"
+#include <string>
 #include "./stb_image.h"
 #include "../GraphicsDeviceBase.h"
 
@@ -9,8 +10,7 @@ namespace gltut
 // Global classes
 Texture* TextureManagerC::create(
 	const void* data,
-	u32 width,
-	u32 height,
+	const Point2u& size,
 	TextureFormat format,
 	const TextureParameters& parameters) noexcept
 {
@@ -18,12 +18,11 @@ Texture* TextureManagerC::create(
 	GLTUT_CATCH_ALL_BEGIN
 		result = add(mDevice.createBackendTexture(
 			data,
-			width,
-			height,
+			size,
 			format,
 			parameters));
 	GLTUT_CATCH_ALL_END("Failed to create texture")
-	return result;
+		return result;
 }
 
 Texture* TextureManagerC::load(
@@ -51,8 +50,7 @@ Texture* TextureManagerC::load(
 
 	Texture* result = create(
 		data,
-		width,
-		height,
+		{ static_cast<u32>(width), static_cast<u32>(height) },
 		channels == 3 ? TextureFormat::RGB : TextureFormat::RGBA,
 		parameters);
 

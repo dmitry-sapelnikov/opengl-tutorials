@@ -125,8 +125,7 @@ const Texture* GraphicsDeviceBase::createSolidColorTexture(
 		const u8 colorData[] = { r8, g8, b8, a8 };
 		result = getTextures()->create(
 			colorData,
-			1U,
-			1U,
+			{ 1, 1 },
 			TextureFormat::RGBA, 
 			{ TextureFilterMode::NEAREST,
 			TextureFilterMode::NEAREST,

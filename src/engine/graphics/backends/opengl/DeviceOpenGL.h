@@ -49,8 +49,7 @@ private:
 	/// Creates a texture
 	std::unique_ptr<Texture> createBackendTexture(
 		const void* data,
-		u32 width,
-		u32 height,
+		const Point2u& size,
 		TextureFormat format,
 		const TextureParameters& parameters) final;
 

@@ -27,7 +27,7 @@ public:
 		float frustumSize,
 		float frustumNear,
 		float frustumFar,
-		u32 shadowMapSize);
+		u32 textureSize);
 
 	/// Destructor
 	~ShadowMapC() noexcept;

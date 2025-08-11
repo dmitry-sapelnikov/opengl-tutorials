@@ -15,8 +15,7 @@ public:
 	/// Creates a texture with the given parameters
 	virtual Texture* create(
 		const void* data,
-		u32 width,
-		u32 height,
+		const Point2u& size,
 		TextureFormat format = TextureFormat::RGBA,
 		const TextureParameters& parameters = {}) noexcept = 0;
 

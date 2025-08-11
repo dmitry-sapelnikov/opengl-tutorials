@@ -96,8 +96,7 @@ public:
 	/// Creates a texture for a specific graphics backend
 	virtual std::unique_ptr<Texture> createBackendTexture(
 		const void* data,
-		u32 width,
-		u32 height,
+		const Point2u& size,
 		const TextureFormat format,
 		const TextureParameters& parameters) = 0;
 
