@@ -29,30 +29,27 @@ Texture* TextureManagerC::load(
 	const char* imagePath,
 	const TextureParameters& parameters) noexcept
 {
-	stbi_set_flip_vertically_on_load(true);
-	int width = 0;
-	int height = 0;
-	int channels = 0;
-	void* data = stbi_load(imagePath, &width, &height, &channels, 0);
-	if (data == nullptr)
-	{
-		std::cerr << "Failed to load the image: " << imagePath << std::endl;
-		stbi_image_free(data);
-		return nullptr;
-	}
+	void* data = nullptr;
+	Texture* result = nullptr;
+	GLTUT_CATCH_ALL_BEGIN
+		stbi_set_flip_vertically_on_load(true);
+		int width = 0;
+		int height = 0;
+		int channels = 0;
+		void* data = stbi_load(imagePath, &width, &height, &channels, 0);
+		GLTUT_CHECK(data != nullptr, "Failed to load image");
+		GLTUT_CHECK(width > 0, "Image width <= 0");
+		GLTUT_CHECK(height > 0, "Image height <= 0");
+		GLTUT_CHECK(
+			channels == 3 || channels == 4,
+			("Unsupported number of channels: " + std::to_string(channels)).c_str());
 
-	if (channels != 3 && channels != 4)
-	{
-		std::cerr << "Unsupported image format in: " << imagePath << std::endl;
-		stbi_image_free(data);
-		return nullptr;
-	}
-
-	Texture* result = create(
-		data,
-		{ static_cast<u32>(width), static_cast<u32>(height) },
-		channels == 3 ? TextureFormat::RGB : TextureFormat::RGBA,
-		parameters);
+		result = create(
+			data,
+			{ static_cast<u32>(width), static_cast<u32>(height) },
+			channels == 3 ? TextureFormat::RGB : TextureFormat::RGBA,
+			parameters);
+	GLTUT_CATCH_ALL_END("Failed to load texture from file: " + std::string(imagePath))
 
 	stbi_image_free(data);
 	return result;
