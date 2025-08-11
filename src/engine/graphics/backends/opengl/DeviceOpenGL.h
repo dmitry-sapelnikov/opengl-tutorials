@@ -9,11 +9,11 @@
 namespace gltut
 {
 /// OpenGL device
-class OpenGLDevice final : public GraphicsDeviceBase
+class DeviceOpenGL final : public GraphicsDeviceBase
 {
 public:
 	/// Constructor
-	OpenGLDevice(Window& window);
+	DeviceOpenGL(Window& window);
 
 	/// Clears the current render target with a specific color
 	void clear(

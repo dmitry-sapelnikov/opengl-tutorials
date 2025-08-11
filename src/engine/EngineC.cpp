@@ -4,7 +4,7 @@
 #include <stdexcept>
 #include <iostream>
 
-#include "graphics/backends/opengl/OpenGLDevice.h"
+#include "graphics/backends/opengl/DeviceOpenGL.h"
 #include "scene/SceneC.h"
 #include "window/WindowC.h"
 #include "factory/FactoryC.h"
@@ -19,7 +19,7 @@ EngineC::EngineC(u32 windowWidth, u32 windowHeight)
 		windowHeight);
 	GLTUT_CHECK(mWindow != nullptr, "Failed to create the window");
 
-	auto device = std::make_unique<OpenGLDevice>(*mWindow);
+	auto device = std::make_unique<DeviceOpenGL>(*mWindow);
 	GLTUT_CHECK(device != nullptr, "Failed to create the device");
 
 	mWindow->addEventHandler(this);

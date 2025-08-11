@@ -407,7 +407,7 @@
     <ClInclude Include="..\..\src\engine\graphics\backends\opengl\MeshOpenGL.h">
       <Filter>src\graphics\backends\opengl</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\engine\graphics\backends\opengl\OpenGLDevice.h">
+    <ClInclude Include="..\..\src\engine\graphics\backends\opengl\DeviceOpenGL.h">
       <Filter>src\graphics\backends\opengl</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\engine\graphics\backends\opengl\ShaderOpenGL.h">
@@ -556,7 +556,7 @@
     <ClCompile Include="..\..\src\engine\graphics\backends\opengl\MeshOpenGL.cpp">
       <Filter>src\graphics\backends\opengl</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\engine\graphics\backends\opengl\OpenGLDevice.cpp">
+    <ClCompile Include="..\..\src\engine\graphics\backends\opengl\DeviceOpenGL.cpp">
       <Filter>src\graphics\backends\opengl</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\engine\graphics\backends\opengl\ShaderOpenGL.cpp">

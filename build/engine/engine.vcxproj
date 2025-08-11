@@ -86,7 +86,7 @@
     <ClInclude Include="..\..\src\engine\graphics\backends\opengl\framebuffer\TextureFramebufferOpenGL.h" />
     <ClInclude Include="..\..\src\engine\graphics\backends\opengl\framebuffer\WindowFramebufferOpenGL.h" />
     <ClInclude Include="..\..\src\engine\graphics\backends\opengl\MeshOpenGL.h" />
-    <ClInclude Include="..\..\src\engine\graphics\backends\opengl\OpenGLDevice.h" />
+    <ClInclude Include="..\..\src\engine\graphics\backends\opengl\DeviceOpenGL.h" />
     <ClInclude Include="..\..\src\engine\graphics\backends\opengl\ShaderOpenGL.h" />
     <ClInclude Include="..\..\src\engine\graphics\backends\opengl\TextureOpenGL.h" />
     <ClInclude Include="..\..\src\engine\graphics\framebuffer\TextureFramebufferBase.h" />
@@ -132,7 +132,7 @@
     <ClCompile Include="..\..\src\engine\factory\shadow\ShadowMapC.cpp" />
     <ClCompile Include="..\..\src\engine\graphics\backends\opengl\framebuffer\TextureFramebufferOpenGL.cpp" />
     <ClCompile Include="..\..\src\engine\graphics\backends\opengl\MeshOpenGL.cpp" />
-    <ClCompile Include="..\..\src\engine\graphics\backends\opengl\OpenGLDevice.cpp" />
+    <ClCompile Include="..\..\src\engine\graphics\backends\opengl\DeviceOpenGL.cpp" />
     <ClCompile Include="..\..\src\engine\graphics\backends\opengl\ShaderOpenGL.cpp" />
     <ClCompile Include="..\..\src\engine\graphics\backends\opengl\TextureOpenGL.cpp" />
     <ClCompile Include="..\..\src\engine\graphics\framebuffer\TextureFramebufferBase.cpp" />
