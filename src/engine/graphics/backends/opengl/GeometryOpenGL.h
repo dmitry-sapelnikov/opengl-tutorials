@@ -7,11 +7,11 @@
 namespace gltut
 {
 
-class MeshOpenGL final : public Mesh, public NonCopyable
+class GeometryOpenGL final : public Geometry, public NonCopyable
 {
 public:
 	/// Constructor
-	MeshOpenGL(
+	GeometryOpenGL(
 		VertexFormat vertexFormat,
 		u32 vertexCount,
 		const float* vertices,
@@ -19,9 +19,9 @@ public:
 		const u32* indices);
 
 	/// Destructor
-	~MeshOpenGL() final;
+	~GeometryOpenGL() final;
 
-	/// Renders the mesh
+	/// Renders the geometry
 	void render() const noexcept final;
 
 private:

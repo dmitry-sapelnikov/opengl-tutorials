@@ -63,9 +63,9 @@ void addFacesBetweenPointAndCircle(
 }
 
 // Global classes
-Mesh* GeometryFactoryC::createBox(float x, float y, float z) noexcept
+Geometry* GeometryFactoryC::createBox(float x, float y, float z) noexcept
 {
-	Mesh* result = nullptr;
+	Geometry* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN
 		x *= 0.5f;
 		y *= 0.5f;
@@ -120,14 +120,14 @@ Mesh* GeometryFactoryC::createBox(float x, float y, float z) noexcept
 			20, 21, 22, 22, 23, 20
 		};
 
-		result = mRenderer.createMesh(VERTEX_FORMAT_POS3_NORM3_TEX2, 24, vertices, 36, indices);
-	GLTUT_CATCH_ALL_END("Failed to create a box mesh")
+		result = mRenderer.createGeometry(VERTEX_FORMAT_POS3_NORM3_TEX2, 24, vertices, 36, indices);
+	GLTUT_CATCH_ALL_END("Failed to create a box geometry")
 	return result;
 }
 
-Mesh* GeometryFactoryC::createSphere(float radius, u32 subdivisions) noexcept
+Geometry* GeometryFactoryC::createSphere(float radius, u32 subdivisions) noexcept
 {
-	Mesh* result = nullptr;
+	Geometry* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN
 		GLTUT_CHECK(subdivisions >= 1, "Subdivisions must be >= 1");
 
@@ -182,14 +182,14 @@ Mesh* GeometryFactoryC::createSphere(float radius, u32 subdivisions) noexcept
 			false,
 			indices);
 
-		result = mRenderer.createMesh(
+		result = mRenderer.createGeometry(
 			VERTEX_FORMAT_POS3_NORM3_TEX2,
 			vertexCount,
 			vertices[0].data(),
 			static_cast<u32>(indices.size()),
 			indices.data());
 
-	GLTUT_CATCH_ALL_END("Failed to create a sphere mesh")
+	GLTUT_CATCH_ALL_END("Failed to create a sphere geometry")
 	return result;
 }
 

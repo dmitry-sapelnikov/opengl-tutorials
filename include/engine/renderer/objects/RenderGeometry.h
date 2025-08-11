@@ -13,9 +13,9 @@ namespace gltut
 class RenderGeometry : public RenderObject
 {
 public:
-	virtual const Mesh* getGeometry() const noexcept = 0;
+	virtual const Geometry* getGeometry() const noexcept = 0;
 
-	virtual void setGeometry(const Mesh* geometry) noexcept = 0;
+	virtual void setGeometry(const Geometry* geometry) noexcept = 0;
 
 	virtual const Material* getMaterial() const noexcept = 0;
 

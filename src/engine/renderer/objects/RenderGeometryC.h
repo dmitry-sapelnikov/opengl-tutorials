@@ -12,7 +12,7 @@ class RenderGeometryC final : public RenderGeometry, public NonCopyable
 public:
 	/// Constructor
 	RenderGeometryC(
-		const Mesh* geometry,
+		const Geometry* geometry,
 		const Material* material,
 		const Matrix4& transform) noexcept :
 
@@ -22,14 +22,14 @@ public:
 	{
 	}
 
-	/// Returns the geometry mesh
-	const Mesh* getGeometry() const noexcept final
+	/// Returns the geometry geometry
+	const Geometry* getGeometry() const noexcept final
 	{
 		return mGeometry;
 	}
 
-	/// Sets the geometry mesh
-	void setGeometry(const Mesh* geometry) noexcept final
+	/// Sets the geometry geometry
+	void setGeometry(const Geometry* geometry) noexcept final
 	{
 		mGeometry = geometry;
 	}
@@ -63,7 +63,7 @@ public:
 
 private:
 	/// The geometry
-	const Mesh* mGeometry = nullptr;
+	const Geometry* mGeometry = nullptr;
 
 	/// The material
 	const Material* mMaterial = nullptr;

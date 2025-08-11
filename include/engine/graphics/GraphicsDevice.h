@@ -25,16 +25,16 @@ public:
 		const Color* color,
 		bool depth) noexcept = 0;
 
-	/// Creates a mesh
-	virtual Mesh* createMesh(
+	/// Creates a geometry
+	virtual Geometry* createGeometry(
 		VertexFormat vertexFormat,
 		u32 vertexCount,
 		const float* vertices,
 		u32 indexCount,
 		const u32* indices) noexcept = 0;
 
-	/// Removes a mesh
-	virtual void removeMesh(Mesh* mesh) noexcept = 0;
+	/// Removes a geometry
+	virtual void removeGeometry(Geometry* geometry) noexcept = 0;
 
 	/// Creates a shader from strings
 	virtual Shader* createShader(

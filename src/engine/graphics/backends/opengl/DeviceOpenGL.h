@@ -34,7 +34,7 @@ private:
 
 	void setViewport(const Rectangle2u& viewport) noexcept final;
 
-	std::unique_ptr<Mesh> createBackendMesh(
+	std::unique_ptr<Geometry> createBackendGeometry(
 		VertexFormat vertexFormat,
 		u32 vertexCount,
 		const float* vertices,

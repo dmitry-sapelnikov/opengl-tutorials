@@ -1,5 +1,5 @@
 // Includes
-#include "MeshOpenGL.h"
+#include "GeometryOpenGL.h"
 
 #include <glad/glad.h>
 #include "engine/core/Check.h"
@@ -100,7 +100,7 @@ GLuint allocateVertexArray(
 }
 
 //	Global classes
-MeshOpenGL::MeshOpenGL(
+GeometryOpenGL::GeometryOpenGL(
 	VertexFormat vertexFormat,
 	u32 vertexCount,
 	const float* vertices,
@@ -121,14 +121,14 @@ MeshOpenGL::MeshOpenGL(
 	mVertexArray = allocateVertexArray(vertexFormat, mVertexBuffer, mIndexBuffer);
 }
 
-MeshOpenGL::~MeshOpenGL()
+GeometryOpenGL::~GeometryOpenGL()
 {
 	glDeleteVertexArrays(1, &mVertexArray);
 	glDeleteBuffers(1, &mVertexBuffer);
 	glDeleteBuffers(1, &mIndexBuffer);
 }
 
-void MeshOpenGL::render() const noexcept
+void GeometryOpenGL::render() const noexcept
 {
 	glBindVertexArray(mVertexArray);
 	glDrawElements(GL_TRIANGLES, mIndexCount, GL_UNSIGNED_INT, nullptr);

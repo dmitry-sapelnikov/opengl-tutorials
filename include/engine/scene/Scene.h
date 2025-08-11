@@ -95,7 +95,7 @@ public:
 
 	/// Creates a scene object
 	virtual GeometryNode* createGeometry(
-		const Mesh* mesh,
+		const Geometry* geometry,
 		const Material* material,
 		const Matrix4& transform = Matrix4::identity(),
 		SceneNode* parent = nullptr) noexcept = 0;

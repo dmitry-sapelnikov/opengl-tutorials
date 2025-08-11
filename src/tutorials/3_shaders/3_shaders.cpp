@@ -53,14 +53,14 @@ int main()
 
 		GLTUT_CHECK(shader != 0, "Failed to create shader program")
 		
-		auto* mesh = device->createMesh(
+		auto* geometry = device->createGeometry(
 			gltut::VERTEX_FORMAT_POS3_COLOR4,
 			3,
 			vertices,
 			3,
 			indices.data());
 
-		GLTUT_CHECK(mesh != nullptr, "Failed to create mesh");
+		GLTUT_CHECK(geometry != nullptr, "Failed to create geometry");
 
 		auto* renderPipeline = engine->getRenderer();
 		auto* binding = renderPipeline->createShaderMaterialBinding(shader);
@@ -72,7 +72,7 @@ int main()
 		auto* pass = material->createPass(0, binding, 0);
 		GLTUT_CHECK(pass != nullptr, "Failed to create material pass");
 
-		scene->createGeometry(mesh, material);
+		scene->createGeometry(geometry, material);
 		while (engine->update())
 		{
 			float time = std::chrono::duration<float>(

@@ -1,19 +1,19 @@
 #pragma once
 
 // Includes
-#include "engine/graphics/mesh/VertexFormat.h"
+#include "engine/graphics/geometry/VertexFormat.h"
 
 namespace gltut
 {
 
-/// The class represents a triangle mesh
-class Mesh
+/// The class represents a geometry to render
+class Geometry
 {
 public:
 	/// Virtual destructor
-	virtual ~Mesh() noexcept = default;
+	virtual ~Geometry() noexcept = default;
 
-	/// Renders the mesh
+	/// Renders the geometry
 	virtual void render() const noexcept = 0;
 };
 

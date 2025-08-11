@@ -93,9 +93,9 @@ ShaderMaterialBinding* createShader(Renderer& renderer, TextureFormat format)
 }
 
 /// Creates a render quad for texture-to-window rendering
-Mesh* createRenderQuad(Renderer& renderer) noexcept
+Geometry* createRenderQuad(Renderer& renderer) noexcept
 {
-	Mesh* result = nullptr;
+	Geometry* result = nullptr;
 
 	GLTUT_CATCH_ALL_BEGIN
 		float vertices1[] = {
@@ -110,7 +110,7 @@ Mesh* createRenderQuad(Renderer& renderer) noexcept
 		1, 2, 3   // second Triangle
 	};
 
-	result = renderer.getDevice()->createMesh(
+	result = renderer.getDevice()->createGeometry(
 		gltut::VERTEX_FORMAT_POS3_TEX2,
 		4,
 		vertices1,
