@@ -11,17 +11,17 @@ static_assert(sizeof(GLuint) == sizeof(u32), "GLuint must be the same size as u3
 namespace
 {
 
-u32 toOpenGLFormat(Texture::Format format) noexcept
+u32 toOpenGLFormat(TextureFormat format) noexcept
 {
 	switch (format)
 	{
-	case Texture::Format::RGB:
+	case TextureFormat::RGB:
 		return GL_RGB;
 
-	case Texture::Format::RGBA:
+	case TextureFormat::RGBA:
 		return GL_RGBA;
 
-	case Texture::Format::FLOAT:
+	case TextureFormat::FLOAT:
 		return GL_DEPTH_COMPONENT;
 
 		GLTUT_UNEXPECTED_SWITCH_DEFAULT_CASE(format)
@@ -29,20 +29,20 @@ u32 toOpenGLFormat(Texture::Format format) noexcept
 	return 0;
 }
 
-u32 toOpenGLFilterMode(Texture::FilterMode filterMode) noexcept
+u32 toOpenGLFilterMode(TextureFilterMode filterMode) noexcept
 {
 	switch (filterMode)
 	{
-	case Texture::FilterMode::NEAREST:
+	case TextureFilterMode::NEAREST:
 		return GL_NEAREST;
 
-	case Texture::FilterMode::LINEAR:
+	case TextureFilterMode::LINEAR:
 		return GL_LINEAR;
 
-	case Texture::FilterMode::NEAREST_MIPMAP_NEAREST:
+	case TextureFilterMode::NEAREST_MIPMAP_NEAREST:
 		return GL_NEAREST_MIPMAP_NEAREST;
 
-	case Texture::FilterMode::LINEAR_MIPMAP:
+	case TextureFilterMode::LINEAR_MIPMAP:
 		return GL_LINEAR_MIPMAP_LINEAR;
 
 		GLTUT_UNEXPECTED_SWITCH_DEFAULT_CASE(filterMode)
@@ -50,14 +50,14 @@ u32 toOpenGLFilterMode(Texture::FilterMode filterMode) noexcept
 	return 0;
 }
 
-u32 toOpenGLWrapMode(Texture::WrapMode wrapMode) noexcept
+u32 toOpenGLWrapMode(TextureWrapMode wrapMode) noexcept
 {
 	switch (wrapMode)
 	{
-	case Texture::WrapMode::REPEAT:
+	case TextureWrapMode::REPEAT:
 		return GL_REPEAT;
 
-	case Texture::WrapMode::CLAMP_TO_EDGE:
+	case TextureWrapMode::CLAMP_TO_EDGE:
 		return GL_CLAMP_TO_EDGE;
 
 		GLTUT_UNEXPECTED_SWITCH_DEFAULT_CASE(wrapMode)
@@ -65,15 +65,15 @@ u32 toOpenGLWrapMode(Texture::WrapMode wrapMode) noexcept
 	return 0;
 }
 
-u32 getChannelType(Texture::Format format) noexcept
+u32 getChannelType(TextureFormat format) noexcept
 {
 	switch (format)
 	{
-	case Texture::Format::RGB:
-	case Texture::Format::RGBA:
+	case TextureFormat::RGB:
+	case TextureFormat::RGBA:
 		return GL_UNSIGNED_BYTE;
 
-	case Texture::Format::FLOAT:
+	case TextureFormat::FLOAT:
 		return GL_FLOAT;
 
 		GLTUT_UNEXPECTED_SWITCH_DEFAULT_CASE(format)
@@ -88,34 +88,25 @@ TextureOpenGL::TextureOpenGL(
 	const void* data,
 	u32 width,
 	u32 height,
-	Texture::Format format,
-	Texture::FilterMode minFilter,
-	Texture::FilterMode magFilter,
-	Texture::WrapMode wrapMode) :
+	TextureFormat format,
+	const TextureParameters& parameters) :
 
 	mSize(width, height),
 	mFormat(format),
-	mMinFilter(minFilter),
-	mMagFilter(magFilter),
-	mWrapMode(wrapMode),
 	mId(0)
 {
 	GLTUT_CHECK(width > 0, "Texture width is 0");
 	GLTUT_CHECK(height > 0, "Texture height is 0");
 
-	glGenTextures(1, &mId);
-	GLTUT_CHECK(mId != 0, "Failed to generate texture");
-	GLTUT_CHECK(mId < std::numeric_limits<u32>::max(), "Texture ID is out of 32-bit range");
-
 	//	Get the currently bound texture to restore it after
 	GLint currentTexture;
 	glGetIntegerv(GL_TEXTURE_BINDING_2D, &currentTexture);
 
+	glGenTextures(1, &mId);
+	GLTUT_CHECK(mId != 0, "Failed to generate texture");
+	GLTUT_CHECK(mId < std::numeric_limits<u32>::max(), "Texture ID is out of 32-bit range");
+
 	glBindTexture(GL_TEXTURE_2D, mId);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, toOpenGLFilterMode(minFilter));
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, toOpenGLFilterMode(magFilter));
-
 	glTexImage2D(
 		GL_TEXTURE_2D,
 		0,
@@ -126,17 +117,9 @@ TextureOpenGL::TextureOpenGL(
 		toOpenGLFormat(format),
 		getChannelType(format),
 		data);
-	
-	if (minFilter == Texture::FilterMode::LINEAR_MIPMAP ||
-		minFilter == Texture::FilterMode::NEAREST_MIPMAP_NEAREST ||
-		magFilter == Texture::FilterMode::LINEAR_MIPMAP ||
-		magFilter == Texture::FilterMode::NEAREST_MIPMAP_NEAREST)
-	{
-		glGenerateMipmap(GL_TEXTURE_2D);
-	}
-	glBindTexture(GL_TEXTURE_2D, currentTexture);
 
-	setWrapMode(wrapMode);
+	setParameters(parameters);
+	glBindTexture(GL_TEXTURE_2D, currentTexture);
 }
 
 TextureOpenGL::~TextureOpenGL()
@@ -144,9 +127,16 @@ TextureOpenGL::~TextureOpenGL()
 	glDeleteTextures(1, &mId);
 }
 
-void TextureOpenGL::setWrapMode(WrapMode wrapMode) noexcept
+void TextureOpenGL::setParameters(const TextureParameters& parameters) noexcept
 {
-	mWrapMode = wrapMode;
+	setMinFilterMode(parameters.minFilter);
+	setMagFilterMode(parameters.magFilter);
+	setWrapMode(parameters.wrapMode);
+}
+
+void TextureOpenGL::setWrapMode(TextureWrapMode wrapMode) noexcept
+{
+	mParameters.wrapMode = wrapMode;
 	// Get the currently bound texture to restore it after
 	GLint currentTexture;
 	glGetIntegerv(GL_TEXTURE_BINDING_2D, &currentTexture);
@@ -154,14 +144,14 @@ void TextureOpenGL::setWrapMode(WrapMode wrapMode) noexcept
 	glBindTexture(GL_TEXTURE_2D, mId);
 	switch (wrapMode)
 	{
-	case WrapMode::REPEAT:
+	case TextureWrapMode::REPEAT:
 	{
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	}
 	break;
 
-	case WrapMode::CLAMP_TO_EDGE:
+	case TextureWrapMode::CLAMP_TO_EDGE:
 	{
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -174,23 +164,25 @@ void TextureOpenGL::setWrapMode(WrapMode wrapMode) noexcept
 	glBindTexture(GL_TEXTURE_2D, currentTexture);
 }
 
-void TextureOpenGL::setMinFilterMode(FilterMode mode) noexcept
+void TextureOpenGL::setMinFilterMode(TextureFilterMode mode) noexcept
 {
-	mMinFilter = mode;
+	mParameters.minFilter = mode;
 	GLint currentTexture;
 	glGetIntegerv(GL_TEXTURE_BINDING_2D, &currentTexture);
 	glBindTexture(GL_TEXTURE_2D, mId);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, toOpenGLFilterMode(mode));
+	updateMipmap();
 	glBindTexture(GL_TEXTURE_2D, currentTexture);
 }
 
-void TextureOpenGL::setMagFilterMode(FilterMode mode) noexcept
+void TextureOpenGL::setMagFilterMode(TextureFilterMode mode) noexcept
 {
-	mMagFilter = mode;
+	mParameters.magFilter = mode;
 	GLint currentTexture;
 	glGetIntegerv(GL_TEXTURE_BINDING_2D, &currentTexture);
 	glBindTexture(GL_TEXTURE_2D, mId);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, toOpenGLFilterMode(mode));
+	updateMipmap();
 	glBindTexture(GL_TEXTURE_2D, currentTexture);
 }
 
@@ -199,6 +191,17 @@ void TextureOpenGL::bind(u32 slot) const noexcept
 	GLTUT_ASSERT(slot < TEXTURE_SLOTS);
 	glActiveTexture(GL_TEXTURE0 + slot);
 	glBindTexture(GL_TEXTURE_2D, mId);
+}
+
+void TextureOpenGL::updateMipmap()
+{
+	if (mParameters.minFilter == TextureFilterMode::LINEAR_MIPMAP ||
+		mParameters.minFilter == TextureFilterMode::NEAREST_MIPMAP_NEAREST ||
+		mParameters.magFilter == TextureFilterMode::LINEAR_MIPMAP ||
+		mParameters.magFilter == TextureFilterMode::NEAREST_MIPMAP_NEAREST)
+	{
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
 }
 
 // End of the namespace gltut

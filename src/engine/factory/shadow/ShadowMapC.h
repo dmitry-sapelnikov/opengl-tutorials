@@ -2,7 +2,7 @@
 
 // Includes
 #include "engine/core/NonCopyable.h"
-#include "engine/graphics/Texture.h"
+#include "engine/graphics/texture/Texture.h"
 #include "engine/scene/nodes/LightNode.h"
 #include "engine/factory/render_pass/RenderPassFactory.h"
 #include "../../renderer/viewpoint/ViewpointC.h"

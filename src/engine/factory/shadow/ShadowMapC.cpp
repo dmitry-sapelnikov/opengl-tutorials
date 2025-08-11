@@ -28,14 +28,14 @@ ShadowMapC::ShadowMapC(
 			frustumNear,
 			frustumFar));
 
-	mTexture = mRenderer.getDevice()->createTexture(
+	mTexture = mRenderer.getDevice()->getTextures()->create(
 		nullptr, // No data, we will render to it
 		ShadowMapCSize,
 		ShadowMapCSize,
-		gltut::Texture::Format::FLOAT,
-		gltut::Texture::FilterMode::NEAREST,
-		gltut::Texture::FilterMode::NEAREST,
-		gltut::Texture::WrapMode::CLAMP_TO_EDGE);
+		gltut::TextureFormat::FLOAT,
+		{ gltut::TextureFilterMode::NEAREST,
+		gltut::TextureFilterMode::NEAREST,
+		gltut::TextureWrapMode::CLAMP_TO_EDGE });
 
 	GLTUT_CHECK(mTexture != nullptr, "Failed to create depth texture");
 
@@ -62,7 +62,7 @@ ShadowMapC::~ShadowMapC() noexcept
 {
 	mRenderer.removePass(mRenderPass);
 	mRenderer.getDevice()->removeTextureFramebuffer(mFramebuffer);
-	mRenderer.getDevice()->removeTexture(mTexture);
+	mRenderer.getDevice()->getTextures()->remove(mTexture);
 }
 
 void ShadowMapC::update() noexcept

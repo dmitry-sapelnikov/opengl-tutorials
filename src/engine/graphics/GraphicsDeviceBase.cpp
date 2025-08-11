@@ -3,7 +3,6 @@
 
 #include <iostream>
 #include "../core/File.h"
-#include "./texture/stb_image.h"
 
 namespace gltut
 {
@@ -44,7 +43,8 @@ void removeElement(
 }
 
 GraphicsDeviceBase::GraphicsDeviceBase(Window& window) noexcept :
-	mWindow(window)
+	mWindow(window),
+	mTextures(*this)
 {
 }
 
@@ -102,68 +102,7 @@ void GraphicsDeviceBase::removeShader(Shader* shader) noexcept
 	removeElement(mShaders, shader, "Shader");
 }
 
-Texture* GraphicsDeviceBase::createTexture(
-	const void* data,
-	u32 width,
-	u32 height,
-	Texture::Format format,
-	Texture::FilterMode minFilter,
-	Texture::FilterMode magFilter,
-	Texture::WrapMode wrapMode) noexcept
-{
-	Texture* result = nullptr;
-	GLTUT_CATCH_ALL_BEGIN
-		result = mTextures.emplace_back(createBackendTexture(
-			data,
-			width,
-			height,
-			format,
-			minFilter,
-			magFilter,
-			wrapMode)).get();
-	GLTUT_CATCH_ALL_END("Failed to create texture from data")
-	return result;
-}
-
-Texture* GraphicsDeviceBase::loadTexture(
-	const char* imagePath,
-	Texture::FilterMode minFilter,
-	Texture::FilterMode magFilter,
-	Texture::WrapMode wrapMode) noexcept
-{
-	stbi_set_flip_vertically_on_load(true);
-	int width = 0;
-	int height = 0;
-	int channels = 0;
-	void* data = stbi_load(imagePath, &width, &height, &channels, 0);
-	if (data == nullptr)
-	{
-		std::cerr << "Failed to load the image: " << imagePath << std::endl;
-		stbi_image_free(data);
-		return nullptr;
-	}
-
-	if (channels != 3 && channels != 4)
-	{
-		std::cerr << "Unsupported image format in: " << imagePath << std::endl;
-		stbi_image_free(data);
-		return nullptr;
-	}
-
-	Texture* result = createTexture(
-		data,
-		width,
-		height,
-		channels == 3 ? Texture::Format::RGB : Texture::Format::RGBA,
-		minFilter,
-		magFilter,
-		wrapMode);
-	
-	stbi_image_free(data);
-	return result;
-}
-
-Texture* GraphicsDeviceBase::createSolidColorTexture(
+const Texture* GraphicsDeviceBase::createSolidColorTexture(
 	float r,
 	float g,
 	float b,
@@ -184,14 +123,14 @@ Texture* GraphicsDeviceBase::createSolidColorTexture(
 		}
 
 		const u8 colorData[] = { r8, g8, b8, a8 };
-		result = createTexture(
+		result = getTextures()->create(
 			colorData,
 			1U,
 			1U,
-			Texture::Format::RGBA, 
-			Texture::FilterMode::NEAREST,
-			Texture::FilterMode::NEAREST,
-			Texture::WrapMode::CLAMP_TO_EDGE);
+			TextureFormat::RGBA, 
+			{ TextureFilterMode::NEAREST,
+			TextureFilterMode::NEAREST,
+			TextureWrapMode::CLAMP_TO_EDGE });
 		if (result != nullptr)
 		{
 			mSolidColorTextures[color_hex] = result;
@@ -199,26 +138,6 @@ Texture* GraphicsDeviceBase::createSolidColorTexture(
 	GLTUT_CATCH_ALL_END("Failed to create solid color texture")
 	
 	return result;
-}
-
-void GraphicsDeviceBase::removeTexture(Texture* texture) noexcept
-{
-	// If the texture is a solid color texture, remove it from the map
-	GLTUT_CATCH_ALL_BEGIN
-		auto findResult = std::find_if(
-			mSolidColorTextures.begin(),
-			mSolidColorTextures.end(),
-			[&texture](const auto& pair)
-			{
-				return pair.second == texture;
-			});
-
-		if (findResult != mSolidColorTextures.end())
-		{
-			mSolidColorTextures.erase(findResult);
-		}
-	GLTUT_CATCH_ALL_END("Failed to remove solid color texture from the map")
-	removeElement(mTextures, texture, "Texture");
 }
 
 TextureFramebuffer* GraphicsDeviceBase::createTextureFramebuffer(

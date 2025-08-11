@@ -2,11 +2,12 @@
 
 // Includes
 #include "engine/core/Types.h"
+#include "engine/core/ItemManager.h"
 #include "engine/math/Color.h"
 #include "engine/math/Rectangle.h"
 #include "engine/graphics/mesh/Mesh.h"
 #include "engine/graphics/shader/Shader.h"
-#include "engine/graphics/Texture.h"
+#include "engine/graphics/texture/TextureManager.h"
 #include "engine/graphics/framebuffer/TextureFramebuffer.h"
 
 namespace gltut
@@ -48,25 +49,8 @@ public:
 	/// Removes a shader
 	virtual void removeShader(Shader* shader) noexcept = 0;
 
-	/// Creates a texture
-	virtual Texture* createTexture(
-		const void* data,
-		u32 width,
-		u32 height,
-		Texture::Format format = Texture::Format::RGBA,
-		Texture::FilterMode minFilter = Texture::FilterMode::LINEAR_MIPMAP,
-		Texture::FilterMode magFilter = Texture::FilterMode::LINEAR,
-		Texture::WrapMode wrapMode = Texture::WrapMode::REPEAT) noexcept = 0;
-
-	/// Loads a texture
-	virtual Texture* loadTexture(
-		const char* imagePath,
-		Texture::FilterMode minFilter = Texture::FilterMode::LINEAR_MIPMAP,
-		Texture::FilterMode magFilter = Texture::FilterMode::LINEAR,
-		Texture::WrapMode wrapMode = Texture::WrapMode::REPEAT) noexcept = 0;
-
-	/// Removes a texture
-	virtual void removeTexture(Texture* texture) noexcept = 0;
+	/// Returns the texture manager
+	virtual TextureManager* getTextures() = 0;
 
 	/// Binds a texture to a slot
 	virtual void bindTexture(const Texture* texture, u32 slot) noexcept = 0;
@@ -94,7 +78,7 @@ public:
 	virtual void enableVSync(bool vSync) noexcept = 0;
 
 	/// Creates a solid color texture
-	virtual Texture* createSolidColorTexture(
+	virtual const Texture* createSolidColorTexture(
 		float r,
 		float g,
 		float b,

@@ -40,10 +40,10 @@ int main()
 		GLTUT_CHECK(shaderBinding != nullptr, "Failed to create shader binding");
 		shaderBinding->bind(gltut::ShaderMaterialBinding::Parameter::GEOMETRY_MATRIX, "model");
 
-		gltut::Texture* texture1 = device->loadTexture("assets/container.jpg");
+		gltut::Texture* texture1 = device->getTextures()->load("assets/container.jpg", {});
 		GLTUT_CHECK(texture1 != nullptr, "Failed to load texture");
 
-		gltut::Texture* texture2 = device->loadTexture("assets/awesomeface.png");
+		gltut::Texture* texture2 = device->getTextures()->load("assets/awesomeface.png");
 		GLTUT_CHECK(texture2 != nullptr, "Failed to load texture");
 
 		auto* material = renderPipeline->createMaterial();

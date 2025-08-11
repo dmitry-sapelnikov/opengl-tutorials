@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\engine\core\Check.h" />
+    <ClInclude Include="..\..\include\engine\core\ItemManager.h" />
     <ClInclude Include="..\..\include\engine\core\NonCopyable.h" />
     <ClInclude Include="..\..\include\engine\core\Types.h" />
     <ClInclude Include="..\..\include\engine\Engine.h" />
@@ -32,7 +33,9 @@
     <ClInclude Include="..\..\include\engine\graphics\shader\Shader.h" />
     <ClInclude Include="..\..\include\engine\graphics\shader\ShaderBinding.h" />
     <ClInclude Include="..\..\include\engine\graphics\shader\ShaderParameters.h" />
-    <ClInclude Include="..\..\include\engine\graphics\Texture.h" />
+    <ClInclude Include="..\..\include\engine\graphics\texture\Texture.h" />
+    <ClInclude Include="..\..\include\engine\graphics\texture\TextureManager.h" />
+    <ClInclude Include="..\..\include\engine\graphics\texture\TextureParameters.h" />
     <ClInclude Include="..\..\include\engine\math\Aabb.h" />
     <ClInclude Include="..\..\include\engine\math\Color.h" />
     <ClInclude Include="..\..\include\engine\math\Functions.h" />
@@ -70,6 +73,7 @@
     <ClInclude Include="..\..\include\engine\window\Window.h" />
     <ClInclude Include="..\..\src\engine\core\File.h" />
     <ClInclude Include="..\..\src\engine\core\FPSCounter.h" />
+    <ClInclude Include="..\..\src\engine\core\ItemManagerT.h" />
     <ClInclude Include="..\..\src\engine\EngineC.h" />
     <ClInclude Include="..\..\src\engine\factory\FactoryC.h" />
     <ClInclude Include="..\..\src\engine\factory\geometry\GeometryFactoryC.h" />
@@ -95,6 +99,7 @@
     <ClInclude Include="..\..\src\engine\graphics\shader\ShaderBindingT.h" />
     <ClInclude Include="..\..\src\engine\graphics\shader\ShaderArguments.h" />
     <ClInclude Include="..\..\src\engine\graphics\texture\stb_image.h" />
+    <ClInclude Include="..\..\src\engine\graphics\texture\TextureManagerC.h" />
     <ClInclude Include="..\..\src\engine\renderer\material\MaterialC.h" />
     <ClInclude Include="..\..\src\engine\renderer\material\MaterialPassC.h" />
     <ClInclude Include="..\..\src\engine\renderer\material\ShaderMaterialBindingC.h" />
@@ -139,6 +144,7 @@
     <ClCompile Include="..\..\src\engine\graphics\GraphicsDeviceBase.cpp" />
     <ClCompile Include="..\..\src\engine\graphics\shader\ShaderArguments.cpp" />
     <ClCompile Include="..\..\src\engine\graphics\texture\stb_image.cpp" />
+    <ClCompile Include="..\..\src\engine\graphics\texture\TextureManagerC.cpp" />
     <ClCompile Include="..\..\src\engine\renderer\material\MaterialC.cpp" />
     <ClCompile Include="..\..\src\engine\renderer\material\MaterialPassC.cpp" />
     <ClCompile Include="..\..\src\engine\renderer\material\ShaderMaterialBindingC.cpp" />
