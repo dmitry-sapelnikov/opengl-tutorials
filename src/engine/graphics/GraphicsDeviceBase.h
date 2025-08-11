@@ -6,6 +6,7 @@
 #include "engine/window/Window.h"
 
 #include "./geometry/GeometryManagerC.h"
+#include "./shader/ShaderManagerC.h"
 #include "./texture/TextureManagerC.h"
 
 namespace gltut
@@ -21,23 +22,16 @@ public:
 	/// Constructor
 	GraphicsDeviceBase(Window& window) noexcept;
 
-	/// Creates a shader from strings
-	Shader* createShader(
-		const char* vertexShader,
-		const char* fragmentShader) noexcept final;
-
-	/// Creates a shader from files
-	Shader* loadShader(
-		const char* vertexShaderPath,
-		const char* fragmentShaderPath) noexcept final;
-
-	/// Removes a shader
-	void removeShader(Shader* shader) noexcept final;
-
 	/// Returns the geometry manager
 	GeometryManager* getGeometries() noexcept final
 	{
 		return &mGeometries;
+	}
+
+	/// Returns the shader manager
+	ShaderManager* getShaders() noexcept final
+	{
+		return &mShaders;
 	}
 
 	/// Returns texture manager	
@@ -106,7 +100,7 @@ private:
 	GeometryManagerC mGeometries;
 
 	/// Shaders
-	std::vector<std::unique_ptr<Shader>> mShaders;
+	ShaderManagerC mShaders;
 
 	/// Textures
 	TextureManagerC mTextures;

@@ -27,7 +27,7 @@ int main()
 
 		GLTUT_CHECK(geometry != nullptr, "Failed to create geometry");
 
-		gltut::Shader* shader = device->loadShader(
+		gltut::Shader* shader = device->getShaders()->load(
 			"assets/shader.vs",
 			"assets/shader.fs");
 

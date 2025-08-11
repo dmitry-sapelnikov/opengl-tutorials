@@ -76,7 +76,7 @@ int main()
 
 		GLTUT_CHECK(mesh2 != nullptr, "Failed to create geometry #2")
 		
-		auto* shader = device->createShader(
+		auto* shader = device->getShaders()->create(
 			VERTEX_SHADER_SOURCE_CODE,
 			FRAGMENT_SHADER_SOURCE_CODE);
 

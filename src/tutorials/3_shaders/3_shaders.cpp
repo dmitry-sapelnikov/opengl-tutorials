@@ -31,7 +31,7 @@ int main()
 		auto* device = engine->getDevice();
 		auto* scene = engine->getScene();
 
-		gltut::Shader* shader = device->createShader(
+		gltut::Shader* shader = device->getShaders()->create(
 			"#version 330 core\n"
 			"layout (location = 0) in vec3 aPos;\n"
 			"layout (location = 1) in vec4 aColor;\n"

@@ -9,7 +9,10 @@
 #include "engine/graphics/shader/Shader.h"
 
 #include "engine/graphics/geometry/GeometryManager.h"
+#include "engine/graphics/shader/ShaderManager.h"
 #include "engine/graphics/texture/TextureManager.h"
+
+
 #include "engine/graphics/framebuffer/TextureFramebuffer.h"
 
 namespace gltut
@@ -27,21 +30,11 @@ public:
 		const Color* color,
 		bool depth) noexcept = 0;
 
-	/// Creates a shader from strings
-	virtual Shader* createShader(
-		const char* vertexShader,
-		const char* fragmentShader) noexcept = 0;
-
-	/// Creates a shader from files
-	virtual Shader* loadShader(
-		const char* vertexShaderPath,
-		const char* fragmentShaderPath) noexcept = 0;
-
-	/// Removes a shader
-	virtual void removeShader(Shader* shader) noexcept = 0;
-
 	/// Returns the geometry manager
 	virtual GeometryManager* getGeometries() = 0;
+
+	/// Return the shader manager
+	virtual ShaderManager* getShaders() = 0;
 
 	/// Returns the texture manager
 	virtual TextureManager* getTextures() = 0;

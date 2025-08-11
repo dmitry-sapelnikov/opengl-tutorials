@@ -62,7 +62,7 @@ ShaderMaterialBinding* createShader(Renderer& renderer, TextureFormat format)
 	{
 	case TextureFormat::RGB:
 	{
-		shader = renderer.getDevice()->createShader(
+		shader = renderer.getDevice()->getShaders()->create(
 			TEXTURE_TO_WINDOW_VERTEX_SHADER,
 			TEXTURE_TO_WINDOW_FRAGMENT_SHADER_RGBA);
 	}
@@ -70,7 +70,7 @@ ShaderMaterialBinding* createShader(Renderer& renderer, TextureFormat format)
 
 	case TextureFormat::RGBA:
 	{
-		shader = renderer.getDevice()->createShader(
+		shader = renderer.getDevice()->getShaders()->create(
 			TEXTURE_TO_WINDOW_VERTEX_SHADER,
 			TEXTURE_TO_WINDOW_FRAGMENT_SHADER_RGBA);
 	}
@@ -78,7 +78,7 @@ ShaderMaterialBinding* createShader(Renderer& renderer, TextureFormat format)
 
 	case TextureFormat::FLOAT:
 	{
-		shader = renderer.getDevice()->createShader(
+		shader = renderer.getDevice()->getShaders()->create(
 			TEXTURE_TO_WINDOW_VERTEX_SHADER,
 			TEXTURE_TO_WINDOW_FRAGMENT_SHADER_FLOAT);
 	}

@@ -45,38 +45,9 @@ void removeElement(
 GraphicsDeviceBase::GraphicsDeviceBase(Window& window) noexcept :
 	mWindow(window),
 	mGeometries(*this),
+	mShaders(*this),
 	mTextures(*this)
 {
-}
-
-Shader* GraphicsDeviceBase::createShader(
-	const char* vertexShader,
-	const char* fragmentShader) noexcept
-{
-	Shader* result = nullptr;
-	GLTUT_CATCH_ALL_BEGIN
-		result = mShaders.emplace_back(
-			createBackendShader(vertexShader, fragmentShader)).get();
-	GLTUT_CATCH_ALL_END("Failed to create shader program")
-	return result;
-}
-
-Shader* GraphicsDeviceBase::loadShader(
-	const char* vertexShaderPath,
-	const char* fragmentShaderPath) noexcept
-{
-	Shader* result = nullptr;
-	GLTUT_CATCH_ALL_BEGIN
-		result = createShader(
-			readFileToString(vertexShaderPath).c_str(),
-			readFileToString(fragmentShaderPath).c_str());
-	GLTUT_CATCH_ALL_END("Failed to load shader from files")
-	return result;
-}
-
-void GraphicsDeviceBase::removeShader(Shader* shader) noexcept
-{
-	removeElement(mShaders, shader, "Shader");
 }
 
 TextureFramebuffer* GraphicsDeviceBase::createTextureFramebuffer(

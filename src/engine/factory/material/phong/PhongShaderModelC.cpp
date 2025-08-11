@@ -241,7 +241,7 @@ PhongShaderModelC::PhongShaderModelC(
 	shaderHeader += "#define MAX_SPOT_LIGHTS " + std::to_string(maxSpotLights) + "\n";
 	shaderHeader += LIGHT_UNIFORMS;
 
-	mShader = device->createShader(
+	mShader = device->getShaders()->create(
 		(shaderHeader + PHONG_VERTEX_SHADER).c_str(),
 		(shaderHeader + PHONG_FRAGMENT_SHADER).c_str());
 
@@ -301,7 +301,7 @@ PhongShaderModelC::~PhongShaderModelC() noexcept
 {
 	if (mRenderer.getDevice() != nullptr)
 	{
-		mRenderer.getDevice()->removeShader(mShader);
+		mRenderer.getDevice()->getShaders()->remove(mShader);
 	}
 	mRenderer.removeShaderViewpointBinding(mViewpointBinding);
 	mRenderer.removeShaderMaterialBinding(mMaterialBinding);

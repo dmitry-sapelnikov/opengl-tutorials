@@ -497,6 +497,12 @@
     <ClInclude Include="..\..\src\engine\graphics\geometry\GeometryManagerC.h">
       <Filter>src\graphics\geometry</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\engine\graphics\shader\ShaderManager.h">
+      <Filter>include\graphics\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\graphics\shader\ShaderManagerC.h">
+      <Filter>src\graphics\shader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\engine\EngineC.cpp">
@@ -612,6 +618,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\engine\graphics\geometry\GeometryManagerC.cpp">
       <Filter>src\graphics\geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\graphics\shader\ShaderManagerC.cpp">
+      <Filter>src\graphics\shader</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

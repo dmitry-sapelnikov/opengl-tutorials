@@ -54,7 +54,7 @@ ShaderMaterialBinding* createFlatColorShader(Renderer& renderPipeline) noexcept
 	ShaderMaterialBinding* materialBinding = nullptr;
 
 	GLTUT_CATCH_ALL_BEGIN
-		Shader* shader = renderPipeline.getDevice()->createShader(
+		Shader* shader = renderPipeline.getDevice()->getShaders()->create(
 			FLAT_COLOR_VERTEX_SHADER,
 			FLAT_COLOR_FRAGMENT_SHADER);
 
@@ -86,7 +86,7 @@ ShaderMaterialBinding* createFlatColorShader(Renderer& renderPipeline) noexcept
 
 	if (shader != nullptr)
 	{
-		renderPipeline.getDevice()->removeShader(shader);
+		renderPipeline.getDevice()->getShaders()->remove(shader);
 	}
 
 	return nullptr;

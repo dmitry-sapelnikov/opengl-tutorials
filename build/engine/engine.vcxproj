@@ -33,6 +33,7 @@
     <ClInclude Include="..\..\include\engine\graphics\GraphicsDevice.h" />
     <ClInclude Include="..\..\include\engine\graphics\shader\Shader.h" />
     <ClInclude Include="..\..\include\engine\graphics\shader\ShaderBinding.h" />
+    <ClInclude Include="..\..\include\engine\graphics\shader\ShaderManager.h" />
     <ClInclude Include="..\..\include\engine\graphics\shader\ShaderParameters.h" />
     <ClInclude Include="..\..\include\engine\graphics\texture\Texture.h" />
     <ClInclude Include="..\..\include\engine\graphics\texture\TextureManager.h" />
@@ -100,6 +101,7 @@
     <ClInclude Include="..\..\src\engine\graphics\GraphicsDeviceBase.h" />
     <ClInclude Include="..\..\src\engine\graphics\shader\ShaderBindingT.h" />
     <ClInclude Include="..\..\src\engine\graphics\shader\ShaderArguments.h" />
+    <ClInclude Include="..\..\src\engine\graphics\shader\ShaderManagerC.h" />
     <ClInclude Include="..\..\src\engine\graphics\texture\stb_image.h" />
     <ClInclude Include="..\..\src\engine\graphics\texture\TextureManagerC.h" />
     <ClInclude Include="..\..\src\engine\renderer\material\MaterialC.h" />
@@ -146,6 +148,7 @@
     <ClCompile Include="..\..\src\engine\graphics\geometry\GeometryManagerC.cpp" />
     <ClCompile Include="..\..\src\engine\graphics\GraphicsDeviceBase.cpp" />
     <ClCompile Include="..\..\src\engine\graphics\shader\ShaderArguments.cpp" />
+    <ClCompile Include="..\..\src\engine\graphics\shader\ShaderManagerC.cpp" />
     <ClCompile Include="..\..\src\engine\graphics\texture\stb_image.cpp" />
     <ClCompile Include="..\..\src\engine\graphics\texture\TextureManagerC.cpp" />
     <ClCompile Include="..\..\src\engine\renderer\material\MaterialC.cpp" />
