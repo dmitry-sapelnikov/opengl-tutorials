@@ -58,7 +58,7 @@ int main()
 
 		auto* device = engine->getDevice();
 		auto* scene = engine->getScene();
-		auto* mesh1 = device->createGeometry(
+		auto* mesh1 = device->getGeometries()->create(
 			gltut::VERTEX_FORMAT_POS3,
 			4,
 			vertices1,
@@ -67,7 +67,7 @@ int main()
 
 		GLTUT_CHECK(mesh1 != nullptr, "Failed to create geometry #1")
 
-		auto* mesh2 = device->createGeometry(
+		auto* mesh2 = device->getGeometries()->create(
 			gltut::VERTEX_FORMAT_POS3,
 			4,
 			vertices2,

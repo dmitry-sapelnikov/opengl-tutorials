@@ -2,8 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <None Include="copy_assets.targets" />
-    <None Include="..\..\..\src\tutorials\9_shadows\assets\light_shader.fs" />
-    <None Include="..\..\..\src\tutorials\9_shadows\assets\light_shader.vs" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\tutorials\9_shadows\9_shadows.cpp" />

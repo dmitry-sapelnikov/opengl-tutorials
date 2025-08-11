@@ -110,7 +110,7 @@ Geometry* createRenderQuad(Renderer& renderer) noexcept
 		1, 2, 3   // second Triangle
 	};
 
-	result = renderer.getDevice()->createGeometry(
+	result = renderer.getDevice()->getGeometries()->create(
 		gltut::VERTEX_FORMAT_POS3_TEX2,
 		4,
 		vertices1,

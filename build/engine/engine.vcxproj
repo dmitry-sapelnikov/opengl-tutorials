@@ -28,6 +28,7 @@
     <ClInclude Include="..\..\include\engine\graphics\framebuffer\Framebuffer.h" />
     <ClInclude Include="..\..\include\engine\graphics\framebuffer\TextureFramebuffer.h" />
     <ClInclude Include="..\..\include\engine\graphics\geometry\Geometry.h" />
+    <ClInclude Include="..\..\include\engine\graphics\geometry\GeometryManager.h" />
     <ClInclude Include="..\..\include\engine\graphics\geometry\VertexFormat.h" />
     <ClInclude Include="..\..\include\engine\graphics\GraphicsDevice.h" />
     <ClInclude Include="..\..\include\engine\graphics\shader\Shader.h" />
@@ -95,6 +96,7 @@
     <ClInclude Include="..\..\src\engine\graphics\backends\opengl\TextureOpenGL.h" />
     <ClInclude Include="..\..\src\engine\graphics\framebuffer\TextureFramebufferBase.h" />
     <ClInclude Include="..\..\src\engine\graphics\framebuffer\WindowFramebufferBase.h" />
+    <ClInclude Include="..\..\src\engine\graphics\geometry\GeometryManagerC.h" />
     <ClInclude Include="..\..\src\engine\graphics\GraphicsDeviceBase.h" />
     <ClInclude Include="..\..\src\engine\graphics\shader\ShaderBindingT.h" />
     <ClInclude Include="..\..\src\engine\graphics\shader\ShaderArguments.h" />
@@ -141,6 +143,7 @@
     <ClCompile Include="..\..\src\engine\graphics\backends\opengl\ShaderOpenGL.cpp" />
     <ClCompile Include="..\..\src\engine\graphics\backends\opengl\TextureOpenGL.cpp" />
     <ClCompile Include="..\..\src\engine\graphics\framebuffer\TextureFramebufferBase.cpp" />
+    <ClCompile Include="..\..\src\engine\graphics\geometry\GeometryManagerC.cpp" />
     <ClCompile Include="..\..\src\engine\graphics\GraphicsDeviceBase.cpp" />
     <ClCompile Include="..\..\src\engine\graphics\shader\ShaderArguments.cpp" />
     <ClCompile Include="..\..\src\engine\graphics\texture\stb_image.cpp" />

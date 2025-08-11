@@ -7,6 +7,8 @@
 #include "engine/math/Rectangle.h"
 #include "engine/graphics/geometry/Geometry.h"
 #include "engine/graphics/shader/Shader.h"
+
+#include "engine/graphics/geometry/GeometryManager.h"
 #include "engine/graphics/texture/TextureManager.h"
 #include "engine/graphics/framebuffer/TextureFramebuffer.h"
 
@@ -25,17 +27,6 @@ public:
 		const Color* color,
 		bool depth) noexcept = 0;
 
-	/// Creates a geometry
-	virtual Geometry* createGeometry(
-		VertexFormat vertexFormat,
-		u32 vertexCount,
-		const float* vertices,
-		u32 indexCount,
-		const u32* indices) noexcept = 0;
-
-	/// Removes a geometry
-	virtual void removeGeometry(Geometry* geometry) noexcept = 0;
-
 	/// Creates a shader from strings
 	virtual Shader* createShader(
 		const char* vertexShader,
@@ -48,6 +39,9 @@ public:
 
 	/// Removes a shader
 	virtual void removeShader(Shader* shader) noexcept = 0;
+
+	/// Returns the geometry manager
+	virtual GeometryManager* getGeometries() = 0;
 
 	/// Returns the texture manager
 	virtual TextureManager* getTextures() = 0;

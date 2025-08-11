@@ -53,7 +53,7 @@ int main()
 
 		GLTUT_CHECK(shader != 0, "Failed to create shader program")
 		
-		auto* geometry = device->createGeometry(
+		auto* geometry = device->getGeometries()->create(
 			gltut::VERTEX_FORMAT_POS3_COLOR4,
 			3,
 			vertices,

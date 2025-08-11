@@ -32,7 +32,7 @@ int main()
 
 		auto* device = engine->getDevice();
 		auto* scene = engine->getScene();
-		auto* geometry = device->createGeometry(
+		auto* geometry = device->getGeometries()->create(
 			gltut::VERTEX_FORMAT_POS3_TEX2,
 			4,
 			vertices,

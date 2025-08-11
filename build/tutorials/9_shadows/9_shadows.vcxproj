@@ -22,8 +22,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\src\tutorials\9_shadows\assets\light_shader.fs" />
-    <None Include="..\..\..\src\tutorials\9_shadows\assets\light_shader.vs" />
     <None Include="copy_assets.targets" />
   </ItemGroup>
   <ItemGroup>

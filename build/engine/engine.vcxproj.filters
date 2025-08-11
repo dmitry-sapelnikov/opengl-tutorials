@@ -156,6 +156,9 @@
     <Filter Include="include\graphics\geometry">
       <UniqueIdentifier>{7b7e2a01-d409-4e63-bdcf-3793738c8d14}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\graphics\geometry">
+      <UniqueIdentifier>{e46b7b16-75f1-4855-8813-20087dae3e5b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\engine\Engine.h">
@@ -488,6 +491,12 @@
     <ClInclude Include="..\..\include\engine\graphics\geometry\Geometry.h">
       <Filter>include\graphics\geometry</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\engine\graphics\geometry\GeometryManager.h">
+      <Filter>include\graphics\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\graphics\geometry\GeometryManagerC.h">
+      <Filter>src\graphics\geometry</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\engine\EngineC.cpp">
@@ -600,6 +609,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\engine\graphics\texture\TextureManagerC.cpp">
       <Filter>src\graphics\texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\graphics\geometry\GeometryManagerC.cpp">
+      <Filter>src\graphics\geometry</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

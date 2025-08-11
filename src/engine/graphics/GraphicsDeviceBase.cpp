@@ -44,32 +44,9 @@ void removeElement(
 
 GraphicsDeviceBase::GraphicsDeviceBase(Window& window) noexcept :
 	mWindow(window),
+	mGeometries(*this),
 	mTextures(*this)
 {
-}
-
-Geometry* GraphicsDeviceBase::createGeometry(
-	VertexFormat vertexFormat,
-	u32 vertexCount,
-	const float* vertices,
-	u32 indexCount,
-	const u32* indices) noexcept
-{
-	Geometry* result = nullptr;
-	GLTUT_CATCH_ALL_BEGIN
-		result = mGeometryes.emplace_back(createBackendGeometry(
-			vertexFormat,
-			vertexCount,
-			vertices,
-			indexCount,
-			indices)).get();
-	GLTUT_CATCH_ALL_END("Failed to create geometry")
-	return result;
-}
-
-void GraphicsDeviceBase::removeGeometry(Geometry* geometry) noexcept
-{
-	removeElement(mGeometryes, geometry, "Geometry");
 }
 
 Shader* GraphicsDeviceBase::createShader(
