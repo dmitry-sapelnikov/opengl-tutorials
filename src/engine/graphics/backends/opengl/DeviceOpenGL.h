@@ -51,10 +51,8 @@ private:
 		const void* data,
 		u32 width,
 		u32 height,
-		Texture::Format format,
-		Texture::FilterMode minFilter,
-		Texture::FilterMode magFilter,
-		Texture::WrapMode wrapMode) final;
+		TextureFormat format,
+		const TextureParameters& parameters) final;
 
 	/// Creates a framebuffer
 	std::unique_ptr<TextureFramebuffer> createBackendTextureFramebuffer(

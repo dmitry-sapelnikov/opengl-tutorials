@@ -9,8 +9,8 @@ void TextureFramebufferBase::setColor(Texture* texture) noexcept
 {
 	// If the texture is not null and is not a color texture, do nothing
 	if (texture != nullptr &&
-		texture->getFormat() != Texture::Format::RGBA &&
-		texture->getFormat() != Texture::Format::RGB)
+		texture->getFormat() != TextureFormat::RGBA &&
+		texture->getFormat() != TextureFormat::RGB)
 	{
 		std::cerr << "Invalid texture format for color attachment." << std::endl;
 		return;
@@ -22,7 +22,7 @@ void TextureFramebufferBase::setDepth(Texture* texture) noexcept
 {
 	// If the texture is not null and is not a depth texture, do nothing
 	if (texture != nullptr &&
-		texture->getFormat() != Texture::Format::FLOAT)
+		texture->getFormat() != TextureFormat::FLOAT)
 	{
 		std::cerr << "Invalid texture format for depth attachment." << std::endl;
 		return;

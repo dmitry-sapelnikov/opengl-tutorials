@@ -1,7 +1,7 @@
 #pragma once
 
 // Includes
-#include "engine/graphics/Texture.h"
+#include "engine/graphics/texture/Texture.h"
 #include "engine/graphics/shader/ShaderParameters.h"
 #include "engine/renderer/material/ShaderMaterialBinding.h"
 #include "engine/renderer/texture/TextureSet.h"

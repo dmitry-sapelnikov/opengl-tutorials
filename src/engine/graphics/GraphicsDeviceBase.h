@@ -6,6 +6,8 @@
 #include "engine/graphics/GraphicsDevice.h"
 #include "engine/window/Window.h"
 
+#include "./texture/TextureManagerC.h"
+
 namespace gltut
 {
 
@@ -43,32 +45,18 @@ public:
 	/// Removes a shader
 	void removeShader(Shader* shader) noexcept final;
 
-	/// Creates a texture
-	Texture* createTexture(
-		const void* data,
-		u32 width,
-		u32 height,
-		Texture::Format format,
-		Texture::FilterMode minFilter,
-		Texture::FilterMode magFilter,
-		Texture::WrapMode wrapMode) noexcept final;
-
-	/// Loads a texture
-	Texture* loadTexture(
-		const char* imagePath,
-		Texture::FilterMode minFilter,
-		Texture::FilterMode magFilter,
-		Texture::WrapMode wrapMode) noexcept final;
+	/// Returns textures
+	TextureManager* getTextures() noexcept final
+	{
+		return &mTextures;
+	}
 
 	/// Creates a solid color texture
-	Texture* createSolidColorTexture(
+	const Texture* createSolidColorTexture(
 		float r,
 		float g,
 		float b,
 		float a = 1.0f) noexcept final;
-
-	/// Removes a texture
-	void removeTexture(Texture* texture) noexcept final;
 
 	/**
 		\brief Creates a framebuffer
@@ -92,13 +80,6 @@ public:
 		return mWindow;
 	}
 
-private:
-	// Sets the framebuffer for rendering
-	virtual void setFramebuffer(Framebuffer* frameBuffer) noexcept = 0;
-
-	// Sets the viewport for rendering
-	virtual void setViewport(const Rectangle2u& viewport) noexcept = 0;
-
 	/// Creates a shader for a specific graphics backend
 	virtual std::unique_ptr<Mesh> createBackendMesh(
 		VertexFormat vertexFormat,
@@ -117,14 +98,19 @@ private:
 		const void* data,
 		u32 width,
 		u32 height,
-		Texture::Format format,
-		Texture::FilterMode minFilter,
-		Texture::FilterMode magFilter,
-		Texture::WrapMode wrapMode) = 0;
+		const TextureFormat format,
+		const TextureParameters& parameters) = 0;
 
 	virtual std::unique_ptr<TextureFramebuffer> createBackendTextureFramebuffer(
 		Texture* color,
 		Texture* depth) = 0;
+
+private:
+	// Sets the framebuffer for rendering
+	virtual void setFramebuffer(Framebuffer* frameBuffer) noexcept = 0;
+
+	// Sets the viewport for rendering
+	virtual void setViewport(const Rectangle2u& viewport) noexcept = 0;
 
 	/// The window associated with this device
 	Window& mWindow;
@@ -136,10 +122,10 @@ private:
 	std::vector<std::unique_ptr<Shader>> mShaders;
 
 	/// Textures
-	std::vector<std::unique_ptr<Texture>> mTextures;
+	TextureManagerC mTextures;
 
 	/// Solid color textures
-	std::unordered_map<u32, Texture*> mSolidColorTextures;
+	std::unordered_map<u32, const Texture*> mSolidColorTextures;
 
 	/// Framebuffers
 	std::vector<std::unique_ptr<TextureFramebuffer>> mFramebuffers;

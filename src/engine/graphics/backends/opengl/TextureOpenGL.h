@@ -5,7 +5,7 @@
 #include <glad/glad.h>
 #include "engine/core/NonCopyable.h"
 #include "engine/core/Types.h"
-#include "engine/graphics/Texture.h"
+#include "engine/graphics/texture/Texture.h"
 
 namespace gltut
 {
@@ -21,10 +21,8 @@ public:
 		const void* data,
 		u32 width,
 		u32 height,
-		Texture::Format format,
-		Texture::FilterMode minFilter,
-		Texture::FilterMode magFilter,
-		Texture::WrapMode wrapMode);
+		TextureFormat format,
+		const TextureParameters& parameters);
 
 	/// Destructor
 	~TextureOpenGL() noexcept final;
@@ -41,57 +39,41 @@ public:
 		return mSize;
 	}
 
-	/// Returns the wrap mode of the texture
-	WrapMode getWrapMode() const noexcept final
-	{
-		return mWrapMode;
-	}
-
-	/// Sets the wrap mode of the texture
-	void setWrapMode(WrapMode mode) noexcept final;
-
 	/// Returns the texture format
-	Format getFormat() const noexcept final
+	TextureFormat getFormat() const noexcept final
 	{
 		return mFormat;
 	}
 
-	/// Returns the min filter mode of the texture
-	FilterMode getMinFilterMode() const noexcept final
+	/// Returns the texture parameters
+	const TextureParameters& getParameters() const noexcept final
 	{
-		return mMinFilter;
+		return mParameters;
 	}
 
-	/// Sets the min filter mode of the texture
-	void setMinFilterMode(FilterMode mode) noexcept final;
-
-	/// Returns the mag filter mode of the texture
-	FilterMode getMagFilterMode() const noexcept final
-	{
-		return mMagFilter;
-	}
-
-	/// Sets the mag filter mode of the texture
-	void setMagFilterMode(FilterMode mode) noexcept final;
+	/// Sets the texture parameters
+	void setParameters(const TextureParameters& parameters) noexcept final;
 
 	/// Binds the texture
 	void bind(u32 slot) const noexcept final;
 
 private:
+	void setMinFilterMode(TextureFilterMode mode) noexcept;
+
+	void setMagFilterMode(TextureFilterMode mode) noexcept;
+
+	void setWrapMode(TextureWrapMode mode) noexcept;
+
+	void updateMipmap();
+
 	/// Texture size
 	Point2u mSize;
 
 	/// Texture format
-	Format mFormat;
+	TextureFormat mFormat;
 
-	/// Min filter mode
-	FilterMode mMinFilter;
-
-	/// Mag filter mode
-	FilterMode mMagFilter;
-
-	/// Wrap mode
-	WrapMode mWrapMode;
+	/// Texture parameters
+	TextureParameters mParameters;
 
 	/// Texture ID
 	GLuint mId;

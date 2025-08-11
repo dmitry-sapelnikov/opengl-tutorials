@@ -145,19 +145,15 @@ std::unique_ptr<Texture> DeviceOpenGL::createBackendTexture(
 	const void* data,
 	u32 width,
 	u32 height,
-	Texture::Format format,
-	Texture::FilterMode minFilter,
-	Texture::FilterMode magFilter,
-	Texture::WrapMode wrapMode)
+	TextureFormat format,
+	const TextureParameters& parameters)
 {
 	return std::make_unique<TextureOpenGL>(
 		data,
 		width,
 		height,
 		format,
-		minFilter,
-		magFilter,
-		wrapMode);
+		parameters);
 }
 
 std::unique_ptr<TextureFramebuffer> DeviceOpenGL::createBackendTextureFramebuffer(

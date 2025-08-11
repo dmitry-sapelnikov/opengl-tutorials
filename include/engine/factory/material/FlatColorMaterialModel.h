@@ -11,7 +11,7 @@ class FlatColorMaterialModel
 public:
 	virtual const Material* getMaterial() const noexcept = 0;
 
-	virtual void setColor(Texture* color) noexcept = 0;
+	virtual void setColor(const Texture* color) noexcept = 0;
 };
 
 // End of the namespace gltut

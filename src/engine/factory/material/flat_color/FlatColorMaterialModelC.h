@@ -24,7 +24,7 @@ public:
 	}
 
 	/// Sets the color texture
-	void setColor(Texture* color) noexcept final
+	void setColor(const Texture* color) noexcept final
 	{
 		getMaterial()[0]->getTextures()->setTexture(color, 0);
 	}

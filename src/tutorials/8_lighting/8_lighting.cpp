@@ -183,10 +183,10 @@ int main()
 		gltut::PhongMaterialModel* phongMaterialModel = materialFactory->createPhongMaterial(phongShader);
 		GLTUT_CHECK(phongMaterialModel, "Failed to create Phong material model");
 
-		gltut::Texture* diffuseTexture = device->loadTexture("assets/container2.png");
+		gltut::Texture* diffuseTexture = device->getTextures()->load("assets/container2.png");
 		GLTUT_CHECK(diffuseTexture, "Failed to create diffuse texture");
 
-		gltut::Texture* specularTexture = device->loadTexture("assets/container2_specular.png");
+		gltut::Texture* specularTexture = device->getTextures()->load("assets/container2_specular.png");
 		GLTUT_CHECK(specularTexture, "Failed to create specular texture");
 
 		phongMaterialModel->setDiffuse(diffuseTexture);

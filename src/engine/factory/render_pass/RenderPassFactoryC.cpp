@@ -55,12 +55,12 @@ void main()
 
 // Local functions
 /// Creates a texture-to-render target shader
-ShaderMaterialBinding* createShader(Renderer& renderer, Texture::Format format)
+ShaderMaterialBinding* createShader(Renderer& renderer, TextureFormat format)
 {
 	Shader* shader = nullptr;
 	switch (format)
 	{
-	case Texture::Format::RGB:
+	case TextureFormat::RGB:
 	{
 		shader = renderer.getDevice()->createShader(
 			TEXTURE_TO_WINDOW_VERTEX_SHADER,
@@ -68,7 +68,7 @@ ShaderMaterialBinding* createShader(Renderer& renderer, Texture::Format format)
 	}
 	break;
 
-	case Texture::Format::RGBA:
+	case TextureFormat::RGBA:
 	{
 		shader = renderer.getDevice()->createShader(
 			TEXTURE_TO_WINDOW_VERTEX_SHADER,
@@ -76,7 +76,7 @@ ShaderMaterialBinding* createShader(Renderer& renderer, Texture::Format format)
 	}
 	break;
 
-	case Texture::Format::FLOAT:
+	case TextureFormat::FLOAT:
 	{
 		shader = renderer.getDevice()->createShader(
 			TEXTURE_TO_WINDOW_VERTEX_SHADER,

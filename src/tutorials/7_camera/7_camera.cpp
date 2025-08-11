@@ -52,10 +52,10 @@ int main()
 			gltut::ShaderViewpointBinding::Parameter::PROJECTION_MATRIX,
 			"projection");
 
-		gltut::Texture* texture1 = device->getDevice()->loadTexture("assets/container.jpg");
+		gltut::Texture* texture1 = device->getDevice()->getTextures()->load("assets/container.jpg", {});
 		GLTUT_CHECK(texture1 != nullptr, "Failed to load texture");
 
-		gltut::Texture* texture2 = device->getDevice()->loadTexture("assets/awesomeface.png");
+		gltut::Texture* texture2 = device->getDevice()->getTextures()->load("assets/awesomeface.png");
 		GLTUT_CHECK(texture2 != nullptr, "Failed to load texture");
 
 		auto* material = device->createMaterial();

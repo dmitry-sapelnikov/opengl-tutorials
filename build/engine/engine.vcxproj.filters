@@ -153,6 +153,9 @@
     <Filter Include="include\scene\texture">
       <UniqueIdentifier>{af858d0c-7ac3-4e49-a821-d93d03eecf2d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\graphics\texture">
+      <UniqueIdentifier>{d898d257-a048-462f-a15e-975a4a3262b4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\engine\Engine.h">
@@ -419,9 +422,6 @@
     <ClInclude Include="..\..\include\engine\graphics\GraphicsDevice.h">
       <Filter>include\graphics</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\engine\graphics\Texture.h">
-      <Filter>include\graphics</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\engine\graphics\framebuffer\Framebuffer.h">
       <Filter>include\graphics\framebuffer</Filter>
     </ClInclude>
@@ -469,6 +469,24 @@
     </ClInclude>
     <ClInclude Include="..\..\include\engine\scene\texture\SceneTextureSetBinding.h">
       <Filter>include\scene\texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\core\ItemManager.h">
+      <Filter>include\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\core\ItemManagerT.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\graphics\texture\TextureManagerC.h">
+      <Filter>src\graphics\texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\graphics\texture\TextureParameters.h">
+      <Filter>include\graphics\texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\graphics\texture\Texture.h">
+      <Filter>include\graphics\texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\graphics\texture\TextureManager.h">
+      <Filter>include\graphics\texture</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -579,6 +597,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\engine\factory\shadow\ShadowMapC.cpp">
       <Filter>src\factory\shadow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\graphics\texture\TextureManagerC.cpp">
+      <Filter>src\graphics\texture</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
