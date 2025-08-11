@@ -1,7 +1,6 @@
 #pragma once
 
 // Includes
-#include <unordered_map>
 #include "engine/core/NonCopyable.h"
 #include "engine/graphics/GraphicsDevice.h"
 #include "engine/window/Window.h"
@@ -46,13 +45,6 @@ public:
 	{
 		return &mTextures;
 	}
-
-	/// Creates a solid color texture
-	const Texture* createSolidColorTexture(
-		float r,
-		float g,
-		float b,
-		float a = 1.0f) noexcept final;
 
 	/**
 		\brief Creates a framebuffer
@@ -118,9 +110,6 @@ private:
 
 	/// Textures
 	TextureManagerC mTextures;
-
-	/// Solid color textures
-	std::unordered_map<u32, const Texture*> mSolidColorTextures;
 
 	/// Framebuffers
 	std::vector<std::unique_ptr<TextureFramebuffer>> mFramebuffers;

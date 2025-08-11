@@ -70,13 +70,6 @@ public:
 
 	/// Enables or disables vertical synchronization
 	virtual void enableVSync(bool vSync) noexcept = 0;
-
-	/// Creates a solid color texture
-	virtual const Texture* createSolidColorTexture(
-		float r,
-		float g,
-		float b,
-		float a = 1.0f) noexcept = 0;
 };
 
 // End of the namespace gltut

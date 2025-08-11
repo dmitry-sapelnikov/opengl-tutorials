@@ -1,6 +1,7 @@
 #pragma once
 
 // Includes
+#include "engine/math/Color.h"
 #include "engine/core/ItemManager.h"
 #include "engine/graphics/texture/Texture.h"
 
@@ -23,6 +24,9 @@ public:
 	virtual Texture* load(
 		const char* imagePath,
 		const TextureParameters& parameters = {}) noexcept = 0;
+
+	/// Creates a solid color texture
+	virtual const Texture* createSolidColor(const Color& color) noexcept = 0;
 };
 
 // End of the namespace gltut

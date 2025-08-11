@@ -73,8 +73,7 @@ gltut::GeometryNode* createLight(
 	const gltut::Vector3& position,
 	const gltut::Color& color)
 {
-	auto* colorTexture = engine.getDevice()->createSolidColorTexture(
-		color.r, color.g, color.b, color.a);
+	auto* colorTexture = engine.getDevice()->getTextures()->createSolidColor(color);
 	GLTUT_CHECK(colorTexture, "Failed to create color texture");
 
 	auto* lightMaterial = engine.getFactory()->getMaterial()->createFlatColorMaterial();

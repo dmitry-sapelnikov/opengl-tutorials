@@ -1,6 +1,7 @@
 #pragma once
 
 // Includes
+#include <unordered_map>
 #include "engine/core/ItemManager.h"
 #include "../../core/ItemManagerT.h"
 #include "engine/graphics/texture/TextureManager.h"
@@ -33,9 +34,15 @@ public:
 		const char* imagePath,
 		const TextureParameters& parameters) noexcept final;
 
+	/// Creates a solid color texture
+	const Texture* createSolidColor(const Color& color) noexcept final;
+
 private:
 	/// Reference to the graphics device
 	GraphicsDeviceBase& mDevice;
+
+	/// Solid color textures
+	std::unordered_map<u32, const Texture*> mSolidColorTextures;
 };
 
 // End of the namespace gltut

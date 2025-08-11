@@ -79,43 +79,6 @@ void GraphicsDeviceBase::removeShader(Shader* shader) noexcept
 	removeElement(mShaders, shader, "Shader");
 }
 
-const Texture* GraphicsDeviceBase::createSolidColorTexture(
-	float r,
-	float g,
-	float b,
-	float a) noexcept
-{
-	const u8 r8 = static_cast<u8>(std::clamp(r, 0.0f, 1.0f) * 255);
-	const u8 g8 = static_cast<u8>(std::clamp(g, 0.0f, 1.0f) * 255);
-	const u8 b8 = static_cast<u8>(std::clamp(b, 0.0f, 1.0f) * 255);
-	const u8 a8 = static_cast<u8>(std::clamp(a, 0.0f, 1.0f) * 255);
-	const u32 color_hex = ((u32)r8 << 24) | ((u32)g8 << 16) | ((u32)b8 << 8) | (u32)a8;
-
-	Texture* result = nullptr;
-	GLTUT_CATCH_ALL_BEGIN
-		if (auto findResult = mSolidColorTextures.find(color_hex);
-			findResult != mSolidColorTextures.end())
-		{
-			return findResult->second;
-		}
-
-		const u8 colorData[] = { r8, g8, b8, a8 };
-		result = getTextures()->create(
-			colorData,
-			{ 1, 1 },
-			TextureFormat::RGBA, 
-			{ TextureFilterMode::NEAREST,
-			TextureFilterMode::NEAREST,
-			TextureWrapMode::CLAMP_TO_EDGE });
-		if (result != nullptr)
-		{
-			mSolidColorTextures[color_hex] = result;
-		}
-	GLTUT_CATCH_ALL_END("Failed to create solid color texture")
-	
-	return result;
-}
-
 TextureFramebuffer* GraphicsDeviceBase::createTextureFramebuffer(
 	Texture* color,
 	Texture* depth) noexcept
