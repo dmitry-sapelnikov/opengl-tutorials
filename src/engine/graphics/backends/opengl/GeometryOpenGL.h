@@ -2,7 +2,7 @@
 
 // Includes
 #include "engine/core/NonCopyable.h"
-#include "engine/graphics/mesh/Mesh.h"
+#include "engine/graphics/geometry/Geometry.h"
 
 namespace gltut
 {

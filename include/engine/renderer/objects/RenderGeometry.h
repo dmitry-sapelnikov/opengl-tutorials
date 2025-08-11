@@ -2,7 +2,7 @@
 
 // Includes
 #include "engine/math/Matrix4.h"
-#include "engine/graphics/mesh/Mesh.h"
+#include "engine/graphics/geometry/Geometry.h"
 #include "engine/renderer/objects/RenderObject.h"
 #include "engine/renderer/material/Material.h"
 

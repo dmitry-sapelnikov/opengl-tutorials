@@ -485,7 +485,7 @@
     <ClInclude Include="..\..\include\engine\graphics\geometry\VertexFormat.h">
       <Filter>include\graphics\geometry</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\engine\graphics\mesh\Mesh.h">
+    <ClInclude Include="..\..\include\engine\graphics\geometry\Geometry.h">
       <Filter>include\graphics\geometry</Filter>
     </ClInclude>
   </ItemGroup>

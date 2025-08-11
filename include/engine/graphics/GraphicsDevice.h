@@ -5,7 +5,7 @@
 #include "engine/core/ItemManager.h"
 #include "engine/math/Color.h"
 #include "engine/math/Rectangle.h"
-#include "engine/graphics/mesh/Mesh.h"
+#include "engine/graphics/geometry/Geometry.h"
 #include "engine/graphics/shader/Shader.h"
 #include "engine/graphics/texture/TextureManager.h"
 #include "engine/graphics/framebuffer/TextureFramebuffer.h"

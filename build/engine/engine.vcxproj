@@ -27,9 +27,9 @@
     <ClInclude Include="..\..\include\engine\factory\shadow\ShadowFactory.h" />
     <ClInclude Include="..\..\include\engine\graphics\framebuffer\Framebuffer.h" />
     <ClInclude Include="..\..\include\engine\graphics\framebuffer\TextureFramebuffer.h" />
+    <ClInclude Include="..\..\include\engine\graphics\geometry\Geometry.h" />
     <ClInclude Include="..\..\include\engine\graphics\geometry\VertexFormat.h" />
     <ClInclude Include="..\..\include\engine\graphics\GraphicsDevice.h" />
-    <ClInclude Include="..\..\include\engine\graphics\mesh\Mesh.h" />
     <ClInclude Include="..\..\include\engine\graphics\shader\Shader.h" />
     <ClInclude Include="..\..\include\engine\graphics\shader\ShaderBinding.h" />
     <ClInclude Include="..\..\include\engine\graphics\shader\ShaderParameters.h" />
