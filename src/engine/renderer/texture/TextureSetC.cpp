@@ -32,10 +32,7 @@ void TextureSetC::bind() const noexcept
 {
 	for (u32 i = 0; i < mTextureSlotsCount; ++i)
 	{
-		if (mTextures[i] != nullptr)
-		{
-			mTextures[i]->bind(i);
-		}
+		mDevice.bindTexture(mTextures[i], i);
 	}
 }
 

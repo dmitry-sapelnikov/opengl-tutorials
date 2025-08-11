@@ -4,6 +4,7 @@
 #include <array>
 #include "engine/core/NonCopyable.h"
 #include "engine/renderer/texture/TextureSet.h"
+#include "engine/graphics/GraphicsDevice.h"
 
 namespace gltut
 {
@@ -13,7 +14,10 @@ class TextureSetC final : public TextureSet, public NonCopyable
 {
 public:
 	/// Constructor
-	explicit TextureSetC(u32 textureSlotsCount) 
+	explicit TextureSetC(
+		GraphicsDevice& device,
+		u32 textureSlotsCount) :
+		mDevice(device)
 	{
 		mTextures.fill(nullptr);
 		setTextureSlotsCount(textureSlotsCount);
@@ -36,6 +40,9 @@ public:
 	void bind() const noexcept final;
 
 private:
+	/// Reference to the graphics device
+	GraphicsDevice& mDevice;
+
 	/// Texture slots
 	std::array<const Texture*, Texture::TEXTURE_SLOTS> mTextures;
 
