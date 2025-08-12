@@ -1,5 +1,6 @@
 // Includes
 #include "ShadowMapC.h"
+#include "engine/factory/material/MaterialPassIndex.h"
 
 namespace gltut
 {
@@ -47,7 +48,7 @@ ShadowMapC::ShadowMapC(
 		&mViewpoint,
 		&shadowCaster,
 		mFramebuffer,
-		0, // Material pass 0
+		static_cast<u32>(MaterialPassIndex::DEPTH),
 		nullptr, // No clear color
 		true, // Depth clearing
 		nullptr);
