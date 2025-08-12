@@ -1,7 +1,7 @@
 #pragma once
 
 // Includes
-#include "engine/renderer/material/ShaderMaterialBinding.h"
+#include "engine/renderer/shader/ShaderRendererBinding.h"
 
 namespace gltut
 {
@@ -18,8 +18,8 @@ public:
 	/// Virtual destructor
 	virtual ~PhongShaderModel() noexcept = default;
 
-	/// Returns the material binding
-	virtual ShaderMaterialBinding* getMaterialBinding() const noexcept = 0;
+	/// Returns the shader renderer binding for the Phong shader
+	virtual ShaderRendererBinding* getShader() const noexcept = 0;
 
 	/// Returns the maximum number of directional lights
 	virtual u32 getMaxDirectionalLights() const noexcept = 0;

@@ -4,7 +4,6 @@
 #include "engine/graphics/GraphicsDevice.h"
 #include "engine/scene/Scene.h"
 #include "engine/factory/material/FlatColorMaterialModel.h"
-#include "engine/factory/material/PhongShaderModel.h"
 #include "engine/factory/material/PhongMaterialModel.h"
 
 namespace gltut
@@ -18,7 +17,8 @@ public:
 	virtual ~MaterialFactory() noexcept = default;
 
 	/// Creates a flat color material model
-	virtual FlatColorMaterialModel* createFlatColorMaterial() noexcept = 0;
+	virtual FlatColorMaterialModel* createFlatColorMaterial(
+		bool castShadows = true) noexcept = 0;
 
 	/// Creates a Phong shader
 	virtual PhongShaderModel* createPhongShader(
@@ -28,7 +28,8 @@ public:
 
 	///	Creates a Phong material model
 	virtual PhongMaterialModel* createPhongMaterial(
-		PhongShaderModel* phongShader) noexcept = 0;
+		PhongShaderModel* phongShader,
+		bool castShadows = true) noexcept = 0;
 
 	/// Updates the material factory
 	virtual void update() noexcept = 0;

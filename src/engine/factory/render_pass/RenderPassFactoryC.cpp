@@ -55,7 +55,7 @@ void main()
 
 // Local functions
 /// Creates a texture-to-render target shader
-ShaderMaterialBinding* createShader(Renderer& renderer, TextureFormat format)
+ShaderRendererBinding* createShader(Renderer& renderer, TextureFormat format)
 {
 	Shader* shader = nullptr;
 	switch (format)
@@ -89,7 +89,7 @@ ShaderMaterialBinding* createShader(Renderer& renderer, TextureFormat format)
 
 	GLTUT_CHECK(shader != nullptr, "Failed to create texture-to-render-target shader");
 	shader->setInt("textureSampler", 0);
-	return renderer.createShaderMaterialBinding(shader);
+	return renderer.createShaderBinding(shader);
 }
 
 /// Creates a render quad for texture-to-window rendering
@@ -138,7 +138,7 @@ RenderPass* RenderPassFactoryC::createTextureToWindowRenderPass(
 				mShaders[shaderIndex] != nullptr,
 				"Failed to create shader for texture-to-window render pass");
 		}
-		ShaderMaterialBinding* shader = mShaders[shaderIndex];
+		ShaderRendererBinding* shader = mShaders[shaderIndex];
 
 		if (mRenderQuad == nullptr)
 		{

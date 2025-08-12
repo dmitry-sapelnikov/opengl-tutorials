@@ -3,7 +3,7 @@
 // Includes
 #include "engine/graphics/texture/Texture.h"
 #include "engine/graphics/shader/ShaderParameters.h"
-#include "engine/renderer/material/ShaderMaterialBinding.h"
+#include "engine/renderer/shader/ShaderRendererBinding.h"
 
 namespace gltut
 {

@@ -4,7 +4,7 @@
 #include "engine/core/NonCopyable.h"
 #include "engine/renderer/Renderer.h"
 #include "engine/scene/Scene.h"
-#include "engine/factory/material/PhongShaderModel.h"
+#include "engine/factory/shader/PhongShaderModel.h"
 
 namespace gltut
 {
@@ -24,9 +24,9 @@ public:
 	~PhongShaderModelC() noexcept final;
 
 	/// Returns the material binding
-	ShaderMaterialBinding* getMaterialBinding() const noexcept final
+	ShaderRendererBinding* getShader() const noexcept final
 	{
-		return mMaterialBinding;
+		return mRendererBinding;
 	}
 
 	/// Returns the maximum number of directional lights
@@ -63,14 +63,8 @@ private:
 	/// The scene
 	Scene& mScene;
 
-	/// The shader
-	Shader* mShader = nullptr;
-
-	/// The viewpoint binding
-	ShaderViewpointBinding* mViewpointBinding = nullptr;
-
 	/// The material binding
-	ShaderMaterialBinding* mMaterialBinding = nullptr;
+	ShaderRendererBinding* mRendererBinding = nullptr;
 
 	/// The scene binding
 	SceneShaderBinding* mSceneBinding = nullptr;

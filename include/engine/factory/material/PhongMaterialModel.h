@@ -3,7 +3,7 @@
 // Includes
 #include "engine/renderer/viewpoint/Viewpoint.h"
 #include "engine/renderer/material/Material.h"
-#include "engine/factory/material/PhongShaderModel.h"
+#include "engine/factory/shader/PhongShaderModel.h"
 
 namespace gltut
 {

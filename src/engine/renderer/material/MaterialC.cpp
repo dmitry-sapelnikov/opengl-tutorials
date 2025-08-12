@@ -7,7 +7,7 @@ namespace gltut
 //	Global classes
 MaterialPass* MaterialC::createPass(
 	u32 index,
-	ShaderMaterialBinding* shader,
+	ShaderRendererBinding* shader,
 	u32 textureSlotsCount) noexcept
 {
 	if (index < mPasses.size() && mPasses[index] != nullptr)

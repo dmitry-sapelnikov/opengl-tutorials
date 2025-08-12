@@ -27,7 +27,7 @@ void createBoxes(
 	gltut::Engine& engine,
 	gltut::PhongMaterialModel* phongMaterialModel)
 {
-	const int COUNT = 3;
+	const int COUNT = 5;
 	const float GEOMETRY_SIZE = 1.0f;
 	const float STRIDE = 3.0f;
 	auto* boxGeometry = engine.getFactory()->getGeometry()->createBox(
@@ -39,19 +39,23 @@ void createBoxes(
 	{
 		for (int j = 0; j < COUNT; ++j)
 		{
-			const float size = rng.nextFloat(0.5f, 2.0f);
+			const gltut::Vector3 size(
+				rng.nextFloat(0.5f, 2.0f),
+				rng.nextFloat(0.5f, 2.0f),
+				rng.nextFloat(0.5f, 2.0f));
+
 			const gltut::Vector3 position(
-				(i - (COUNT - 1.0f) * 0.5f) * STRIDE,
-				0.5f * size,
-				(j - (COUNT - 1.0f) * 0.5f) * STRIDE);
+				(i - (COUNT - 1.0f) * 0.5f + rng.nextFloat(-0.25f, 0.25f)) * STRIDE,
+				0.5f * size.y,
+				(j - (COUNT - 1.0f) * 0.5f + rng.nextFloat(-0.25f, 0.25f)) * STRIDE);
 
 			auto* object = engine.getScene()->createGeometry(
 				boxGeometry,
 				phongMaterialModel->getMaterial(),
 				gltut::Matrix4::transformMatrix(
 					position,
-					{ 0.0f, 0.0, 0.0f },
-					size * gltut::Vector3(1.0f, 1.0f, 1.0f)));
+					gltut::Vector3(0.0f, rng.nextFloat(0.0f, gltut::PI * 2.0), 0.0f),
+					size));
 
 			GLTUT_CHECK(object, "Failed to create object");
 		}
@@ -86,12 +90,14 @@ void createLights(
 	std::vector<gltut::LightNode*>& lightSources,
 	std::vector<gltut::ShadowMap*>& shadows)
 {
-	auto* lightGeometry = engine.getFactory()->getGeometry()->createSphere(0.5f, 16);
+	auto* factory = engine.getFactory();
+	auto* lightGeometry = factory->getGeometry()->createSphere(0.5f, 16);
 	GLTUT_CHECK(lightGeometry, "Failed to create light geometry");
 
 	for (size_t i = 0; i < DIRECTIONAL_LIGHT_COUNT; ++i)
 	{
-		auto* lightMaterial = engine.getFactory()->getMaterial()->createFlatColorMaterial();
+		// Create a flat color material for the light. This material does not cast shadows.
+		auto* lightMaterial = factory->getMaterial()->createFlatColorMaterial(false);
 		GLTUT_CHECK(lightMaterial, "Failed to create light material");
 		lightMaterial->setColor(engine.getDevice()->getTextures()->createSolidColor(
 			DIR_LIGHT_COLORS[i]));
@@ -106,7 +112,7 @@ void createLights(
 		lights.push_back(light);
 		lightSources.push_back(lightSource);
 
-		gltut::ShadowMap* shadow = engine.getFactory()->getShadow()->createShadowMap(
+		gltut::ShadowMap* shadow = factory->getShadow()->createShadowMap(
 			lightSource,
 			engine.getScene()->getRenderObject(),
 			40.0f, // Frustum size

@@ -2,7 +2,7 @@
 
 // Includes
 #include "engine/graphics/GraphicsDevice.h"
-#include "engine/renderer/viewpoint/ShaderViewpointBinding.h"
+#include "engine/renderer/shader/ShaderRendererBinding.h"
 #include "engine/renderer/objects/RenderGeometry.h"
 #include "engine/renderer/objects/RenderGroup.h"
 #include "engine/renderer/RenderPass.h"
@@ -21,20 +21,12 @@ public:
 	virtual GraphicsDevice* getDevice() noexcept = 0;
 
 	/// Creates a shader material binding
-	virtual ShaderMaterialBinding* createShaderMaterialBinding(
+	virtual ShaderRendererBinding* createShaderBinding(
 		Shader* shader) noexcept = 0;
 
 	/// Removes a shader material binding
-	virtual void removeShaderMaterialBinding(
-		ShaderMaterialBinding* binding) noexcept = 0;
-
-	/// Creates a shader viewpoint binding
-	virtual ShaderViewpointBinding* createShaderViewpointBinding(
-		Shader* shader) noexcept = 0;
-
-	/// Removes a shader viewpoint binding
-	virtual void removeShaderViewpointBinding(
-		ShaderViewpointBinding* binding) noexcept = 0;
+	virtual void removeShaderBinding(
+		ShaderRendererBinding* binding) noexcept = 0;
 
 	/// Creates a material
 	virtual Material* createMaterial() noexcept = 0;
