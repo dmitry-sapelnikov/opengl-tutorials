@@ -107,7 +107,7 @@ EngineImguiC::EngineImguiC(Engine& engine) :
 	mRenderPass = engine.getRenderer()->createPass(
 		nullptr,
 		mRenderObject.get(),
-		engine.getDevice()->getWindowFramebuffer(),
+		engine.getDevice()->getFramebuffers()->getDefault(),
 		0,
 		nullptr,
 		false,

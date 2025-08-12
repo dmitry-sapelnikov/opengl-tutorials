@@ -6,6 +6,7 @@
 #include "engine/window/Window.h"
 
 #include "./geometry/GeometryManagerC.h"
+#include "./framebuffer/FramebufferManagerC.h"
 #include "./shader/ShaderManagerC.h"
 #include "./texture/TextureManagerC.h"
 
@@ -28,6 +29,12 @@ public:
 		return &mGeometries;
 	}
 
+	/// Returns the framebuffer manager
+	FramebufferManager* getFramebuffers() noexcept final
+	{
+		return &mFramebuffers;
+	}
+
 	/// Returns the shader manager
 	ShaderManager* getShaders() noexcept final
 	{
@@ -39,17 +46,6 @@ public:
 	{
 		return &mTextures;
 	}
-
-	/**
-		\brief Creates a framebuffer
-		\note At least one of texture parameters must be non-null
-	*/
-	TextureFramebuffer* createTextureFramebuffer(
-		Texture* color,
-		Texture* depth) noexcept final;
-
-	/// Removes a framebuffer
-	void removeTextureFramebuffer(TextureFramebuffer* frameBuffer) noexcept final;
 
 	/// Binds a framebuffer
 	void bindFramebuffer(
@@ -86,6 +82,8 @@ public:
 		Texture* color,
 		Texture* depth) = 0;
 
+	virtual Framebuffer* getDefaultFramebuffer() const noexcept = 0;
+
 private:
 	// Sets the framebuffer for rendering
 	virtual void setFramebuffer(Framebuffer* frameBuffer) noexcept = 0;
@@ -99,14 +97,14 @@ private:
 	/// Geometryes
 	GeometryManagerC mGeometries;
 
+	/// Framebuffers
+	FramebufferManagerC mFramebuffers;
+
 	/// Shaders
 	ShaderManagerC mShaders;
 
 	/// Textures
 	TextureManagerC mTextures;
-
-	/// Framebuffers
-	std::vector<std::unique_ptr<TextureFramebuffer>> mFramebuffers;
 };
 
 // End of the namespace gltut

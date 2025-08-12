@@ -503,6 +503,12 @@
     <ClInclude Include="..\..\src\engine\graphics\shader\ShaderManagerC.h">
       <Filter>src\graphics\shader</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\engine\graphics\framebuffer\FramebufferManager.h">
+      <Filter>include\graphics\framebuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\graphics\framebuffer\FramebufferManagerC.h">
+      <Filter>src\graphics\framebuffer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\engine\EngineC.cpp">
@@ -621,6 +627,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\engine\graphics\shader\ShaderManagerC.cpp">
       <Filter>src\graphics\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\graphics\framebuffer\FramebufferManagerC.cpp">
+      <Filter>src\graphics\framebuffer</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

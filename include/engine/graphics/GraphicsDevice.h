@@ -9,6 +9,7 @@
 #include "engine/graphics/shader/Shader.h"
 
 #include "engine/graphics/geometry/GeometryManager.h"
+#include "engine/graphics/framebuffer/FramebufferManager.h"
 #include "engine/graphics/shader/ShaderManager.h"
 #include "engine/graphics/texture/TextureManager.h"
 
@@ -33,6 +34,9 @@ public:
 	/// Returns the geometry manager
 	virtual GeometryManager* getGeometries() = 0;
 
+	/// Returns the framebuffer manager
+	virtual FramebufferManager* getFramebuffers() = 0;
+
 	/// Return the shader manager
 	virtual ShaderManager* getShaders() = 0;
 
@@ -41,20 +45,6 @@ public:
 
 	/// Binds a texture to a slot
 	virtual void bindTexture(const Texture* texture, u32 slot) noexcept = 0;
-
-	/**
-		\brief Creates a framebuffer
-		\note At least one of texture parameters must be non-null
-	*/
-	virtual TextureFramebuffer* createTextureFramebuffer(
-		Texture* color,
-		Texture* depth) noexcept = 0;
-
-	/// Removes a framebuffer
-	virtual void removeTextureFramebuffer(TextureFramebuffer* frameBuffer) noexcept = 0;
-
-	/// Returns the window framebuffer
-	virtual Framebuffer* getWindowFramebuffer() const noexcept = 0;
 
 	/// Binds a framebuffer
 	virtual void bindFramebuffer(

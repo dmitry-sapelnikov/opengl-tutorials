@@ -37,7 +37,7 @@ EngineC::EngineC(u32 windowWidth, u32 windowHeight)
 	RenderPass* defaultPass = mRenderer->createPass(
 		mScene->getActiveCameraViewpoint(),
 		mScene->getRenderObject(),
-		mDevice->getWindowFramebuffer(),
+		mDevice->getFramebuffers()->getDefault(),
 		0,
 		&clearColor,
 		true,

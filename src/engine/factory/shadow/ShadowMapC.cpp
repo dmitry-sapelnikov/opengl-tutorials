@@ -38,7 +38,7 @@ ShadowMapC::ShadowMapC(
 
 	GLTUT_CHECK(mTexture != nullptr, "Failed to create depth texture");
 
-	mFramebuffer = mRenderer.getDevice()->createTextureFramebuffer(
+	mFramebuffer = mRenderer.getDevice()->getFramebuffers()->create(
 		nullptr,
 		mTexture);
 	GLTUT_CHECK(mFramebuffer, "Failed to create framebuffer");
@@ -60,7 +60,7 @@ ShadowMapC::ShadowMapC(
 ShadowMapC::~ShadowMapC() noexcept
 {
 	mRenderer.removePass(mRenderPass);
-	mRenderer.getDevice()->removeTextureFramebuffer(mFramebuffer);
+	mRenderer.getDevice()->getFramebuffers()->remove(mFramebuffer);
 	mRenderer.getDevice()->getTextures()->remove(mTexture);
 }
 

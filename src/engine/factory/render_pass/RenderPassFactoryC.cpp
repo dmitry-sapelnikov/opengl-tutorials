@@ -174,7 +174,7 @@ RenderPass* RenderPassFactoryC::createTextureToWindowRenderPass(
 		result = mRenderer.createPass(
 			nullptr, // No viewpoint
 			object,
-			mRenderer.getDevice()->getWindowFramebuffer(),
+			mRenderer.getDevice()->getFramebuffers()->getDefault(),
 			0, // Material pass 0
 			nullptr, // No clear color
 			true, // Depth clearing

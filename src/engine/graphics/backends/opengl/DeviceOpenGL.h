@@ -23,16 +23,11 @@ public:
 	/// Enables or disables vertical synchronization
 	void enableVSync(bool vSync) noexcept final;
 
-	/// Returns the window framebuffer
-	Framebuffer* getWindowFramebuffer() const noexcept final
+	/// Returns the default (window) framebuffer
+	Framebuffer* getDefaultFramebuffer() const noexcept final
 	{
 		return mWindowFramebuffer.get();
 	}
-
-private:
-	void setFramebuffer(Framebuffer* frameBuffer) noexcept final;
-
-	void setViewport(const Rectangle2u& viewport) noexcept final;
 
 	std::unique_ptr<Geometry> createBackendGeometry(
 		VertexFormat vertexFormat,
@@ -60,6 +55,13 @@ private:
 
 	/// Binds a texture to a slot
 	void bindTexture(const Texture* texture, u32 slot) noexcept final;
+
+private:
+	/// Sets a framebuffer for rendering
+	void setFramebuffer(Framebuffer* frameBuffer) noexcept final;
+
+	/// Sets the viewport for rendering
+	void setViewport(const Rectangle2u& viewport) noexcept final;
 
 	/// The window framebuffer
 	std::unique_ptr<WindowFramebufferOpenGL> mWindowFramebuffer;

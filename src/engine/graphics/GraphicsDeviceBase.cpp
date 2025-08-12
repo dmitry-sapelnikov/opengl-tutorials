@@ -7,65 +7,13 @@
 namespace gltut
 {
 
-// Local functions
-namespace
-{
-
-template <typename T>
-void removeElement(
-	std::vector<std::unique_ptr<T>>&container,
-	T * element,
-	const char* elementName) noexcept
-{
-	if (element == nullptr)
-	{
-		return;
-	}
-
-	auto findResult = std::find_if(
-		container.begin(),
-		container.end(),
-		[&element](const auto& e)
-		{
-			return e.get() == element;
-		});
-
-	if (findResult != container.end())
-	{
-		container.erase(findResult);
-	}
-	else
-	{
-		std::cerr << "Failed to remove the element: " << elementName << std::endl;
-	}
-}
-
-}
-
 GraphicsDeviceBase::GraphicsDeviceBase(Window& window) noexcept :
 	mWindow(window),
 	mGeometries(*this),
+	mFramebuffers(*this),
 	mShaders(*this),
 	mTextures(*this)
 {
-}
-
-TextureFramebuffer* GraphicsDeviceBase::createTextureFramebuffer(
-	Texture* color,
-	Texture* depth) noexcept
-{
-	TextureFramebuffer* result = nullptr;
-	GLTUT_CATCH_ALL_BEGIN
-		result = mFramebuffers.emplace_back(createBackendTextureFramebuffer(
-			color,
-			depth)).get();
-	GLTUT_CATCH_ALL_END("Failed to create framebuffer")
-	return result;
-}
-
-void GraphicsDeviceBase::removeTextureFramebuffer(TextureFramebuffer* frameBuffer) noexcept
-{
-	removeElement(mFramebuffers, frameBuffer, "Framebuffer");
 }
 
 void GraphicsDeviceBase::bindFramebuffer(
