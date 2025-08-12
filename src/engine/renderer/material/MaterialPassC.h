@@ -14,6 +14,7 @@ class MaterialPassC final : public MaterialPass, public NonCopyable
 public:
 	/// Constructor
 	explicit MaterialPassC(
+		GraphicsDevice& device,
 		ShaderMaterialBinding* shader,
 		u32 textureSlotsCount) noexcept;
 

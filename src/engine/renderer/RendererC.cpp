@@ -91,7 +91,8 @@ Material* RendererC::createMaterial() noexcept
 {
 	return createElement<Material, MaterialC>(
 		mMaterials,
-		"material");
+		"material",
+		mDevice);
 }
 
 void RendererC::removeMaterial(Material* material) noexcept

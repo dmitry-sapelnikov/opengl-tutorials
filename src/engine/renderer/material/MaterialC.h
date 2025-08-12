@@ -4,6 +4,7 @@
 #include <vector>
 #include "engine/core/NonCopyable.h"
 #include "engine/renderer/material/Material.h"
+#include "engine/graphics/GraphicsDevice.h"
 
 namespace gltut
 {
@@ -12,7 +13,10 @@ class MaterialC final : public Material, public NonCopyable
 {
 public:
 	/// Constructor
-	MaterialC() noexcept = default;
+	MaterialC(GraphicsDevice& device) noexcept :
+		mDevice(device)
+	{
+	}
 
 	/// Creates a material pass by index
 	MaterialPass* createPass(
@@ -27,6 +31,10 @@ public:
 	MaterialPass* getPass(u32 index) const noexcept final;
 
 private:
+	/// Graphics device reference
+	GraphicsDevice& mDevice;
+
+	/// List of material passes
 	std::vector<std::unique_ptr<MaterialPass>> mPasses;
 };
 

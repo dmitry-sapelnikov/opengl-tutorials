@@ -9,6 +9,7 @@ namespace gltut
 {
 //	Global classes
 MaterialPassC::MaterialPassC(
+	GraphicsDevice& device,
 	ShaderMaterialBinding* Shader,
 	u32 textureSlotsCount) noexcept :
 
@@ -16,7 +17,7 @@ MaterialPassC::MaterialPassC(
 	mShaderArguments(Shader != nullptr ? 
 		Shader->getShader() :
 		nullptr),
-	mTextures(textureSlotsCount)
+	mTextures(device, textureSlotsCount)
 {
 }
 
