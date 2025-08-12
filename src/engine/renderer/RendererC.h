@@ -26,21 +26,12 @@ public:
 	}
 
 	/// Creates a shader material binding
-	ShaderMaterialBinding* createShaderMaterialBinding(
+	ShaderRendererBinding* createShaderBinding(
 		Shader* shader) noexcept final;
 
 	/// Removes a shader material binding
-	void removeShaderMaterialBinding(
-		ShaderMaterialBinding* binding) noexcept final;
-
-
-	/// Creates a shader viewpoint binding
-	ShaderViewpointBinding* createShaderViewpointBinding(
-		Shader* shader) noexcept final;
-
-	/// Removes a shader viewpoint binding
-	void removeShaderViewpointBinding(
-		ShaderViewpointBinding* binding) noexcept final;
+	void removeShaderBinding(
+		ShaderRendererBinding* binding) noexcept final;
 
 	/// Creates a material
 	Material* createMaterial() noexcept final;
@@ -80,11 +71,8 @@ private:
 	/// GraphicsDevice
 	GraphicsDevice& mDevice;
 
-	/// Shader viewpoint bindings
-	std::vector<std::unique_ptr<ShaderViewpointBinding>> mShaderViewpointBindings;
-
-	/// Shader material bindings
-	std::vector<std::unique_ptr<ShaderMaterialBinding>> mShaderMaterialBindings;
+	/// Shader renderer bindings
+	std::vector<std::unique_ptr<ShaderRendererBinding>> mShaderBindings;
 
 	/// Materials
 	std::vector<std::unique_ptr<Material>> mMaterials;

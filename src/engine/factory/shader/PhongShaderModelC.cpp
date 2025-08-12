@@ -1,6 +1,7 @@
 // Includes
 #include <string>
 #include "PhongShaderModelC.h"
+#include "./StandardShaderBinding.h"
 
 namespace gltut
 {
@@ -241,36 +242,29 @@ PhongShaderModelC::PhongShaderModelC(
 	shaderHeader += "#define MAX_SPOT_LIGHTS " + std::to_string(maxSpotLights) + "\n";
 	shaderHeader += LIGHT_UNIFORMS;
 
-	mShader = device->getShaders()->create(
+	mRendererBinding = createStandardShaderBinding(
+		mRenderer,
 		(shaderHeader + PHONG_VERTEX_SHADER).c_str(),
 		(shaderHeader + PHONG_FRAGMENT_SHADER).c_str());
 
-	GLTUT_CHECK(mShader, "Failed to create Phong shader");
+	GLTUT_CHECK(mRendererBinding != nullptr, "Failed to create Phong shader binding");
+	auto* shader = mRendererBinding->getShader();
+	GLTUT_CHECK(shader != nullptr, "Invalid shader pointer");
 
-	mShader->setInt("diffuseSampler", 0);
-	mShader->setInt("specularSampler", 1);
-	mShader->setFloat("shininess", DEFAULT_SHINESS);
+	mRendererBinding->bind(ShaderRendererBinding::Parameter::VIEWPOINT_POSITION, "viewPos");
+	mRendererBinding->bind(ShaderRendererBinding::Parameter::GEOMETRY_NORMAL_MATRIX, "normalMat");
+
+	shader->setInt("diffuseSampler", 0);
+	shader->setInt("specularSampler", 1);
+	shader->setFloat("shininess", DEFAULT_SHINESS);
 	for (u32 i = 0; i < maxDirectionalLights; ++i)
 	{
-		mShader->setInt(
+		shader->setInt(
 			("directionalLightShadowSamplers[" + std::to_string(i) + "]").c_str(),
 			PhongShaderModel::TEXTURE_SLOTS_COUNT + i);
 	}
 
-	mMaterialBinding = renderer.createShaderMaterialBinding(mShader);
-	GLTUT_CHECK(mMaterialBinding != nullptr, "Failed to create shader material binding");
-
-	mMaterialBinding->bind(ShaderMaterialBinding::Parameter::GEOMETRY_MATRIX, "model");
-	mMaterialBinding->bind(ShaderMaterialBinding::Parameter::GEOMETRY_NORMAL_MATRIX, "normalMat");
-
-	mViewpointBinding = renderer.createShaderViewpointBinding(mShader);
-	GLTUT_CHECK(mViewpointBinding != nullptr, "Failed to create shader viewpoint binding");
-
-	mViewpointBinding->bind(ShaderViewpointBinding::Parameter::VIEW_MATRIX, "view");
-	mViewpointBinding->bind(ShaderViewpointBinding::Parameter::PROJECTION_MATRIX, "projection");
-	mViewpointBinding->bind(ShaderViewpointBinding::Parameter::POSITION, "viewPos");
-
-	mSceneBinding = scene.createShaderBinding(mShader);
+	mSceneBinding = scene.createShaderBinding(shader);
 	GLTUT_CHECK(mSceneBinding != nullptr, "Failed to create scene shader binding");
 
 	mSceneBinding->bind(SceneShaderBinding::Parameter::DIRECTIONAL_LIGHT_DIRECTION, "directionalLights.dir");
@@ -299,13 +293,12 @@ PhongShaderModelC::PhongShaderModelC(
 
 PhongShaderModelC::~PhongShaderModelC() noexcept
 {
-	if (mRenderer.getDevice() != nullptr)
-	{
-		mRenderer.getDevice()->getShaders()->remove(mShader);
-	}
-	mRenderer.removeShaderViewpointBinding(mViewpointBinding);
-	mRenderer.removeShaderMaterialBinding(mMaterialBinding);
+	Shader* shader = mRendererBinding != nullptr ?
+		mRendererBinding->getShader() :
+		nullptr;
+	mRenderer.removeShaderBinding(mRendererBinding);
 	mScene.removeShaderBinding(mSceneBinding);
+	mRenderer.getDevice()->getShaders()->remove(shader);
 }
 
 // End of the namespace gltut

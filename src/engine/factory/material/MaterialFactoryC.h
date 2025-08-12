@@ -7,9 +7,9 @@
 #include "engine/renderer/Renderer.h"
 #include "engine/factory/material/MaterialFactory.h"
 
-#include "./flat_color/FlatColorMaterialModelC.h"
-#include "./phong/PhongShaderModelC.h"
-#include "./phong/PhongMaterialModelC.h"
+#include "../shader/PhongShaderModelC.h"
+#include "./FlatColorMaterialModelC.h"
+#include "./PhongMaterialModelC.h"
 
 namespace gltut
 {
@@ -17,13 +17,20 @@ namespace gltut
 class MaterialFactoryC final : public MaterialFactory, public NonCopyable
 {
 public:
+	/// Color pass index
+	static constexpr u32 COLOR_PASS = 0;
+
+	/// Depth pass index
+	static constexpr u32 DEPTH_PASS = 1;
+
 	// Constructor
 	explicit MaterialFactoryC(
 		Renderer& renderer,
 		Scene& scene) noexcept;
 
 	/// Creates a flat color material model
-	FlatColorMaterialModel* createFlatColorMaterial() noexcept final;
+	FlatColorMaterialModel* createFlatColorMaterial(
+		bool castShadows = true) noexcept final;
 
 	/// Creates a Phong shader
 	PhongShaderModel* createPhongShader(
@@ -33,12 +40,19 @@ public:
 
 	///	Creates a Phong material model
 	PhongMaterialModel* createPhongMaterial(
-		PhongShaderModel* phongShader) noexcept final;
+		PhongShaderModel* phongShader,
+		bool castShadows = true) noexcept final;
 
 	/// Updates the factory
 	void update() noexcept final;
 
 private:
+	/// Creates the flat color shader
+	void createFlatColorShader();
+
+	/// Creates the depth shader
+	void createDepthShader();
+
 	/// The device
 	Renderer& mRenderer;
 
@@ -46,7 +60,10 @@ private:
 	Scene& mScene;
 
 	/// Flat color shader binding
-	ShaderMaterialBinding* mFlatColorShader = nullptr;
+	ShaderRendererBinding* mFlatColorShader = nullptr;
+
+	/// Depth shader binding
+	ShaderRendererBinding* mDepthShader = nullptr;
 
 	/// Flat color material models
 	std::deque<FlatColorMaterialModelC> mFlatColorModels;

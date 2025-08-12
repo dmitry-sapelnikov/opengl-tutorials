@@ -62,11 +62,11 @@ int main()
 
 		GLTUT_CHECK(geometry != nullptr, "Failed to create geometry");
 
-		auto* renderPipeline = engine->getRenderer();
-		auto* binding = renderPipeline->createShaderMaterialBinding(shader);
+		auto* renderer = engine->getRenderer();
+		auto* binding = renderer->createShaderBinding(shader);
 		GLTUT_CHECK(binding != nullptr, "Failed to create shader binding");
 
-		auto* material = renderPipeline->createMaterial();
+		auto* material = renderer->createMaterial();
 		GLTUT_CHECK(material != nullptr, "Failed to create material");
 
 		auto* pass = material->createPass(0, binding, 0);

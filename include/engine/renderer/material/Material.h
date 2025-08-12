@@ -2,6 +2,7 @@
 
 // Includes
 #include "engine/renderer/material/MaterialPass.h"
+#include "engine/renderer/shader/ShaderRendererBinding.h"
 
 namespace gltut
 {
@@ -17,7 +18,7 @@ public:
 	/// Creates a material pass by index
 	virtual MaterialPass* createPass(
 		u32 index,
-		ShaderMaterialBinding* shader,
+		ShaderRendererBinding* shader,
 		u32 textureSlotsCount) noexcept = 0;
 
 	/// Removes a material pass by index

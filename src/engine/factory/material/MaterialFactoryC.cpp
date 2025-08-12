@@ -1,6 +1,7 @@
 // Includes
 #include "MaterialFactoryC.h"
-#include "./flat_color/FlatColorShader.h"
+#include "../shader/FlatColorShader.h"
+#include "../shader/DepthShader.h"
 
 namespace gltut
 {
@@ -14,20 +15,20 @@ MaterialFactoryC::MaterialFactoryC(
 {
 }
 
-FlatColorMaterialModel* MaterialFactoryC::createFlatColorMaterial() noexcept
+FlatColorMaterialModel* MaterialFactoryC::createFlatColorMaterial(
+	bool castShadows) noexcept
 {
-	if (mFlatColorShader == nullptr)
-	{
-		mFlatColorShader = gltut::createFlatColorShader(mRenderer);
-		if (mFlatColorShader == nullptr)
-		{
-			return nullptr;
-		}
-	}
-
 	FlatColorMaterialModel* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN
-		result = &mFlatColorModels.emplace_back(mRenderer, *mFlatColorShader);
+		createFlatColorShader();
+		if (castShadows)
+		{
+			createDepthShader();
+		}
+		result = &mFlatColorModels.emplace_back(
+			mRenderer,
+			*mFlatColorShader,
+			castShadows ? mDepthShader : nullptr);
 	GLTUT_CATCH_ALL_END("Cannot create a flat color material model")
 	return result;
 }
@@ -64,7 +65,8 @@ PhongShaderModel* MaterialFactoryC::createPhongShader(
 }
 
 PhongMaterialModel* MaterialFactoryC::createPhongMaterial(
-	PhongShaderModel* phongShader) noexcept
+	PhongShaderModel* phongShader,
+	bool castShadows) noexcept
 {
 	if (phongShader == nullptr)
 	{
@@ -73,12 +75,39 @@ PhongMaterialModel* MaterialFactoryC::createPhongMaterial(
 
 	PhongMaterialModel* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN
+		if (castShadows)
+		{
+			createDepthShader();
+		}
 		result = &mPhongModels.emplace_back(
 			mRenderer,
 			mScene,
-			*phongShader);
+			*phongShader,
+			castShadows ? mDepthShader : nullptr);
 	GLTUT_CATCH_ALL_END("Cannot create a Phong material model")
 	return result;
+}
+
+void MaterialFactoryC::createFlatColorShader()
+{
+	if (mFlatColorShader == nullptr)
+	{
+		mFlatColorShader = gltut::createFlatColorShader(mRenderer);
+		GLTUT_CHECK(
+			mFlatColorShader != nullptr,
+			"Failed to create flat color shader");
+	}
+}
+
+void MaterialFactoryC::createDepthShader()
+{
+	if (mDepthShader == nullptr)
+	{
+		mDepthShader = gltut::createDepthShader(mRenderer);
+		GLTUT_CHECK(
+			mDepthShader != nullptr,
+			"Failed to create depth shader");
+	}
 }
 
 void MaterialFactoryC::update() noexcept

@@ -36,20 +36,18 @@ int main()
 		shader->setInt("texture1", 0);
 		shader->setInt("texture2", 1);
 
-		auto* materialBinding = device->createShaderMaterialBinding(shader);
+		auto* materialBinding = device->createShaderBinding(shader);
 		GLTUT_CHECK(materialBinding, "Failed to create light shader material binding");
 		materialBinding->bind(
-			gltut::ShaderMaterialBinding::Parameter::GEOMETRY_MATRIX,
+			gltut::ShaderRendererBinding::Parameter::GEOMETRY_MATRIX,
 			"model");
 
-		auto* viewpointBinding = device->createShaderViewpointBinding(shader);
-		GLTUT_CHECK(viewpointBinding, "Failed to create light shader viewpoint binding");
-		viewpointBinding->bind(
-			gltut::ShaderViewpointBinding::Parameter::VIEW_MATRIX,
+		materialBinding->bind(
+			gltut::ShaderRendererBinding::Parameter::VIEWPOINT_VIEW_MATRIX,
 			"view");
 
-		viewpointBinding->bind(
-			gltut::ShaderViewpointBinding::Parameter::PROJECTION_MATRIX,
+		materialBinding->bind(
+			gltut::ShaderRendererBinding::Parameter::VIEWPOINT_PROJECTION_MATRIX,
 			"projection");
 
 		gltut::Texture* texture1 = device->getDevice()->getTextures()->load("assets/container.jpg", {});

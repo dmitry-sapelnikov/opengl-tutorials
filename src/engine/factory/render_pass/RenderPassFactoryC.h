@@ -28,7 +28,7 @@ private:
 	Renderer& mRenderer;
 
 	/// Depth texture shader
-	std::array<ShaderMaterialBinding*, static_cast<size_t>(TextureFormat::TOTAL_COUNT)> mShaders;
+	std::array<ShaderRendererBinding*, static_cast<size_t>(TextureFormat::TOTAL_COUNT)> mShaders;
 
 	/// Render quad for the texture
 	Geometry* mRenderQuad = nullptr;

@@ -3,7 +3,7 @@
 // Includes
 #include "engine/graphics/texture/Texture.h"
 #include "engine/graphics/shader/ShaderParameters.h"
-#include "engine/renderer/material/ShaderMaterialBinding.h"
+#include "engine/renderer/shader/ShaderRendererBinding.h"
 #include "engine/renderer/texture/TextureSet.h"
 
 namespace gltut
@@ -18,10 +18,10 @@ public:
 	virtual ~MaterialPass() noexcept = default;
 
 	/// Returns the shader
-	virtual const ShaderMaterialBinding* getShader() const noexcept = 0;
+	virtual const ShaderRendererBinding* getShader() const noexcept = 0;
 
 	/// Sets the shader
-	virtual void setShader(const ShaderMaterialBinding* shader) noexcept = 0;
+	virtual void setShader(const ShaderRendererBinding* shader) noexcept = 0;
 
 	/// Returns the shader arguments object, i.e. values of shader parameters
 	virtual ShaderParameters* getShaderArguments() noexcept = 0;

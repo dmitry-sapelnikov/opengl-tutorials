@@ -7,8 +7,8 @@
 namespace gltut
 {
 // Global functions
-/// Creates a flat color shader
-ShaderMaterialBinding* createFlatColorShader(Renderer& renderPipeline) noexcept;
+/// Creates a depth-only shader
+ShaderRendererBinding* createDepthShader(Renderer& renderer) noexcept;
 
 // End of the namespace gltut
 }

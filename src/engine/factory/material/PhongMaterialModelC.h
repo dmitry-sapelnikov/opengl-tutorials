@@ -3,7 +3,7 @@
 // Includes
 #include "engine/factory/material/PhongMaterialModel.h"
 #include "engine/scene/Scene.h"
-#include "../MaterialModelT.h"
+#include "./MaterialModelT.h"
 
 namespace gltut
 {
@@ -16,7 +16,8 @@ public:
 	PhongMaterialModelC(
 		Renderer& renderer,
 		Scene& scene,
-		PhongShaderModel& phongShader);
+		PhongShaderModel& phongShader,
+		ShaderRendererBinding* depthShader);
 
 	/// Virtual destructor
 	~PhongMaterialModelC() noexcept final;

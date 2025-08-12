@@ -66,12 +66,6 @@
     <Filter Include="src\factory\material">
       <UniqueIdentifier>{31044889-474a-4b1d-bda8-b4c99b1c6485}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\factory\material\phong">
-      <UniqueIdentifier>{360aa92b-cd77-45bb-a30c-a075e64a2ac8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\factory\material\flat_color">
-      <UniqueIdentifier>{670fe105-b12a-47fa-a712-4bb9859301ab}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\renderer">
       <UniqueIdentifier>{02e12331-ca12-4be6-9803-3c1f90d59d46}</UniqueIdentifier>
     </Filter>
@@ -158,6 +152,18 @@
     </Filter>
     <Filter Include="src\graphics\geometry">
       <UniqueIdentifier>{e46b7b16-75f1-4855-8813-20087dae3e5b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\renderer\shader">
+      <UniqueIdentifier>{0fe061c5-89ed-465f-b32d-c468973d0ea8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\renderer\shader">
+      <UniqueIdentifier>{c446831a-5f07-4feb-923a-fb0719b8c979}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\factory\shader">
+      <UniqueIdentifier>{2db2dd51-5971-4751-bf4d-9bad8bb7c0ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\factory\shader">
+      <UniqueIdentifier>{80b81427-46a5-4c07-a727-32d5787bd8f0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -278,12 +284,6 @@
     <ClInclude Include="..\..\src\engine\factory\material\MaterialFactoryC.h">
       <Filter>src\factory\material</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\engine\factory\material\phong\PhongMaterialModelC.h">
-      <Filter>src\factory\material\phong</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\engine\factory\material\phong\PhongShaderModelC.h">
-      <Filter>src\factory\material\phong</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\engine\factory\geometry\GeometryFactoryC.h">
       <Filter>src\factory\geometry</Filter>
     </ClInclude>
@@ -302,17 +302,11 @@
     <ClInclude Include="..\..\include\engine\factory\material\PhongMaterialModel.h">
       <Filter>include\factory\material</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\engine\factory\material\flat_color\FlatColorMaterialModelC.h">
-      <Filter>src\factory\material\flat_color</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\engine\factory\material\MaterialModelT.h">
       <Filter>src\factory\material</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\engine\factory\material\MaterialModel.h">
       <Filter>include\factory\material</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\engine\factory\material\flat_color\FlatColorShader.h">
-      <Filter>src\factory\material\flat_color</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\engine\math\Aabb.h">
       <Filter>include\math</Filter>
@@ -347,9 +341,6 @@
     <ClInclude Include="..\..\include\engine\renderer\RenderPass.h">
       <Filter>include\renderer</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\engine\renderer\viewpoint\ShaderViewpointBinding.h">
-      <Filter>include\renderer\viewpoint</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\engine\renderer\viewpoint\Viewpoint.h">
       <Filter>include\renderer\viewpoint</Filter>
     </ClInclude>
@@ -364,12 +355,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\engine\graphics\shader\ShaderBindingT.h">
       <Filter>src\graphics\shader</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\engine\renderer\material\ShaderMaterialBindingC.h">
-      <Filter>src\renderer\material</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\engine\renderer\viewpoint\ShaderViewpointBindingC.h">
-      <Filter>src\renderer\viewpoint</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\engine\renderer\objects\RenderGeometryC.h">
       <Filter>src\renderer\objects</Filter>
@@ -455,9 +440,6 @@
     <ClInclude Include="..\..\src\engine\renderer\texture\TextureSetC.h">
       <Filter>src\renderer\texture</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\engine\factory\material\PhongShaderModel.h">
-      <Filter>include\factory\material</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\engine\factory\shadow\ShadowFactoryC.h">
       <Filter>src\factory\shadow</Filter>
     </ClInclude>
@@ -509,6 +491,36 @@
     <ClInclude Include="..\..\src\engine\graphics\framebuffer\FramebufferManagerC.h">
       <Filter>src\graphics\framebuffer</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\engine\renderer\shader\ShaderRendererBinding.h">
+      <Filter>include\renderer\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\renderer\shader\ShaderRendererBindingC.h">
+      <Filter>src\renderer\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\factory\shader\StandardShaderBinding.h">
+      <Filter>src\factory\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\factory\shader\PhongShaderModel.h">
+      <Filter>include\factory\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\factory\material\MaterialPassIndex.h">
+      <Filter>include\factory\material</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\factory\shader\DepthShader.h">
+      <Filter>src\factory\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\factory\shader\FlatColorShader.h">
+      <Filter>src\factory\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\factory\shader\PhongShaderModelC.h">
+      <Filter>src\factory\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\factory\material\FlatColorMaterialModelC.h">
+      <Filter>src\factory\material</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\factory\material\PhongMaterialModelC.h">
+      <Filter>src\factory\material</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\engine\EngineC.cpp">
@@ -550,14 +562,8 @@
     <ClCompile Include="..\..\src\engine\factory\material\MaterialFactoryC.cpp">
       <Filter>src\factory\material</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\engine\factory\material\phong\PhongShaderModelC.cpp">
-      <Filter>src\factory\material\phong</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\engine\factory\geometry\GeometryFactoryC.cpp">
       <Filter>src\factory\geometry</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\engine\factory\material\flat_color\FlatColorShader.cpp">
-      <Filter>src\factory\material\flat_color</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\engine\renderer\RendererC.cpp">
       <Filter>src\renderer</Filter>
@@ -571,12 +577,6 @@
     <ClCompile Include="..\..\src\engine\renderer\material\MaterialPassC.cpp">
       <Filter>src\renderer\material</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\engine\renderer\material\ShaderMaterialBindingC.cpp">
-      <Filter>src\renderer\material</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\engine\renderer\viewpoint\ShaderViewpointBindingC.cpp">
-      <Filter>src\renderer\viewpoint</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\engine\renderer\objects\RenderGeometryC.cpp">
       <Filter>src\renderer\objects</Filter>
     </ClCompile>
@@ -588,9 +588,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\engine\factory\render_pass\RenderPassFactoryC.cpp">
       <Filter>src\factory\render_pass</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\engine\factory\material\phong\PhongMaterialModelC.cpp">
-      <Filter>src\factory\material\phong</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\engine\graphics\backends\opengl\GeometryOpenGL.cpp">
       <Filter>src\graphics\backends\opengl</Filter>
@@ -630,6 +627,27 @@
     </ClCompile>
     <ClCompile Include="..\..\src\engine\graphics\framebuffer\FramebufferManagerC.cpp">
       <Filter>src\graphics\framebuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\renderer\shader\ShaderRendererBindingC.cpp">
+      <Filter>src\renderer\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\factory\shader\StandardShaderBinding.cpp">
+      <Filter>src\factory\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\factory\shader\DepthShader.cpp">
+      <Filter>src\factory\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\factory\shader\FlatColorShader.cpp">
+      <Filter>src\factory\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\factory\shader\PhongShaderModelC.cpp">
+      <Filter>src\factory\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\factory\material\FlatColorMaterialModelC.cpp">
+      <Filter>src\factory\material</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\factory\material\PhongMaterialModelC.cpp">
+      <Filter>src\factory\material</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

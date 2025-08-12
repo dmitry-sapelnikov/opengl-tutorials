@@ -4,9 +4,8 @@
 #include "RendererC.h"
 #include <algorithm>
 #include "./RenderPassC.h"
-#include "./material/ShaderMaterialBindingC.h"
 #include "./material/MaterialC.h"
-#include "./viewpoint/ShaderViewpointBindingC.h"
+#include "./shader/ShaderRendererBindingC.h"
 #include "./objects/RenderGeometryC.h"
 #include "./objects/RenderGroupC.h"
 
@@ -37,53 +36,28 @@ RendererC::RendererC(GraphicsDevice& device) noexcept :
 {
 }
 
-ShaderViewpointBinding* RendererC::createShaderViewpointBinding(
+ShaderRendererBinding* RendererC::createShaderBinding(
 	Shader* shader) noexcept
 {
-	return createElement<ShaderViewpointBinding, ShaderViewpointBindingC>(
-		mShaderViewpointBindings,
-		"shader viewpoint binding",
-		shader);
-}
-
-void RendererC::removeShaderMaterialBinding(
-	ShaderMaterialBinding* binding) noexcept
-{
-	auto it = std::find_if(
-		mShaderMaterialBindings.begin(),
-		mShaderMaterialBindings.end(),
-		[&binding](const auto& currentBinding)
-		{
-			return currentBinding.get() == binding;
-		});
-	if (it != mShaderMaterialBindings.end())
-	{
-		mShaderMaterialBindings.erase(it);
-	}
-}
-
-ShaderMaterialBinding* RendererC::createShaderMaterialBinding(
-	Shader* shader) noexcept
-{
-	return createElement<ShaderMaterialBinding, ShaderMaterialBindingC>(
-		mShaderMaterialBindings,
+	return createElement<ShaderRendererBinding, ShaderRendererBindingC>(
+		mShaderBindings,
 		"shader material binding",
 		shader);
 }
 
-void RendererC::removeShaderViewpointBinding(
-	ShaderViewpointBinding* binding) noexcept
+void RendererC::removeShaderBinding(
+	ShaderRendererBinding* binding) noexcept
 {
 	auto it = std::find_if(
-		mShaderViewpointBindings.begin(),
-		mShaderViewpointBindings.end(),
+		mShaderBindings.begin(),
+		mShaderBindings.end(),
 		[&binding](const auto& currentBinding)
 		{
 			return currentBinding.get() == binding;
 		});
-	if (it != mShaderViewpointBindings.end())
+	if (it != mShaderBindings.end())
 	{
-		mShaderViewpointBindings.erase(it);
+		mShaderBindings.erase(it);
 	}
 }
 
@@ -150,7 +124,7 @@ RenderPass* RendererC::createPass(
 			clearDepth,
 			viewport,
 			mDevice,
-			mShaderViewpointBindings),
+			mShaderBindings),
 			0).first.get();
 	GLTUT_CATCH_ALL_END("Cannot create a scene render pass")
 	return result;

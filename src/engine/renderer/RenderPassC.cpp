@@ -13,7 +13,7 @@ RenderPassC::RenderPassC(
 	bool clearDepth,
 	const Rectangle2u* viewport,
 	GraphicsDevice& device,
-	const ShaderViewpointBindings& viewpointBindings) noexcept :
+	const ShaderBindings& shaderBindings) noexcept :
 
 	mViewpoint(viewpoint),
 	mObject(object),
@@ -23,7 +23,7 @@ RenderPassC::RenderPassC(
 	mClearDepth(clearDepth),
 	mViewport(viewport ? std::make_optional(*viewport) : std::nullopt),
 	mRenderer(device),
-	mViewpointBindings(viewpointBindings)
+	mShaderBindings(shaderBindings)
 {
 }
 
@@ -46,7 +46,7 @@ void RenderPassC::execute() noexcept
 		static_cast<float>(viewportSize.x) / static_cast<float>(viewportSize.y) :
 		1.0f;
 
-	for (const auto& binding : mViewpointBindings)
+	for (const auto& binding : mShaderBindings)
 	{
 		binding->update(mViewpoint, aspectRatio);
 	}

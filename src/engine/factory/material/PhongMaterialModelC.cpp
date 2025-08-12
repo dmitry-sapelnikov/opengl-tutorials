@@ -1,5 +1,6 @@
 // Includes
 #include "PhongMaterialModelC.h"
+#include "engine/factory/material/MaterialPassIndex.h"
 
 namespace gltut
 {
@@ -7,19 +8,32 @@ namespace gltut
 PhongMaterialModelC::PhongMaterialModelC(
 	Renderer& renderer,
 	Scene& scene,
-	PhongShaderModel& phongShader) :
+	PhongShaderModel& phongShader,
+	ShaderRendererBinding* depthShader) :
 
 	MaterialModelT<PhongMaterialModel>(renderer),
 	mScene(scene),
 	mPhongShader(phongShader)
 {
-	MaterialPass* materialPass = getMaterial().createPass(
-		0,
-		phongShader.getMaterialBinding(),
+	MaterialPass* lightingPass = getMaterial().createPass(
+		static_cast<u32>(MaterialPassIndex::LIGHTING),
+		phongShader.getShader(),
 		PhongShaderModel::TEXTURE_SLOTS_COUNT + phongShader.getMaxDirectionalLights());
-	GLTUT_CHECK(materialPass != nullptr, "Failed to create a material pass");
+	GLTUT_CHECK(lightingPass != nullptr, "Failed to create a material pass");
 
-	mTextureSetBinding = mScene.createTextureSetBinding(materialPass->getTextures());
+	if (depthShader != nullptr)
+	{
+		MaterialPass* depthPass = getMaterial().createPass(
+			static_cast<u32>(MaterialPassIndex::DEPTH),
+			depthShader,
+			PhongShaderModel::TEXTURE_SLOTS_COUNT + phongShader.getMaxDirectionalLights());
+
+		GLTUT_CHECK(
+			depthPass != nullptr,
+			"Failed to create the depth pass for the Phong material model");
+	}
+
+	mTextureSetBinding = mScene.createTextureSetBinding(lightingPass->getTextures());
 	GLTUT_CHECK(mTextureSetBinding != nullptr, "Failed to create a texture set binding");
 	
 	mTextureSetBinding->bind(

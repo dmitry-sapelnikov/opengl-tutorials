@@ -15,14 +15,14 @@ public:
 	/// Constructor
 	explicit MaterialPassC(
 		GraphicsDevice& device,
-		ShaderMaterialBinding* shader,
+		ShaderRendererBinding* shader,
 		u32 textureSlotsCount) noexcept;
 
 	/// Returns the shader binding
-	const ShaderMaterialBinding* getShader() const noexcept final;
+	const ShaderRendererBinding* getShader() const noexcept final;
 
 	/// Sets the shader binding
-	void setShader(const ShaderMaterialBinding* shader) noexcept final;
+	void setShader(const ShaderRendererBinding* shader) noexcept final;
 
 	/// Returns the shader controller
 	ShaderParameters* getShaderArguments() noexcept final
@@ -41,7 +41,7 @@ public:
 
 private:
 	/// The shader binding
-	const ShaderMaterialBinding* mShaderBinding;
+	const ShaderRendererBinding* mShaderBinding;
 
 	/// The shader arguments
 	ShaderArguments mShaderArguments;
