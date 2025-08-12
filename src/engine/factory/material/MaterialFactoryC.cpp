@@ -15,6 +15,22 @@ MaterialFactoryC::MaterialFactoryC(
 {
 }
 
+MaterialFactoryC::~MaterialFactoryC() noexcept
+{
+	auto* shaders = mRenderer.getDevice()->getShaders();
+	if (mFlatColorShader != nullptr)
+	{
+		shaders->remove(mFlatColorShader->getShader());
+		mRenderer.removeShaderBinding(mFlatColorShader);
+	}
+
+	if (mDepthShader != nullptr)
+	{
+		shaders->remove(mDepthShader->getShader());
+		mRenderer.removeShaderBinding(mDepthShader);
+	}
+}
+
 FlatColorMaterialModel* MaterialFactoryC::createFlatColorMaterial(
 	bool castShadows) noexcept
 {

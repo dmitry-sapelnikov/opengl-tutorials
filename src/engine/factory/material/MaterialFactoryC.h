@@ -17,16 +17,13 @@ namespace gltut
 class MaterialFactoryC final : public MaterialFactory, public NonCopyable
 {
 public:
-	/// Color pass index
-	static constexpr u32 COLOR_PASS = 0;
-
-	/// Depth pass index
-	static constexpr u32 DEPTH_PASS = 1;
-
-	// Constructor
+	/// Constructor
 	explicit MaterialFactoryC(
 		Renderer& renderer,
 		Scene& scene) noexcept;
+
+	/// Destructor
+	~MaterialFactoryC() noexcept final;
 
 	/// Creates a flat color material model
 	FlatColorMaterialModel* createFlatColorMaterial(
