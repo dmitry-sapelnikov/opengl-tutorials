@@ -101,6 +101,8 @@ uniform sampler2D diffuseSampler;
 uniform sampler2D specularSampler;
 uniform float shininess;
 uniform vec3 viewPos;
+uniform float minShadowMapBias;
+uniform float maxShadowMapBias;
 
 // Inputs
 in vec3 pos;
@@ -132,8 +134,8 @@ void main()
 
 		// Diffuse
 		vec3 lightDir = -directionalLights[i].dir;
-		float dot_diffuse = max(0.0f, dot(norm, lightDir));
-		vec3 diffuse = dot_diffuse * directionalLights[i].color.diffuse * geomDiffuse;
+		float normalLightDot = dot(norm, lightDir);
+		vec3 diffuse = max(0.0f, normalLightDot) * directionalLights[i].color.diffuse * geomDiffuse;
 
 		// Specular
 		vec3 reflectDir = reflect(-lightDir, norm);
@@ -144,7 +146,8 @@ void main()
 		// Shadow mapping
 		vec3 projCoords = shadowSpacePos[i].xyz * (0.5 / shadowSpacePos[i].w) + 0.5;
 		float closestDepth = texture(directionalLightShadowSamplers[i], projCoords.xy).r;
-		float bias = 0.001;
+		
+		float bias = mix(minShadowMapBias, maxShadowMapBias, 1.0 - abs(normalLightDot));
 		result += (diffuse + specular) * float(projCoords.z - bias < closestDepth);
 	}
 #endif
@@ -227,7 +230,9 @@ PhongShaderModelC::PhongShaderModelC(
 	mScene(scene),
 	mMaxDirectionalLights(maxDirectionalLights),
 	mMaxPointLights(maxPointLights),
-	mMaxSpotLights(maxSpotLights)
+	mMaxSpotLights(maxSpotLights),
+	mMinShadowMapBias(0),
+	mMaxShadowMapBias(0)
 {
 	GLTUT_CHECK(
 		mMaxDirectionalLights + mMaxDirectionalLights + mMaxSpotLights > 0,
@@ -289,6 +294,9 @@ PhongShaderModelC::PhongShaderModelC(
 	mSceneBinding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_SPECULAR_COLOR, "spotLights.color.specular");
 	mSceneBinding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_LINEAR_ATTENUATION, "spotLights.linAttenuation");
 	mSceneBinding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_QUADRATIC_ATTENUATION, "spotLights.quadAttenuation");
+
+	setMaxShadowMapBias(DEFAULT_MAX_SHADOW_MAP_BIAS);
+	setMinShadowMapBias(DEFAULT_MIN_SHADOW_MAP_BIAS);
 }
 
 PhongShaderModelC::~PhongShaderModelC() noexcept
@@ -299,6 +307,21 @@ PhongShaderModelC::~PhongShaderModelC() noexcept
 	mRenderer.removeShaderBinding(mRendererBinding);
 	mScene.removeShaderBinding(mSceneBinding);
 	mRenderer.getDevice()->getShaders()->remove(shader);
+}
+
+void PhongShaderModelC::setMinShadowMapBias(float bias) noexcept
+{
+	mMinShadowMapBias = clamp(bias, 0.0f, mMaxShadowMapBias);
+	mRendererBinding->getShader()->setFloat(
+		"minShadowMapBias", mMinShadowMapBias);
+}
+
+void PhongShaderModelC::setMaxShadowMapBias(float bias) noexcept
+{
+	mMaxShadowMapBias = std::max(0.0f, bias);
+	mRendererBinding->getShader()->setFloat(
+		"maxShadowMapBias", mMaxShadowMapBias);
+	setMinShadowMapBias(mMinShadowMapBias);
 }
 
 // End of the namespace gltut

@@ -15,7 +15,7 @@
 constexpr size_t DIRECTIONAL_LIGHT_COUNT = 2;
 
 const gltut::Vector3 DIR_LIGHT_POSITIONS[DIRECTIONAL_LIGHT_COUNT] = {
-	{ 10.0f, 5.0f, 0.0f },
+	{ 10.0f, 10.0f, 0.0f },
 	{ -5.0f, 5.0f, 15.0f } };
 
 const gltut::Color DIR_LIGHT_COLORS[DIRECTIONAL_LIGHT_COUNT] = {
