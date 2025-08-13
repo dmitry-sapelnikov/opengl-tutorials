@@ -13,6 +13,9 @@ namespace gltut
 class Factory
 {
 public:
+	/// Virtual destructor
+	virtual ~Factory() noexcept = default;
+
 	/// Returns the geometry factory
 	virtual GeometryFactory* getGeometry() noexcept = 0;
 
