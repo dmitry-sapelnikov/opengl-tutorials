@@ -18,47 +18,18 @@ void addFacesBetweenCircles(
 	u32 circleSegmentsCount,
 	std::vector<u32>& result)
 {
-	u32 prevIndex = circleSegmentsCount - 1;
-	for (u32 index = 0; index < circleSegmentsCount; ++index)
+	for (u32 index = 1; index < circleSegmentsCount; ++index)
 	{
-		result.push_back(circle1Offset + prevIndex);
 		result.push_back(circle1Offset + index);
+		result.push_back(circle1Offset + index - 1);
 		result.push_back(circle2Offset + index);
 
 		result.push_back(circle2Offset + index);
-		result.push_back(circle2Offset + prevIndex);
-		result.push_back(circle1Offset + prevIndex);
-
-		prevIndex = index;
+		result.push_back(circle1Offset + index - 1);
+		result.push_back(circle2Offset + index - 1);
 	}
 }
 
-/// Adds faces between a point and a circle
-void addFacesBetweenPointAndCircle(
-	u32 pointOffset,
-	u32 circleOffset,
-	u32 circleSegmentsCount,
-	bool flipNormals,
-	std::vector<u32>& result)
-{
-	u32 prevIndex = circleSegmentsCount - 1;
-	for (u32 index = 0; index < circleSegmentsCount; ++index)
-	{
-		if (flipNormals)
-		{
-			result.push_back(circleOffset + index);
-			result.push_back(circleOffset + prevIndex);
-			result.push_back(pointOffset);
-		}
-		else
-		{
-			result.push_back(circleOffset + prevIndex);
-			result.push_back(circleOffset + index);
-			result.push_back(pointOffset);
-		}
-		prevIndex = index;
-	}
-}
 // End of the anonymous namespace
 }
 
@@ -134,16 +105,14 @@ Geometry* GeometryFactoryC::createSphere(float radius, u32 subdivisions) noexcep
 		using Vertex = std::array<float, 8>;
 
 		std::vector<Vertex> vertices;
-		vertices.push_back({ 0.0f, -radius, 0.0f, 0.0f, -1.0f, 0.0f, 0.5f, 0.0f });
-
 		const u32 latSubdivisions = 2 * subdivisions;
 		const u32 lonSubdivisions = 4 * subdivisions;
 
 		const float angleDelta = PI / latSubdivisions;
-		for (u32 latInd = 1; latInd < latSubdivisions; ++latInd)
+		for (u32 latInd = 0; latInd <= latSubdivisions; ++latInd)
 		{
 			float latitude = angleDelta * static_cast<float>(latInd) - 0.5f * PI;
-			for (u32 lonInd = 0; lonInd < lonSubdivisions; ++lonInd)
+			for (u32 lonInd = 0; lonInd <= lonSubdivisions; ++lonInd)
 			{
 				const float longitude = angleDelta * static_cast<float>(lonInd);
 				const Vector3 normal = setDistanceAzimuthInclination({ 1.0, longitude, latitude });
@@ -161,27 +130,18 @@ Geometry* GeometryFactoryC::createSphere(float radius, u32 subdivisions) noexcep
 					static_cast<float>(latInd) / latSubdivisions });
 			}
 		}
-		vertices.push_back({ 0.0f, radius, 0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f });
 
 		std::vector<u32> indices;
-		for (u32 latitudeIndex = 0; latitudeIndex < latSubdivisions - 2; ++latitudeIndex)
+		for (u32 latitudeIndex = 0; latitudeIndex < latSubdivisions; ++latitudeIndex)
 		{
 			addFacesBetweenCircles(
-				latitudeIndex * lonSubdivisions + 1,
-				(latitudeIndex + 1) * lonSubdivisions + 1,
-				lonSubdivisions,
+				latitudeIndex * (lonSubdivisions + 1),
+				(latitudeIndex + 1) * (lonSubdivisions + 1),
+				lonSubdivisions + 1,
 				indices);
 		}
 
 		const u32 vertexCount = static_cast<u32>(vertices.size());
-		addFacesBetweenPointAndCircle(0, 1, lonSubdivisions, true, indices);
-		addFacesBetweenPointAndCircle(
-			vertexCount - 1,
-			vertexCount - 1 - lonSubdivisions,
-			lonSubdivisions,
-			false,
-			indices);
-
 		result = mRenderer.getGeometries()->create(
 			VERTEX_FORMAT_POS3_NORM3_TEX2,
 			vertexCount,
