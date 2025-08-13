@@ -29,6 +29,8 @@ public:
 		const Color* clearColor,
 		bool clearDepth,
 		const Rectangle2u* viewport,
+		bool cullBackFaces,
+		bool cullFrontFaces,
 		GraphicsDevice& device,
 		const ShaderBindings& shaderBindings) noexcept;
 
@@ -89,19 +91,25 @@ private:
 	Framebuffer* mTarget;
 
 	/// The material pass for this render pass
-	u32 mMaterialPass = 0;
+	u32 mMaterialPass;
 
 	/// The clear color for the render target
 	std::optional<Color> mClearColor;
 
 	/// If the depth clearing is enabled
-	bool mClearDepth = false;
+	bool mClearDepth;
 
 	/// The viewport for this render pass
 	std::optional<Rectangle2u> mViewport;
 
+	/// Cull back faces flag
+	bool mCullBackFaces;
+
+	/// Cull front faces flag
+	bool mCullFrontFaces;
+
 	/// GraphicsDevice
-	GraphicsDevice& mRenderer;
+	GraphicsDevice& mDevice;
 
 	/// Shader-renderer bindings
 	const ShaderBindings& mShaderBindings;

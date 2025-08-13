@@ -12,6 +12,8 @@ RenderPassC::RenderPassC(
 	const Color* clearColor,
 	bool clearDepth,
 	const Rectangle2u* viewport,
+	bool cullBack,
+	bool cullFront,
 	GraphicsDevice& device,
 	const ShaderBindings& shaderBindings) noexcept :
 
@@ -22,18 +24,24 @@ RenderPassC::RenderPassC(
 	mClearColor(clearColor ? std::make_optional(*clearColor) : std::nullopt),
 	mClearDepth(clearDepth),
 	mViewport(viewport ? std::make_optional(*viewport) : std::nullopt),
-	mRenderer(device),
+	mCullBackFaces(cullBack),
+	mCullFrontFaces(cullFront),
+	mDevice(device),
 	mShaderBindings(shaderBindings)
 {
 }
 
 void RenderPassC::execute() noexcept
 {
-	mRenderer.bindFramebuffer(
+	mDevice.setFaceCulling(
+		mCullBackFaces,
+		mCullFrontFaces);
+
+	mDevice.bindFramebuffer(
 		mTarget, 
 		mViewport.has_value() ? &mViewport.value() : nullptr);
 
-	mRenderer.clear(
+	mDevice.clear(
 		mClearColor.has_value() ? &mClearColor.value() : nullptr,
 		mClearDepth);
 

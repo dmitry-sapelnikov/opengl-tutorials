@@ -56,6 +56,9 @@ public:
 	/// Binds a texture to a slot
 	void bindTexture(const Texture* texture, u32 slot) noexcept final;
 
+	/// Set face culling
+	void setFaceCulling(bool back, bool front) noexcept final;
+
 private:
 	/// Sets a framebuffer for rendering
 	void setFramebuffer(Framebuffer* frameBuffer) noexcept final;

@@ -56,7 +56,9 @@ public:
 		u32 materialPass,
 		const Color* clearColor,
 		bool clearDepth,
-		const Rectangle2u* viewport) noexcept final;
+		const Rectangle2u* viewport,
+		bool cullBackFaces = true,
+		bool cullFrontFaces = false) noexcept final;
 
 	/// Removes a render pass
 	void removePass(RenderPass* pass) noexcept final;

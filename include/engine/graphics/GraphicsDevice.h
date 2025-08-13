@@ -53,6 +53,9 @@ public:
 
 	/// Enables or disables vertical synchronization
 	virtual void enableVSync(bool vSync) noexcept = 0;
+
+	/// Sets face cull
+	virtual void setFaceCulling(bool back, bool front) noexcept = 0;
 };
 
 // End of the namespace gltut

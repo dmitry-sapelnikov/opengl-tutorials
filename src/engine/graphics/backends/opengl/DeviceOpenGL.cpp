@@ -62,6 +62,9 @@ DeviceOpenGL::DeviceOpenGL(Window& window) :
 
 	// Disable VSync
 	enableVSync(false);
+
+	// Enable face culling
+	glEnable(GL_CULL_FACE);
 }
 
 void DeviceOpenGL::clear(
@@ -177,6 +180,24 @@ void DeviceOpenGL::bindTexture(const Texture* texture, u32 slot) noexcept
 	{
 		texture->bind(slot);
 	}
+}
+
+void DeviceOpenGL::setFaceCulling(bool back, bool front) noexcept
+{
+	GLenum cullMode = GL_NONE;
+	if (back && front)
+	{
+		cullMode = GL_FRONT_AND_BACK;
+	}
+	else if (back)
+	{
+		cullMode = GL_BACK;
+	}
+	else if (front)
+	{
+		cullMode = GL_FRONT;
+	}
+	glCullFace(cullMode);
 }
 
 // End of the namespace gltut

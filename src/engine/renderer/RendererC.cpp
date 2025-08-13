@@ -111,7 +111,9 @@ RenderPass* RendererC::createPass(
 	u32 materialPass,
 	const Color* clearColor,
 	bool clearDepth,
-	const Rectangle2u* viewport) noexcept
+	const Rectangle2u* viewport,
+	bool cullBackFaces,
+	bool cullFrontFaces) noexcept
 {
 	RenderPass* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN
@@ -123,6 +125,8 @@ RenderPass* RendererC::createPass(
 			clearColor,
 			clearDepth,
 			viewport,
+			cullBackFaces,
+			cullFrontFaces,
 			mDevice,
 			mShaderBindings),
 			0).first.get();
