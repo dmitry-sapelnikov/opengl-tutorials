@@ -140,13 +140,13 @@ void createLights(
 
 gltut::PhongMaterialModel* createPhongMaterialModel(
 	gltut::Engine* engine,
-	size_t maxDirectionalLights,
-	size_t maxPointLights,
-	size_t maxSpotLights)
+	gltut::u32 maxDirectionalLights,
+	gltut::u32 maxPointLights,
+	gltut::u32 maxSpotLights)
 {
 	gltut::MaterialFactory* materialFactory = engine->getFactory()->getMaterial();
 	auto* phongShader = materialFactory->createPhongShader(
-		USED_DIRECTIONAL_LIGHT_COUNT,
+		maxDirectionalLights,
 		maxPointLights,
 		maxSpotLights);
 
@@ -185,9 +185,7 @@ int main()
 		imgui = gltut::createEngineImgui(engine.get());
 		GLTUT_CHECK(imgui, "Failed to create ImGui instance");
 
-		auto* device = engine->getDevice();
 		auto* scene = engine->getScene();
-
 		gltut::PhongMaterialModel* phongMaterialModel = createPhongMaterialModel(
 			engine.get(),
 			USED_DIRECTIONAL_LIGHT_COUNT,
