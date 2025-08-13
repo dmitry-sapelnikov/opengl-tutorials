@@ -10,7 +10,7 @@
 namespace gltut
 {
 
-class ShadowMapC : public NonCopyable, public ShadowMap
+class ShadowMapC : public ShadowMap, public NonCopyable
 {
 public:
 	/// The priority of the shadow pass in the render pipeline
