@@ -13,6 +13,10 @@
 
 // Slightly yellowish light
 constexpr size_t DIRECTIONAL_LIGHT_COUNT = 2;
+constexpr size_t USED_DIRECTIONAL_LIGHT_COUNT = 2;
+static_assert(
+	DIRECTIONAL_LIGHT_COUNT >= USED_DIRECTIONAL_LIGHT_COUNT,
+	"Used directional light count must be less than or equal to the total directional light count");
 
 const gltut::Vector3 DIR_LIGHT_POSITIONS[DIRECTIONAL_LIGHT_COUNT] = {
 	{ 10.0f, 10.0f, 0.0f },
@@ -21,6 +25,11 @@ const gltut::Vector3 DIR_LIGHT_POSITIONS[DIRECTIONAL_LIGHT_COUNT] = {
 const gltut::Color DIR_LIGHT_COLORS[DIRECTIONAL_LIGHT_COUNT] = {
 	{ 1.5f, 1.5f, 1.5f },
 	{ 1.2f, 1.2f, 1.2f } };
+
+const bool DIR_LIGHT_CAST_SHADOWS[DIRECTIONAL_LIGHT_COUNT] = {
+	true, // First light casts shadows
+	false // Second light does not cast shadows
+};
 
 /// Creates boxes
 void createBoxes(
@@ -94,7 +103,7 @@ void createLights(
 	auto* lightGeometry = factory->getGeometry()->createSphere(0.5f, 16);
 	GLTUT_CHECK(lightGeometry, "Failed to create light geometry");
 
-	for (size_t i = 0; i < DIRECTIONAL_LIGHT_COUNT; ++i)
+	for (size_t i = 0; i < USED_DIRECTIONAL_LIGHT_COUNT; ++i)
 	{
 		// Create a flat color material for the light. This material does not cast shadows.
 		auto* lightMaterial = factory->getMaterial()->createFlatColorMaterial(false);
@@ -112,19 +121,53 @@ void createLights(
 		lights.push_back(light);
 		lightSources.push_back(lightSource);
 
-		gltut::ShadowMap* shadow = factory->getShadow()->createShadowMap(
-			lightSource,
-			engine.getScene()->getRenderObject(),
-			40.0f, // Frustum size
-			0.5f,  // Near plane
-			50.0f, // Far plane
-			2048);  // Shadow map size
-		GLTUT_CHECK(shadow, "Failed to create shadow map");
-		lightSource->setShadowMap(shadow);
+		if (DIR_LIGHT_CAST_SHADOWS[i])
+		{
+			gltut::ShadowMap* shadow = factory->getShadow()->createShadowMap(
+				lightSource,
+				engine.getScene()->getRenderObject(),
+				40.0f, // Frustum size
+				0.5f,  // Near plane
+				50.0f, // Far plane
+				2048);  // Shadow map size
+			GLTUT_CHECK(shadow, "Failed to create shadow map");
+			lightSource->setShadowMap(shadow);
 
-		shadows.push_back(shadow);
+			shadows.push_back(shadow);
+		}
 	}
 
+}
+
+gltut::PhongMaterialModel* createPhongMaterialModel(
+	gltut::Engine* engine,
+	size_t maxDirectionalLights,
+	size_t maxPointLights,
+	size_t maxSpotLights)
+{
+	gltut::MaterialFactory* materialFactory = engine->getFactory()->getMaterial();
+	auto* phongShader = materialFactory->createPhongShader(
+		USED_DIRECTIONAL_LIGHT_COUNT,
+		0, // No point lights
+		0); // No spot lights
+
+	GLTUT_CHECK(phongShader, "Failed to create Phong shader");
+
+	gltut::PhongMaterialModel* phongMaterialModel = materialFactory->createPhongMaterial(phongShader);
+	GLTUT_CHECK(phongMaterialModel, "Failed to create Phong material model");
+
+	gltut::GraphicsDevice* device = engine->getDevice();
+	gltut::Texture* diffuseTexture = device->getTextures()->load("assets/container2.png");
+	GLTUT_CHECK(diffuseTexture, "Failed to create diffuse texture");
+	gltut::Texture* specularTexture = device->getTextures()->load("assets/container2_specular.png");
+	GLTUT_CHECK(specularTexture, "Failed to create specular texture");
+
+	phongMaterialModel->setDiffuse(diffuseTexture);
+	phongMaterialModel->setSpecular(specularTexture);
+	phongMaterialModel->setShininess(32.0f);
+	phongMaterialModel->getPhongShader()->setMinShadowMapBias(0.00001f);
+	phongMaterialModel->getPhongShader()->setMaxShadowMapBias(0.008f);
+	return phongMaterialModel;
 }
 
 ///	The program entry point
@@ -146,29 +189,11 @@ int main()
 		auto* device = engine->getDevice();
 		auto* scene = engine->getScene();
 
-		auto* materialFactory = engine->getFactory()->getMaterial();
-
-		auto* phongShader = materialFactory->createPhongShader(
-			2, // 1 directional light
+		gltut::PhongMaterialModel* phongMaterialModel = createPhongMaterialModel(
+			engine.get(),
+			USED_DIRECTIONAL_LIGHT_COUNT,
 			0, // No point lights
 			0); // No spot lights
-
-		GLTUT_CHECK(phongShader, "Failed to create Phong shader");
-
-		gltut::PhongMaterialModel* phongMaterialModel = materialFactory->createPhongMaterial(phongShader);
-		GLTUT_CHECK(phongMaterialModel, "Failed to create Phong material model");
-
-		gltut::Texture* diffuseTexture = device->getTextures()->load("assets/container2.png");
-		//gltut::Texture* diffuseTexture = device->createSolidColorTexture(1.0f, 0.5f, 0.31f, 1.0f);
-		GLTUT_CHECK(diffuseTexture, "Failed to create diffuse texture");
-
-		gltut::Texture* specularTexture = device->getTextures()->load("assets/container2_specular.png");
-		//device->createSolidColorTexture(0.0f, 0.0f, 0.0f, 1.0f);
-		GLTUT_CHECK(specularTexture, "Failed to create specular texture");
-
-		phongMaterialModel->setDiffuse(diffuseTexture);
-		phongMaterialModel->setSpecular(specularTexture);
-		phongMaterialModel->setShininess(32.0f);
 
 		auto* floorGeometry = engine->getFactory()->getGeometry()->createBox(20.0f, 1.0f, 20.0f);
 		GLTUT_CHECK(floorGeometry, "Failed to create floor geometry");
@@ -225,6 +250,22 @@ int main()
 					gltut::Matrix4::translationMatrix(DIR_LIGHT_POSITIONS[0]);
 
 				lights[0]->setTransform(lightTransform);
+			}
+
+			// Bias controls for phong shader
+			if (ImGui::CollapsingHeader("Shadow Map Bias"))
+			{
+				float minBias = phongMaterialModel->getPhongShader()->getMinShadowMapBias();
+				if (ImGui::SliderFloat("Min Bias", &minBias, 0.0f, 0.1f))
+				{
+					phongMaterialModel->getPhongShader()->setMinShadowMapBias(minBias);
+				}
+
+				float maxBias = phongMaterialModel->getPhongShader()->getMaxShadowMapBias();
+				if (ImGui::SliderFloat("Max Bias", &maxBias, 0.0f, 0.1f))
+				{
+					phongMaterialModel->getPhongShader()->setMaxShadowMapBias(maxBias);
+				}
 			}
 
 			// Display the shadow map textures
