@@ -63,11 +63,11 @@ private:
 	///	The device
 	std::unique_ptr<GraphicsDeviceBase> mDevice;
 
-	/// The scene
-	std::unique_ptr<SceneC> mScene;
-
 	/// The render pipeline
 	std::unique_ptr<RendererC> mRenderer;
+
+	/// The scene
+	std::unique_ptr<SceneC> mScene;
 
 	/// The geometry factory
 	std::unique_ptr<Factory> mFactory;
