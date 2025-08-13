@@ -56,26 +56,12 @@ PhongShaderModel* MaterialFactoryC::createPhongShader(
 {
 	PhongShaderModel* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN
-		const auto lightCounts = std::make_tuple(
+		result = &mPhongShaders.emplace_back(
+			mRenderer,
+			mScene,
 			maxDirectionalLights,
 			maxPointLights,
 			maxSpotLights);
-
-		if (auto findResult = mPhongShaders.find(lightCounts);
-			findResult != mPhongShaders.end())
-		{
-			result = &findResult->second;
-		}
-		else
-		{
-			result = &mPhongShaders.try_emplace(
-				lightCounts,
-				mRenderer,
-				mScene,
-				maxDirectionalLights,
-				maxPointLights,
-				maxSpotLights).first->second;
-		}
 	GLTUT_CATCH_ALL_END("Cannot create a Phong shader")
 	return result;
 }

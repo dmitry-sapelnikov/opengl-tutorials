@@ -66,7 +66,7 @@ private:
 	std::deque<FlatColorMaterialModelC> mFlatColorModels;
 
 	/// Pointer to the Phong material shader
-	std::map<std::tuple<u32, u32, u32>, PhongShaderModelC> mPhongShaders;
+	std::deque<PhongShaderModelC> mPhongShaders;
 
 	/// Phong material models
 	std::deque<PhongMaterialModelC> mPhongModels;
