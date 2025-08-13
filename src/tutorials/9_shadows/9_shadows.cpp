@@ -136,7 +136,6 @@ void createLights(
 			shadows.push_back(shadow);
 		}
 	}
-
 }
 
 gltut::PhongMaterialModel* createPhongMaterialModel(
@@ -148,8 +147,8 @@ gltut::PhongMaterialModel* createPhongMaterialModel(
 	gltut::MaterialFactory* materialFactory = engine->getFactory()->getMaterial();
 	auto* phongShader = materialFactory->createPhongShader(
 		USED_DIRECTIONAL_LIGHT_COUNT,
-		0, // No point lights
-		0); // No spot lights
+		maxPointLights,
+		maxSpotLights);
 
 	GLTUT_CHECK(phongShader, "Failed to create Phong shader");
 
