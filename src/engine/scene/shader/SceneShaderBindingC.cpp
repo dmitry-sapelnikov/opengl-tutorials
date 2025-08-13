@@ -147,14 +147,14 @@ void SceneShaderBindingC::updateLights(const Scene& scene) const
 				lightInd,
 				light->getGlobalDirection());
 
-			if (light->getShadowMap() != nullptr)
-			{
-				setMatrix4(
-					*shader,
-					getShaderParameterParts(Parameter::DIRECTIONAL_LIGHT_SHADOW_MATRIX),
-					directionalInd,
-					light->getShadowMap()->getShadowMatrix());
-			}
+			setMatrix4(
+				*shader,
+				getShaderParameterParts(Parameter::DIRECTIONAL_LIGHT_SHADOW_MATRIX),
+				directionalInd,
+				light->getShadowMap() != nullptr ?
+					light->getShadowMap()->getShadowMatrix() :
+					// Set zero matrix
+					Matrix4());
 			++directionalInd;
 		}
 		break;

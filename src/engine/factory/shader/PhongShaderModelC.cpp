@@ -116,6 +116,31 @@ in vec4 shadowSpacePos[MAX_DIRECTIONAL_LIGHTS];
 // Outputs
 out vec4 outColor;
 
+float getShadowFactor(int i, float normalLightDot)
+{
+	if (shadowSpacePos[i].w <= 0.0f)
+	{
+		return 1.0f;
+	}
+
+	vec3 projCoords = shadowSpacePos[i].xyz * (0.5 / shadowSpacePos[i].w) + 0.5;
+	vec2 texelSize = 1.0 / textureSize(directionalLightShadowSamplers[i], 0);
+	float bias = mix(minShadowMapBias, maxShadowMapBias, 1.0 - abs(normalLightDot));
+	float shadow = 0.0f;
+	for (int x = -1; x <= 1; ++x)
+	{
+		for (int y = -1; y <= 1; ++y)
+		{
+			float closestDepth = texture(
+				directionalLightShadowSamplers[i],
+				projCoords.xy + vec2(x, y) * texelSize).r;
+			shadow += float(projCoords.z - bias < closestDepth);
+		}
+	}
+	shadow *= 1.0 / 9.0;
+	return shadow;
+}
+
 void main()
 {
 	vec3 result = vec3(0.0f);
@@ -142,13 +167,7 @@ void main()
 		float dot_specular = max(dot(viewDir, reflectDir), 0.0);
 		float spec = pow(dot_specular, shininess);
 		vec3 specular = spec * directionalLights[i].color.specular * texture(specularSampler, texCoord).rgb;
-
-		// Shadow mapping
-		vec3 projCoords = shadowSpacePos[i].xyz * (0.5 / shadowSpacePos[i].w) + 0.5;
-		float closestDepth = texture(directionalLightShadowSamplers[i], projCoords.xy).r;
-		
-		float bias = mix(minShadowMapBias, maxShadowMapBias, 1.0 - abs(normalLightDot));
-		result += (diffuse + specular) * float(projCoords.z - bias < closestDepth);
+		result += (diffuse + specular) * getShadowFactor(i, normalLightDot);
 	}
 #endif
 
