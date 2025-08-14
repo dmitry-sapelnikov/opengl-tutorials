@@ -226,6 +226,14 @@ void SceneShaderBindingC::updateLights(const Scene& scene) const
 				spotInd,
 				light->getQuadraticAttenuation());
 
+			setMatrix4(
+				*shader,
+				getShaderParameterParts(Parameter::SPOT_LIGHT_SHADOW_MATRIX),
+				spotInd,
+				light->getShadowMap() != nullptr ?
+					light->getShadowMap()->getShadowMatrix() :
+					// Set zero matrix
+					Matrix4());
 			++spotInd;
 		}
 		break;

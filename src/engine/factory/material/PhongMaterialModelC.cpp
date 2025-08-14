@@ -39,6 +39,10 @@ PhongMaterialModelC::PhongMaterialModelC(
 	mTextureSetBinding->bind(
 		SceneTextureSetBinding::Parameter::DIRECTIONAL_LIGHT_SHADOW_MAP,
 		PhongShaderModel::TEXTURE_SLOTS_COUNT);
+
+	mTextureSetBinding->bind(
+		SceneTextureSetBinding::Parameter::SPOT_LIGHT_SHADOW_MAP,
+		PhongShaderModel::TEXTURE_SLOTS_COUNT + phongShader.getMaxDirectionalLights());
 }
 
 PhongMaterialModelC::~PhongMaterialModelC() noexcept
