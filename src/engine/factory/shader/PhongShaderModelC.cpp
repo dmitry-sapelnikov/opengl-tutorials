@@ -255,15 +255,10 @@ void main()
 				spotLights[i].quadAttenuation * distance * distance);
 
 			// Shadow factor
-			float shadowFactor = 1.0f;
-			if (spotLights[i].shadowMatrix[3][3] > 0.0f)
-			{
-				shadowFactor = getShadowFactor(
-					spotShadowSpacePos[i],
-					MAX_DIRECTIONAL_LIGHTS + i,
-					normalLightDot);
-			}
-
+			float shadowFactor = getShadowFactor(
+				spotShadowSpacePos[i],
+				MAX_DIRECTIONAL_LIGHTS + i,
+				normalLightDot);
 			result += intensity * (attenuation * shadowFactor) * (diffuse + specular);
 		}
 	}
