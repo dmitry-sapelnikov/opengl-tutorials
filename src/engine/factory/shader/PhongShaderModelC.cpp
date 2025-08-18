@@ -122,7 +122,7 @@ in vec4 spotShadowSpacePos[MAX_SPOT_LIGHTS];
 // Outputs
 out vec4 outColor;
 
-float getShadowFactor(vec4 shadowSpacePos, sampler2D shadow, float normalLightDot)
+float getShadowFactor(vec4 shadowSpacePos, sampler2D* shadowMap, float normalLightDot)
 {
 	if (shadowSpacePos.w <= 0.0f)
 	{
@@ -130,7 +130,7 @@ float getShadowFactor(vec4 shadowSpacePos, sampler2D shadow, float normalLightDo
 	}
 
 	vec3 projCoords = shadowSpacePos.xyz * (0.5 / shadowSpacePos.w) + 0.5;
-	vec2 texelSize = 1.0 / textureSize(shadow, 0);
+	vec2 texelSize = 1.0 / textureSize(*shadowMap, 0);
 	float bias = mix(minShadowMapBias, maxShadowMapBias, 1.0 - abs(normalLightDot));
 	float shadow = 0.0f;
 	for (int x = -1; x <= 1; ++x)
@@ -138,7 +138,7 @@ float getShadowFactor(vec4 shadowSpacePos, sampler2D shadow, float normalLightDo
 		for (int y = -1; y <= 1; ++y)
 		{
 			float closestDepth = texture(
-				shadow,
+				*shadowMap,
 				projCoords.xy + vec2(x, y) * texelSize).r;
 			shadow += float(projCoords.z - bias < closestDepth);
 		}
@@ -175,7 +175,7 @@ void main()
 		vec3 specular = spec * directionalLights[i].color.specular * texture(specularSampler, texCoord).rgb;
 		result += (diffuse + specular) * getShadowFactor(
 			directionalShadowSpacePos[i],
-			directionalLightShadows[i],
+			directionalLightShadows + i,
 			normalLightDot);
 	}
 #endif
@@ -246,7 +246,7 @@ void main()
 			{
 				shadowFactor = getShadowFactor(
 					spotShadowSpacePos[i],
-					spotLightShadows[i],
+					spotLightShadows + i,
 					normalLightDot);
 			}
 
