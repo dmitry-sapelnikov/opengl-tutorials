@@ -31,7 +31,6 @@ ShadowMap* ShadowFactoryC::createShadowMap(
 			switch (light->getType())
 			{
 			case LightNode::Type::DIRECTIONAL:
-				if (light->getShadowMap() != nullptr)
 				{
 					// Create a new shadow map
 					result = &mShadowMaps.try_emplace(
