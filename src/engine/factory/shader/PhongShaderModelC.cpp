@@ -187,10 +187,16 @@ void main()
 		float dot_specular = max(dot(viewDir, reflectDir), 0.0);
 		float spec = pow(dot_specular, shininess);
 		vec3 specular = spec * directionalLights[i].color.specular * texture(specularSampler, texCoord).rgb;
-		result += (diffuse + specular) * getShadowFactor(
-			directionalShadowSpacePos[i],
-			i,
-			normalLightDot);
+
+		float shadowFactor = 1.0f;
+		if (directionalLights[i].shadowMatrix[3][3] > 0.0f)
+		{
+			shadowFactor = getShadowFactor(
+				directionalShadowSpacePos[i],
+				i,
+				normalLightDot);
+		}
+		result += (diffuse + specular) * shadowFactor;
 	}
 #endif
 
