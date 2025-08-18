@@ -23,7 +23,6 @@ struct DirectionalLight
 	mat4 shadowMatrix;
 };
 uniform DirectionalLight directionalLights[MAX_DIRECTIONAL_LIGHTS];
-uniform sampler2D directionalLightShadows[MAX_DIRECTIONAL_LIGHTS];
 #endif
 
 #if MAX_POINT_LIGHTS > 0
@@ -52,8 +51,8 @@ struct SpotLight
 };
 
 uniform SpotLight spotLights[MAX_SPOT_LIGHTS];
-uniform sampler2D spotLightShadows[MAX_SPOT_LIGHTS];
 #endif
+
 )";
 
 // Vertex shader source code for Phong shading
@@ -79,6 +78,10 @@ out vec2 texCoord;
 out vec4 directionalShadowSpacePos[MAX_DIRECTIONAL_LIGHTS];
 #endif
 
+#if MAX_SPOT_LIGHTS > 0
+out vec4 spotShadowSpacePos[MAX_SPOT_LIGHTS];
+#endif
+
 void main()
 {
 	vec4 modelPos = model * vec4(inPos, 1.0f);
@@ -91,6 +94,13 @@ void main()
 	for (int i = 0; i < MAX_DIRECTIONAL_LIGHTS; ++i)
 	{
 		directionalShadowSpacePos[i] = directionalLights[i].shadowMatrix * vec4(pos, 1.0f);
+	}
+#endif
+
+#if MAX_SPOT_LIGHTS > 0
+	for (int i = 0; i < MAX_SPOT_LIGHTS; ++i)
+	{
+		spotShadowSpacePos[i] = spotLights[i].shadowMatrix * vec4(pos, 1.0f);
 	}
 #endif
 })";
@@ -119,10 +129,14 @@ in vec4 directionalShadowSpacePos[MAX_DIRECTIONAL_LIGHTS];
 in vec4 spotShadowSpacePos[MAX_SPOT_LIGHTS];
 #endif
 
+#if MAX_DIRECTIONAL_LIGHTS > 0 || MAX_SPOT_LIGHTS > 0
+uniform sampler2D shadowSamplers[MAX_DIRECTIONAL_LIGHTS + MAX_SPOT_LIGHTS];
+#endif
+
 // Outputs
 out vec4 outColor;
 
-float getShadowFactor(vec4 shadowSpacePos, sampler2D* shadowMap, float normalLightDot)
+float getShadowFactor(vec4 shadowSpacePos, int shadowInd, float normalLightDot)
 {
 	if (shadowSpacePos.w <= 0.0f)
 	{
@@ -130,7 +144,7 @@ float getShadowFactor(vec4 shadowSpacePos, sampler2D* shadowMap, float normalLig
 	}
 
 	vec3 projCoords = shadowSpacePos.xyz * (0.5 / shadowSpacePos.w) + 0.5;
-	vec2 texelSize = 1.0 / textureSize(*shadowMap, 0);
+	vec2 texelSize = 1.0 / textureSize(shadowSamplers[shadowInd], 0);
 	float bias = mix(minShadowMapBias, maxShadowMapBias, 1.0 - abs(normalLightDot));
 	float shadow = 0.0f;
 	for (int x = -1; x <= 1; ++x)
@@ -138,7 +152,7 @@ float getShadowFactor(vec4 shadowSpacePos, sampler2D* shadowMap, float normalLig
 		for (int y = -1; y <= 1; ++y)
 		{
 			float closestDepth = texture(
-				*shadowMap,
+				shadowSamplers[shadowInd],
 				projCoords.xy + vec2(x, y) * texelSize).r;
 			shadow += float(projCoords.z - bias < closestDepth);
 		}
@@ -175,7 +189,7 @@ void main()
 		vec3 specular = spec * directionalLights[i].color.specular * texture(specularSampler, texCoord).rgb;
 		result += (diffuse + specular) * getShadowFactor(
 			directionalShadowSpacePos[i],
-			directionalLightShadows + i,
+			i,
 			normalLightDot);
 	}
 #endif
@@ -246,7 +260,7 @@ void main()
 			{
 				shadowFactor = getShadowFactor(
 					spotShadowSpacePos[i],
-					spotLightShadows + i,
+					MAX_DIRECTIONAL_LIGHTS + i,
 					normalLightDot);
 			}
 
@@ -301,10 +315,10 @@ PhongShaderModelC::PhongShaderModelC(
 	shader->setInt("diffuseSampler", 0);
 	shader->setInt("specularSampler", 1);
 	shader->setFloat("shininess", DEFAULT_SHINESS);
-	for (u32 i = 0; i < maxDirectionalLights; ++i)
+	for (u32 i = 0; i < maxDirectionalLights + maxSpotLights; ++i)
 	{
 		shader->setInt(
-			("directionalLightShadows[" + std::to_string(i) + "]").c_str(),
+			("shadowSamplers[" + std::to_string(i) + "]").c_str(),
 			PhongShaderModel::TEXTURE_SLOTS_COUNT + i);
 	}
 

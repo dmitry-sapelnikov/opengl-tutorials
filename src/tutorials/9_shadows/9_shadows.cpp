@@ -115,9 +115,13 @@ void createLights(
 			*engine.getScene(),
 			*lightMaterial->getMaterial(),
 			*lightGeometry,
-			gltut::LightNode::Type::DIRECTIONAL,
+			gltut::LightNode::Type::SPOT,
 			DIR_LIGHT_POSITIONS[i],
 			DIR_LIGHT_COLORS[i]);
+
+		lightSource->setInnerAngle(gltut::toRadians(15.0f));
+		lightSource->setOuterAngle(gltut::toRadians(30.0f));
+
 		lights.push_back(light);
 		lightSources.push_back(lightSource);
 
@@ -188,9 +192,9 @@ int main()
 		auto* scene = engine->getScene();
 		gltut::PhongMaterialModel* phongMaterialModel = createPhongMaterialModel(
 			engine.get(),
-			USED_DIRECTIONAL_LIGHT_COUNT,
+			0,
 			0, // No point lights
-			0); // No spot lights
+			USED_DIRECTIONAL_LIGHT_COUNT); // No spot lights
 
 		auto* floorGeometry = engine->getFactory()->getGeometry()->createBox(20.0f, 1.0f, 20.0f);
 		GLTUT_CHECK(floorGeometry, "Failed to create floor geometry");
