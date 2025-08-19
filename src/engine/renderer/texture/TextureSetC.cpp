@@ -7,11 +7,13 @@ namespace gltut
 // Global classes
 const Texture* TextureSetC::getTexture(u32 slot) const noexcept
 {
+	GLTUT_ASSERT(slot < mTextureSlotsCount);
 	return slot < mTextureSlotsCount ? mTextures[slot] : nullptr;
 }
 
 void TextureSetC::setTexture(const Texture* texture, u32 slot) noexcept
 {
+	GLTUT_ASSERT(slot < mTextureSlotsCount);
 	if (slot < mTextureSlotsCount)
 	{
 		mTextures[slot] = texture;
@@ -25,6 +27,7 @@ u32 TextureSetC::getTextureSlotsCount() const noexcept
 
 void TextureSetC::setTextureSlotsCount(u32 count) noexcept
 {
+	GLTUT_ASSERT(count <= Texture::TEXTURE_SLOTS);
 	mTextureSlotsCount = std::min(count, Texture::TEXTURE_SLOTS);
 }
 

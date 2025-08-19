@@ -30,6 +30,7 @@ MaterialPass* MaterialC::createPass(
 
 void MaterialC::removePass(u32 index) noexcept
 {
+	GLTUT_ASSERT(index < mPasses.size());
 	if (index < mPasses.size())
 	{
 		mPasses[index].reset();
