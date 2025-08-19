@@ -20,6 +20,12 @@ public:
 
 	/// Returns the shadow map viewpoint
 	virtual const Viewpoint* getViewpoint() const noexcept = 0;
+
+	/// Returns the near plane of the shadow map
+	virtual float getFrustumNear() const noexcept = 0;
+
+	/// Returns the far plane of the shadow map
+	virtual float getFrustumFar() const noexcept = 0;
 	
 	/// Returns view-projection matrix for the shadow map
 	virtual Matrix4 getShadowMatrix() const noexcept = 0;

@@ -73,6 +73,18 @@ public:
 	/// Updates the shadow map
 	void update() noexcept final;
 
+	/// Returns the near plane distance of the shadow map frustum
+	float getFrustumNear() const noexcept final
+	{
+		return mFrustumNear;
+	}
+
+	/// Returns the far plane distance of the shadow map frustum
+	float getFrustumFar() const noexcept final
+	{
+		return mFrustumFar;
+	}
+
 private:
 	// Private constructor for directional and spot lights
 	ShadowMapC(

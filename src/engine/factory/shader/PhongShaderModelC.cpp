@@ -48,6 +48,8 @@ struct SpotLight
 	float linAttenuation;
 	float quadAttenuation;
 	mat4 shadowMatrix;
+	float shadowNear;
+	float shadowFar;
 };
 
 uniform SpotLight spotLights[MAX_SPOT_LIGHTS];
@@ -136,7 +138,7 @@ uniform sampler2D shadowSamplers[MAX_DIRECTIONAL_LIGHTS + MAX_SPOT_LIGHTS];
 // Outputs
 out vec4 outColor;
 
-float getShadowFactor(vec4 shadowSpacePos, int shadowInd, float normalLightDot)
+float getShadowFactor(vec4 shadowSpacePos, int shadowInd, float bias)
 {
 	if (shadowSpacePos.w <= 0.0f)
 	{
@@ -145,7 +147,6 @@ float getShadowFactor(vec4 shadowSpacePos, int shadowInd, float normalLightDot)
 
 	vec3 projCoords = shadowSpacePos.xyz * (0.5 / shadowSpacePos.w) + 0.5;
 	vec2 texelSize = 1.0 / textureSize(shadowSamplers[shadowInd], 0);
-	float bias = mix(minShadowMapBias, maxShadowMapBias, 1.0 - abs(normalLightDot));
 	float shadow = 0.0f;
 	for (int x = -1; x <= 1; ++x)
 	{
@@ -187,10 +188,10 @@ void main()
 		float dot_specular = max(dot(viewDir, reflectDir), 0.0);
 		float spec = pow(dot_specular, shininess);
 		vec3 specular = spec * directionalLights[i].color.specular * texture(specularSampler, texCoord).rgb;
-		result += (diffuse + specular) * getShadowFactor(
-			directionalShadowSpacePos[i],
-			i,
-			normalLightDot);
+
+		float shadowBias = mix(minShadowMapBias, maxShadowMapBias, 1.0 - abs(normalLightDot));
+		result += (diffuse + specular) * 
+			getShadowFactor(directionalShadowSpacePos[i], i, shadowBias);
 	}
 #endif
 
@@ -255,10 +256,17 @@ void main()
 				spotLights[i].quadAttenuation * distance * distance);
 
 			// Shadow factor
+			float shadowBias = max(minShadowMapBias, maxShadowMapBias);
+			//float f = spotLights[i].shadowFar;
+			//float n = spotLights[i].shadowNear;
+
+			float projCoords = spotShadowSpacePos[i].z * (0.5 / spotShadowSpacePos[i].w) + 0.5;
+			shadowBias *= (1.0f - projCoords);
+
 			float shadowFactor = getShadowFactor(
 				spotShadowSpacePos[i],
 				MAX_DIRECTIONAL_LIGHTS + i,
-				normalLightDot);
+				shadowBias);
 			result += intensity * (attenuation * shadowFactor) * (diffuse + specular);
 		}
 	}
@@ -343,6 +351,8 @@ PhongShaderModelC::PhongShaderModelC(
 	mSceneBinding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_LINEAR_ATTENUATION, "spotLights.linAttenuation");
 	mSceneBinding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_QUADRATIC_ATTENUATION, "spotLights.quadAttenuation");
 	mSceneBinding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_SHADOW_MATRIX, "spotLights.shadowMatrix");
+	//mSceneBinding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_SHADOW_NEAR, "spotLights.shadowNear");
+	//mSceneBinding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_SHADOW_FAR, "spotLights.shadowFar");
 
 	setMaxShadowMapBias(DEFAULT_MAX_SHADOW_MAP_BIAS);
 	setMinShadowMapBias(DEFAULT_MIN_SHADOW_MAP_BIAS);
