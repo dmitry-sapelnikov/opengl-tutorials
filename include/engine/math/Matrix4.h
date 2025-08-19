@@ -245,7 +245,7 @@ public:
 
 	/// Returns a 4x4 perspective projection matrix
 	static Matrix4 perspectiveProjectionMatrix(
-		float fieldOfViewDegrees,
+		float fieldOfViewRadians,
 		float aspectRatio,
 		float nearDistance,
 		float farDistance) noexcept;
@@ -461,17 +461,17 @@ inline Matrix4 Matrix4::lookAtMatrix(
 }
 
 inline Matrix4 Matrix4::perspectiveProjectionMatrix(
-	float fieldOfViewDegrees,
+	float fieldOfViewRadians,
 	float aspectRatio,
 	float nearDistance,
 	float farDistance) noexcept
 {
-	GLTUT_ASSERT(fieldOfViewDegrees > FLOAT_EPSILON);
+	GLTUT_ASSERT(fieldOfViewRadians > FLOAT_EPSILON);
 	GLTUT_ASSERT(aspectRatio > FLOAT_EPSILON);
 	GLTUT_ASSERT(nearDistance > FLOAT_EPSILON);
 	GLTUT_ASSERT(farDistance > nearDistance);
 
-	const float top = nearDistance * std::tan(toRadians(fieldOfViewDegrees / 2.f));
+	const float top = nearDistance * std::tan(fieldOfViewRadians / 2.0f);
 	const float bottom = -top;
 	const float left = bottom * aspectRatio;
 	const float right = top * aspectRatio;
