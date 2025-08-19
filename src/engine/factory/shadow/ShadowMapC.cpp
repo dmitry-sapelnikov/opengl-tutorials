@@ -136,18 +136,11 @@ void ShadowMapC::update() noexcept
 			1.0f;
 
 		mViewpoint.setProjectionMatrix(
-			Matrix4::orthographicProjectionMatrix(
-				50.0,
-				50.0,
-				mFrustumNear,
-				mFrustumFar));
-
-		/*mViewpoint.setProjectionMatrix(
 			Matrix4::perspectiveProjectionMatrix(
 				mLight.getOuterAngle() * 2.0f,
 				aspectRatio,
 				mFrustumNear,
-				mFrustumFar));*/
+				mFrustumFar));
 	}
 }
 
