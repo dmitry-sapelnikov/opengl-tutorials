@@ -138,23 +138,65 @@ uniform sampler2D shadowSamplers[MAX_DIRECTIONAL_LIGHTS + MAX_SPOT_LIGHTS];
 // Outputs
 out vec4 outColor;
 
-float getShadowFactor(vec4 shadowSpacePos, int shadowInd, float bias)
+float getShadowFactorOrthogonalProjection(
+	vec4 shadowSpacePos,
+	int shadowSamplerInd,
+	float normalLightDot)
 {
 	if (shadowSpacePos.w <= 0.0f)
 	{
 		return 1.0f;
 	}
 
+	float bias = mix(minShadowMapBias, maxShadowMapBias, 1.0 - abs(normalLightDot));
 	vec3 projCoords = shadowSpacePos.xyz * (0.5 / shadowSpacePos.w) + 0.5;
-	vec2 texelSize = 1.0 / textureSize(shadowSamplers[shadowInd], 0);
+	vec2 texelSize = 1.0 / textureSize(shadowSamplers[shadowSamplerInd], 0);
 	float shadow = 0.0f;
 	for (int x = -1; x <= 1; ++x)
 	{
 		for (int y = -1; y <= 1; ++y)
 		{
 			float closestDepth = texture(
-				shadowSamplers[shadowInd],
+				shadowSamplers[shadowSamplerInd],
 				projCoords.xy + vec2(x, y) * texelSize).r;
+			shadow += float(projCoords.z - bias < closestDepth);
+		}
+	}
+	shadow *= 1.0 / 9.0;
+	return shadow;
+}
+
+float linearizeDepth(float depth, float zNear, float zFar)
+{
+	return (zNear * (zFar / (zFar + depth * (zNear - zFar)) - 1.0)) / (zFar - zNear);
+}
+
+float getShadowFactorPerspectiveProjection(
+	vec4 shadowSpacePos,
+	int shadowSamplerInd,
+	float normalLightDot,
+	float zNear,
+	float zFar)
+{
+	if (shadowSpacePos.w <= 0.0f)
+	{
+		return 1.0f;
+	}
+
+	float bias = mix(minShadowMapBias, maxShadowMapBias, 1.0 - abs(normalLightDot));
+	vec3 projCoords = shadowSpacePos.xyz * (0.5 / shadowSpacePos.w) + 0.5;
+	projCoords.z = linearizeDepth(projCoords.z, zNear, zFar);
+	vec2 texelSize = 1.0 / textureSize(shadowSamplers[shadowSamplerInd], 0);
+	float shadow = 0.0f;
+	for (int x = -1; x <= 1; ++x)
+	{
+		for (int y = -1; y <= 1; ++y)
+		{
+			float closestDepth = texture(
+				shadowSamplers[shadowSamplerInd],
+				projCoords.xy + vec2(x, y) * texelSize).r;
+
+			closestDepth = linearizeDepth(closestDepth, zNear, zFar);
 			shadow += float(projCoords.z - bias < closestDepth);
 		}
 	}
@@ -191,7 +233,7 @@ void main()
 
 		float shadowBias = mix(minShadowMapBias, maxShadowMapBias, 1.0 - abs(normalLightDot));
 		result += (diffuse + specular) * 
-			getShadowFactor(directionalShadowSpacePos[i], i, shadowBias);
+			getShadowFactorOrthogonalProjection(directionalShadowSpacePos[i], i, normalLightDot);
 	}
 #endif
 
@@ -256,17 +298,12 @@ void main()
 				spotLights[i].quadAttenuation * distance * distance);
 
 			// Shadow factor
-			float shadowBias = max(minShadowMapBias, maxShadowMapBias);
-			//float f = spotLights[i].shadowFar;
-			//float n = spotLights[i].shadowNear;
-
-			float projCoords = spotShadowSpacePos[i].z * (0.5 / spotShadowSpacePos[i].w) + 0.5;
-			shadowBias *= (1.0f - projCoords);
-
-			float shadowFactor = getShadowFactor(
+			float shadowFactor = getShadowFactorPerspectiveProjection(
 				spotShadowSpacePos[i],
 				MAX_DIRECTIONAL_LIGHTS + i,
-				shadowBias);
+				normalLightDot,
+				spotLights[i].shadowNear,
+				spotLights[i].shadowFar);
 			result += intensity * (attenuation * shadowFactor) * (diffuse + specular);
 		}
 	}
@@ -351,8 +388,8 @@ PhongShaderModelC::PhongShaderModelC(
 	mSceneBinding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_LINEAR_ATTENUATION, "spotLights.linAttenuation");
 	mSceneBinding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_QUADRATIC_ATTENUATION, "spotLights.quadAttenuation");
 	mSceneBinding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_SHADOW_MATRIX, "spotLights.shadowMatrix");
-	//mSceneBinding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_SHADOW_NEAR, "spotLights.shadowNear");
-	//mSceneBinding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_SHADOW_FAR, "spotLights.shadowFar");
+	mSceneBinding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_SHADOW_NEAR, "spotLights.shadowNear");
+	mSceneBinding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_SHADOW_FAR, "spotLights.shadowFar");
 
 	setMaxShadowMapBias(DEFAULT_MAX_SHADOW_MAP_BIAS);
 	setMinShadowMapBias(DEFAULT_MIN_SHADOW_MAP_BIAS);
