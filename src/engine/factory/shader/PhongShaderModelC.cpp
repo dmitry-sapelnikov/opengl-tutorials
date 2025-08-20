@@ -23,7 +23,6 @@ struct DirectionalLight
 	mat4 shadowMatrix;
 };
 uniform DirectionalLight directionalLights[MAX_DIRECTIONAL_LIGHTS];
-uniform sampler2D directionalLightShadowSamplers[MAX_DIRECTIONAL_LIGHTS];
 #endif
 
 #if MAX_POINT_LIGHTS > 0
@@ -48,10 +47,14 @@ struct SpotLight
 	float outerAngleCos;
 	float linAttenuation;
 	float quadAttenuation;
+	mat4 shadowMatrix;
+	float shadowNear;
+	float shadowFar;
 };
 
 uniform SpotLight spotLights[MAX_SPOT_LIGHTS];
 #endif
+
 )";
 
 // Vertex shader source code for Phong shading
@@ -74,7 +77,11 @@ out vec3 normal;
 out vec2 texCoord;
 
 #if MAX_DIRECTIONAL_LIGHTS > 0
-out vec4 shadowSpacePos[MAX_DIRECTIONAL_LIGHTS];
+out vec4 directionalShadowSpacePos[MAX_DIRECTIONAL_LIGHTS];
+#endif
+
+#if MAX_SPOT_LIGHTS > 0
+out vec4 spotShadowSpacePos[MAX_SPOT_LIGHTS];
 #endif
 
 void main()
@@ -88,7 +95,14 @@ void main()
 #if MAX_DIRECTIONAL_LIGHTS > 0
 	for (int i = 0; i < MAX_DIRECTIONAL_LIGHTS; ++i)
 	{
-		shadowSpacePos[i] = directionalLights[i].shadowMatrix * vec4(pos, 1.0f);
+		directionalShadowSpacePos[i] = directionalLights[i].shadowMatrix * vec4(pos, 1.0f);
+	}
+#endif
+
+#if MAX_SPOT_LIGHTS > 0
+	for (int i = 0; i < MAX_SPOT_LIGHTS; ++i)
+	{
+		spotShadowSpacePos[i] = spotLights[i].shadowMatrix * vec4(pos, 1.0f);
 	}
 #endif
 })";
@@ -110,30 +124,79 @@ in vec3 normal;
 in vec2 texCoord;
 
 #if MAX_DIRECTIONAL_LIGHTS > 0
-in vec4 shadowSpacePos[MAX_DIRECTIONAL_LIGHTS];
+in vec4 directionalShadowSpacePos[MAX_DIRECTIONAL_LIGHTS];
+#endif
+
+#if MAX_SPOT_LIGHTS > 0
+in vec4 spotShadowSpacePos[MAX_SPOT_LIGHTS];
+#endif
+
+#if MAX_DIRECTIONAL_LIGHTS > 0 || MAX_SPOT_LIGHTS > 0
+uniform sampler2D shadowSamplers[MAX_DIRECTIONAL_LIGHTS + MAX_SPOT_LIGHTS];
 #endif
 
 // Outputs
 out vec4 outColor;
 
-float getShadowFactor(int i, float normalLightDot)
+float getShadowFactorOrthogonalProjection(
+	vec4 shadowSpacePos,
+	int shadowSamplerInd,
+	float normalLightDot)
 {
-	if (shadowSpacePos[i].w <= 0.0f)
+	if (shadowSpacePos.w <= 0.0f)
 	{
 		return 1.0f;
 	}
 
-	vec3 projCoords = shadowSpacePos[i].xyz * (0.5 / shadowSpacePos[i].w) + 0.5;
-	vec2 texelSize = 1.0 / textureSize(directionalLightShadowSamplers[i], 0);
 	float bias = mix(minShadowMapBias, maxShadowMapBias, 1.0 - abs(normalLightDot));
+	vec3 projCoords = shadowSpacePos.xyz * (0.5 / shadowSpacePos.w) + 0.5;
+	vec2 texelSize = 1.0 / textureSize(shadowSamplers[shadowSamplerInd], 0);
 	float shadow = 0.0f;
 	for (int x = -1; x <= 1; ++x)
 	{
 		for (int y = -1; y <= 1; ++y)
 		{
 			float closestDepth = texture(
-				directionalLightShadowSamplers[i],
+				shadowSamplers[shadowSamplerInd],
 				projCoords.xy + vec2(x, y) * texelSize).r;
+			shadow += float(projCoords.z - bias < closestDepth);
+		}
+	}
+	shadow *= 1.0 / 9.0;
+	return shadow;
+}
+
+float linearizeDepth(float depth, float zNear, float zFar)
+{
+	return (zNear * (zFar / (zFar + depth * (zNear - zFar)) - 1.0)) / (zFar - zNear);
+}
+
+float getShadowFactorPerspectiveProjection(
+	vec4 shadowSpacePos,
+	int shadowSamplerInd,
+	float normalLightDot,
+	float zNear,
+	float zFar)
+{
+	if (shadowSpacePos.w <= 0.0f)
+	{
+		return 1.0f;
+	}
+
+	float bias = mix(minShadowMapBias, maxShadowMapBias, 1.0 - abs(normalLightDot));
+	vec3 projCoords = shadowSpacePos.xyz * (0.5 / shadowSpacePos.w) + 0.5;
+	projCoords.z = linearizeDepth(projCoords.z, zNear, zFar);
+	vec2 texelSize = 1.0 / textureSize(shadowSamplers[shadowSamplerInd], 0);
+	float shadow = 0.0f;
+	for (int x = -1; x <= 1; ++x)
+	{
+		for (int y = -1; y <= 1; ++y)
+		{
+			float closestDepth = texture(
+				shadowSamplers[shadowSamplerInd],
+				projCoords.xy + vec2(x, y) * texelSize).r;
+
+			closestDepth = linearizeDepth(closestDepth, zNear, zFar);
 			shadow += float(projCoords.z - bias < closestDepth);
 		}
 	}
@@ -167,7 +230,10 @@ void main()
 		float dot_specular = max(dot(viewDir, reflectDir), 0.0);
 		float spec = pow(dot_specular, shininess);
 		vec3 specular = spec * directionalLights[i].color.specular * texture(specularSampler, texCoord).rgb;
-		result += (diffuse + specular) * getShadowFactor(i, normalLightDot);
+
+		float shadowBias = mix(minShadowMapBias, maxShadowMapBias, 1.0 - abs(normalLightDot));
+		result += (diffuse + specular) * 
+			getShadowFactorOrthogonalProjection(directionalShadowSpacePos[i], i, normalLightDot);
 	}
 #endif
 
@@ -217,7 +283,8 @@ void main()
 			float intensity = clamp((theta - outerAngleCos) / (innerAngleCos - outerAngleCos), 0.0, 1.0);
 
 			// Diffuse
-			vec3 diffuse = max(0.0f, dot(norm, lightDir)) * spotLights[i].color.diffuse * geomDiffuse;
+			float normalLightDot = dot(norm, lightDir);
+			vec3 diffuse = max(0.0f, normalLightDot) * spotLights[i].color.diffuse * geomDiffuse;
 			
 			// Specular
 			vec3 reflectDir = reflect(-lightDir, norm);
@@ -230,7 +297,14 @@ void main()
 				spotLights[i].linAttenuation * distance +
 				spotLights[i].quadAttenuation * distance * distance);
 
-			result += intensity * attenuation * (diffuse + specular);
+			// Shadow factor
+			float shadowFactor = getShadowFactorPerspectiveProjection(
+				spotShadowSpacePos[i],
+				MAX_DIRECTIONAL_LIGHTS + i,
+				normalLightDot,
+				spotLights[i].shadowNear,
+				spotLights[i].shadowFar);
+			result += intensity * (attenuation * shadowFactor) * (diffuse + specular);
 		}
 	}
 #endif
@@ -281,10 +355,10 @@ PhongShaderModelC::PhongShaderModelC(
 	shader->setInt("diffuseSampler", 0);
 	shader->setInt("specularSampler", 1);
 	shader->setFloat("shininess", DEFAULT_SHINESS);
-	for (u32 i = 0; i < maxDirectionalLights; ++i)
+	for (u32 i = 0; i < maxDirectionalLights + maxSpotLights; ++i)
 	{
 		shader->setInt(
-			("directionalLightShadowSamplers[" + std::to_string(i) + "]").c_str(),
+			("shadowSamplers[" + std::to_string(i) + "]").c_str(),
 			PhongShaderModel::TEXTURE_SLOTS_COUNT + i);
 	}
 
@@ -313,6 +387,9 @@ PhongShaderModelC::PhongShaderModelC(
 	mSceneBinding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_SPECULAR_COLOR, "spotLights.color.specular");
 	mSceneBinding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_LINEAR_ATTENUATION, "spotLights.linAttenuation");
 	mSceneBinding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_QUADRATIC_ATTENUATION, "spotLights.quadAttenuation");
+	mSceneBinding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_SHADOW_MATRIX, "spotLights.shadowMatrix");
+	mSceneBinding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_SHADOW_NEAR, "spotLights.shadowNear");
+	mSceneBinding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_SHADOW_FAR, "spotLights.shadowFar");
 
 	setMaxShadowMapBias(DEFAULT_MAX_SHADOW_MAP_BIAS);
 	setMinShadowMapBias(DEFAULT_MIN_SHADOW_MAP_BIAS);

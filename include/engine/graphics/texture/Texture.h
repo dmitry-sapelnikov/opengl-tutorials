@@ -43,6 +43,15 @@ public:
 
 	/// Binds the texture
 	virtual void bind(u32 slot) const noexcept = 0;
+
+	/// Returns the aspect ratio of the texture
+	float getAspectRatio() const noexcept
+	{
+		const auto& size = getSize();
+		return size.y != 0 ?
+			static_cast<float>(size.x) / static_cast<float>(size.y) :
+			1.0f;
+	}
 };
 
 // End of the namespace gltut

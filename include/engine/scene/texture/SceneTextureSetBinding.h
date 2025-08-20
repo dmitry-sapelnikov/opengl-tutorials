@@ -16,6 +16,8 @@ public:
 	{
 		/// The shadow map texture for directional lights
 		DIRECTIONAL_LIGHT_SHADOW_MAP,
+		/// The shadow map texture for spot lights
+		SPOT_LIGHT_SHADOW_MAP,
 		/// Total number of textures
 		TOTAL_COUNT
 	};

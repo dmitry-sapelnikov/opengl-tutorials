@@ -86,7 +86,7 @@ void CameraProjectionC::update() noexcept
 Matrix4 CameraProjectionC::getMatrix(float aspectRatio) const noexcept
 {
 	return Matrix4::perspectiveProjectionMatrix(
-		mFov,
+		toRadians(mFov),
 		aspectRatio,
 		mNearPlane,
 		mFarPlane);

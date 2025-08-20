@@ -226,6 +226,31 @@ void SceneShaderBindingC::updateLights(const Scene& scene) const
 				spotInd,
 				light->getQuadraticAttenuation());
 
+			setMatrix4(
+				*shader,
+				getShaderParameterParts(Parameter::SPOT_LIGHT_SHADOW_MATRIX),
+				spotInd,
+				light->getShadowMap() != nullptr ?
+					light->getShadowMap()->getShadowMatrix() :
+					// Set zero matrix
+					Matrix4());
+
+			setFloat(
+				*shader,
+				getShaderParameterParts(Parameter::SPOT_LIGHT_SHADOW_NEAR),
+				spotInd,
+				light->getShadowMap() != nullptr ?
+					light->getShadowMap()->getFrustumNear() :
+					0.0f);
+
+			setFloat(
+				*shader,
+				getShaderParameterParts(Parameter::SPOT_LIGHT_SHADOW_FAR),
+				spotInd,
+				light->getShadowMap() != nullptr ?
+					light->getShadowMap()->getFrustumFar() :
+				0.0f);
+
 			++spotInd;
 		}
 		break;

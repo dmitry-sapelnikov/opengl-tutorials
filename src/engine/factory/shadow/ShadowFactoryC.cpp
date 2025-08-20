@@ -14,7 +14,7 @@ ShadowMap* ShadowFactoryC::createShadowMap(
 	u32 shadowMapSize) noexcept
 {
 	if (light == nullptr || shadowCaster == nullptr ||
-		light->getType() != LightNode::Type::DIRECTIONAL)
+		light->getType() == LightNode::Type::POINT)
 	{
 		return nullptr;
 	}
@@ -28,16 +28,38 @@ ShadowMap* ShadowFactoryC::createShadowMap(
 		}
 		else
 		{
-			// Create a new shadow map
-			result = &mShadowMaps.try_emplace(
-				light,
-				mRenderer,
-				*light,
-				*shadowCaster,
-				frustumSize,
-				frustumNear,
-				frustumFar,
-				shadowMapSize).first->second;
+			switch (light->getType())
+			{
+			case LightNode::Type::DIRECTIONAL:
+				{
+					// Create a new shadow map
+					result = &mShadowMaps.try_emplace(
+						light,
+						mRenderer,
+						*light,
+						*shadowCaster,
+						frustumSize,
+						frustumNear,
+						frustumFar,
+						shadowMapSize).first->second;
+				}
+				break;
+
+				case LightNode::Type::SPOT:
+				{
+					result = &mShadowMaps.try_emplace(
+						light,
+						mRenderer,
+						*light,
+						*shadowCaster,
+						frustumNear,
+						frustumFar,
+						shadowMapSize).first->second;
+				}
+				break;
+
+				GLTUT_UNEXPECTED_SWITCH_DEFAULT_CASE(light->getType())
+			}
 		}
 	GLTUT_CATCH_ALL_END("Failed to create shadow map for the light");
 	return result;

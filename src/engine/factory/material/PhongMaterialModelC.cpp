@@ -18,7 +18,9 @@ PhongMaterialModelC::PhongMaterialModelC(
 	MaterialPass* lightingPass = getMaterial().createPass(
 		static_cast<u32>(MaterialPassIndex::LIGHTING),
 		phongShader.getShader(),
-		PhongShaderModel::TEXTURE_SLOTS_COUNT + phongShader.getMaxDirectionalLights());
+		PhongShaderModel::TEXTURE_SLOTS_COUNT + 
+		phongShader.getMaxDirectionalLights() + 
+		phongShader.getMaxSpotLights());
 	GLTUT_CHECK(lightingPass != nullptr, "Failed to create a material pass");
 
 	if (depthShader != nullptr)
@@ -26,7 +28,9 @@ PhongMaterialModelC::PhongMaterialModelC(
 		MaterialPass* depthPass = getMaterial().createPass(
 			static_cast<u32>(MaterialPassIndex::DEPTH),
 			depthShader,
-			PhongShaderModel::TEXTURE_SLOTS_COUNT + phongShader.getMaxDirectionalLights());
+			PhongShaderModel::TEXTURE_SLOTS_COUNT + 
+			phongShader.getMaxDirectionalLights() +
+			phongShader.getMaxSpotLights());
 
 		GLTUT_CHECK(
 			depthPass != nullptr,
@@ -39,6 +43,10 @@ PhongMaterialModelC::PhongMaterialModelC(
 	mTextureSetBinding->bind(
 		SceneTextureSetBinding::Parameter::DIRECTIONAL_LIGHT_SHADOW_MAP,
 		PhongShaderModel::TEXTURE_SLOTS_COUNT);
+
+	mTextureSetBinding->bind(
+		SceneTextureSetBinding::Parameter::SPOT_LIGHT_SHADOW_MAP,
+		PhongShaderModel::TEXTURE_SLOTS_COUNT + phongShader.getMaxDirectionalLights());
 }
 
 PhongMaterialModelC::~PhongMaterialModelC() noexcept

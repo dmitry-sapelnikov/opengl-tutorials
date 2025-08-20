@@ -17,14 +17,31 @@ public:
 	static constexpr int32 SHADOW_PASS_PRIORITY = -1000;
 
 	/**
-		Constructor
-		\throw std::runtime_error If the shadow map could not be created
+		Directional light constructor
+		\throw std::runtime_error
+		If the light type is not a directional light,
+		or if the frustum size, near or far values are invalid,
+		or if the texture size is not greater than 0.
 	*/
 	ShadowMapC(
 		Renderer& renderer,
 		const LightNode& light,
 		const RenderObject& shadowCaster,
 		float frustumSize,
+		float frustumNear,
+		float frustumFar,
+		u32 textureSize);
+
+	/**
+		Spot light constructor
+		\throw std::runtime_error
+		If the light type is not a directional or spot light,
+		or if the texture size is not greater than 0.
+	*/
+	ShadowMapC(
+		Renderer& renderer,
+		const LightNode& light,
+		const RenderObject& shadowCaster,
 		float frustumNear,
 		float frustumFar,
 		u32 textureSize);
@@ -56,12 +73,40 @@ public:
 	/// Updates the shadow map
 	void update() noexcept final;
 
+	/// Returns the near plane distance of the shadow map frustum
+	float getFrustumNear() const noexcept final
+	{
+		return mFrustumNear;
+	}
+
+	/// Returns the far plane distance of the shadow map frustum
+	float getFrustumFar() const noexcept final
+	{
+		return mFrustumFar;
+	}
+
 private:
+	// Private constructor for directional and spot lights
+	ShadowMapC(
+		u32,
+		Renderer& renderer,
+		const LightNode& light,
+		const RenderObject& shadowCaster,
+		float frustumNear,
+		float frustumFar,
+		u32 textureSize);
+
 	/// The device
 	Renderer& mRenderer;
 
 	/// The light node for which the shadow map is created
 	const LightNode& mLight;
+
+	/// Frustum near plane distance
+	float mFrustumNear = 0.0f;
+
+	/// Frustum far plane distance
+	float mFrustumFar = 0.0f;
 
 	/// The shadow map texture
 	Texture* mTexture = nullptr;

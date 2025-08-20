@@ -63,6 +63,12 @@ public:
 		SPOT_LIGHT_DIFFUSE_COLOR,
 		/// Spot light specular color
 		SPOT_LIGHT_SPECULAR_COLOR,
+		/// Spot light shadow matrix
+		SPOT_LIGHT_SHADOW_MATRIX,
+		/// Spot light shadow near
+		SPOT_LIGHT_SHADOW_NEAR,
+		/// Spot light shadow far
+		SPOT_LIGHT_SHADOW_FAR,
 
 		/// Total number of scene parameters
 		TOTAL_COUNT

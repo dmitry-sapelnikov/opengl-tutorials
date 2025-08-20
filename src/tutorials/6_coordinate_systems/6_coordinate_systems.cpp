@@ -77,7 +77,7 @@ int main()
 			GLTUT_CHECK(size.y != 0, "Invalid window size");
 
 			const gltut::Matrix4 projection = gltut::Matrix4::perspectiveProjectionMatrix(
-				45.0f,
+				gltut::toRadians(45.0f),
 				static_cast<float>(size.x) / static_cast<float>(size.y),
 				0.1f,
 				100.0f);
