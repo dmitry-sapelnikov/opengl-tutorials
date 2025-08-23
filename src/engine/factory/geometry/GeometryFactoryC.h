@@ -32,7 +32,13 @@ public:
 
 		\note Negative dimensions produce an inverted geometry
 	*/
-	Geometry* createBox(float width, float height, float depth) noexcept final;
+	Geometry* createBox(
+		float width,
+		float height,
+		float depth
+		bool normal,
+		bool textureCoordinates,
+		bool tangentBitangent) noexcept final;
 
 	/**
 		\brief Creates a sphere geometry with smooth normals
