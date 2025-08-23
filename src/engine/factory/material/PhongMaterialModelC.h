@@ -29,10 +29,13 @@ public:
 	}
 
 	// Sets the diffuse texture
-	void setDiffuse(Texture* diffuse) noexcept final;
+	void setDiffuse(const Texture* diffuse) noexcept final;
 
 	// Sets the specular texture
-	void setSpecular(Texture* specular) noexcept final;
+	void setSpecular(const Texture* specular) noexcept final;
+
+	// Sets the normal texture
+	void setNormal(const Texture* normal) noexcept final;
 
 	// Sets the shininess value
 	void setShininess(float shininess) noexcept final;

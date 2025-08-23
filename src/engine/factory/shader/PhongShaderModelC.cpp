@@ -113,6 +113,7 @@ static const char* PHONG_FRAGMENT_SHADER = R"(
 // Uniforms
 uniform sampler2D diffuseSampler;
 uniform sampler2D specularSampler;
+uniform sampler2D normalSampler;
 uniform float shininess;
 uniform vec3 viewPos;
 uniform float minShadowMapBias;
@@ -209,7 +210,10 @@ void main()
 	vec3 result = vec3(0.0f);
 
 #if MAX_DIRECTIONAL_LIGHTS + MAX_POINT_LIGHTS + MAX_SPOT_LIGHTS > 0
-	vec3 norm = normalize(normal);
+	vec3 norm1 = normalize(normal);
+	vec3 norm = texture(normalSampler, texCoord).rgb;
+	norm = norm1 * 0.00001f + normalize(norm * 2.0f - 1.0f);
+
 	vec3 viewDir = normalize(viewPos - pos);
 	vec3 geomDiffuse = texture(diffuseSampler, texCoord).rgb;
 #endif
@@ -354,6 +358,7 @@ PhongShaderModelC::PhongShaderModelC(
 
 	shader->setInt("diffuseSampler", 0);
 	shader->setInt("specularSampler", 1);
+	shader->setInt("normalSampler", 2);
 	shader->setFloat("shininess", DEFAULT_SHINESS);
 	for (u32 i = 0; i < maxDirectionalLights + maxSpotLights; ++i)
 	{
