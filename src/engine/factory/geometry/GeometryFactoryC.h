@@ -35,7 +35,7 @@ public:
 	Geometry* createBox(
 		float width,
 		float height,
-		float depth
+		float depth,
 		bool normal,
 		bool textureCoordinates,
 		bool tangentBitangent) noexcept final;

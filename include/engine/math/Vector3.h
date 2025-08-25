@@ -3,6 +3,7 @@
 // Libraries
 #include "engine/core/Check.h"
 #include "engine/math/Functions.h"
+#include "Vector2.h"
 
 namespace gltut
 {
@@ -232,6 +233,9 @@ inline void getTangentSpace(
 	const float r = 1.f / (deltaUV1.x * deltaUV2.y - deltaUV1.y * deltaUV2.x);
 	tangent =   (deltaPos1 * deltaUV2.y - deltaPos2 * deltaUV1.y) * r;
 	bitangent = (deltaPos2 * deltaUV1.x - deltaPos1 * deltaUV2.x) * r;
+
+	GLTUT_ASSERT(!tangent.isNearZero());
+	GLTUT_ASSERT(!bitangent.isNearZero());
 }
 
 // End of the namespace gltut

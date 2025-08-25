@@ -70,11 +70,14 @@ uniform mat3 normalMat;
 layout (location = 0) in vec3 inPos;
 layout (location = 1) in vec3 inNormal;
 layout (location = 2) in vec2 inTexCoord;
+layout (location = 3) in vec3 inTangent;
+layout (location = 4) in vec3 inBitangent;
 
 // Outputs
 out vec3 pos;
 out vec3 normal;
 out vec2 texCoord;
+out mat3 TBN;
 
 #if MAX_DIRECTIONAL_LIGHTS > 0
 out vec4 directionalShadowSpacePos[MAX_DIRECTIONAL_LIGHTS];
@@ -91,6 +94,7 @@ void main()
 	pos = vec3(modelPos);
 	normal = normalMat * inNormal;
 	texCoord = inTexCoord;
+	TBN = mat3(normalMat * inTangent, normalMat * inBitangent, normal);
 
 #if MAX_DIRECTIONAL_LIGHTS > 0
 	for (int i = 0; i < MAX_DIRECTIONAL_LIGHTS; ++i)
@@ -123,6 +127,7 @@ uniform float maxShadowMapBias;
 in vec3 pos;
 in vec3 normal;
 in vec2 texCoord;
+in mat3 TBN;
 
 #if MAX_DIRECTIONAL_LIGHTS > 0
 in vec4 directionalShadowSpacePos[MAX_DIRECTIONAL_LIGHTS];
@@ -212,7 +217,8 @@ void main()
 #if MAX_DIRECTIONAL_LIGHTS + MAX_POINT_LIGHTS + MAX_SPOT_LIGHTS > 0
 	vec3 norm1 = normalize(normal);
 	vec3 norm = texture(normalSampler, texCoord).rgb;
-	norm = norm1 * 0.00001f + normalize(norm * 2.0f - 1.0f);
+	norm = norm * 2.0f - 1.0f;
+	norm = norm1 * 0.0000001f + normalize(TBN * norm);
 
 	vec3 viewDir = normalize(viewPos - pos);
 	vec3 geomDiffuse = texture(diffuseSampler, texCoord).rgb;

@@ -142,7 +142,7 @@ int main()
 		0, // No point lights
 		0); // No spot lights
 
-	auto* floorGeometry = engine->getFactory()->getGeometry()->createBox(20.0f, 20.0f, 0.0f);
+	auto* floorGeometry = engine->getFactory()->getGeometry()->createBox(10.0f, 10.0f, 10.0f, true, true, true);
 	GLTUT_CHECK(floorGeometry, "Failed to create floor geometry");
 	scene->createGeometry(
 		floorGeometry,
@@ -154,7 +154,7 @@ int main()
 	createLights(*engine, lights, lightSources);
 
 	gltut::Camera* camera = engine->getScene()->createCamera(
-		{ -2.0f, 2.0f, 6.0f },
+		{ -10.0f, 10.0f, 30.0f },
 		{ 0.0f, 0.0f, 0.0f },
 		{ 0.0f, 1.0f, 0.0f },
 		45.0f,

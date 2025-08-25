@@ -30,6 +30,58 @@ void addFacesBetweenCircles(
 	}
 }
 
+std::vector<std::pair<Vector3, Vector3>> getTangentBitangent(
+	const Vector3* positions,
+	const u32 positionsCount,
+	const Vector2* textureCoordinates,
+	const u32* indices,
+	const u32 indexCount) noexcept
+{
+	GLTUT_ASSERT(positions != nullptr);
+	GLTUT_ASSERT(positionsCount > 0);
+	GLTUT_ASSERT(textureCoordinates != nullptr);
+	GLTUT_ASSERT(indices != nullptr);
+	GLTUT_ASSERT(indexCount > 0);
+	GLTUT_ASSERT(indexCount % 3 == 0);
+
+	std::vector<std::pair<Vector3, Vector3>> result(positionsCount);
+	// Iterate for each triangle
+	for (u32 i = 0; i < indexCount / 3; ++i)
+	{
+		u32 inds[3];
+		for (u32 j = 0; j < 3; ++j)
+		{
+			inds[j] = indices[i * 3 + j];
+			GLTUT_ASSERT(inds[j] < positionsCount);
+		}
+
+		Vector3 tangent;
+		Vector3 bitangent;
+		getTangentSpace(
+			positions[inds[0]],
+			positions[inds[1]],
+			positions[inds[2]],
+			textureCoordinates[inds[0]],
+			textureCoordinates[inds[1]],
+			textureCoordinates[inds[2]],
+			tangent, 
+			bitangent);
+
+		for (u32 j = 0; j < 3; ++j)
+		{
+			result[inds[j]].first += tangent;
+			result[inds[j]].second += bitangent;
+		}
+	}
+
+	for (auto& tb : result)
+	{
+		tb.first.normalize();
+		tb.second.normalize();
+	}
+	return result;
+}
+
 // End of the anonymous namespace
 }
 
@@ -42,85 +94,201 @@ Geometry* GeometryFactoryC::createBox(
 {
 	Geometry* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN
-		x *= 0.5f;
-		y *= 0.5f;
-		z *= 0.5f;
+	x *= 0.5f;
+	y *= 0.5f;
+	z *= 0.5f;
 
-		const Vector3 positions[] = {
-			{-x, -y,  z}, { x, -y,  z}, { x,  y,  z}, {-x,  y,  z},
-			{-x, -y, -z}, { x, -y, -z}, { x,  y, -z}, {-x,  y, -z},
-			{-x, -y, -z}, {-x, -y,  z}, {-x,  y,  z}, {-x,  y, -z},
-			{ x, -y, -z }, { x, -y,  z }, { x,  y,  z }, { x,  y, -z },
-			{ -x,  y, -z }, { x,  y, -z }, { x,  y,  z }, { -x,  y,  z },
-			{ -x, -y, -z }, { x, -y, -z }, { x, -y,  z }, { -x, -y,  z }
-		};
+	const Vector3 positions[] =
+	{
+		// Front
+		{ -x, -y,  z },
+		{  x, -y,  z },
+		{  x,  y,  z },
+		{ -x,  y,  z },
 
-		const Vector3 normals[] = {
-			{ 0.0f, 0.0f,  1.0f}, { 0.0f, 0.0f,  1.0f}, { 0.0f, 0.0f,  1.0f}, { 0.0f, 0.0f,  1.0f},
-			{ 0.0f, 0.0f, -1.0f}, { 0.0f, 0.0f, -1.0f}, { 0.0f, 0.0f, -1.0f}, { 0.0f, 0.0f, -1.0f},
-			{-1.0f, 0.0f,  0.0f}, {-1.0f, 0.0f,  0.0f}, {-1.0f, 0.0f,  0.0f}, {-1.0f, 0.0f,  0.0f},
-			{ 1.0f, 0.0f,  0.0f}, { 1.0f, 0.0f,  0.0f}, { 1.0f, 0.0f,  0.0f}, { 1.0f, 0.0f,  0.0f},
-			{ 0.0f, 1.0f,  0.0f}, { 0.0f, 1.0f,  0.0f}, { 0.0f, 1.0f,  0.0f}, { 0.0f, 1.0f,  0.0f},
-			{ 0.0f,-1.0f,  0.0f}, { 0.0f,-1.0f,  0.0f}, { 0.0f,-1.0f,  0.0f}, { 0.0f,-1.0f,  0.0f}
-		};
+		// Back
+		{ -x, -y, -z },
+		{  x, -y, -z },
+		{  x,  y, -z },
+		{ -x,  y, -z },
 
-		const Vector2 textureCoordinates[] = {
-			{0.0f, 0.0f}, {1.0f, 0.0f}, {1.0f, 1.0f}, {0.0f, 1.0f},
-			{0.0f, 0.0f}, {1.0f, 0.0f}, {1.0f, 1.0f}, {0.0f, 1.0f},
-			{0.0f, 0.0f}, {1.0f, 0.0f}, {1.0f, 1.0f}, {0.0f, 1.0f},
-			{0.0f, 0.0f}, {1.0f, 0.0f}, {1.0f, 1.0f}, {0.0f, 1.0f},
-			{0.0f, 0.0f}, {1.0f, 0.0f}, {1.0f, 1.0f}, {0.0f, 1.0f},
-			{0.0f, 0.0f}, {1.0f, 0.0f}, {1.0f, 1.0f}, {0.0f, 1.0f}
-		};
+		// Left
+		{ -x, -y, -z },
+		{ -x, -y,  z },
+		{ -x,  y,  z },
+		{ -x,  y, -z },
 
+		// Right
+		{  x, -y, -z },
+		{  x, -y,  z },
+		{  x,  y,  z },
+		{  x,  y, -z },
 
-		std::vector<float> vertexData;
-		for (size_t i = 0; i < 24; ++i)
+		 // Top
+		{  -x,  y, -z },
+		{   x,  y, -z },
+		{   x,  y,  z },
+		{  -x,  y,  z },
+
+		 // Bottom
+		{  -x, -y, -z },
+		{   x, -y, -z },
+		{   x, -y,  z },
+		{  -x, -y,  z }
+	};
+
+	const Vector3 normals[] =
+	{
+		// Front
+		{ 0.0f, 0.0f,  1.0f },
+		{ 0.0f, 0.0f,  1.0f },
+		{ 0.0f, 0.0f,  1.0f },
+		{ 0.0f, 0.0f,  1.0f },
+
+		// Back
+		{ 0.0f, 0.0f, -1.0f },
+		{ 0.0f, 0.0f, -1.0f },
+		{ 0.0f, 0.0f, -1.0f },
+		{ 0.0f, 0.0f, -1.0f },
+
+		// Left
+		{ -1.0f, 0.0f,  0.0f },
+		{ -1.0f, 0.0f,  0.0f },
+		{ -1.0f, 0.0f,  0.0f },
+		{ -1.0f, 0.0f,  0.0f },
+
+		// Right
+		{ 1.0f, 0.0f,  0.0f },
+		{ 1.0f, 0.0f,  0.0f },
+		{ 1.0f, 0.0f,  0.0f },
+		{ 1.0f, 0.0f,  0.0f },
+
+		 // Top
+		{ 0.0f, 1.0f,  0.0f },
+		{ 0.0f, 1.0f,  0.0f },
+		{ 0.0f, 1.0f,  0.0f },
+		{ 0.0f, 1.0f,  0.0f },
+
+		 // Bottom
+		{ 0.0f, -1.0f, 0.0f },
+		{ 0.0f, -1.0f, 0.0f },
+		{ 0.0f, -1.0f, 0.0f },
+		{ 0.0f, -1.0f, 0.0f }
+	};
+
+	const Vector2 textureCoordinates[] =
+	{
+		// Front
+		{ 0.0f, 0.0f },
+		{ 1.0f, 0.0f },
+		{ 1.0f, 1.0f },
+		{ 0.0f, 1.0f },
+
+		// Back
+		{ 0.0f, 0.0f },
+		{ 1.0f, 0.0f },
+		{ 1.0f, 1.0f },
+		{ 0.0f, 1.0f },
+
+		// Left
+		{ 0.0f, 0.0f },
+		{ 1.0f, 0.0f },
+		{ 1.0f, 1.0f },
+		{ 0.0f, 1.0f },
+
+		// Right
+		{ 0.0f, 0.0f },
+		{ 1.0f, 0.0f },
+		{ 1.0f, 1.0f },
+		{ 0.0f, 1.0f },
+
+		// Top
+		{ 0.0f, 0.0f },
+		{ 1.0f, 0.0f },
+		{ 1.0f, 1.0f },
+		{ 0.0f, 1.0f },
+
+		 // Bottom
+		{ 0.0f, 0.0f },
+		{ 1.0f, 0.0f },
+		{ 1.0f, 1.0f },
+		{ 0.0f, 1.0f }
+	};
+
+	u32 indices[] =
+	{
+		0, 1, 2, 2, 3, 0,
+		5, 4, 6, 6, 4, 7,
+		8, 9, 10, 10, 11, 8,
+		13, 12, 14, 14, 12, 15,
+		17, 16, 18, 18, 16, 19,
+		20, 21, 22, 22, 23, 20
+	};
+
+	std::vector<std::pair<Vector3, Vector3>> tb;
+	if (tangentBitangent)
+	{
+		tb = getTangentBitangent(
+			positions,
+			24,
+			textureCoordinates,
+			indices,
+			36);
+	}
+
+	std::vector<float> vertexData;
+	for (size_t i = 0; i < 24; ++i)
+	{
+		vertexData.push_back(positions[i].x);
+		vertexData.push_back(positions[i].y);
+		vertexData.push_back(positions[i].z);
+
+		if (normal)
 		{
-			vertexData.push_back(positions[i].x);
-			vertexData.push_back(positions[i].y);
-			vertexData.push_back(positions[i].z);
-
-			if (normal)
-			{
-				vertexData.push_back(normals[i].x);
-				vertexData.push_back(normals[i].y);
-				vertexData.push_back(normals[i].z);
-			}
-
-			if (textureCoordinates)
-			{
-				vertexData.push_back(textureCoordinates[i].x);
-				vertexData.push_back(textureCoordinates[i].y);
-			}
+			vertexData.push_back(normals[i].x);
+			vertexData.push_back(normals[i].y);
+			vertexData.push_back(normals[i].z);
 		}
 
-		u32 indices[] =
+		if (textureCoordinates)
 		{
-			0, 1, 2, 2, 3, 0,
-			5, 4, 6, 6, 4, 7,
-			8, 9, 10, 10, 11, 8,
-			13, 12, 14, 14, 12, 15,
-			17, 16, 18, 18, 16, 19,
-			20, 21, 22, 22, 23, 20
-		};
+			vertexData.push_back(textureCoordinates[i].x);
+			vertexData.push_back(textureCoordinates[i].y);
+		}
 
 		if (tangentBitangent)
 		{
-			std::array<Vector3, 8> tangents;
-			std::array<Vector3, 8> bitangents;
-
-			// Iterate for each triangle
-			for (u32 i = 0; i < 12; ++i)
-			{
-
-			}
+			vertexData.push_back(tb[i].first.x);
+			vertexData.push_back(tb[i].first.y);
+			vertexData.push_back(tb[i].first.z);
+			vertexData.push_back(tb[i].second.x);
+			vertexData.push_back(tb[i].second.y);
+			vertexData.push_back(tb[i].second.z);
 		}
+	}
 
-		result = mRenderer.getGeometries()->create(VERTEX_FORMAT_POS3_NORM3_TEX2, 24, vertices, 36, indices);
+	VertexFormat vertexFormat = VERTEX_FORMAT_POS3;
+	u32 componentIndex = 1;
+	if (normal)
+	{
+		vertexFormat.setComponentSize(componentIndex++, 3);
+	}
+
+	if (textureCoordinates)
+	{
+		vertexFormat.setComponentSize(componentIndex++, 2);
+	}
+
+	if (tangentBitangent)
+	{
+		vertexFormat.setComponentSize(componentIndex++, 3);
+		vertexFormat.setComponentSize(componentIndex++, 3);
+	}
+
+	result = mRenderer.getGeometries()->create(vertexFormat, 24, vertexData.data(), 36, indices);
 
 	GLTUT_CATCH_ALL_END("Failed to create a box geometry")
-	return result;
+		return result;
 }
 
 Geometry* GeometryFactoryC::createSphere(float radius, u32 subdivisions) noexcept
