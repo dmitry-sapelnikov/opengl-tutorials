@@ -207,7 +207,7 @@ int main()
 			engine.get(),
 			phongShader);
 
-		auto* floorGeometry = engine->getFactory()->getGeometry()->createBox(20.0f, 1.0f, 20.0f);
+		auto* floorGeometry = engine->getFactory()->getGeometry()->createBox(20.0f, 1.0f, 20.0f, true, true, true);
 		GLTUT_CHECK(floorGeometry, "Failed to create floor geometry");
 		scene->createGeometry(
 			floorGeometry,

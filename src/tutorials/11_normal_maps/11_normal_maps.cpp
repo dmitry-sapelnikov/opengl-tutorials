@@ -212,22 +212,6 @@ int main()
 			firstSetup = false;
 		}
 
-		// Bias controls for phong shader
-		if (ImGui::CollapsingHeader("Shadow Map Bias"))
-		{
-			float minBias = phongMaterialModel->getPhongShader()->getMinShadowMapBias();
-			if (ImGui::SliderFloat("Min Bias", &minBias, 0.0f, 0.1f))
-			{
-				phongMaterialModel->getPhongShader()->setMinShadowMapBias(minBias);
-			}
-
-			float maxBias = phongMaterialModel->getPhongShader()->getMaxShadowMapBias();
-			if (ImGui::SliderFloat("Max Bias", &maxBias, 0.0f, 0.1f))
-			{
-				phongMaterialModel->getPhongShader()->setMaxShadowMapBias(maxBias);
-			}
-		}
-
 		ImGui::End();
 
 		if (!engine->update())
