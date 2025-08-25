@@ -67,7 +67,7 @@ PhongShaderModel* MaterialFactoryC::createPhongShader(
 }
 
 PhongMaterialModel* MaterialFactoryC::createPhongMaterial(
-	PhongShaderModel* phongShader,
+	const PhongShaderModel* phongShader,
 	bool castShadows) noexcept
 {
 	if (phongShader == nullptr)

@@ -15,6 +15,9 @@ u32 toOpenGLFormat(TextureFormat format) noexcept
 {
 	switch (format)
 	{
+	case TextureFormat::R:
+		return GL_RED;
+
 	case TextureFormat::RGB:
 		return GL_RGB;
 
@@ -69,6 +72,7 @@ u32 getChannelType(TextureFormat format) noexcept
 {
 	switch (format)
 	{
+	case TextureFormat::R:
 	case TextureFormat::RGB:
 	case TextureFormat::RGBA:
 		return GL_UNSIGNED_BYTE;
@@ -76,7 +80,7 @@ u32 getChannelType(TextureFormat format) noexcept
 	case TextureFormat::FLOAT:
 		return GL_FLOAT;
 
-		GLTUT_UNEXPECTED_SWITCH_DEFAULT_CASE(format)
+	GLTUT_UNEXPECTED_SWITCH_DEFAULT_CASE(format)
 	}
 	return 0;
 }

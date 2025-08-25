@@ -15,7 +15,7 @@ public:
 	/// Constructor
 	explicit MaterialPassC(
 		GraphicsDevice& device,
-		ShaderRendererBinding* shader,
+		const ShaderRendererBinding* shader,
 		u32 textureSlotsCount) noexcept;
 
 	/// Returns the shader binding

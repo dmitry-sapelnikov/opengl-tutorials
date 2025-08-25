@@ -8,7 +8,7 @@ namespace gltut
 PhongMaterialModelC::PhongMaterialModelC(
 	Renderer& renderer,
 	Scene& scene,
-	PhongShaderModel& phongShader,
+	const PhongShaderModel& phongShader,
 	ShaderRendererBinding* depthShader) :
 
 	MaterialModelT<PhongMaterialModel>(renderer),
@@ -54,12 +54,12 @@ PhongMaterialModelC::~PhongMaterialModelC() noexcept
 	mScene.removeTextureSetBinding(mTextureSetBinding);
 }
 
-void PhongMaterialModelC::setDiffuse(Texture* diffuse) noexcept
+void PhongMaterialModelC::setDiffuse(const Texture* diffuse) noexcept
 {
 	getMaterial()[0]->getTextures()->setTexture(diffuse, 0);
 }
 
-void PhongMaterialModelC::setSpecular(Texture* specular) noexcept
+void PhongMaterialModelC::setSpecular(const Texture* specular) noexcept
 {
 	getMaterial()[0]->getTextures()->setTexture(specular, 1);
 }

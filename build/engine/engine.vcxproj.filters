@@ -165,6 +165,12 @@
     <Filter Include="include\factory\shader">
       <UniqueIdentifier>{80b81427-46a5-4c07-a727-32d5787bd8f0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\factory\scene">
+      <UniqueIdentifier>{32eb27a4-a2b3-4641-a1e4-2a6135556d47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\factory\scene">
+      <UniqueIdentifier>{db2597e5-5f85-4fde-a728-5f07363816de}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\engine\Engine.h">
@@ -521,6 +527,15 @@
     <ClInclude Include="..\..\src\engine\factory\material\PhongMaterialModelC.h">
       <Filter>src\factory\material</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\engine\factory\scene\SceneFactoryC.h">
+      <Filter>src\factory\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\factory\scene\SceneFactory.h">
+      <Filter>include\factory\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\scene\nodes\GroupNodeC.h">
+      <Filter>src\scene\nodes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\engine\EngineC.cpp">
@@ -648,6 +663,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\engine\factory\material\PhongMaterialModelC.cpp">
       <Filter>src\factory\material</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\factory\scene\SceneFactoryC.cpp">
+      <Filter>src\factory\scene</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -10,6 +10,7 @@
 #include "./camera/CameraC.h"
 #include "./shader/SceneShaderBindingC.h"
 #include "./texture/SceneTextureSetBindingC.h"
+#include "./nodes/GroupNodeC.h"
 #include "./nodes/GeometryNodeC.h"
 #include "./nodes/LightNodeC.h"
 
@@ -59,6 +60,10 @@ public:
 	{
 		return mTextureSetBindings[index].get();
 	}
+
+	SceneNode* createGroup(
+		const Matrix4& transform = Matrix4::identity(),
+		SceneNode* parent = nullptr) noexcept final;
 
 	GeometryNode* createGeometry(
 		const Geometry* geometry,
@@ -133,6 +138,9 @@ private:
 
 	/// The texture set bindings
 	std::vector<std::unique_ptr<SceneTextureSetBindingC>> mTextureSetBindings;
+
+	/// Group nodes
+	std::deque<GroupNodeC> mGroups;
 
 	/// Geometry nodes
 	std::deque<GeometryNodeC> mGeometries;

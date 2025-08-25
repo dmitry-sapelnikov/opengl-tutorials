@@ -24,6 +24,7 @@
     <ClInclude Include="..\..\include\engine\factory\material\MaterialPassIndex.h" />
     <ClInclude Include="..\..\include\engine\factory\material\PhongMaterialModel.h" />
     <ClInclude Include="..\..\include\engine\factory\render_pass\RenderPassFactory.h" />
+    <ClInclude Include="..\..\include\engine\factory\scene\SceneFactory.h" />
     <ClInclude Include="..\..\include\engine\factory\shader\PhongShaderModel.h" />
     <ClInclude Include="..\..\include\engine\factory\shadow\ShadowFactory.h" />
     <ClInclude Include="..\..\include\engine\graphics\framebuffer\Framebuffer.h" />
@@ -86,6 +87,7 @@
     <ClInclude Include="..\..\src\engine\factory\material\MaterialModelT.h" />
     <ClInclude Include="..\..\src\engine\factory\material\PhongMaterialModelC.h" />
     <ClInclude Include="..\..\src\engine\factory\render_pass\RenderPassFactoryC.h" />
+    <ClInclude Include="..\..\src\engine\factory\scene\SceneFactoryC.h" />
     <ClInclude Include="..\..\src\engine\factory\shader\DepthShader.h" />
     <ClInclude Include="..\..\src\engine\factory\shader\FlatColorShader.h" />
     <ClInclude Include="..\..\src\engine\factory\shader\PhongShaderModelC.h" />
@@ -123,6 +125,7 @@
     <ClInclude Include="..\..\src\engine\scene\camera\FPSCameraControllerC.h" />
     <ClInclude Include="..\..\src\engine\scene\camera\MouseCameraControllerC.h" />
     <ClInclude Include="..\..\src\engine\scene\nodes\GeometryNodeC.h" />
+    <ClInclude Include="..\..\src\engine\scene\nodes\GroupNodeC.h" />
     <ClInclude Include="..\..\src\engine\scene\nodes\LightNodeC.h" />
     <ClInclude Include="..\..\src\engine\scene\nodes\SceneNodeT.h" />
     <ClInclude Include="..\..\src\engine\scene\SceneC.h" />
@@ -140,6 +143,7 @@
     <ClCompile Include="..\..\src\engine\factory\material\MaterialFactoryC.cpp" />
     <ClCompile Include="..\..\src\engine\factory\material\PhongMaterialModelC.cpp" />
     <ClCompile Include="..\..\src\engine\factory\render_pass\RenderPassFactoryC.cpp" />
+    <ClCompile Include="..\..\src\engine\factory\scene\SceneFactoryC.cpp" />
     <ClCompile Include="..\..\src\engine\factory\shader\DepthShader.cpp" />
     <ClCompile Include="..\..\src\engine\factory\shader\FlatColorShader.cpp" />
     <ClCompile Include="..\..\src\engine\factory\shader\PhongShaderModelC.cpp" />
@@ -225,7 +229,7 @@
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile />
-      <AdditionalIncludeDirectories>../../include/;../../extern/glfw/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../include/;../../3rd_party/assimp/include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -246,7 +250,7 @@
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile />
-      <AdditionalIncludeDirectories>../../include/;../../extern/glfw/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../include/;../../3rd_party/assimp/include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
