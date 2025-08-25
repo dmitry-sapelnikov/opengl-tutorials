@@ -93,6 +93,11 @@ public:
 	/// Removes a texture set binding from the scene
 	virtual void removeTextureSetBinding(SceneTextureSetBinding* binding) noexcept = 0;
 
+	/// Creates a scene group node
+	virtual SceneNode* createGroup(
+		const Matrix4& transform = Matrix4::identity(),
+		SceneNode* parent = nullptr) noexcept = 0;
+
 	/// Creates a scene object
 	virtual GeometryNode* createGeometry(
 		const Geometry* geometry,

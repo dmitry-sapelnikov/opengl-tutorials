@@ -21,7 +21,7 @@ public:
 	/// Creates a material pass by index
 	MaterialPass* createPass(
 		u32 index,
-		ShaderRendererBinding* shader,
+		const ShaderRendererBinding* shader,
 		u32 textureSlotsCount) noexcept final;
 
 	/// Removes a material pass by index

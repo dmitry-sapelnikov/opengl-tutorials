@@ -10,12 +10,12 @@ namespace gltut
 //	Global classes
 MaterialPassC::MaterialPassC(
 	GraphicsDevice& device,
-	ShaderRendererBinding* Shader,
+	const ShaderRendererBinding* shader,
 	u32 textureSlotsCount) noexcept :
 
-	mShaderBinding(Shader),
-	mShaderArguments(Shader != nullptr ? 
-		Shader->getShader() :
+	mShaderBinding(shader),
+	mShaderArguments(shader != nullptr ? 
+		shader->getShader() :
 		nullptr),
 	mTextures(device, textureSlotsCount)
 {

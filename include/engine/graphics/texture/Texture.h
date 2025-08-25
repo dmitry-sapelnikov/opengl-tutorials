@@ -10,6 +10,8 @@ namespace gltut
 /// Represents the format of a texture
 enum class TextureFormat
 {
+	/// Single channel (red)
+	R,
 	RGB,
 	RGBA,
 	FLOAT,

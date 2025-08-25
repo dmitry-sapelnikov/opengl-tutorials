@@ -2,7 +2,7 @@
 
 // Includes
 #include "engine/math/Vector2.h"
-#include "engine/graphics/geometry/Geometry.h"
+#include "engine/scene/nodes/GeometryNode.h"
 
 namespace gltut
 {

@@ -142,7 +142,7 @@ void createLights(
 	}
 }
 
-gltut::PhongMaterialModel* createPhongMaterialModel(
+gltut::PhongShaderModel* createPhongShader(
 	gltut::Engine* engine,
 	gltut::u32 maxDirectionalLights,
 	gltut::u32 maxPointLights,
@@ -153,9 +153,17 @@ gltut::PhongMaterialModel* createPhongMaterialModel(
 		maxDirectionalLights,
 		maxPointLights,
 		maxSpotLights);
+	GLTUT_CHECK(phongShader, "Failed to create Phong shader");
+	return phongShader;
+}
 
+gltut::PhongMaterialModel* createPhongMaterialModel(
+	gltut::Engine* engine,
+	gltut::PhongShaderModel* phongShader)
+{
 	GLTUT_CHECK(phongShader, "Failed to create Phong shader");
 
+	gltut::MaterialFactory* materialFactory = engine->getFactory()->getMaterial();
 	gltut::PhongMaterialModel* phongMaterialModel = materialFactory->createPhongMaterial(phongShader);
 	GLTUT_CHECK(phongMaterialModel, "Failed to create Phong material model");
 
@@ -168,8 +176,6 @@ gltut::PhongMaterialModel* createPhongMaterialModel(
 	phongMaterialModel->setDiffuse(diffuseTexture);
 	phongMaterialModel->setSpecular(specularTexture);
 	phongMaterialModel->setShininess(32.0f);
-	phongMaterialModel->getPhongShader()->setMinShadowMapBias(0.00001f);
-	phongMaterialModel->getPhongShader()->setMaxShadowMapBias(0.008f);
 	return phongMaterialModel;
 }
 
@@ -190,11 +196,16 @@ int main()
 		GLTUT_CHECK(imgui, "Failed to create ImGui instance");
 
 		auto* scene = engine->getScene();
-		gltut::PhongMaterialModel* phongMaterialModel = createPhongMaterialModel(
+
+		gltut::PhongShaderModel* phongShader = createPhongShader(
 			engine.get(),
 			0,
 			0, // No point lights
 			USED_DIRECTIONAL_LIGHT_COUNT); // No spot lights
+
+		gltut::PhongMaterialModel* phongMaterialModel = createPhongMaterialModel(
+			engine.get(),
+			phongShader);
 
 		auto* floorGeometry = engine->getFactory()->getGeometry()->createBox(20.0f, 1.0f, 20.0f);
 		GLTUT_CHECK(floorGeometry, "Failed to create floor geometry");
@@ -256,16 +267,16 @@ int main()
 			// Bias controls for phong shader
 			if (ImGui::CollapsingHeader("Shadow Map Bias"))
 			{
-				float minBias = phongMaterialModel->getPhongShader()->getMinShadowMapBias();
+				float minBias = phongShader->getMinShadowMapBias();
 				if (ImGui::SliderFloat("Min Bias", &minBias, 0.0f, 0.1f))
 				{
-					phongMaterialModel->getPhongShader()->setMinShadowMapBias(minBias);
+					phongShader->setMinShadowMapBias(minBias);
 				}
 
-				float maxBias = phongMaterialModel->getPhongShader()->getMaxShadowMapBias();
+				float maxBias = phongShader->getMaxShadowMapBias();
 				if (ImGui::SliderFloat("Max Bias", &maxBias, 0.0f, 0.1f))
 				{
-					phongMaterialModel->getPhongShader()->setMaxShadowMapBias(maxBias);
+					phongShader->setMaxShadowMapBias(maxBias);
 				}
 			}
 
