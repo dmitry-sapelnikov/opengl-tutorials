@@ -75,6 +75,17 @@ void SceneC::removeTextureSetBinding(SceneTextureSetBinding* binding) noexcept
 	GLTUT_CATCH_ALL_END("Cannot remove a texture set binding")
 }
 
+SceneNode* SceneC::createGroup(
+	const Matrix4& transform,
+	SceneNode* parent) noexcept
+{
+	SceneNode* result = nullptr;
+	GLTUT_CATCH_ALL_BEGIN
+		result = &mGroups.emplace_back(transform, parent);
+	GLTUT_CATCH_ALL_END("Cannot create a scene group")
+	return result;
+}
+
 GeometryNode* SceneC::createGeometry(
 	const Geometry* geometry,
 	const Material* material,

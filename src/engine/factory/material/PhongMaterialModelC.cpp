@@ -8,7 +8,7 @@ namespace gltut
 PhongMaterialModelC::PhongMaterialModelC(
 	Renderer& renderer,
 	Scene& scene,
-	PhongShaderModel& phongShader,
+	const PhongShaderModel& phongShader,
 	ShaderRendererBinding* depthShader) :
 
 	MaterialModelT<PhongMaterialModel>(renderer),

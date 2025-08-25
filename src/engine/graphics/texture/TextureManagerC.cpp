@@ -41,13 +41,31 @@ Texture* TextureManagerC::load(
 		GLTUT_CHECK(width > 0, "Image width <= 0");
 		GLTUT_CHECK(height > 0, "Image height <= 0");
 		GLTUT_CHECK(
-			channels == 3 || channels == 4,
+			channels == 1 || channels == 3 || channels == 4,
 			("Unsupported number of channels: " + std::to_string(channels)).c_str());
+
+		TextureFormat format;
+		switch (channels)
+		{
+		case 1:
+			format = TextureFormat::R;
+			break;
+
+		case 3:
+			format = TextureFormat::RGB;
+			break;
+
+		case 4:
+			format = TextureFormat::RGBA;
+			break;
+
+		GLTUT_UNEXPECTED_SWITCH_DEFAULT_CASE(channels)
+		}
 
 		result = create(
 			data,
 			{ static_cast<u32>(width), static_cast<u32>(height) },
-			channels == 3 ? TextureFormat::RGB : TextureFormat::RGBA,
+			format,
 			parameters);
 	GLTUT_CATCH_ALL_END("Failed to load texture from file: " + std::string(imagePath))
 

@@ -13,7 +13,7 @@ class PhongMaterialModel
 public:
 	virtual ~PhongMaterialModel() noexcept = default;
 
-	virtual PhongShaderModel* getPhongShader() const noexcept = 0;
+	virtual const PhongShaderModel* getPhongShader() const noexcept = 0;
 
 	virtual const Material* getMaterial() const noexcept = 0;
 

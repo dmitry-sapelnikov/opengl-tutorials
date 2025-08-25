@@ -9,13 +9,10 @@ namespace gltut
 void RenderGeometryC::render(u32 materialPass) const noexcept
 {
 	if (mMaterial != nullptr &&
-		mMaterial->getPass(materialPass) != nullptr)
+		mMaterial->getPass(materialPass) != nullptr &&
+		mGeometry != nullptr)
 	{
 		mMaterial->getPass(materialPass)->bind(this);
-	}
-
-	if (mGeometry != nullptr)
-	{
 		mGeometry->render();
 	}
 }

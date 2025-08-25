@@ -8,6 +8,7 @@
 #include "./material/MaterialFactoryC.h"
 #include "./render_pass/RenderPassFactoryC.h"
 #include "./shadow/ShadowFactoryC.h"
+#include "./scene/SceneFactoryC.h"
 
 namespace gltut
 {

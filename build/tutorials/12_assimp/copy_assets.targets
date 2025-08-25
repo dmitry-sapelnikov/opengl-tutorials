@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <AssetFiles Include="$(MSBuildThisFileDirectory)..\..\..\src\tutorials\12_assimp\assets\**\*" />
+  </ItemGroup>
+  <Target Name="CopyAssets">
+    <Copy 
+      SourceFiles="@(AssetFiles)" 
+      DestinationFiles="@(AssetFiles->'$(OutDir)assets\%(RecursiveDir)%(Filename)%(Extension)')" 
+      SkipUnchangedFiles="true" />
+  </Target>
+  <PropertyGroup>
+    <BuildDependsOn>CopyAssets;$(BuildDependsOn)</BuildDependsOn>
+  </PropertyGroup>
+</Project>

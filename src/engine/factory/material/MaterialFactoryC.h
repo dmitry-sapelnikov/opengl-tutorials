@@ -37,7 +37,7 @@ public:
 
 	///	Creates a Phong material model
 	PhongMaterialModel* createPhongMaterial(
-		PhongShaderModel* phongShader,
+		const PhongShaderModel* phongShader,
 		bool castShadows = true) noexcept final;
 
 	/// Updates the factory

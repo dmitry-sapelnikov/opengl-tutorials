@@ -16,14 +16,14 @@ public:
 	PhongMaterialModelC(
 		Renderer& renderer,
 		Scene& scene,
-		PhongShaderModel& phongShader,
+		const PhongShaderModel& phongShader,
 		ShaderRendererBinding* depthShader);
 
 	/// Virtual destructor
 	~PhongMaterialModelC() noexcept final;
 
 	// Returns the Phong shader model
-	PhongShaderModel* getPhongShader() const noexcept final
+	const PhongShaderModel* getPhongShader() const noexcept final
 	{
 		return &mPhongShader;
 	}
@@ -45,7 +45,7 @@ private:
 	Scene& mScene;
 
 	/// The Phong shader model
-	PhongShaderModel& mPhongShader;
+	const PhongShaderModel& mPhongShader;
 
 	/// The texture set binding
 	SceneTextureSetBinding* mTextureSetBinding = nullptr;
