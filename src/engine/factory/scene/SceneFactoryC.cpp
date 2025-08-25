@@ -36,6 +36,7 @@ SceneNode* SceneFactoryC::loadModel(
 		filePath,
 		aiProcess_Triangulate |
 		aiProcess_FlipUVs |
+		aiProcess_GenSmoothNormals |
 		aiProcess_CalcTangentSpace);
 
 		GLTUT_CHECK(
