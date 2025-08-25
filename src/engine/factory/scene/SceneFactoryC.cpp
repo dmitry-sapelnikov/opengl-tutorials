@@ -35,8 +35,8 @@ SceneNode* SceneFactoryC::loadModel(
 	const aiScene* scene = importer.ReadFile(
 		filePath,
 		aiProcess_Triangulate |
-		aiProcess_GenSmoothNormals |
-		aiProcess_FlipUVs);
+		aiProcess_FlipUVs |
+		aiProcess_CalcTangentSpace);
 
 		GLTUT_CHECK(
 			scene != nullptr && !(scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE) && scene->mRootNode,
@@ -80,6 +80,7 @@ std::vector<PhongMaterialModel*> SceneFactoryC::createMaterials(
 
 			material->setDiffuse(loadMaterialTexture(modelDirectory, aiMat, aiTextureType_DIFFUSE));
 			material->setSpecular(loadMaterialTexture(modelDirectory, aiMat, aiTextureType_SPECULAR));
+			material->setNormal(loadMaterialTexture(modelDirectory, aiMat, aiTextureType_HEIGHT));
 
 			result.push_back(material);
 		}
@@ -190,6 +191,18 @@ Geometry* SceneFactoryC::createGeometry(aiMesh* mesh)
 			vertices.push_back(mesh->mTextureCoords[0][i].x);
 			vertices.push_back(mesh->mTextureCoords[0][i].y);
 		}
+
+		// tangent
+		if (mesh->HasTangentsAndBitangents())
+		{
+			vertices.push_back(mesh->mTangents[i].x);
+			vertices.push_back(mesh->mTangents[i].y);
+			vertices.push_back(mesh->mTangents[i].z);
+
+			vertices.push_back(mesh->mBitangents[i].x);
+			vertices.push_back(mesh->mBitangents[i].y);
+			vertices.push_back(mesh->mBitangents[i].z);
+		}
 	}
 
 	for (unsigned int i = 0; i < mesh->mNumFaces; i++)
@@ -212,6 +225,12 @@ Geometry* SceneFactoryC::createGeometry(aiMesh* mesh)
 	if (mesh->mTextureCoords[0]) // does the mesh contain texture coordinates?
 	{
 		vertexFormat.setComponentSize(componentInd++, 2);
+	}
+
+	if (mesh->HasTangentsAndBitangents())
+	{
+		vertexFormat.setComponentSize(componentInd++, 3);
+		vertexFormat.setComponentSize(componentInd++, 3);
 	}
 
 	GLTUT_CHECK(vertices.size() % vertexFormat.getTotalSize() == 0, "Invalid vertex size");

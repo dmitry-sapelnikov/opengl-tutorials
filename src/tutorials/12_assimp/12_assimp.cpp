@@ -24,7 +24,7 @@ const gltut::Vector3 DIR_LIGHT_POSITIONS[DIRECTIONAL_LIGHT_COUNT] = {
 	{ -2.0f, 2.0f, 3.0f } };
 
 const gltut::Color DIR_LIGHT_COLORS[DIRECTIONAL_LIGHT_COUNT] = {
-	{ 1.0f, 1.0f, 1.0f },
+	{ 1.5f, 1.5f, 1.5f },
 	{ 1.2f, 1.2f, 1.2f } };
 
 const bool DIR_LIGHT_CAST_SHADOWS[DIRECTIONAL_LIGHT_COUNT] = {
