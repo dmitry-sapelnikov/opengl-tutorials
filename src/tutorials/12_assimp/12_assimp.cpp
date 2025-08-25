@@ -62,7 +62,7 @@ void createLights(
 	std::vector<gltut::ShadowMap*>& shadows)
 {
 	auto* factory = engine.getFactory();
-	auto* lightGeometry = factory->getGeometry()->createSphere(0.1f, 16);
+	auto* lightGeometry = factory->getGeometry()->createSphere(0.5f, 16);
 	GLTUT_CHECK(lightGeometry, "Failed to create light geometry");
 
 	for (size_t i = 0; i < USED_DIRECTIONAL_LIGHT_COUNT; ++i)
@@ -109,7 +109,7 @@ int main()
 		engine.reset(gltut::createEngine(1024, 768));
 		GLTUT_CHECK(engine, "Failed to create engine");
 
-		gltut::SceneFactory* sceneFactory = gltut::createSceneFactory(
+		sceneFactory = gltut::createSceneFactory(
 			*engine->getDevice(), 
 			*engine->getScene(), 
 			*engine->getFactory()->getMaterial());
@@ -120,10 +120,11 @@ int main()
 		imgui = gltut::createEngineImgui(engine.get());
 		GLTUT_CHECK(imgui, "Failed to create ImGui instance");
 
-		auto* scene = engine->getScene();
 		gltut::MaterialFactory* materialFactory = engine->getFactory()->getMaterial();
 		auto* phongShader = materialFactory->createPhongShader(1,0, 0);
 		GLTUT_CHECK(phongShader, "Failed to create Phong shader");
+
+		sceneFactory->loadModel("assets/backpack/backpack.obj", phongShader);
 
 		std::vector<gltut::GeometryNode*> lights;
 		std::vector<gltut::LightNode*> lightSources;
@@ -143,8 +144,6 @@ int main()
 			gltut::createMouseCameraController(*camera));
 		GLTUT_CHECK(controller, "Failed to create camera controller");
 		engine->getScene()->addCameraController(controller.get());
-
-		sceneFactory->loadModel("assets/backpack/backpack.obj", phongShader);
 
 		const auto startTime = std::chrono::high_resolution_clock::now();
 		float lightAzimuth = 0.0f;
@@ -175,8 +174,8 @@ int main()
 			bool inlinationChanged = ImGui::SliderFloat(
 				"Light Inclination",
 				&lightInclination,
-				-90.0f,
-				90.0f,
+				-89.0f,
+				89.0f,
 				"%.1f degrees");
 
 			if (firstSetup || azimuthChanged || inlinationChanged)
