@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\include\engine\asset_loader\AssetLoader.h" />
     <ClInclude Include="..\..\include\engine\core\Check.h" />
     <ClInclude Include="..\..\include\engine\core\ItemManager.h" />
     <ClInclude Include="..\..\include\engine\core\NonCopyable.h" />
@@ -24,7 +25,6 @@
     <ClInclude Include="..\..\include\engine\factory\material\MaterialPassIndex.h" />
     <ClInclude Include="..\..\include\engine\factory\material\PhongMaterialModel.h" />
     <ClInclude Include="..\..\include\engine\factory\render_pass\RenderPassFactory.h" />
-    <ClInclude Include="..\..\include\engine\factory\scene\SceneFactory.h" />
     <ClInclude Include="..\..\include\engine\factory\shader\PhongShaderModel.h" />
     <ClInclude Include="..\..\include\engine\factory\shadow\ShadowFactory.h" />
     <ClInclude Include="..\..\include\engine\graphics\framebuffer\Framebuffer.h" />
@@ -87,7 +87,6 @@
     <ClInclude Include="..\..\src\engine\factory\material\MaterialModelT.h" />
     <ClInclude Include="..\..\src\engine\factory\material\PhongMaterialModelC.h" />
     <ClInclude Include="..\..\src\engine\factory\render_pass\RenderPassFactoryC.h" />
-    <ClInclude Include="..\..\src\engine\factory\scene\SceneFactoryC.h" />
     <ClInclude Include="..\..\src\engine\factory\shader\DepthShader.h" />
     <ClInclude Include="..\..\src\engine\factory\shader\FlatColorShader.h" />
     <ClInclude Include="..\..\src\engine\factory\shader\PhongShaderModelC.h" />
@@ -143,7 +142,6 @@
     <ClCompile Include="..\..\src\engine\factory\material\MaterialFactoryC.cpp" />
     <ClCompile Include="..\..\src\engine\factory\material\PhongMaterialModelC.cpp" />
     <ClCompile Include="..\..\src\engine\factory\render_pass\RenderPassFactoryC.cpp" />
-    <ClCompile Include="..\..\src\engine\factory\scene\SceneFactoryC.cpp" />
     <ClCompile Include="..\..\src\engine\factory\shader\DepthShader.cpp" />
     <ClCompile Include="..\..\src\engine\factory\shader\FlatColorShader.cpp" />
     <ClCompile Include="..\..\src\engine\factory\shader\PhongShaderModelC.cpp" />

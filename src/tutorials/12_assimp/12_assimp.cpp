@@ -7,7 +7,7 @@
 #include "engine/core/Check.h"
 #include "engine/math/Rng.h"
 #include "engine/Engine.h"
-#include "engine/factory/scene/SceneFactory.h"
+#include "asset_loader/AssetLoader.h"
 
 #include "imgui/EngineImgui.h"
 
@@ -102,17 +102,14 @@ void createLights(
 int main()
 {
 	gltut::EngineImgui* imgui = nullptr;
-	gltut::SceneFactory* sceneFactory = nullptr;
+	gltut::AssetLoader* assetLoader = nullptr;
 	std::unique_ptr<gltut::Engine> engine;
 
 	GLTUT_CATCH_ALL_BEGIN
 		engine.reset(gltut::createEngine(1024, 768));
 		GLTUT_CHECK(engine, "Failed to create engine");
 
-		sceneFactory = gltut::createSceneFactory(
-			*engine->getDevice(), 
-			*engine->getScene(), 
-			*engine->getFactory()->getMaterial());
+		assetLoader = gltut::createAssetLoader(engine.get());
 
 		engine->getWindow()->setTitle("Normal Maps");
 
@@ -124,7 +121,7 @@ int main()
 		auto* phongShader = materialFactory->createPhongShader(1,0, 0);
 		GLTUT_CHECK(phongShader, "Failed to create Phong shader");
 
-		sceneFactory->loadModel("assets/backpack/backpack.obj", phongShader);
+		assetLoader->loadAsset("assets/backpack/backpack.obj", phongShader);
 
 		std::vector<gltut::GeometryNode*> lights;
 		std::vector<gltut::LightNode*> lightSources;
@@ -211,7 +208,7 @@ int main()
 	GLTUT_CATCH_ALL_END("Failed to run 12 assimp example");
 
 	gltut::deleteEngineImgui(imgui);
-	gltut::deleteSceneFactory(sceneFactory);
+	gltut::deleteAssetLoader(assetLoader);
 
 	return 0;
 }
