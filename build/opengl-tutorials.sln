@@ -39,6 +39,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "12_assimp", "tutorials\12_a
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "asset_loader", "asset_loader\asset_loader.vcxproj", "{273F5551-3D4E-40A9-B5BF-C31944753972}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "13_parallax_mapping", "tutorials\13_parallax_mapping\13_parallax_mapping.vcxproj", "{1AE18231-99DD-4F09-9ACC-CC40746E6343}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -113,6 +115,10 @@ Global
 		{273F5551-3D4E-40A9-B5BF-C31944753972}.Debug|x64.Build.0 = Debug|x64
 		{273F5551-3D4E-40A9-B5BF-C31944753972}.Release|x64.ActiveCfg = Release|x64
 		{273F5551-3D4E-40A9-B5BF-C31944753972}.Release|x64.Build.0 = Release|x64
+		{1AE18231-99DD-4F09-9ACC-CC40746E6343}.Debug|x64.ActiveCfg = Debug|x64
+		{1AE18231-99DD-4F09-9ACC-CC40746E6343}.Debug|x64.Build.0 = Debug|x64
+		{1AE18231-99DD-4F09-9ACC-CC40746E6343}.Release|x64.ActiveCfg = Release|x64
+		{1AE18231-99DD-4F09-9ACC-CC40746E6343}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -131,6 +137,7 @@ Global
 		{75F3418A-4E07-470C-90E3-28E7FEF531C4} = {0397819A-9899-4953-AE17-B1F07ADBB3B9}
 		{173E6C2E-0F7C-45C9-A768-D8875D47B8DD} = {0397819A-9899-4953-AE17-B1F07ADBB3B9}
 		{EBC4FC77-62B3-4648-B17E-A63DEE351139} = {0397819A-9899-4953-AE17-B1F07ADBB3B9}
+		{1AE18231-99DD-4F09-9ACC-CC40746E6343} = {0397819A-9899-4953-AE17-B1F07ADBB3B9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6671FED5-F651-4A55-91AE-C9B03C9D54D5}
