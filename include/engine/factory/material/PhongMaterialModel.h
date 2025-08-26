@@ -23,6 +23,10 @@ public:
 
 	virtual void setNormal(const Texture* normal) noexcept = 0;
 
+	virtual void setDepth(const Texture* height) noexcept = 0;
+
+	virtual void setDepthtScale(float depthScale) noexcept = 0;
+
 	virtual void setShininess(float shininess) noexcept = 0;
 };
 

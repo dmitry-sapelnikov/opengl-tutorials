@@ -32,6 +32,11 @@ gltut::PhongMaterialModel* createPhongMaterialModel(gltut::Engine& engine)
 	GLTUT_CHECK(specularTexture, "Failed to create specular texture");
 	phongMaterialModel->setSpecular(const_cast<gltut::Texture*>(specularTexture));
 
+	gltut::TextureManager::LoadParameters heightMapLoadParams;
+	gltut::Texture* depthTexture = device->getTextures()->load("assets/bricks2_disp.jpg");
+	GLTUT_CHECK(depthTexture, "Failed to create height texture");
+	phongMaterialModel->setDepth(depthTexture);
+
 	gltut::TextureManager::LoadParameters normalMapLoadParams;
 	normalMapLoadParams.invertChannel[1] = true; // Invert the green channel
 	gltut::Texture* normalTexture = device->getTextures()->load(
@@ -117,6 +122,9 @@ int main()
 		GLTUT_CHECK(controller, "Failed to create camera controller");
 		engine->getScene()->addCameraController(controller.get());
 
+		float depthScale = 0.1f;
+		phongMaterialModel->setDepthtScale(depthScale);
+
 		float lightAzimuth = 0.0f;
 		float lightInclination = 0.0f;
 		bool firstSetup = true;
@@ -154,6 +162,11 @@ int main()
 
 				lightNode->setTransform(rotation * gltut::Matrix4::translationMatrix({ 0.0, 0.0f, 20.0f }));
 				firstSetup = false;
+			}
+
+			if (ImGui::SliderFloat("Height Scale", &depthScale, -0.2f, 0.2f, "%.3f"))
+			{
+				phongMaterialModel->setDepthtScale(depthScale);
 			}
 
 			ImGui::End();
