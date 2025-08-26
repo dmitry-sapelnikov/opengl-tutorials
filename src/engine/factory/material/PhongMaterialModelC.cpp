@@ -67,6 +67,7 @@ void PhongMaterialModelC::setSpecular(const Texture* specular) noexcept
 void PhongMaterialModelC::setNormal(const Texture* normal) noexcept
 {
 	getMaterial()[0]->getTextures()->setTexture(normal, 2);
+	getMaterial()[0]->getShaderArguments()->setInt("normalMap", normal != nullptr);
 }
 
 void PhongMaterialModelC::setShininess(float shininess) noexcept

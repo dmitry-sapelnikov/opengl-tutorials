@@ -103,8 +103,8 @@ gltut::PhongMaterialModel* createPhongMaterialModel(
 
 	gltut::GraphicsDevice* device = engine->getDevice();
 	gltut::Texture* diffuseTexture = device->getTextures()->load("assets/brickwall.jpg");
-	//const gltut::Texture* diffuseTexture = device->getTextures()->createSolidColor({ 1.0f, 1.0f, 1.0f, 1.0f });
 	GLTUT_CHECK(diffuseTexture, "Failed to create diffuse texture");
+	phongMaterialModel->setDiffuse(diffuseTexture);
 
 	const gltut::Texture* specularTexture = device->getTextures()->createSolidColor({ 0.5f, 0.5f, 0.5f, });
 	GLTUT_CHECK(specularTexture, "Failed to create specular texture");
@@ -112,9 +112,8 @@ gltut::PhongMaterialModel* createPhongMaterialModel(
 
 	gltut::Texture* normalTexture = device->getTextures()->load("assets/brickwall_normal.jpg");
 	GLTUT_CHECK(normalTexture, "Failed to create normal texture");
-
-	phongMaterialModel->setDiffuse(diffuseTexture);
 	phongMaterialModel->setNormal(normalTexture);
+
 	phongMaterialModel->setShininess(32.0f);
 	return phongMaterialModel;
 }

@@ -118,6 +118,8 @@ static const char* PHONG_FRAGMENT_SHADER = R"(
 uniform sampler2D diffuseSampler;
 uniform sampler2D specularSampler;
 uniform sampler2D normalSampler;
+uniform bool normalMap;
+
 uniform float shininess;
 uniform vec3 viewPos;
 uniform float minShadowMapBias;
@@ -215,11 +217,9 @@ void main()
 	vec3 result = vec3(0.0f);
 
 #if MAX_DIRECTIONAL_LIGHTS + MAX_POINT_LIGHTS + MAX_SPOT_LIGHTS > 0
-	vec3 norm1 = normalize(normal);
-	vec3 norm = texture(normalSampler, texCoord).rgb;
-	norm = norm * 2.0f - 1.0f;
-	norm = norm1 * 0.0000001f + normalize(TBN * norm);
-
+	vec3 norm = normalMap ? 
+		normalize(TBN * (texture(normalSampler, texCoord).rgb * 2.0f - 1.0f)) :
+		normalize(normal);
 	vec3 viewDir = normalize(viewPos - pos);
 	vec3 geomDiffuse = texture(diffuseSampler, texCoord).rgb;
 #endif
