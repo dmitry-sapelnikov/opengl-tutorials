@@ -24,7 +24,7 @@ int main()
 
 		auto* device = engine->getRenderer();
 		auto* scene = engine->getScene();
-		auto* geometry = engine->getFactory()->getGeometry()->createBox(1.0f, 1.0f, 1.0f);
+		auto* geometry = engine->getFactory()->getGeometry()->createBox(1.0f, 1.0f, 1.0f, true, true, true);
 
 		GLTUT_CHECK(geometry != nullptr, "Failed to create geometry")
 

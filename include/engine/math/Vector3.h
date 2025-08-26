@@ -3,6 +3,7 @@
 // Libraries
 #include "engine/core/Check.h"
 #include "engine/math/Functions.h"
+#include "Vector2.h"
 
 namespace gltut
 {
@@ -180,7 +181,7 @@ inline Vector3 operator*(float s, const Vector3& v) noexcept
 	\brief Returns the distance, azimuth, and inclination of the vector,
 	the angles are in radians.
 */
-inline Vector3 getDistanceAzimuthInclination(const Vector3 & v) noexcept
+inline Vector3 getDistanceAzimuthInclination(const Vector3& v) noexcept
 {
 	const float distance = v.length();
 	return isNearZero(distance) ?
@@ -196,10 +197,45 @@ inline Vector3 setDistanceAzimuthInclination(const Vector3& dai) noexcept
 {
 	const float d = dai.x;
 	const float cosInclination = std::cos(dai.z);
-	return Vector3 {
+	return Vector3{
 		d * std::cos(dai.y) * cosInclination,
 		d * std::sin(dai.y) * cosInclination,
 		d * std::sin(dai.z) };
+}
+
+/**
+	\brief Computes the tangent and bitangent vectors for the triangle
+	defined by the three vertices and their texture coordinates.
+	\param v1 The first vertex position
+	\param v2 The second vertex position
+	\param v3 The third vertex position
+	\param uv1 The first vertex texture coordinate
+	\param uv2 The second vertex texture coordinate
+	\param uv3 The third vertex texture coordinate
+
+	\param[out] tangent The computed tangent vector
+	\param[out] bitangent The computed bitangent vector
+*/
+inline void getTangentSpace(
+	const Vector3& v1,
+	const Vector3& v2,
+	const Vector3& v3,
+	const Vector2& uv1,
+	const Vector2& uv2,
+	const Vector2& uv3,
+	Vector3& tangent,
+	Vector3& bitangent) noexcept
+{
+	const Vector3 deltaPos1 = v2 - v1;
+	const Vector3 deltaPos2 = v3 - v1;
+	const Vector2 deltaUV1 = uv2 - uv1;
+	const Vector2 deltaUV2 = uv3 - uv1;
+	const float r = 1.f / (deltaUV1.x * deltaUV2.y - deltaUV1.y * deltaUV2.x);
+	tangent =   (deltaPos1 * deltaUV2.y - deltaPos2 * deltaUV1.y) * r;
+	bitangent = (deltaPos2 * deltaUV1.x - deltaPos1 * deltaUV2.x) * r;
+
+	GLTUT_ASSERT(!tangent.isNearZero());
+	GLTUT_ASSERT(!bitangent.isNearZero());
 }
 
 // End of the namespace gltut

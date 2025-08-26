@@ -40,7 +40,7 @@ void createBoxes(
 	const float GEOMETRY_SIZE = 1.0f;
 	const float STRIDE = 3.0f;
 	auto* boxGeometry = engine.getFactory()->getGeometry()->createBox(
-		GEOMETRY_SIZE, GEOMETRY_SIZE, GEOMETRY_SIZE);
+		GEOMETRY_SIZE, GEOMETRY_SIZE, GEOMETRY_SIZE, true, true, true);
 	GLTUT_CHECK(boxGeometry, "Failed to create geometry");
 
 	gltut::Rng rng;
@@ -207,7 +207,7 @@ int main()
 			engine.get(),
 			phongShader);
 
-		auto* floorGeometry = engine->getFactory()->getGeometry()->createBox(20.0f, 1.0f, 20.0f);
+		auto* floorGeometry = engine->getFactory()->getGeometry()->createBox(20.0f, 1.0f, 20.0f, true, true, true);
 		GLTUT_CHECK(floorGeometry, "Failed to create floor geometry");
 		scene->createGeometry(
 			floorGeometry,

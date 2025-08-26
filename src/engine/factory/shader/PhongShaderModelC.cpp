@@ -70,11 +70,14 @@ uniform mat3 normalMat;
 layout (location = 0) in vec3 inPos;
 layout (location = 1) in vec3 inNormal;
 layout (location = 2) in vec2 inTexCoord;
+layout (location = 3) in vec3 inTangent;
+layout (location = 4) in vec3 inBitangent;
 
 // Outputs
 out vec3 pos;
 out vec3 normal;
 out vec2 texCoord;
+out mat3 TBN;
 
 #if MAX_DIRECTIONAL_LIGHTS > 0
 out vec4 directionalShadowSpacePos[MAX_DIRECTIONAL_LIGHTS];
@@ -91,6 +94,7 @@ void main()
 	pos = vec3(modelPos);
 	normal = normalMat * inNormal;
 	texCoord = inTexCoord;
+	TBN = mat3(normalMat * inTangent, normalMat * inBitangent, normal);
 
 #if MAX_DIRECTIONAL_LIGHTS > 0
 	for (int i = 0; i < MAX_DIRECTIONAL_LIGHTS; ++i)
@@ -113,6 +117,9 @@ static const char* PHONG_FRAGMENT_SHADER = R"(
 // Uniforms
 uniform sampler2D diffuseSampler;
 uniform sampler2D specularSampler;
+uniform sampler2D normalSampler;
+uniform bool normalMap;
+
 uniform float shininess;
 uniform vec3 viewPos;
 uniform float minShadowMapBias;
@@ -122,6 +129,7 @@ uniform float maxShadowMapBias;
 in vec3 pos;
 in vec3 normal;
 in vec2 texCoord;
+in mat3 TBN;
 
 #if MAX_DIRECTIONAL_LIGHTS > 0
 in vec4 directionalShadowSpacePos[MAX_DIRECTIONAL_LIGHTS];
@@ -209,7 +217,9 @@ void main()
 	vec3 result = vec3(0.0f);
 
 #if MAX_DIRECTIONAL_LIGHTS + MAX_POINT_LIGHTS + MAX_SPOT_LIGHTS > 0
-	vec3 norm = normalize(normal);
+	vec3 norm = normalMap ? 
+		normalize(TBN * (texture(normalSampler, texCoord).rgb * 2.0f - 1.0f)) :
+		normalize(normal);
 	vec3 viewDir = normalize(viewPos - pos);
 	vec3 geomDiffuse = texture(diffuseSampler, texCoord).rgb;
 #endif
@@ -354,6 +364,7 @@ PhongShaderModelC::PhongShaderModelC(
 
 	shader->setInt("diffuseSampler", 0);
 	shader->setInt("specularSampler", 1);
+	shader->setInt("normalSampler", 2);
 	shader->setFloat("shininess", DEFAULT_SHINESS);
 	for (u32 i = 0; i < maxDirectionalLights + maxSpotLights; ++i)
 	{

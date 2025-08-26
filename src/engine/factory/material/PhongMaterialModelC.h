@@ -34,6 +34,9 @@ public:
 	// Sets the specular texture
 	void setSpecular(const Texture* specular) noexcept final;
 
+	// Sets the normal texture
+	void setNormal(const Texture* normal) noexcept final;
+
 	// Sets the shininess value
 	void setShininess(float shininess) noexcept final;
 

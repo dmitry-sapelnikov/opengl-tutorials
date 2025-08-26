@@ -33,11 +33,10 @@ default:\
 
 
 #define GLTUT_CATCH_ALL_BEGIN \
-try\
+try \
 {
 
-#define GLTUT_CATCH_ALL_END(message)\
-}\
+#define GLTUT_CATCH_ALL(message)\
 catch (std::exception& e)\
 {\
 	std::cerr << message << ": " << e.what() << std::endl;\
@@ -45,7 +44,11 @@ catch (std::exception& e)\
 catch (...)\
 {\
 	std::cerr << message << std::endl;\
+}
+
+#define GLTUT_CATCH_ALL_END(message)\
 }\
+GLTUT_CATCH_ALL(message)
 
 #define GLTUT_APPLICATION_CATCH \
 catch (const std::exception& e)\

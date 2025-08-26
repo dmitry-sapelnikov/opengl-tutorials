@@ -30,70 +30,265 @@ void addFacesBetweenCircles(
 	}
 }
 
+std::vector<std::pair<Vector3, Vector3>> getTangentBitangent(
+	const Vector3* positions,
+	const u32 positionsCount,
+	const Vector2* textureCoordinates,
+	const u32* indices,
+	const u32 indexCount) noexcept
+{
+	GLTUT_ASSERT(positions != nullptr);
+	GLTUT_ASSERT(positionsCount > 0);
+	GLTUT_ASSERT(textureCoordinates != nullptr);
+	GLTUT_ASSERT(indices != nullptr);
+	GLTUT_ASSERT(indexCount > 0);
+	GLTUT_ASSERT(indexCount % 3 == 0);
+
+	std::vector<std::pair<Vector3, Vector3>> result(positionsCount);
+	// Iterate for each triangle
+	for (u32 i = 0; i < indexCount / 3; ++i)
+	{
+		u32 inds[3];
+		for (u32 j = 0; j < 3; ++j)
+		{
+			inds[j] = indices[i * 3 + j];
+			GLTUT_ASSERT(inds[j] < positionsCount);
+		}
+
+		Vector3 tangent;
+		Vector3 bitangent;
+		getTangentSpace(
+			positions[inds[0]],
+			positions[inds[1]],
+			positions[inds[2]],
+			textureCoordinates[inds[0]],
+			textureCoordinates[inds[1]],
+			textureCoordinates[inds[2]],
+			tangent, 
+			bitangent);
+
+		for (u32 j = 0; j < 3; ++j)
+		{
+			result[inds[j]].first += tangent;
+			result[inds[j]].second += bitangent;
+		}
+	}
+
+	for (auto& tb : result)
+	{
+		tb.first.normalize();
+		tb.second.normalize();
+	}
+	return result;
+}
+
 // End of the anonymous namespace
 }
 
 // Global classes
-Geometry* GeometryFactoryC::createBox(float x, float y, float z) noexcept
+Geometry* GeometryFactoryC::createBox(
+	float x, float y, float z,
+	bool normal,
+	bool textureCoordinates,
+	bool tangentBitangent) noexcept
 {
 	Geometry* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN
-		x *= 0.5f;
-		y *= 0.5f;
-		z *= 0.5f;
+	x *= 0.5f;
+	y *= 0.5f;
+	z *= 0.5f;
 
-		const float vertices[] =
+	const Vector3 positions[] =
+	{
+		// Front
+		{ -x, -y,  z },
+		{  x, -y,  z },
+		{  x,  y,  z },
+		{ -x,  y,  z },
+
+		// Back
+		{ -x, -y, -z },
+		{  x, -y, -z },
+		{  x,  y, -z },
+		{ -x,  y, -z },
+
+		// Left
+		{ -x, -y, -z },
+		{ -x, -y,  z },
+		{ -x,  y,  z },
+		{ -x,  y, -z },
+
+		// Right
+		{  x, -y, -z },
+		{  x, -y,  z },
+		{  x,  y,  z },
+		{  x,  y, -z },
+
+		 // Top
+		{  -x,  y, -z },
+		{   x,  y, -z },
+		{   x,  y,  z },
+		{  -x,  y,  z },
+
+		 // Bottom
+		{  -x, -y, -z },
+		{   x, -y, -z },
+		{   x, -y,  z },
+		{  -x, -y,  z }
+	};
+
+	const Vector3 normals[] =
+	{
+		// Front
+		{ 0.0f, 0.0f,  1.0f },
+		{ 0.0f, 0.0f,  1.0f },
+		{ 0.0f, 0.0f,  1.0f },
+		{ 0.0f, 0.0f,  1.0f },
+
+		// Back
+		{ 0.0f, 0.0f, -1.0f },
+		{ 0.0f, 0.0f, -1.0f },
+		{ 0.0f, 0.0f, -1.0f },
+		{ 0.0f, 0.0f, -1.0f },
+
+		// Left
+		{ -1.0f, 0.0f,  0.0f },
+		{ -1.0f, 0.0f,  0.0f },
+		{ -1.0f, 0.0f,  0.0f },
+		{ -1.0f, 0.0f,  0.0f },
+
+		// Right
+		{ 1.0f, 0.0f,  0.0f },
+		{ 1.0f, 0.0f,  0.0f },
+		{ 1.0f, 0.0f,  0.0f },
+		{ 1.0f, 0.0f,  0.0f },
+
+		 // Top
+		{ 0.0f, 1.0f,  0.0f },
+		{ 0.0f, 1.0f,  0.0f },
+		{ 0.0f, 1.0f,  0.0f },
+		{ 0.0f, 1.0f,  0.0f },
+
+		 // Bottom
+		{ 0.0f, -1.0f, 0.0f },
+		{ 0.0f, -1.0f, 0.0f },
+		{ 0.0f, -1.0f, 0.0f },
+		{ 0.0f, -1.0f, 0.0f }
+	};
+
+	const Vector2 textureCoordinates[] =
+	{
+		// Front
+		{ 0.0f, 0.0f },
+		{ 1.0f, 0.0f },
+		{ 1.0f, 1.0f },
+		{ 0.0f, 1.0f },
+
+		// Back
+		{ 0.0f, 0.0f },
+		{ 1.0f, 0.0f },
+		{ 1.0f, 1.0f },
+		{ 0.0f, 1.0f },
+
+		// Left
+		{ 0.0f, 0.0f },
+		{ 1.0f, 0.0f },
+		{ 1.0f, 1.0f },
+		{ 0.0f, 1.0f },
+
+		// Right
+		{ 0.0f, 0.0f },
+		{ 1.0f, 0.0f },
+		{ 1.0f, 1.0f },
+		{ 0.0f, 1.0f },
+
+		// Top
+		{ 0.0f, 0.0f },
+		{ 1.0f, 0.0f },
+		{ 1.0f, 1.0f },
+		{ 0.0f, 1.0f },
+
+		 // Bottom
+		{ 0.0f, 0.0f },
+		{ 1.0f, 0.0f },
+		{ 1.0f, 1.0f },
+		{ 0.0f, 1.0f }
+	};
+
+	u32 indices[] =
+	{
+		0, 1, 2, 2, 3, 0,
+		5, 4, 6, 6, 4, 7,
+		8, 9, 10, 10, 11, 8,
+		13, 12, 14, 14, 12, 15,
+		17, 16, 18, 18, 16, 19,
+		20, 21, 22, 22, 23, 20
+	};
+
+	std::vector<std::pair<Vector3, Vector3>> tb;
+	if (tangentBitangent)
+	{
+		tb = getTangentBitangent(
+			positions,
+			24,
+			textureCoordinates,
+			indices,
+			36);
+	}
+
+	std::vector<float> vertexData;
+	for (size_t i = 0; i < 24; ++i)
+	{
+		vertexData.push_back(positions[i].x);
+		vertexData.push_back(positions[i].y);
+		vertexData.push_back(positions[i].z);
+
+		if (normal)
 		{
-			// Front
-			-x, -y,  z,  0.0f, 0.0f,  1.0f, 0.0f, 0.0f,
-			 x, -y,  z,  0.0f, 0.0f,  1.0f, 1.0f, 0.0f,
-			 x,  y,  z,  0.0f, 0.0f,  1.0f, 1.0f, 1.0f,
-			-x,  y,  z,  0.0f, 0.0f,  1.0f, 0.0f, 1.0f,
+			vertexData.push_back(normals[i].x);
+			vertexData.push_back(normals[i].y);
+			vertexData.push_back(normals[i].z);
+		}
 
-			// Back
-			-x, -y, -z,  0.0f, 0.0f, -1.0f, 0.0f, 0.0f,
-			 x, -y, -z,  0.0f, 0.0f, -1.0f, 1.0f, 0.0f,
-			 x,  y, -z,  0.0f, 0.0f, -1.0f, 1.0f, 1.0f,
-			-x,  y, -z,  0.0f, 0.0f, -1.0f, 0.0f, 1.0f,
-
-			// Left
-			-x, -y, -z, -1.0f, 0.0f,  0.0f, 0.0f, 0.0f,
-			-x, -y,  z, -1.0f, 0.0f,  0.0f, 1.0f, 0.0f,
-			-x,  y,  z, -1.0f, 0.0f,  0.0f, 1.0f, 1.0f,
-			-x,  y, -z, -1.0f, 0.0f,  0.0f, 0.0f, 1.0f,
-
-			// Right
-			 x, -y, -z,  1.0f, 0.0f,  0.0f, 0.0f, 0.0f,
-			 x, -y,  z,  1.0f, 0.0f,  0.0f, 1.0f, 0.0f,
-			 x,  y,  z,  1.0f, 0.0f,  0.0f, 1.0f, 1.0f,
-			 x,  y, -z,  1.0f, 0.0f,  0.0f, 0.0f, 1.0f,
-
-			 // Top
-			 -x,  y, -z,  0.0f, 1.0f,  0.0f, 0.0f, 0.0f,
-			  x,  y, -z,  0.0f, 1.0f,  0.0f, 1.0f, 0.0f,
-			  x,  y,  z,  0.0f, 1.0f,  0.0f, 1.0f, 1.0f,
-			 -x,  y,  z,  0.0f, 1.0f,  0.0f, 0.0f, 1.0f,
-
-			 // Bottom
-			 -x, -y, -z,  0.0f, -1.0f, 0.0f, 0.0f, 0.0f,
-			  x, -y, -z,  0.0f, -1.0f, 0.0f, 1.0f, 0.0f,
-			  x, -y,  z,  0.0f, -1.0f, 0.0f, 1.0f, 1.0f,
-			 -x, -y,  z,  0.0f, -1.0f, 0.0f, 0.0f, 1.0f
-		};
-
-		u32 indices[] =
+		if (textureCoordinates)
 		{
-			0, 1, 2, 2, 3, 0,
-			5, 4, 6, 6, 4, 7,
-			8, 9, 10, 10, 11, 8,
-			13, 12, 14, 14, 12, 15,
-			17, 16, 18, 18, 16, 19,
-			20, 21, 22, 22, 23, 20
-		};
+			vertexData.push_back(textureCoordinates[i].x);
+			vertexData.push_back(textureCoordinates[i].y);
+		}
 
-		result = mRenderer.getGeometries()->create(VERTEX_FORMAT_POS3_NORM3_TEX2, 24, vertices, 36, indices);
+		if (tangentBitangent)
+		{
+			vertexData.push_back(tb[i].first.x);
+			vertexData.push_back(tb[i].first.y);
+			vertexData.push_back(tb[i].first.z);
+			vertexData.push_back(tb[i].second.x);
+			vertexData.push_back(tb[i].second.y);
+			vertexData.push_back(tb[i].second.z);
+		}
+	}
+
+	VertexFormat vertexFormat = VERTEX_FORMAT_POS3;
+	u32 componentIndex = 1;
+	if (normal)
+	{
+		vertexFormat.setComponentSize(componentIndex++, 3);
+	}
+
+	if (textureCoordinates)
+	{
+		vertexFormat.setComponentSize(componentIndex++, 2);
+	}
+
+	if (tangentBitangent)
+	{
+		vertexFormat.setComponentSize(componentIndex++, 3);
+		vertexFormat.setComponentSize(componentIndex++, 3);
+	}
+
+	result = mRenderer.getGeometries()->create(vertexFormat, 24, vertexData.data(), 36, indices);
+
 	GLTUT_CATCH_ALL_END("Failed to create a box geometry")
-	return result;
+		return result;
 }
 
 Geometry* GeometryFactoryC::createSphere(float radius, u32 subdivisions) noexcept
@@ -102,55 +297,55 @@ Geometry* GeometryFactoryC::createSphere(float radius, u32 subdivisions) noexcep
 	GLTUT_CATCH_ALL_BEGIN
 		GLTUT_CHECK(subdivisions >= 1, "Subdivisions must be >= 1");
 
-		using Vertex = std::array<float, 8>;
+	using Vertex = std::array<float, 8>;
 
-		std::vector<Vertex> vertices;
-		const u32 latSubdivisions = 2 * subdivisions;
-		const u32 lonSubdivisions = 4 * subdivisions;
+	std::vector<Vertex> vertices;
+	const u32 latSubdivisions = 2 * subdivisions;
+	const u32 lonSubdivisions = 4 * subdivisions;
 
-		const float angleDelta = PI / latSubdivisions;
-		for (u32 latInd = 0; latInd <= latSubdivisions; ++latInd)
+	const float angleDelta = PI / latSubdivisions;
+	for (u32 latInd = 0; latInd <= latSubdivisions; ++latInd)
+	{
+		float latitude = angleDelta * static_cast<float>(latInd) - 0.5f * PI;
+		for (u32 lonInd = 0; lonInd <= lonSubdivisions; ++lonInd)
 		{
-			float latitude = angleDelta * static_cast<float>(latInd) - 0.5f * PI;
-			for (u32 lonInd = 0; lonInd <= lonSubdivisions; ++lonInd)
-			{
-				const float longitude = angleDelta * static_cast<float>(lonInd);
-				const Vector3 normal = setDistanceAzimuthInclination({ 1.0, longitude, latitude });
+			const float longitude = angleDelta * static_cast<float>(lonInd);
+			const Vector3 normal = setDistanceAzimuthInclination({ 1.0, longitude, latitude });
 
-				// setDistanceAzimuthInclination uses z-axis as the up vector, so
-				// so we need to swap the x and z components to use y-axis as the up vector
-				vertices.push_back({
-					radius * normal.x,
-					radius * normal.z,
-					radius * normal.y,
-					normal.x,
-					normal.z,
-					normal.y,
-					static_cast<float>(lonInd) / lonSubdivisions,
-					static_cast<float>(latInd) / latSubdivisions });
-			}
+			// setDistanceAzimuthInclination uses z-axis as the up vector, so
+			// so we need to swap the x and z components to use y-axis as the up vector
+			vertices.push_back({
+				radius * normal.x,
+				radius * normal.z,
+				radius * normal.y,
+				normal.x,
+				normal.z,
+				normal.y,
+				static_cast<float>(lonInd) / lonSubdivisions,
+				static_cast<float>(latInd) / latSubdivisions });
 		}
+	}
 
-		std::vector<u32> indices;
-		for (u32 latitudeIndex = 0; latitudeIndex < latSubdivisions; ++latitudeIndex)
-		{
-			addFacesBetweenCircles(
-				latitudeIndex * (lonSubdivisions + 1),
-				(latitudeIndex + 1) * (lonSubdivisions + 1),
-				lonSubdivisions + 1,
-				indices);
-		}
+	std::vector<u32> indices;
+	for (u32 latitudeIndex = 0; latitudeIndex < latSubdivisions; ++latitudeIndex)
+	{
+		addFacesBetweenCircles(
+			latitudeIndex * (lonSubdivisions + 1),
+			(latitudeIndex + 1) * (lonSubdivisions + 1),
+			lonSubdivisions + 1,
+			indices);
+	}
 
-		const u32 vertexCount = static_cast<u32>(vertices.size());
-		result = mRenderer.getGeometries()->create(
-			VERTEX_FORMAT_POS3_NORM3_TEX2,
-			vertexCount,
-			vertices[0].data(),
-			static_cast<u32>(indices.size()),
-			indices.data());
+	const u32 vertexCount = static_cast<u32>(vertices.size());
+	result = mRenderer.getGeometries()->create(
+		VERTEX_FORMAT_POS3_NORM3_TEX2,
+		vertexCount,
+		vertices[0].data(),
+		static_cast<u32>(indices.size()),
+		indices.data());
 
 	GLTUT_CATCH_ALL_END("Failed to create a sphere geometry")
-	return result;
+		return result;
 }
 
 // End of the namespace gltut
