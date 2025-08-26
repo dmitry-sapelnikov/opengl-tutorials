@@ -70,6 +70,20 @@ void PhongMaterialModelC::setNormal(const Texture* normal) noexcept
 	getMaterial()[0]->getShaderArguments()->setInt("normalMap", normal != nullptr);
 }
 
+void PhongMaterialModelC::setDepth(const Texture* height) noexcept
+{
+	getMaterial()[0]->getTextures()->setTexture(height, 3);
+	if (height == nullptr)
+	{
+		setDepthtScale(0.0f);
+	}
+}
+
+void PhongMaterialModelC::setDepthtScale(float depthScale) noexcept
+{
+	getMaterial()[0]->getShaderArguments()->setFloat("depthScale", depthScale);
+}
+
 void PhongMaterialModelC::setShininess(float shininess) noexcept
 {
 	getMaterial()[0]->getShaderArguments()->setFloat("shininess", shininess);

@@ -10,7 +10,7 @@ class PhongShaderModel
 {
 public:
 	// The number of texture slots used by the Phong shader
-	static constexpr u32 TEXTURE_SLOTS_COUNT = 3;
+	static constexpr u32 TEXTURE_SLOTS_COUNT = 4;
 
 	// The default shininess value
 	static constexpr float DEFAULT_SHINESS = 32.0f;

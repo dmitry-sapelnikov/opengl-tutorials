@@ -37,6 +37,12 @@ public:
 	// Sets the normal texture
 	void setNormal(const Texture* normal) noexcept final;
 
+	// Sets the height texture
+	void setDepth(const Texture* height) noexcept final;
+
+	// Sets the height scale
+	void setDepthtScale(float depthScale) noexcept final;
+
 	// Sets the shininess value
 	void setShininess(float shininess) noexcept final;
 

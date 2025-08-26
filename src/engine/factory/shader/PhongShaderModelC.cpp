@@ -78,6 +78,8 @@ out vec3 pos;
 out vec3 normal;
 out vec2 texCoord;
 out mat3 TBN;
+out vec3 tbnLocalViewPos;
+out vec3 tbnLocalPos;
 
 #if MAX_DIRECTIONAL_LIGHTS > 0
 out vec4 directionalShadowSpacePos[MAX_DIRECTIONAL_LIGHTS];
@@ -95,6 +97,11 @@ void main()
 	normal = normalMat * inNormal;
 	texCoord = inTexCoord;
 	TBN = mat3(normalMat * inTangent, normalMat * inBitangent, normal);
+
+	mat3 invTBN = transpose(TBN);
+	vec3 localViewDir = viewPos - pos;
+	tbnLocalViewPos = invTBN * viewPos;
+	tbnLocalPos = invTBN * pos;
 
 #if MAX_DIRECTIONAL_LIGHTS > 0
 	for (int i = 0; i < MAX_DIRECTIONAL_LIGHTS; ++i)
@@ -120,6 +127,9 @@ uniform sampler2D specularSampler;
 uniform sampler2D normalSampler;
 uniform bool normalMap;
 
+uniform sampler2D depthSampler;
+uniform float depthScale;
+
 uniform float shininess;
 uniform vec3 viewPos;
 uniform float minShadowMapBias;
@@ -130,6 +140,8 @@ in vec3 pos;
 in vec3 normal;
 in vec2 texCoord;
 in mat3 TBN;
+in vec3 tbnLocalViewPos;
+in vec3 tbnLocalPos;
 
 #if MAX_DIRECTIONAL_LIGHTS > 0
 in vec4 directionalShadowSpacePos[MAX_DIRECTIONAL_LIGHTS];
@@ -212,16 +224,58 @@ float getShadowFactorPerspectiveProjection(
 	return shadow;
 }
 
+vec2 parallaxMapping(vec2 texCoords, vec3 viewDir)
+{ 
+	// number of depth layers
+	const float minLayers = 8;
+	const float maxLayers = 32;
+
+	float depthStep = 1.0 / mix(maxLayers, minLayers, abs(viewDir.z));
+	float curDepth = 0.0;
+	vec2 deltaTexCoords = viewDir.xy * depthScale * depthStep / viewDir.z;
+  
+	vec2 curTexCoords = texCoords;
+	float curDepthMapValue = texture(depthSampler, curTexCoords).r;
+
+	while(curDepth < curDepthMapValue)
+	{
+		curTexCoords -= deltaTexCoords;
+		curDepthMapValue = texture(depthSampler, curTexCoords).r;
+		curDepth += depthStep;
+	}
+
+	// get texture coordinates before collision (reverse operations)
+	vec2 prevTexCoords = curTexCoords + deltaTexCoords;
+
+	// get depth after and before collision for linear interpolation
+	float depthAfter  = curDepthMapValue - curDepth;
+	float depthBefore = texture(depthSampler, prevTexCoords).r - curDepth + depthStep;
+ 
+	// interpolation of texture coordinates
+	return mix(prevTexCoords, curTexCoords, depthBefore / (depthBefore - depthAfter));
+}
+
 void main()
 {
 	vec3 result = vec3(0.0f);
 
 #if MAX_DIRECTIONAL_LIGHTS + MAX_POINT_LIGHTS + MAX_SPOT_LIGHTS > 0
+	vec2 tCoord = texCoord;
+	if (depthScale > 0.0f)
+	{
+		vec3 viewDir = normalize(tbnLocalViewPos - tbnLocalPos);
+		tCoord = parallaxMapping(texCoord, viewDir);
+		if (tCoord.x < 0.0f || tCoord.x > 1.0f || tCoord.y < 0.0f || tCoord.y > 1.0f)
+		{
+			discard;
+		}
+	}
+
 	vec3 norm = normalMap ? 
-		normalize(TBN * (texture(normalSampler, texCoord).rgb * 2.0f - 1.0f)) :
+		normalize(TBN * (texture(normalSampler, tCoord).rgb * 2.0f - 1.0f)) :
 		normalize(normal);
 	vec3 viewDir = normalize(viewPos - pos);
-	vec3 geomDiffuse = texture(diffuseSampler, texCoord).rgb;
+	vec3 geomDiffuse = texture(diffuseSampler, tCoord).rgb;
 #endif
 
 #if MAX_DIRECTIONAL_LIGHTS > 0
@@ -239,7 +293,7 @@ void main()
 		vec3 reflectDir = reflect(-lightDir, norm);
 		float dot_specular = max(dot(viewDir, reflectDir), 0.0);
 		float spec = pow(dot_specular, shininess);
-		vec3 specular = spec * directionalLights[i].color.specular * texture(specularSampler, texCoord).rgb;
+		vec3 specular = spec * directionalLights[i].color.specular * texture(specularSampler, tCoord).rgb;
 
 		float shadowBias = mix(minShadowMapBias, maxShadowMapBias, 1.0 - abs(normalLightDot));
 		result += (diffuse + specular) * 
@@ -262,7 +316,7 @@ void main()
 		// Specular
 		vec3 reflectDir = reflect(-lightDir, norm);
 		float spec = pow(max(dot(viewDir, reflectDir), 0.0), shininess);
-		vec3 specular = spec * pointLights[i].color.specular * texture(specularSampler, texCoord).rgb;
+		vec3 specular = spec * pointLights[i].color.specular * texture(specularSampler, tCoord).rgb;
 
 		// Attenuation
 		float attenuation = 1.0f / (
@@ -299,7 +353,7 @@ void main()
 			// Specular
 			vec3 reflectDir = reflect(-lightDir, norm);
 			float spec = pow(max(dot(viewDir, reflectDir), 0.0), shininess);
-			vec3 specular = spec * spotLights[i].color.specular * texture(specularSampler, texCoord).rgb;
+			vec3 specular = spec * spotLights[i].color.specular * texture(specularSampler, tCoord).rgb;
 
 			// Attenuation
 			float attenuation = 1.0f / (
@@ -365,6 +419,7 @@ PhongShaderModelC::PhongShaderModelC(
 	shader->setInt("diffuseSampler", 0);
 	shader->setInt("specularSampler", 1);
 	shader->setInt("normalSampler", 2);
+	shader->setInt("depthSampler", 3);
 	shader->setFloat("shininess", DEFAULT_SHINESS);
 	for (u32 i = 0; i < maxDirectionalLights + maxSpotLights; ++i)
 	{
