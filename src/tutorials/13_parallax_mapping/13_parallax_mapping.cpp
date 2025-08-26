@@ -24,7 +24,7 @@ gltut::PhongMaterialModel* createPhongMaterialModel(gltut::Engine& engine)
 	GLTUT_CHECK(phongMaterialModel, "Failed to create Phong material model");
 
 	gltut::GraphicsDevice* device = engine.getDevice();
-	gltut::Texture* diffuseTexture = device->getTextures()->load("assets/bricks2.jpg");
+	gltut::Texture* diffuseTexture = device->getTextures()->load("assets/wood.png");
 	GLTUT_CHECK(diffuseTexture, "Failed to create diffuse texture");
 	phongMaterialModel->setDiffuse(diffuseTexture);
 
@@ -32,15 +32,14 @@ gltut::PhongMaterialModel* createPhongMaterialModel(gltut::Engine& engine)
 	GLTUT_CHECK(specularTexture, "Failed to create specular texture");
 	phongMaterialModel->setSpecular(const_cast<gltut::Texture*>(specularTexture));
 
-	gltut::TextureManager::LoadParameters heightMapLoadParams;
-	gltut::Texture* depthTexture = device->getTextures()->load("assets/bricks2_disp.jpg");
-	GLTUT_CHECK(depthTexture, "Failed to create height texture");
+	gltut::Texture* depthTexture = device->getTextures()->load("assets/toy_box_disp.png");
+	GLTUT_CHECK(depthTexture, "Failed to create depth texture");
 	phongMaterialModel->setDepth(depthTexture);
 
 	gltut::TextureManager::LoadParameters normalMapLoadParams;
 	normalMapLoadParams.invertChannel[1] = true; // Invert the green channel
 	gltut::Texture* normalTexture = device->getTextures()->load(
-		"assets/bricks2_normal.jpg",
+		"assets/toy_box_normal.png",
 		{},
 		normalMapLoadParams);
 
@@ -87,7 +86,7 @@ int main()
 	{
 		engine.reset(gltut::createEngine(1024, 768));
 		GLTUT_CHECK(engine, "Failed to create engine");
-		engine->getWindow()->setTitle("Normal Maps");
+		engine->getWindow()->setTitle("Parallax Mapping");
 
 		// Create the Imgui connector
 		imgui = gltut::createEngineImgui(engine.get());
