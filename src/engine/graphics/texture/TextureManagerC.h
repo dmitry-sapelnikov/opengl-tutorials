@@ -32,7 +32,8 @@ public:
 	/// Loads a texture from an image file
 	Texture* load(
 		const char* imagePath,
-		const TextureParameters& parameters) noexcept final;
+		const TextureParameters& textureParameters,
+		const LoadParameters& loadParameters) noexcept final;
 
 	/// Creates a solid color texture
 	const Texture* createSolidColor(const Color& color) noexcept final;

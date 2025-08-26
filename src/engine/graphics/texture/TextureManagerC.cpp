@@ -7,6 +7,29 @@
 namespace gltut
 {
 
+// Local functions
+namespace
+{
+
+// Inverts a specific channel in the image data
+void invertChannel(
+	unsigned char* data,
+	u32 pixelCount,
+	u32 channelIndex,
+	u32 channelCount) noexcept
+{
+	GLTUT_ASSERT(data != nullptr);
+	GLTUT_ASSERT(channelIndex < channelCount);
+
+	for (u32 i = 0; i < pixelCount; ++i)
+	{
+		data[i * channelCount + channelIndex] = 255 - data[i * channelCount + channelIndex];
+	}
+}
+
+// End of the anonymous namespace
+}
+
 // Global classes
 Texture* TextureManagerC::create(
 	const void* data,
@@ -27,16 +50,18 @@ Texture* TextureManagerC::create(
 
 Texture* TextureManagerC::load(
 	const char* imagePath,
-	const TextureParameters& parameters) noexcept
+	const TextureParameters& textureParameters,
+	const LoadParameters& loadParameters) noexcept
 {
-	void* data = nullptr;
+	unsigned char* data = nullptr;
 	Texture* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN
 		stbi_set_flip_vertically_on_load(true);
 		int width = 0;
 		int height = 0;
 		int channels = 0;
-		void* data = stbi_load(imagePath, &width, &height, &channels, 0);
+		data = stbi_load(imagePath, &width, &height, &channels, 0);
+
 		GLTUT_CHECK(data != nullptr, "Failed to load image");
 		GLTUT_CHECK(width > 0, "Image width <= 0");
 		GLTUT_CHECK(height > 0, "Image height <= 0");
@@ -62,11 +87,23 @@ Texture* TextureManagerC::load(
 		GLTUT_UNEXPECTED_SWITCH_DEFAULT_CASE(channels)
 		}
 
+		for (u32 i = 0; i < static_cast<u32>(channels); ++i)
+		{
+			if (loadParameters.invertChannel[i])
+			{
+				invertChannel(
+					data,
+					static_cast<u32>(width * height),
+					i,
+					static_cast<u32>(channels));
+			}
+		}
+
 		result = create(
 			data,
 			{ static_cast<u32>(width), static_cast<u32>(height) },
 			format,
-			parameters);
+			textureParameters);
 	GLTUT_CATCH_ALL_END("Failed to load texture from file: " + std::string(imagePath))
 
 	stbi_image_free(data);
