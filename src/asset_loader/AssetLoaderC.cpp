@@ -1,24 +1,17 @@
 // Includes
-#include "SceneFactoryC.h"
+#include "AssetLoaderC.h"
 #include <filesystem>
-#include "engine/core/Check.h"
 
 namespace gltut
 {
 
 // Global classes
-SceneFactoryC::SceneFactoryC(
-	GraphicsDevice& device,
-	Scene& scene,
-	MaterialFactory& materialFactory) :
-
-	mDevice(device),
-	mScene(scene),
-	mMaterialFactory(materialFactory)
+AssetLoaderC::AssetLoaderC(Engine& engine) noexcept :
+	mEngine(engine)
 {
 }
 
-SceneNode* SceneFactoryC::loadModel(
+SceneNode* AssetLoaderC::loadAsset(
 	const char* filePath,
 	PhongShaderModel* phongShader) noexcept
 {
@@ -30,14 +23,15 @@ SceneNode* SceneFactoryC::loadModel(
 	}
 
 	// Load assets/backpack.obj using assimp
-	GLTUT_CATCH_ALL_BEGIN
+	try
+	{
 		Assimp::Importer importer;
-	const aiScene* scene = importer.ReadFile(
-		filePath,
-		aiProcess_Triangulate |
-		aiProcess_FlipUVs |
-		aiProcess_GenSmoothNormals |
-		aiProcess_CalcTangentSpace);
+		const aiScene* scene = importer.ReadFile(
+			filePath,
+			aiProcess_Triangulate |
+			aiProcess_FlipUVs |
+			aiProcess_GenSmoothNormals |
+			aiProcess_CalcTangentSpace);
 
 		GLTUT_CHECK(
 			scene != nullptr && !(scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE) && scene->mRootNode,
@@ -59,13 +53,12 @@ SceneNode* SceneFactoryC::loadModel(
 			nullptr,
 			geometries,
 			geometryMaterials);
-
-	GLTUT_CATCH_ALL_END("Failed to load a geometry node from a file");
-
+	}
+	GLTUT_CATCH_ALL("Failed to load an asset from a file");
 	return nullptr;
 }
 
-std::vector<PhongMaterialModel*> SceneFactoryC::createMaterials(
+std::vector<PhongMaterialModel*> AssetLoaderC::createMaterials(
 	const std::string& modelDirectory,
 	const aiScene& scene,
 	const PhongShaderModel& phongShader)
@@ -76,7 +69,8 @@ std::vector<PhongMaterialModel*> SceneFactoryC::createMaterials(
 		for (u32 matInd = 0; matInd < scene.mNumMaterials; ++matInd)
 		{
 			aiMaterial* aiMat = scene.mMaterials[matInd];
-			PhongMaterialModel* material = mMaterialFactory.createPhongMaterial(&phongShader, true);
+			PhongMaterialModel* material =
+				mEngine.getFactory()->getMaterial()->createPhongMaterial(&phongShader, true);
 			GLTUT_CHECK(material != nullptr, "Failed to create a Phong material model");
 
 			material->setDiffuse(loadMaterialTexture(modelDirectory, aiMat, aiTextureType_DIFFUSE));
@@ -101,7 +95,7 @@ std::vector<PhongMaterialModel*> SceneFactoryC::createMaterials(
 	return result;
 }
 
-Texture* SceneFactoryC::loadMaterialTexture(
+Texture* AssetLoaderC::loadMaterialTexture(
 	const std::string& modelDirectory,
 	aiMaterial* mat,
 	aiTextureType type)
@@ -123,10 +117,10 @@ Texture* SceneFactoryC::loadMaterialTexture(
 		texturePath = (std::filesystem::path(modelDirectory) / std::filesystem::path(texturePath.C_Str())).string().c_str();
 	}
 
-	return mDevice.getTextures()->load(texturePath.C_Str());
+	return mEngine.getDevice()->getTextures()->load(texturePath.C_Str());
 }
 
-SceneNode* SceneFactoryC::createCompoundGeometryNode(
+SceneNode* AssetLoaderC::createCompoundGeometryNode(
 	aiNode* node,
 	SceneNode* parent,
 	const std::vector<Geometry*>& geometries,
@@ -141,7 +135,7 @@ SceneNode* SceneFactoryC::createCompoundGeometryNode(
 		}
 	}
 
-	SceneNode* result = mScene.createGroup(transform, parent);
+	SceneNode* result = mEngine.getScene()->createGroup(transform, parent);
 
 	for (u32 meshInd = 0; meshInd < node->mNumMeshes; ++meshInd)
 	{
@@ -151,7 +145,7 @@ SceneNode* SceneFactoryC::createCompoundGeometryNode(
 		// Obtain the transform
 		const PhongMaterialModel* material = geometryMaterials.at(node->mMeshes[meshInd]);
 		GLTUT_CHECK(material != nullptr, "Invalid material index");
-		mScene.createGeometry(geometry, material->getMaterial(), Matrix4::identity(), result);
+		mEngine.getScene()->createGeometry(geometry, material->getMaterial(), Matrix4::identity(), result);
 	}
 
 	for (u32 childInd = 0; childInd < node->mNumChildren; ++childInd)
@@ -165,7 +159,7 @@ SceneNode* SceneFactoryC::createCompoundGeometryNode(
 	return result;
 }
 
-Geometry* SceneFactoryC::createGeometry(aiMesh* mesh)
+Geometry* AssetLoaderC::createGeometry(aiMesh* mesh)
 {
 	// data to fill
 	std::vector<float> vertices;
@@ -238,7 +232,7 @@ Geometry* SceneFactoryC::createGeometry(aiMesh* mesh)
 
 	PhongMaterialModel* material = nullptr;
 
-	return mDevice.getGeometries()->create(
+	return mEngine.getDevice()->getGeometries()->create(
 		vertexFormat,
 		static_cast<u32>(vertices.size() / vertexFormat.getTotalSize()),
 		vertices.data(),
@@ -246,7 +240,7 @@ Geometry* SceneFactoryC::createGeometry(aiMesh* mesh)
 		indices.data());
 }
 
-void SceneFactoryC::processMeshes(
+void AssetLoaderC::processMeshes(
 	const aiScene& scene,
 	const std::vector<PhongMaterialModel*>& materials,
 	std::vector<Geometry*>& geometries,
@@ -274,28 +268,28 @@ void SceneFactoryC::processMeshes(
 	{
 		for (auto* geometry : geometries)
 		{
-			if (geometry != nullptr)
-			{
-				mDevice.getGeometries()->remove(geometry);
-			}
+			mEngine.getDevice()->getGeometries()->remove(geometry);
 		}
 		throw;
 	}
 }
 
-SceneFactory* createSceneFactory(
-	GraphicsDevice& device,
-	Scene& scene,
-	MaterialFactory& materialFactory) noexcept
+AssetLoader* createAssetLoader(Engine* engine) noexcept
 {
-	SceneFactory* result = nullptr;
+	GLTUT_ASSERT(engine != nullptr);
+	if (engine == nullptr)
+	{
+		return nullptr;
+	}
+
+	AssetLoader* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN
-		result = new SceneFactoryC(device, scene, materialFactory);
+		result = new AssetLoaderC(*engine);
 	GLTUT_CATCH_ALL_END("Failed to create scene factory");
 	return result;
 }
 
-void deleteSceneFactory(SceneFactory* factory) noexcept
+void deleteAssetLoader(AssetLoader* factory) noexcept
 {
 	delete factory;
 }

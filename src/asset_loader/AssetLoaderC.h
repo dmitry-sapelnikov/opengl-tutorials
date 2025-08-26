@@ -6,28 +6,23 @@
 #include <assimp/postprocess.h>
 
 #include "engine/core/NonCopyable.h"
-#include "engine/scene/Scene.h"
-#include "engine/factory/material/MaterialFactory.h"
-#include "engine/factory/scene/SceneFactory.h"
+#include "asset_loader/AssetLoader.h"
 
 namespace gltut
 {
 
-/// Implementation of the SceneFactory class
-class SceneFactoryC final : public SceneFactory, public NonCopyable
+/// Implementation of the AssetLoader class
+class AssetLoaderC final : public AssetLoader, public NonCopyable
 {
 public:
 	// Constructor
-	SceneFactoryC(
-		GraphicsDevice& device,
-		Scene& scene,
-		MaterialFactory& materialFactory);
+	explicit AssetLoaderC(Engine& engine) noexcept;
 
 	/**
 		\brief Loads a geometry node and its children from a file
 		\return The geometry node if it was loaded successfully, nullptr otherwise
 	*/
-	SceneNode* loadModel(
+	SceneNode* loadAsset(
 		const char* filePath,
 		PhongShaderModel* phongShader) noexcept final;
 
@@ -56,14 +51,8 @@ private:
 		const std::vector<Geometry*>& geometries,
 		const std::vector<PhongMaterialModel*>& geometryMaterials);
 
-	/// The graphics device used to create resources
-	GraphicsDevice& mDevice;
-
-	/// The target scene
-	Scene& mScene;
-
-	/// The material factory used to create the materials
-	MaterialFactory& mMaterialFactory;
+	/// Reference to the engine
+	Engine& mEngine;
 };
 
 // End of the namespace gltut
