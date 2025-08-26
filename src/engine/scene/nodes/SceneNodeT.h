@@ -38,7 +38,7 @@ public:
 	}
 
 	/// Sets the transform
-	void setTransform(const Matrix4& transform) noexcept override
+	void setTransform(const Matrix4& transform) noexcept final
 	{
 		mTransform = transform;
 		updateGlobalTransform();
@@ -126,17 +126,13 @@ public:
 		return index < mChildren.size() ? mChildren[index] : nullptr;
 	}
 
-private:
+protected:
 	/// Updates the global transform
-	void updateGlobalTransform() noexcept final
+	virtual void updateGlobalTransform() noexcept
 	{
-		mGlobalTransform = mTransform;
-		const SceneNode* parent = mParent;
-		while (parent != nullptr)
-		{
-			mGlobalTransform = parent->getTransform() * mGlobalTransform;
-			parent = parent->getParent();
-		}
+		mGlobalTransform = mParent != nullptr ? 
+			mParent->getGlobalTransform() * mTransform :
+			mTransform;
 
 		for (SceneNode* child : mChildren)
 		{
@@ -144,6 +140,7 @@ private:
 		}
 	}
 
+private:
 	/// Sets the parent node. For internal use only.
 	void setParent(SceneNode* parent) noexcept final
 	{

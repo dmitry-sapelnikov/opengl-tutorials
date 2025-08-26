@@ -121,7 +121,8 @@ int main()
 		auto* phongShader = materialFactory->createPhongShader(1,0, 0);
 		GLTUT_CHECK(phongShader, "Failed to create Phong shader");
 
-		assetLoader->loadAsset("assets/backpack/backpack.obj", phongShader);
+		auto* backpack = assetLoader->loadAsset("assets/backpack/backpack.obj", phongShader);
+		backpack->setTransform(gltut::Matrix4::scaleMatrix({ 2.0f, 2.0f, 2.0f }));
 
 		std::vector<gltut::GeometryNode*> lights;
 		std::vector<gltut::LightNode*> lightSources;

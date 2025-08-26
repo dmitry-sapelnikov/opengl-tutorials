@@ -29,14 +29,14 @@ public:
 		return &mGeometry;
 	}
 
-	/// Sets the transform
-	void setTransform(const Matrix4& transform) noexcept final
+private:
+	/// Updates the global transform
+	void updateGlobalTransform() noexcept final
 	{
-		SceneNodeT<GeometryNode>::setTransform(transform);
+		SceneNodeT<GeometryNode>::updateGlobalTransform();
 		mGeometry.setTransform(getGlobalTransform());
 	}
 
-private:
 	/// The geometry
 	RenderGeometry& mGeometry;
 };
