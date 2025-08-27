@@ -18,44 +18,22 @@ public:
 	{
 	}
 
-	/**
-		\brief Creates a box geometry with non-smooth normals
-
-		\param width The width of the box
-		\param height The height of the box
-		\param depth The depth of the box
-
-		\return The geometry if it was created successfully, nullptr otherwise
-
-		\note The geometry is created with the following vertex format:
-		VertexFormat::VERTEX_FORMAT_POS3_NORM3_TEX2
-
-		\note Negative dimensions produce an inverted geometry
-	*/
 	Geometry* createBox(
-		float width,
-		float height,
-		float depth,
-		bool normal,
-		bool textureCoordinates,
-		bool tangentBitangent) noexcept final;
+		const Vector3& size,
+		const CreationOptions& options = {}) noexcept final;
 
-	/**
-		\brief Creates a sphere geometry with smooth normals
-
-		\param radius The radius of the sphere
-		\param subdivisions The number of subdivisions for the sphere, must be greater than 0
-
-		\return The geometry if it was created successfully, nullptr otherwise
-
-		\note The geometry is created with the following vertex format:
-		VertexFormat::VERTEX_FORMAT_POS3_NORM3_TEX2
-
-		\note Negative radius produces an inverted geometry
-	*/
 	Geometry* createSphere(float radius, u32 subdivisions) noexcept final;
 
 private:
+	Geometry* createGeometry(
+		const Vector3* positions,
+		const Vector3* normals,
+		const Vector2* textureCoordinates,
+		u32 vertexCount,
+		const u32* indices,
+		u32 indexCount,
+		const CreationOptions& options) noexcept;
+
 	/// The device used to create the geometries
 	GraphicsDevice& mRenderer;
 };

@@ -39,13 +39,7 @@ void createBoxes(
 	const int COUNT = 3;
 	const float GEOMETRY_SIZE = 1.0f;
 	const float STRIDE = 3.0f;
-	auto* boxGeometry = engine.getFactory()->getGeometry()->createBox(
-		GEOMETRY_SIZE,
-		GEOMETRY_SIZE,
-		GEOMETRY_SIZE,
-		true,
-		true,
-		true);
+	auto* boxGeometry = engine.getFactory()->getGeometry()->createBox(gltut::Vector3(GEOMETRY_SIZE));
 
 	GLTUT_CHECK(boxGeometry, "Failed to create geometry");
 
@@ -194,7 +188,7 @@ int main()
 		phongMaterialModel->setDiffuse(diffuseTexture);
 		phongMaterialModel->setSpecular(specularTexture);
 
-		auto* floorGeometry = engine->getFactory()->getGeometry()->createBox(20.0f, 1.0f, 20.0f, true, true, true);
+		auto* floorGeometry = engine->getFactory()->getGeometry()->createBox({ 20.0f, 1.0f, 20.0f });
 		GLTUT_CHECK(floorGeometry, "Failed to create floor geometry");
 		scene->createGeometry(
 			floorGeometry,

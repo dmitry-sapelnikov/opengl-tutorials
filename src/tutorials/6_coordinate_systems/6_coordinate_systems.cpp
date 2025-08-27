@@ -23,7 +23,7 @@ int main()
 
 		auto* device = engine->getDevice();
 		auto* scene = engine->getScene();
-		auto* geometry = engine->getFactory()->getGeometry()->createBox(1.0f, 1.0f, 1.0f, true, true, true);
+		auto* geometry = engine->getFactory()->getGeometry()->createBox(gltut::Vector3(1.0f));
 
 		GLTUT_CHECK(geometry != nullptr, "Failed to create geometry");
 

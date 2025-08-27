@@ -85,9 +85,7 @@ int main()
 		auto* scene = engine->getScene();
 		gltut::PhongMaterialModel* phongMaterialModel = createPhongMaterialModel(*engine);
 
-		auto* floorGeometry = engine->getFactory()->getGeometry()->createBox(
-			10.0f, 10.0f, 10.0f,
-			true, true, true);
+		auto* floorGeometry = engine->getFactory()->getGeometry()->createBox(gltut::Vector3(10.0f));
 		GLTUT_CHECK(floorGeometry, "Failed to create floor geometry");
 
 		scene->createGeometry(

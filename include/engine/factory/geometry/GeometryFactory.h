@@ -11,27 +11,44 @@ namespace gltut
 class GeometryFactory
 {
 public:
+	/// Options for geometry creation
+	struct CreationOptions
+	{
+		// Whether to create normals
+		bool normal;
+
+		// Whether to create texture coordinates
+		bool textureCoordinates;
+
+		// Whether to create tangent and bitangent vectors
+		bool tangentBitangent ;
+
+		// Constructor
+		CreationOptions(
+			bool normal = true,
+			bool textureCoordinates = true,
+			bool tangentBitangent = true) noexcept :
+			normal(normal),
+			textureCoordinates(textureCoordinates),
+			tangentBitangent(tangentBitangent)
+		{
+		}
+	};
+
+	/// Virtual destructor
+	virtual ~GeometryFactory() = default;
+
 	/**
 		\brief Creates a box geometry with non-smooth normals
-
-		\param width The width of the box
-		\param height The height of the box
-		\param depth The depth of the box
+		\param size The size of the box
+		\param options The creation options
 
 		\return The geometry if it was created successfully, nullptr otherwise
-
-		\note The geometry is created with the following vertex format:
-		VertexFormat::VERTEX_FORMAT_POS3_NORM3_TEX2
-
 		\note Negative dimensions produce an inverted geometry
 	*/
 	virtual Geometry* createBox(
-		float width,
-		float height,
-		float depth,
-		bool normal,
-		bool textureCoordinates,
-		bool tangentBitangent) noexcept = 0;
+		const Vector3& size,
+		const CreationOptions& options = {}) noexcept = 0;
 
 	/**
 		\brief Creates a sphere geometry with smooth normals
