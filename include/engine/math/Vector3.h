@@ -15,11 +15,24 @@ struct Vector3
 	float y;
 	float z;
 
-	// Constructor
+	constexpr Vector3() noexcept :
+		x(0.f),
+		y(0.f),
+		z(0.f)
+	{
+	}
+
+	constexpr explicit Vector3(float value) noexcept :
+		x(value),
+		y(value),
+		z(value)
+	{
+	}
+
 	constexpr Vector3(
-		float x = 0.f,
-		float y = 0.f,
-		float z = 0.f) noexcept :
+		float x,
+		float y,
+		float z) noexcept :
 
 		x(x),
 		y(y),

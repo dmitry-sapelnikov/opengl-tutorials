@@ -81,7 +81,8 @@ void FPSCameraControllerC::updateCamera(
 	{
 		Vector3 movement(
 			static_cast<float>(mMoveRight - mMoveLeft),
-			static_cast<float>(mMoveFront - mMoveBack));
+			static_cast<float>(mMoveFront - mMoveBack),
+			0.0f);
 		movement.normalize();
 		movement *= mTranslationSpeed * (timeDeltaMs / 1000.0f);
 
