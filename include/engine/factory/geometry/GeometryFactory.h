@@ -39,6 +39,18 @@ public:
 	virtual ~GeometryFactory() = default;
 
 	/**
+		\brief Creates a XY quad geometry
+		\param size The size of the quad
+		\param options The creation options
+
+		\return The geometry if it was created successfully, nullptr otherwise
+		\note The quad is created in the XY plane, with normal pointing in the +Z direction
+	*/
+	virtual Geometry* createQuad(
+		const Vector2& size,
+		const CreationOptions& options = {}) noexcept = 0;
+
+	/**
 		\brief Creates a box geometry with non-smooth normals
 		\param size The size of the box
 		\param options The creation options

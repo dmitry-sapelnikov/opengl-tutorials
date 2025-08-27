@@ -18,9 +18,13 @@ public:
 	{
 	}
 
+	Geometry* createQuad(
+		const Vector2& size,
+		const CreationOptions& options) noexcept final;
+
 	Geometry* createBox(
 		const Vector3& size,
-		const CreationOptions& options = {}) noexcept final;
+		const CreationOptions& options) noexcept final;
 
 	Geometry* createSphere(float radius, u32 subdivisions) noexcept final;
 

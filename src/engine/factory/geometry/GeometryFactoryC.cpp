@@ -86,6 +86,48 @@ std::vector<std::pair<Vector3, Vector3>> getTangentBitangent(
 }
 
 // Global classes
+Geometry* GeometryFactoryC::createQuad(
+	const Vector2& size,
+	const CreationOptions& options) noexcept
+{
+	static constexpr Vector3 normals[] =
+	{
+		{ 0.0f, 0.0f, 1.0f },
+		{ 0.0f, 0.0f, 1.0f },
+		{ 0.0f, 0.0f, 1.0f },
+		{ 0.0f, 0.0f, 1.0f }
+	};
+
+	static constexpr Vector2 textureCoordinates[] =
+	{
+		{ 0.0f, 0.0f },
+		{ 1.0f, 0.0f },
+		{ 1.0f, 1.0f },
+		{ 0.0f, 1.0f }
+	};
+
+	static constexpr u32 indices[] = { 0, 1, 2, 2, 3, 0 };
+	
+	const float x = size.x * 0.5f;
+	const float y = size.y * 0.5f;
+	const Vector3 positions[] =
+	{
+		{ -x, -y, 0.0f },
+		{  x, -y, 0.0f },
+		{  x,  y, 0.0f },
+		{ -x,  y, 0.0f }
+	};
+
+	return createGeometry(
+		positions,
+		normals,
+		textureCoordinates,
+		4,
+		indices,
+		6,
+		options);
+}
+
 
 Geometry* GeometryFactoryC::createBox(
 	const Vector3& size,
