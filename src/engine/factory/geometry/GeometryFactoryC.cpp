@@ -353,7 +353,7 @@ Geometry* GeometryFactoryC::createGeometry(
 		}
 
 		std::vector<float> vertexData;
-		for (size_t i = 0; i < 24; ++i)
+		for (size_t i = 0; i < vertexCount; ++i)
 		{
 			vertexData.push_back(positions[i].x);
 			vertexData.push_back(positions[i].y);
