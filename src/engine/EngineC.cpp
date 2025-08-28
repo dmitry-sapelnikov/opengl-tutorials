@@ -34,7 +34,7 @@ EngineC::EngineC(u32 windowWidth, u32 windowHeight)
 	// - the current active scene camera
 	// - the window frame buffer
 	const Color clearColor(0.1f, 0.3f, 0.3f);
-	RenderPass* defaultPass = mRenderer->createPass(
+	mSceneRenderPass = mRenderer->createPass(
 		mScene->getActiveCameraViewpoint(),
 		mScene->getRenderObject(),
 		mDevice->getFramebuffers()->getDefault(),
@@ -42,7 +42,7 @@ EngineC::EngineC(u32 windowWidth, u32 windowHeight)
 		&clearColor,
 		true,
 		nullptr);
-	GLTUT_CHECK(defaultPass != nullptr, "Cannot create the default render pass");
+	GLTUT_CHECK(mSceneRenderPass != nullptr, "Cannot create the scene render pass");
 
 	mFactory = std::make_unique<FactoryC>(*mRenderer, *mScene);
 }

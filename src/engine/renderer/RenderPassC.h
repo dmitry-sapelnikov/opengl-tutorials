@@ -65,6 +65,18 @@ public:
 		return mClearColor.has_value() ? &mClearColor.value() : nullptr;
 	}
 
+	void setClearColor(const Color* color) noexcept final
+	{
+		if (color != nullptr)
+		{
+			mClearColor = *color;
+		}
+		else
+		{
+			mClearColor.reset();
+		}
+	}
+
 	/// Returns if the depth clearing is enabled
 	bool isDepthCleared() const noexcept final
 	{

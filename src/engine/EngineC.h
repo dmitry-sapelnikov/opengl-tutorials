@@ -53,6 +53,12 @@ public:
 		return mFactory.get();
 	}
 
+	/// Returns the scene render pass
+	RenderPass* getSceneRenderPass() noexcept final
+	{
+		return mSceneRenderPass;
+	}
+
 	/// Called when the window is resized
 	bool onEvent(const Event& event) noexcept final;
 
@@ -71,6 +77,9 @@ private:
 
 	/// The geometry factory
 	std::unique_ptr<Factory> mFactory;
+
+	/// The scene render pass
+	RenderPass* mSceneRenderPass = nullptr;
 };
 
 // End of the namespace gltut
