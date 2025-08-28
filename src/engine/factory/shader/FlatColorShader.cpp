@@ -34,6 +34,7 @@ static const char* FLAT_COLOR_FRAGMENT_SHADER = R"(
 
 // Uniforms
 uniform sampler2D colorSampler;
+uniform float transparencyThreshold;
 
 // Inputs
 in vec2 texCoord;
@@ -44,6 +45,8 @@ out vec4 outColor;
 void main()
 {
 	outColor = texture(colorSampler, texCoord);
+	if (transparencyThreshold != 0.0 && outColor.a < transparencyThreshold)
+		discard;
 })";
 
 // Global functions
@@ -57,6 +60,7 @@ ShaderRendererBinding* createFlatColorShader(Renderer& renderer) noexcept
 	if (result != nullptr)
 	{
 		result->getShader()->setInt("colorSampler", 0);
+		result->getShader()->setFloat("transparencyThreshold", 0.0f);
 	}
 	return result;
 }
