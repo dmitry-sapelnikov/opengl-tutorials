@@ -60,6 +60,17 @@ public:
 		bool cullBackFaces = true,
 		bool cullFrontFaces = false) noexcept final;
 
+	RenderPass* createDepthSortedPass(
+		const Viewpoint* viewpoint,
+		const RenderObject* object,
+		Framebuffer* target,
+		u32 materialPass,
+		const Color* clearColor,
+		bool clearDepth,
+		const Rectangle2u* viewport,
+		bool cullBackFaces,
+		bool cullFrontFaces) noexcept final;
+
 	/// Removes a render pass
 	void removePass(RenderPass* pass) noexcept final;
 

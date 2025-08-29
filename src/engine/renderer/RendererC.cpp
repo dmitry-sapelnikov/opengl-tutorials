@@ -134,6 +134,37 @@ RenderPass* RendererC::createPass(
 	return result;
 }
 
+RenderPass* RendererC::createDepthSortedPass(
+	const Viewpoint* viewpoint,
+	const RenderObject* object,
+	Framebuffer* target,
+	u32 materialPass,
+	const Color* clearColor,
+	bool clearDepth,
+	const Rectangle2u* viewport,
+	bool cullBackFaces,
+	bool cullFrontFaces) noexcept
+{
+	RenderPass* result = nullptr;
+	GLTUT_CATCH_ALL_BEGIN
+		result = mPasses.emplace_back(std::make_unique<DepthSortedRenderPassC>(
+			viewpoint,
+			object,
+			target,
+			materialPass,
+			clearColor,
+			clearDepth,
+			viewport,
+			cullBackFaces,
+			cullFrontFaces,
+			mDevice,
+			mShaderBindings),
+			0).first.get();
+	GLTUT_CATCH_ALL_END("Cannot create a depth-sorted scene render pass")
+	return result;
+}
+
+
 void RendererC::removePass(RenderPass* pass) noexcept
 {
 	auto findResult = std::find_if(

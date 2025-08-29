@@ -13,7 +13,7 @@ namespace gltut
 //	Global classes
 
 ///	Represents a render pass of the scene
-class RenderPassC final : public RenderPass, public NonCopyable
+class RenderPassC : public RenderPass, public NonCopyable
 {
 public:
 	/// Vector of shader viewpoint bindings
@@ -90,7 +90,7 @@ public:
 	}
 
 	/// Executes the render pass
-	void execute() noexcept final;
+	void execute() noexcept;
 
 private:
 	/// The viewpoint for this render pass

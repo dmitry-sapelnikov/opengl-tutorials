@@ -55,6 +55,18 @@ public:
 		bool cullBack = true,
 		bool cullFront = false) noexcept = 0;
 
+	/// Creates a depth-sorted render pass
+	virtual RenderPass* createDepthSortedPass(
+		const Viewpoint* viewpoint,
+		const RenderObject* object,
+		Framebuffer* target,
+		u32 materialPass,
+		const Color* clearColor,
+		bool clearDepth,
+		const Rectangle2u* viewport,
+		bool cullBack = true,
+		bool cullFront = false) noexcept = 0;
+
 	/// Removes a render pass
 	virtual void removePass(RenderPass* pass) noexcept = 0;
 

@@ -168,6 +168,9 @@
     <Filter Include="include\asset_loader">
       <UniqueIdentifier>{bf4dd192-34da-4b17-86ec-c8bec57b7f47}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\renderer\render_pass">
+      <UniqueIdentifier>{6fa1b9b5-c7ba-49fd-8249-29a276b62227}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\engine\Engine.h">
@@ -346,9 +349,6 @@
     </ClInclude>
     <ClInclude Include="..\..\include\engine\renderer\viewpoint\Viewpoint.h">
       <Filter>include\renderer\viewpoint</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\engine\renderer\RenderPassC.h">
-      <Filter>src\renderer</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\engine\renderer\material\MaterialC.h">
       <Filter>src\renderer\material</Filter>
@@ -530,6 +530,12 @@
     <ClInclude Include="..\..\include\engine\asset_loader\AssetLoader.h">
       <Filter>include\asset_loader</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\engine\renderer\render_pass\DepthSortedRenderPassC.h">
+      <Filter>src\renderer\render_pass</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\renderer\render_pass\RenderPassC.h">
+      <Filter>src\renderer\render_pass</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\engine\EngineC.cpp">
@@ -575,9 +581,6 @@
       <Filter>src\factory\geometry</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\engine\renderer\RendererC.cpp">
-      <Filter>src\renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\engine\renderer\RenderPassC.cpp">
       <Filter>src\renderer</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\engine\renderer\material\MaterialC.cpp">
@@ -657,6 +660,12 @@
     </ClCompile>
     <ClCompile Include="..\..\src\engine\factory\material\PhongMaterialModelC.cpp">
       <Filter>src\factory\material</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\renderer\render_pass\DepthSortedRenderPassC.cpp">
+      <Filter>src\renderer\render_pass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\renderer\render_pass\RenderPassC.cpp">
+      <Filter>src\renderer\render_pass</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
