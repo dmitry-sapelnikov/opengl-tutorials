@@ -29,6 +29,9 @@ public:
 	/// Returns the clear color for the render target
 	virtual const Color* getClearColor() const noexcept = 0;
 
+	/// Sets the clear color for the render target
+	virtual void setClearColor(const Color* color) noexcept = 0;
+
 	/// Returns if the depth clearing is enabled
 	virtual bool isDepthCleared() const noexcept = 0;
 

@@ -13,7 +13,7 @@ namespace gltut
 //	Global classes
 
 ///	Represents a render pass of the scene
-class RenderPassC final : public RenderPass, public NonCopyable
+class RenderPassC : public RenderPass, public NonCopyable
 {
 public:
 	/// Vector of shader viewpoint bindings
@@ -31,6 +31,7 @@ public:
 		const Rectangle2u* viewport,
 		bool cullBackFaces,
 		bool cullFrontFaces,
+		bool enableBlending,
 		GraphicsDevice& device,
 		const ShaderBindings& shaderBindings) noexcept;
 
@@ -65,6 +66,18 @@ public:
 		return mClearColor.has_value() ? &mClearColor.value() : nullptr;
 	}
 
+	void setClearColor(const Color* color) noexcept final
+	{
+		if (color != nullptr)
+		{
+			mClearColor = *color;
+		}
+		else
+		{
+			mClearColor.reset();
+		}
+	}
+
 	/// Returns if the depth clearing is enabled
 	bool isDepthCleared() const noexcept final
 	{
@@ -78,7 +91,11 @@ public:
 	}
 
 	/// Executes the render pass
-	void execute() noexcept final;
+	void execute() noexcept;
+
+protected:
+	/// Executes the render pass
+	void execute(const RenderObject* target) noexcept;
 
 private:
 	/// The viewpoint for this render pass
@@ -107,6 +124,9 @@ private:
 
 	/// Cull front faces flag
 	bool mCullFrontFaces;
+
+	/// Enable transparency flag
+	bool mEnableBlending;
 
 	/// GraphicsDevice
 	GraphicsDevice& mDevice;

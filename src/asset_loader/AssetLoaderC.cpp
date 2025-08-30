@@ -135,7 +135,7 @@ SceneNode* AssetLoaderC::createCompoundGeometryNode(
 		}
 	}
 
-	SceneNode* result = mEngine.getScene()->createGroup(transform, parent);
+	SceneNode* result = mEngine.getScene()->createGeometryGroup(transform, parent);
 
 	for (u32 meshInd = 0; meshInd < node->mNumMeshes; ++meshInd)
 	{

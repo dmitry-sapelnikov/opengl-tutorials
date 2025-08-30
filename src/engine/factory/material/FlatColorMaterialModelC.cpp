@@ -5,13 +5,6 @@
 namespace gltut
 {
 // Global classes
-void FlatColorMaterialModelC::setColor(const Texture* color) noexcept
-{
-	MaterialPass* pass = getMaterial()[static_cast<u32>(MaterialPassIndex::LIGHTING)];
-	GLTUT_ASSERT(pass != nullptr);
-	pass->getTextures()->setTexture(color, 0);
-}
-
 FlatColorMaterialModelC::FlatColorMaterialModelC(
 	Renderer& renderer,
 	ShaderRendererBinding& shader,
@@ -34,6 +27,30 @@ FlatColorMaterialModelC::FlatColorMaterialModelC(
 			depthShader,
 			0);
 		GLTUT_CHECK(depthPass != nullptr, "Failed to create a depth pass");
+	}
+}
+
+void FlatColorMaterialModelC::setColor(const Texture* color) noexcept
+{
+	MaterialPass* pass = getMaterial()[static_cast<u32>(MaterialPassIndex::LIGHTING)];
+	GLTUT_ASSERT(pass != nullptr);
+	if (pass != nullptr)
+	{
+		pass->getTextures()->setTexture(color, 0);
+	}
+}
+
+void FlatColorMaterialModelC::setTransparencyThreshold(float threshold) noexcept
+{
+	const bool thresholdInRange = 0.0f <= threshold && threshold <= 1.0f;
+	GLTUT_ASSERT(thresholdInRange);
+
+	MaterialPass* pass = getMaterial()[static_cast<u32>(MaterialPassIndex::LIGHTING)];
+	GLTUT_ASSERT(pass != nullptr);
+
+	if (thresholdInRange && pass != nullptr)
+	{
+		pass->getShader()->getShader()->setFloat("transparencyThreshold", threshold);
 	}
 }
 

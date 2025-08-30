@@ -34,7 +34,7 @@ public:
 	}
 
 protected:
-	Material& getMaterial()
+	Material& getMaterial() noexcept
 	{
 		GLTUT_ASSERT(mMaterial != nullptr);
 		return *mMaterial;

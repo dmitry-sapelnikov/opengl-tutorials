@@ -4,7 +4,7 @@
 #include "engine/graphics/GraphicsDevice.h"
 #include "engine/renderer/shader/ShaderRendererBinding.h"
 #include "engine/renderer/objects/RenderGeometry.h"
-#include "engine/renderer/objects/RenderGroup.h"
+#include "engine/renderer/objects/RenderGeometryGroup.h"
 #include "engine/renderer/RenderPass.h"
 
 namespace gltut
@@ -41,7 +41,7 @@ public:
 		const Matrix4& transform) noexcept = 0;
 
 	/// Creates a render group
-	virtual RenderGroup* createGroup() noexcept = 0;
+	virtual RenderGeometryGroup* createGeometryGroup() noexcept = 0;
 
 	/// Creates a render pass
 	virtual RenderPass* createPass(
@@ -53,7 +53,21 @@ public:
 		bool clearDepth,
 		const Rectangle2u* viewport,
 		bool cullBack = true,
-		bool cullFront = false) noexcept = 0;
+		bool cullFront = false,
+		bool enableBlending = false) noexcept = 0;
+
+	/// Creates a depth-sorted render pass
+	virtual RenderPass* createDepthSortedPass(
+		const Viewpoint* viewpoint,
+		const RenderGeometryGroup* group,
+		Framebuffer* target,
+		u32 materialPass,
+		const Color* clearColor,
+		bool clearDepth,
+		const Rectangle2u* viewport,
+		bool cullBack = true,
+		bool cullFront = false,
+		bool enableBlending = true) noexcept = 0;
 
 	/// Removes a render pass
 	virtual void removePass(RenderPass* pass) noexcept = 0;

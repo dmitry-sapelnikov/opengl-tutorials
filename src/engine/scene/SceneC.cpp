@@ -12,9 +12,13 @@ SceneC::SceneC(
 	mWindow(window),
 	mRenderer(renderer)
 {
-	mRenderGroup = mRenderer.createGroup();
-	GLTUT_CHECK(mRenderGroup != nullptr,
+	mOpaqueRenderGroup = mRenderer.createGeometryGroup();
+	GLTUT_CHECK(mOpaqueRenderGroup != nullptr,
 		"Cannot create a render group for the scene");
+
+	mDepthSortedRenderGroup = mRenderer.createGeometryGroup();
+	GLTUT_CHECK(mDepthSortedRenderGroup != nullptr,
+		"Cannot create a render group for transparent objects in the scene");
 
 	// Get creation time in ms using high resolution clock
 	mCreationTime = std::chrono::high_resolution_clock::now();
@@ -75,7 +79,7 @@ void SceneC::removeTextureSetBinding(SceneTextureSetBinding* binding) noexcept
 	GLTUT_CATCH_ALL_END("Cannot remove a texture set binding")
 }
 
-SceneNode* SceneC::createGroup(
+SceneNode* SceneC::createGeometryGroup(
 	const Matrix4& transform,
 	SceneNode* parent) noexcept
 {
@@ -90,7 +94,8 @@ GeometryNode* SceneC::createGeometry(
 	const Geometry* geometry,
 	const Material* material,
 	const Matrix4& transform,
-	SceneNode* parent) noexcept
+	SceneNode* parent,
+	bool depthSorted) noexcept
 {
 	RenderGeometry* renderGeometry = mRenderer.createGeometry(
 		geometry,
@@ -102,7 +107,14 @@ GeometryNode* SceneC::createGeometry(
 		return nullptr;
 	}
 
-	mRenderGroup->addObject(renderGeometry);
+	if (depthSorted)
+	{
+		mDepthSortedRenderGroup->add(renderGeometry);
+	}
+	else
+	{
+		mOpaqueRenderGroup->add(renderGeometry);
+	}
 	GeometryNode* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN
 		result = &mGeometries.emplace_back(*renderGeometry, transform, parent);

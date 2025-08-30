@@ -45,8 +45,8 @@ public:
 		const Material* material,
 		const Matrix4& transform) noexcept final;
 
-	/// Creates a render group
-	RenderGroup* createGroup() noexcept final;
+	/// Creates a render geometry group
+	RenderGeometryGroup* createGeometryGroup() noexcept final;
 
 	/// Creates a render pass
 	RenderPass* createPass(
@@ -58,7 +58,20 @@ public:
 		bool clearDepth,
 		const Rectangle2u* viewport,
 		bool cullBackFaces = true,
-		bool cullFrontFaces = false) noexcept final;
+		bool cullFrontFaces = false,
+		bool enableBlending = false) noexcept final;
+
+	RenderPass* createDepthSortedPass(
+		const Viewpoint* viewpoint,
+		const RenderGeometryGroup* group,
+		Framebuffer* target,
+		u32 materialPass,
+		const Color* clearColor,
+		bool clearDepth,
+		const Rectangle2u* viewport,
+		bool cullBackFaces = true,
+		bool cullFrontFaces = false,
+		bool enableBlending = true) noexcept final;
 
 	/// Removes a render pass
 	void removePass(RenderPass* pass) noexcept final;
@@ -83,7 +96,7 @@ private:
 	std::vector<std::unique_ptr<RenderGeometry>> mGeometries;
 
 	/// Groups
-	std::vector<std::unique_ptr<RenderGroup>> mGroups;
+	std::vector<std::unique_ptr<RenderGeometryGroup>> mGroups;
 
 	/// List of render passes
 	std::vector<std::pair<std::unique_ptr<RenderPass>, u32>> mPasses;

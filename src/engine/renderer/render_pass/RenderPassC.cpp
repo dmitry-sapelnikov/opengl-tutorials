@@ -14,6 +14,7 @@ RenderPassC::RenderPassC(
 	const Rectangle2u* viewport,
 	bool cullBack,
 	bool cullFront,
+	bool enableBlending,
 	GraphicsDevice& device,
 	const ShaderBindings& shaderBindings) noexcept :
 
@@ -26,12 +27,18 @@ RenderPassC::RenderPassC(
 	mViewport(viewport ? std::make_optional(*viewport) : std::nullopt),
 	mCullBackFaces(cullBack),
 	mCullFrontFaces(cullFront),
+	mEnableBlending(enableBlending),
 	mDevice(device),
 	mShaderBindings(shaderBindings)
 {
 }
 
 void RenderPassC::execute() noexcept
+{
+	execute(mObject);
+}
+
+void RenderPassC::execute(const RenderObject* target) noexcept
 {
 	mDevice.setFaceCulling(
 		mCullBackFaces,
@@ -44,6 +51,8 @@ void RenderPassC::execute() noexcept
 	mDevice.clear(
 		mClearColor.has_value() ? &mClearColor.value() : nullptr,
 		mClearDepth);
+
+	mDevice.setBlending(mEnableBlending);
 
 	const Point2u viewportSize = mViewport.has_value() ?
 		mViewport->getSize() :
@@ -59,9 +68,9 @@ void RenderPassC::execute() noexcept
 		binding->update(mViewpoint, aspectRatio);
 	}
 
-	if (mObject != nullptr)
+	if (target != nullptr)
 	{
-		mObject->render(mMaterialPass);
+		target->render(mMaterialPass);
 	}
 }
 

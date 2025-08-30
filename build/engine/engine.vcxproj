@@ -56,7 +56,7 @@
     <ClInclude Include="..\..\include\engine\renderer\material\Material.h" />
     <ClInclude Include="..\..\include\engine\renderer\material\MaterialPass.h" />
     <ClInclude Include="..\..\include\engine\renderer\objects\RenderGeometry.h" />
-    <ClInclude Include="..\..\include\engine\renderer\objects\RenderGroup.h" />
+    <ClInclude Include="..\..\include\engine\renderer\objects\RenderGeometryGroup.h" />
     <ClInclude Include="..\..\include\engine\renderer\objects\RenderObject.h" />
     <ClInclude Include="..\..\include\engine\renderer\RenderPass.h" />
     <ClInclude Include="..\..\include\engine\renderer\Renderer.h" />
@@ -113,9 +113,10 @@
     <ClInclude Include="..\..\src\engine\renderer\material\MaterialC.h" />
     <ClInclude Include="..\..\src\engine\renderer\material\MaterialPassC.h" />
     <ClInclude Include="..\..\src\engine\renderer\objects\RenderGeometryC.h" />
-    <ClInclude Include="..\..\src\engine\renderer\objects\RenderGroupC.h" />
-    <ClInclude Include="..\..\src\engine\renderer\RenderPassC.h" />
+    <ClInclude Include="..\..\src\engine\renderer\objects\RenderGeometryGroupC.h" />
     <ClInclude Include="..\..\src\engine\renderer\RendererC.h" />
+    <ClInclude Include="..\..\src\engine\renderer\render_pass\DepthSortedRenderPassC.h" />
+    <ClInclude Include="..\..\src\engine\renderer\render_pass\RenderPassC.h" />
     <ClInclude Include="..\..\src\engine\renderer\shader\ShaderRendererBindingC.h" />
     <ClInclude Include="..\..\src\engine\renderer\texture\TextureSetC.h" />
     <ClInclude Include="..\..\src\engine\renderer\viewpoint\ViewpointC.h" />
@@ -164,8 +165,9 @@
     <ClCompile Include="..\..\src\engine\renderer\material\MaterialC.cpp" />
     <ClCompile Include="..\..\src\engine\renderer\material\MaterialPassC.cpp" />
     <ClCompile Include="..\..\src\engine\renderer\objects\RenderGeometryC.cpp" />
-    <ClCompile Include="..\..\src\engine\renderer\RenderPassC.cpp" />
     <ClCompile Include="..\..\src\engine\renderer\RendererC.cpp" />
+    <ClCompile Include="..\..\src\engine\renderer\render_pass\DepthSortedRenderPassC.cpp" />
+    <ClCompile Include="..\..\src\engine\renderer\render_pass\RenderPassC.cpp" />
     <ClCompile Include="..\..\src\engine\renderer\shader\ShaderRendererBindingC.cpp" />
     <ClCompile Include="..\..\src\engine\renderer\texture\TextureSetC.cpp" />
     <ClCompile Include="..\..\src\engine\scene\camera\CameraC.cpp" />

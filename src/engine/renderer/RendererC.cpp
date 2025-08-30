@@ -3,11 +3,12 @@
 // Includes
 #include "RendererC.h"
 #include <algorithm>
-#include "./RenderPassC.h"
+#include "./render_pass/RenderPassC.h"
+#include "./render_pass/DepthSortedRenderPassC.h"
 #include "./material/MaterialC.h"
 #include "./shader/ShaderRendererBindingC.h"
 #include "./objects/RenderGeometryC.h"
-#include "./objects/RenderGroupC.h"
+#include "./objects/RenderGeometryGroupC.h"
 
 namespace gltut
 {
@@ -97,9 +98,9 @@ RenderGeometry* RendererC::createGeometry(
 		transform);
 }
 
-RenderGroup* RendererC::createGroup() noexcept
+RenderGeometryGroup* RendererC::createGeometryGroup() noexcept
 {
-	return createElement<RenderGroup, RenderGroupC>(
+	return createElement<RenderGeometryGroup, RenderGeometryGroupC>(
 		mGroups,
 		"render group");
 }
@@ -113,7 +114,8 @@ RenderPass* RendererC::createPass(
 	bool clearDepth,
 	const Rectangle2u* viewport,
 	bool cullBackFaces,
-	bool cullFrontFaces) noexcept
+	bool cullFrontFaces,
+	bool enableBlending) noexcept
 {
 	RenderPass* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN
@@ -127,10 +129,43 @@ RenderPass* RendererC::createPass(
 			viewport,
 			cullBackFaces,
 			cullFrontFaces,
+			enableBlending,
 			mDevice,
 			mShaderBindings),
 			0).first.get();
 	GLTUT_CATCH_ALL_END("Cannot create a scene render pass")
+	return result;
+}
+
+RenderPass* RendererC::createDepthSortedPass(
+	const Viewpoint* viewpoint,
+	const RenderGeometryGroup* group,
+	Framebuffer* target,
+	u32 materialPass,
+	const Color* clearColor,
+	bool clearDepth,
+	const Rectangle2u* viewport,
+	bool cullBackFaces,
+	bool cullFrontFaces,
+	bool enableBlending) noexcept
+{
+	RenderPass* result = nullptr;
+	GLTUT_CATCH_ALL_BEGIN
+		result = mPasses.emplace_back(std::make_unique<DepthSortedRenderPassC>(
+			viewpoint,
+			group,
+			target,
+			materialPass,
+			clearColor,
+			clearDepth,
+			viewport,
+			cullBackFaces,
+			cullFrontFaces,
+			enableBlending,
+			mDevice,
+			mShaderBindings),
+			0).first.get();
+	GLTUT_CATCH_ALL_END("Cannot create a depth-sorted scene render pass")
 	return result;
 }
 

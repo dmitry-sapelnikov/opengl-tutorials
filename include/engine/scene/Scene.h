@@ -1,7 +1,7 @@
 #pragma once
 
 // Includes
-#include "engine/renderer/objects/RenderObject.h"
+#include "engine/renderer/objects/RenderGeometryGroup.h"
 #include "engine/scene/camera/CameraController.h"
 #include "engine/scene/shader/SceneShaderBinding.h"
 #include "engine/scene/texture/SceneTextureSetBinding.h"
@@ -18,8 +18,11 @@ public:
 	/// Virtual destructor
 	virtual ~Scene() noexcept = default;
 
-	/// Return the scene render object. It is used to create render passes.
-	virtual const RenderObject* getRenderObject() const noexcept = 0;
+	/// Returns the render group for all objects except depth-sorted ones
+	virtual const RenderGeometryGroup* getRenderGroup() const noexcept = 0;
+
+	/// Returns the render group for depth-sorted objects
+	virtual const RenderGeometryGroup* getDepthSortedRenderGroup() const noexcept = 0;
 
 	/// Returns the active camera
 	virtual Camera* getActiveCamera() const noexcept = 0;
@@ -94,7 +97,7 @@ public:
 	virtual void removeTextureSetBinding(SceneTextureSetBinding* binding) noexcept = 0;
 
 	/// Creates a scene group node
-	virtual SceneNode* createGroup(
+	virtual SceneNode* createGeometryGroup(
 		const Matrix4& transform = Matrix4::identity(),
 		SceneNode* parent = nullptr) noexcept = 0;
 
@@ -103,7 +106,8 @@ public:
 		const Geometry* geometry,
 		const Material* material,
 		const Matrix4& transform = Matrix4::identity(),
-		SceneNode* parent = nullptr) noexcept = 0;
+		SceneNode* parent = nullptr,
+		bool depthSorted = false) noexcept = 0;
 
 	/// Returns the number of geometries in the scene
 	virtual u32 getGeometryCount() const noexcept = 0;

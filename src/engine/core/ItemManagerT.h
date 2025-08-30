@@ -56,7 +56,6 @@ protected:
 		return mItems.emplace_back(std::move(item)).get();
 	}
 
-private:
 	std::vector<std::unique_ptr<ItemType>> mItems;
 };
 

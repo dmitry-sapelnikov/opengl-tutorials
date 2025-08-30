@@ -1,5 +1,6 @@
 #pragma once
 #include "engine/core/Types.h"
+#include "engine/math/Matrix4.h"
 
 namespace gltut
 {
