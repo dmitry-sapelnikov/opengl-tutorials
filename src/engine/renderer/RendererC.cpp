@@ -114,7 +114,8 @@ RenderPass* RendererC::createPass(
 	bool clearDepth,
 	const Rectangle2u* viewport,
 	bool cullBackFaces,
-	bool cullFrontFaces) noexcept
+	bool cullFrontFaces,
+	bool enableBlending) noexcept
 {
 	RenderPass* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN
@@ -128,6 +129,7 @@ RenderPass* RendererC::createPass(
 			viewport,
 			cullBackFaces,
 			cullFrontFaces,
+			enableBlending,
 			mDevice,
 			mShaderBindings),
 			0).first.get();
@@ -144,7 +146,8 @@ RenderPass* RendererC::createDepthSortedPass(
 	bool clearDepth,
 	const Rectangle2u* viewport,
 	bool cullBackFaces,
-	bool cullFrontFaces) noexcept
+	bool cullFrontFaces,
+	bool enableBlending) noexcept
 {
 	RenderPass* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN
@@ -158,6 +161,7 @@ RenderPass* RendererC::createDepthSortedPass(
 			viewport,
 			cullBackFaces,
 			cullFrontFaces,
+			enableBlending,
 			mDevice,
 			mShaderBindings),
 			0).first.get();

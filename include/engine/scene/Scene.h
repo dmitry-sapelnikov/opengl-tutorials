@@ -107,7 +107,7 @@ public:
 		const Material* material,
 		const Matrix4& transform = Matrix4::identity(),
 		SceneNode* parent = nullptr,
-		bool transparent = false) noexcept = 0;
+		bool depthSorted = false) noexcept = 0;
 
 	/// Returns the number of geometries in the scene
 	virtual u32 getGeometryCount() const noexcept = 0;

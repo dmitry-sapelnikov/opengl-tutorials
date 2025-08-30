@@ -31,6 +31,7 @@ public:
 		const Rectangle2u* viewport,
 		bool cullBackFaces,
 		bool cullFrontFaces,
+		bool enableBlending,
 		GraphicsDevice& device,
 		const ShaderBindings& shaderBindings) noexcept;
 
@@ -123,6 +124,9 @@ private:
 
 	/// Cull front faces flag
 	bool mCullFrontFaces;
+
+	/// Enable transparency flag
+	bool mEnableBlending;
 
 	/// GraphicsDevice
 	GraphicsDevice& mDevice;

@@ -60,6 +60,9 @@ DeviceOpenGL::DeviceOpenGL(Window& window) :
 	// Enable depth testing
 	glEnable(GL_DEPTH_TEST);
 
+	// Set default blend function
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	// Disable VSync
 	enableVSync(false);
 
@@ -198,6 +201,18 @@ void DeviceOpenGL::setFaceCulling(bool back, bool front) noexcept
 		cullMode = GL_FRONT;
 	}
 	glCullFace(cullMode);
+}
+
+void DeviceOpenGL::setBlending(bool enabled) noexcept
+{
+	if (enabled)
+	{
+		glEnable(GL_BLEND);
+	}
+	else
+	{
+		glDisable(GL_BLEND);
+	}
 }
 
 // End of the namespace gltut

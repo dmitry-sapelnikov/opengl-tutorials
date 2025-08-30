@@ -58,7 +58,8 @@ public:
 		bool clearDepth,
 		const Rectangle2u* viewport,
 		bool cullBackFaces = true,
-		bool cullFrontFaces = false) noexcept final;
+		bool cullFrontFaces = false,
+		bool enableBlending = false) noexcept final;
 
 	RenderPass* createDepthSortedPass(
 		const Viewpoint* viewpoint,
@@ -69,7 +70,8 @@ public:
 		bool clearDepth,
 		const Rectangle2u* viewport,
 		bool cullBackFaces = true,
-		bool cullFrontFaces = false) noexcept final;
+		bool cullFrontFaces = false,
+		bool enableBlending = true) noexcept final;
 
 	/// Removes a render pass
 	void removePass(RenderPass* pass) noexcept final;

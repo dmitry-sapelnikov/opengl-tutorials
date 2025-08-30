@@ -56,6 +56,9 @@ public:
 
 	/// Sets face cull
 	virtual void setFaceCulling(bool back, bool front) noexcept = 0;
+
+	/// Enable or disables blending
+	virtual void setBlending(bool enabled) noexcept = 0;
 };
 
 // End of the namespace gltut

@@ -23,6 +23,7 @@ public:
 		const Rectangle2u* viewport,
 		bool cullBackFaces,
 		bool cullFrontFaces,
+		bool enableBlending,
 		GraphicsDevice& device,
 		const ShaderBindings& shaderBindings) noexcept;
 

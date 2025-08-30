@@ -15,6 +15,7 @@ DepthSortedRenderPassC::DepthSortedRenderPassC(
 	const Rectangle2u* viewport,
 	bool cullBack,
 	bool cullFront,
+	bool enableBlending,
 	GraphicsDevice& device,
 	const ShaderBindings& shaderBindings) noexcept :
 
@@ -28,6 +29,7 @@ DepthSortedRenderPassC::DepthSortedRenderPassC(
 		viewport,
 		cullBack,
 		cullFront,
+		enableBlending,
 		device,
 		shaderBindings),
 
@@ -54,7 +56,8 @@ void DepthSortedRenderPassC::execute() noexcept
 			{
 				const Vector3 aPos = a->getTransform().getTranslation();
 				const Vector3 bPos = b->getTransform().getTranslation();
-				return (viewMatrix * aPos).z > (viewMatrix * bPos).z;
+				// The further the object, the smaller the z value in view space
+				return (viewMatrix * aPos).z < (viewMatrix * bPos).z;
 			});
 	}
 	RenderPassC::execute(&mSortedGroup);

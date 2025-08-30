@@ -59,6 +59,9 @@ public:
 	/// Set face culling
 	void setFaceCulling(bool back, bool front) noexcept final;
 
+	/// Enable or disables blending
+	virtual void setBlending(bool enabled) noexcept final;
+
 private:
 	/// Sets a framebuffer for rendering
 	void setFramebuffer(Framebuffer* frameBuffer) noexcept final;
