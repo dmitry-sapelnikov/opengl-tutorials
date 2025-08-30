@@ -29,12 +29,11 @@ int main()
 
 		auto* material = engine->getFactory()->getMaterial()->createFlatColorMaterial(false);
 		material->setColor(device->getDevice()->getTextures()->load(
-			"assets/grass.png",
+			"assets/window.png",
 			gltut::TextureParameters(
 				gltut::TextureFilterMode::LINEAR_MIPMAP,
 				gltut::TextureFilterMode::LINEAR,
 				gltut::TextureWrapMode::CLAMP_TO_EDGE)));
-		material->setTransparencyThreshold(0.1f);
 
 		GLTUT_CHECK(material != nullptr, "Failed to create material");
 
@@ -50,7 +49,9 @@ int main()
 			quads.push_back(scene->createGeometry(
 				geometry,
 				material->getMaterial(),
-				gltut::Matrix4::translationMatrix(position)));
+				gltut::Matrix4::translationMatrix(position),
+				nullptr,
+				true));
 		}
 
 		gltut::Camera* camera = engine->getScene()->createCamera(
