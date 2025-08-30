@@ -56,7 +56,7 @@
     <ClInclude Include="..\..\include\engine\renderer\material\Material.h" />
     <ClInclude Include="..\..\include\engine\renderer\material\MaterialPass.h" />
     <ClInclude Include="..\..\include\engine\renderer\objects\RenderGeometry.h" />
-    <ClInclude Include="..\..\include\engine\renderer\objects\RenderGroup.h" />
+    <ClInclude Include="..\..\include\engine\renderer\objects\RenderGeometryGroup.h" />
     <ClInclude Include="..\..\include\engine\renderer\objects\RenderObject.h" />
     <ClInclude Include="..\..\include\engine\renderer\RenderPass.h" />
     <ClInclude Include="..\..\include\engine\renderer\Renderer.h" />
@@ -113,7 +113,7 @@
     <ClInclude Include="..\..\src\engine\renderer\material\MaterialC.h" />
     <ClInclude Include="..\..\src\engine\renderer\material\MaterialPassC.h" />
     <ClInclude Include="..\..\src\engine\renderer\objects\RenderGeometryC.h" />
-    <ClInclude Include="..\..\src\engine\renderer\objects\RenderGroupC.h" />
+    <ClInclude Include="..\..\src\engine\renderer\objects\RenderGeometryGroupC.h" />
     <ClInclude Include="..\..\src\engine\renderer\RendererC.h" />
     <ClInclude Include="..\..\src\engine\renderer\render_pass\DepthSortedRenderPassC.h" />
     <ClInclude Include="..\..\src\engine\renderer\render_pass\RenderPassC.h" />

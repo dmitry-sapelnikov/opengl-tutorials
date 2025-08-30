@@ -4,45 +4,10 @@
 namespace gltut
 {
 
-// Local classes
-namespace
-{
-class DepthSorter final : public RenderGroup::Sorter
-{
-public:
-	explicit DepthSorter(const Matrix4& viewpointMatrix) noexcept :
-		mViewpointMatrix(viewpointMatrix)
-	{
-	}
-
-	bool operator()(
-		const RenderObject* a,
-		const RenderObject* b) const noexcept final
-	{
-		/*const Vector3 posA = a->getTransform().getTranslation();
-		const Vector3 posB = b->getTransform().getTranslation();
-
-		Vector4 viewPosA = mViewpointMatrix * Vector4(posA, 1.0f);
-		viewPosA /= viewPosA.w;
-
-		Vector4 viewPosB = mViewpointMatrix * Vector4(posB, 1.0f);
-		viewPosB /= viewPosB.w;
-
-		return viewPosA.z > viewPosB.z;*/
-		return false;
-	}
-
-private:
-	Matrix4 mViewpointMatrix;
-};
-
-// end of the anonymous namespace
-}
-
 //	Global classes
 DepthSortedRenderPassC::DepthSortedRenderPassC(
 	const Viewpoint* viewpoint,
-	RenderGroup* group,
+	const RenderGeometryGroup* group,
 	Framebuffer* target,
 	u32 materialPass,
 	const Color* clearColor,
@@ -65,29 +30,34 @@ DepthSortedRenderPassC::DepthSortedRenderPassC(
 		cullFront,
 		device,
 		shaderBindings),
+
 	mGroup(group)
 {
 }
 
 void DepthSortedRenderPassC::execute() noexcept
 {
-	const float aspectRatio = getViewport() != nullptr ?
-		static_cast<float>(getViewport()->getSize().x) /
-		static_cast<float>(getViewport()->getSize().y) :
-		1.0f;
-
-	const Matrix4 viewpointMatrix = 
-		getViewpoint()->getProjectionMatrix(aspectRatio) *
-		getViewpoint()->getViewMatrix();
-
-	if (!(mViewpointMatrix - viewpointMatrix).isNearZero())
+	const Matrix4 viewMatrix = getViewpoint()->getViewMatrix();
+	if (!(mViewMatrix - viewMatrix).isNearZero())
 	{
-		mViewpointMatrix = viewpointMatrix;
-		DepthSorter depthSorter(mViewpointMatrix);
-		mGroup->sort(&depthSorter);
-	}
+		mViewMatrix = viewMatrix;
+		mSortedGroup.clear();
+		for (u32 i = 0; i < mGroup->getSize(); ++i)
+		{
+			mSortedGroup.add(mGroup->get(i));
+		}
 
-	RenderPassC::execute();
+		std::sort(
+			mSortedGroup.begin(),
+			mSortedGroup.end(),
+			[&viewMatrix](const RenderGeometry* a, const RenderGeometry* b)
+			{
+				const Vector3 aPos = a->getTransform().getTranslation();
+				const Vector3 bPos = b->getTransform().getTranslation();
+				return (viewMatrix * aPos).z > (viewMatrix * bPos).z;
+			});
+	}
+	RenderPassC::execute(&mSortedGroup);
 }
 
 // End of the namespace gltut

@@ -37,9 +37,6 @@ public:
 
 	/// Returns the geometry factory
 	virtual Factory* getFactory() noexcept = 0;
-
-	/// Returns the scene render pass
-	virtual RenderPass* getSceneRenderPass() noexcept = 0;
 };
 
 //	Global functions

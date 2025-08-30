@@ -332,10 +332,7 @@
     <ClInclude Include="..\..\include\engine\renderer\objects\RenderGeometry.h">
       <Filter>include\renderer\objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\engine\renderer\objects\RenderGroup.h">
-      <Filter>include\renderer\objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\engine\renderer\objects\RenderObject.h">
+    <ClInclude Include="..\..\include\engine\renderer\objects\RenderGeometryGroup.h">
       <Filter>include\renderer\objects</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\engine\renderer\material\MaterialPass.h">
@@ -362,7 +359,7 @@
     <ClInclude Include="..\..\src\engine\renderer\objects\RenderGeometryC.h">
       <Filter>src\renderer\objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\engine\renderer\objects\RenderGroupC.h">
+    <ClInclude Include="..\..\src\engine\renderer\objects\RenderGeometryGroupC.h">
       <Filter>src\renderer\objects</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\engine\graphics\framebuffer\TextureFramebufferBase.h">
@@ -535,6 +532,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\engine\renderer\render_pass\RenderPassC.h">
       <Filter>src\renderer\render_pass</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\renderer\objects\RenderObject.h">
+      <Filter>include\renderer\objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

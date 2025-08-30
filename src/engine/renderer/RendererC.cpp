@@ -3,11 +3,12 @@
 // Includes
 #include "RendererC.h"
 #include <algorithm>
-#include "./RenderPassC.h"
+#include "./render_pass/RenderPassC.h"
+#include "./render_pass/DepthSortedRenderPassC.h"
 #include "./material/MaterialC.h"
 #include "./shader/ShaderRendererBindingC.h"
 #include "./objects/RenderGeometryC.h"
-#include "./objects/RenderGroupC.h"
+#include "./objects/RenderGeometryGroupC.h"
 
 namespace gltut
 {
@@ -97,9 +98,9 @@ RenderGeometry* RendererC::createGeometry(
 		transform);
 }
 
-RenderGroup* RendererC::createGroup() noexcept
+RenderGeometryGroup* RendererC::createGeometryGroup() noexcept
 {
-	return createElement<RenderGroup, RenderGroupC>(
+	return createElement<RenderGeometryGroup, RenderGeometryGroupC>(
 		mGroups,
 		"render group");
 }
@@ -136,7 +137,7 @@ RenderPass* RendererC::createPass(
 
 RenderPass* RendererC::createDepthSortedPass(
 	const Viewpoint* viewpoint,
-	const RenderObject* object,
+	const RenderGeometryGroup* group,
 	Framebuffer* target,
 	u32 materialPass,
 	const Color* clearColor,
@@ -149,7 +150,7 @@ RenderPass* RendererC::createDepthSortedPass(
 	GLTUT_CATCH_ALL_BEGIN
 		result = mPasses.emplace_back(std::make_unique<DepthSortedRenderPassC>(
 			viewpoint,
-			object,
+			group,
 			target,
 			materialPass,
 			clearColor,
@@ -163,7 +164,6 @@ RenderPass* RendererC::createDepthSortedPass(
 	GLTUT_CATCH_ALL_END("Cannot create a depth-sorted scene render pass")
 	return result;
 }
-
 
 void RendererC::removePass(RenderPass* pass) noexcept
 {

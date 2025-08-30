@@ -33,6 +33,11 @@ RenderPassC::RenderPassC(
 
 void RenderPassC::execute() noexcept
 {
+	execute(mObject);
+}
+
+void RenderPassC::execute(const RenderObject* target) noexcept
+{
 	mDevice.setFaceCulling(
 		mCullBackFaces,
 		mCullFrontFaces);
@@ -59,9 +64,9 @@ void RenderPassC::execute() noexcept
 		binding->update(mViewpoint, aspectRatio);
 	}
 
-	if (mObject != nullptr)
+	if (target != nullptr)
 	{
-		mObject->render(mMaterialPass);
+		target->render(mMaterialPass);
 	}
 }
 

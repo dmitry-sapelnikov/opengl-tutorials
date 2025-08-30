@@ -92,6 +92,10 @@ public:
 	/// Executes the render pass
 	void execute() noexcept;
 
+protected:
+	/// Executes the render pass
+	void execute(const RenderObject* target) noexcept;
+
 private:
 	/// The viewpoint for this render pass
 	const Viewpoint* mViewpoint;

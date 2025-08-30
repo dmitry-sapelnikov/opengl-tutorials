@@ -2,7 +2,7 @@
 
 // Includes
 #include "RenderPassC.h"
-#include "engine/renderer/objects/RenderGroup.h"
+#include "../objects/RenderGeometryGroupC.h"
 
 namespace gltut
 {
@@ -12,14 +12,10 @@ namespace gltut
 class DepthSortedRenderPassC final : public RenderPassC
 {
 public:
-	/// Vector of shader viewpoint bindings
-	using ShaderBindings =
-		std::vector<std::unique_ptr<ShaderRendererBinding>>;
-
 	/// Constructor
 	DepthSortedRenderPassC(
 		const Viewpoint* viewpoint,
-		RenderGroup* group,
+		const RenderGeometryGroup* group,
 		Framebuffer* target,
 		u32 materialPass,
 		const Color* clearColor,
@@ -34,9 +30,11 @@ public:
 	void execute() noexcept final;
 
 private:
-	RenderGroup* mGroup;
+	const RenderGeometryGroup* mGroup;
 
-	Matrix4 mViewpointMatrix;
+	RenderGeometryGroupC mSortedGroup;
+
+	Matrix4 mViewMatrix;
 };
 
 // End of the namespace gltut

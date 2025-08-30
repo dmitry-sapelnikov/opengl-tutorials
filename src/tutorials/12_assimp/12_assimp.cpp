@@ -86,7 +86,7 @@ void createLights(
 
 		gltut::ShadowMap* shadow = factory->getShadow()->createShadowMap(
 			lightSource,
-			engine.getScene()->getRenderObject(),
+			engine.getScene()->getRenderGroup(),
 			10.0f, // Frustum size
 			1.5f,  // Near plane
 			50.0f, // Far plane

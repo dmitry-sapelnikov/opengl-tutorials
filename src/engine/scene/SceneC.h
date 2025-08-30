@@ -26,10 +26,16 @@ public:
 		Window& window,
 		Renderer& renderer);
 
-	/// Returns the render object for the scene
-	const RenderObject* getRenderObject() const noexcept final
+	/// Returns the render group for all objects except depth-sorted ones
+	const RenderGeometryGroup* getRenderGroup() const noexcept final
 	{
-		return mRenderGroup;
+		return mOpaqueRenderGroup;
+	}
+
+	/// Returns the render group for depth-sorted objects
+	const RenderGeometryGroup* getDepthSortedRenderGroup() const noexcept final
+	{
+		return mDepthSortedRenderGroup;
 	}
 
 	SceneShaderBinding* createShaderBinding(Shader* shader) noexcept final;
@@ -61,15 +67,16 @@ public:
 		return mTextureSetBindings[index].get();
 	}
 
-	SceneNode* createGroup(
+	SceneNode* createGeometryGroup(
 		const Matrix4& transform = Matrix4::identity(),
 		SceneNode* parent = nullptr) noexcept final;
 
 	GeometryNode* createGeometry(
 		const Geometry* geometry,
 		const Material* material,
-		const Matrix4& transform = Matrix4::identity(),
-		SceneNode* parent = nullptr) noexcept final;
+		const Matrix4& transform,
+		SceneNode* parent,
+		bool depthSorted) noexcept final;
 
 	u32 getGeometryCount() const noexcept final
 	{
@@ -130,8 +137,11 @@ private:
 	/// The device
 	Renderer& mRenderer;
 
-	/// The scene render group
-	RenderGroup* mRenderGroup = nullptr;
+	/// The render group for opaque objects
+	RenderGeometryGroup* mOpaqueRenderGroup = nullptr;
+
+	/// The render group for transparent objects
+	RenderGeometryGroup* mDepthSortedRenderGroup = nullptr;
 
 	/// The shader bindings
 	std::vector<std::unique_ptr<SceneShaderBindingC>> mShaderBindings;
