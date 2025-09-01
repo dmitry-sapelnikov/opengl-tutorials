@@ -16,6 +16,8 @@ int main()
 
 		engine->getWindow()->setTitle("Shaders");
 		engine->getWindow()->showFPS(true);
+		// Since our geometry does not have normals, disable face culling
+		engine->getSceneRenderPass()->setFaceCulling(false, false);
 
 		float vertices[] = {
 			// positions         // colors
@@ -73,12 +75,12 @@ int main()
 		GLTUT_CHECK(pass != nullptr, "Failed to create material pass");
 
 		scene->createGeometry(geometry, material);
+		auto start = std::chrono::high_resolution_clock::now();
 		while (engine->update())
 		{
-			float time = std::chrono::duration<float>(
-				std::chrono::steady_clock::now().time_since_epoch()).count();
-
-			float colorScale = (std::sin(time) / 2.0f) + 0.5f;
+			auto now = std::chrono::high_resolution_clock::now();
+			float time = std::chrono::duration<float>(now - start).count();
+			float colorScale = (std::sin(time) * 0.5f) + 0.5f;
 			shader->setFloat("colorScale", colorScale);
 		}
 	}
