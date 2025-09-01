@@ -76,6 +76,9 @@ public:
 	/// Removes a render pass
 	void removePass(RenderPass* pass) noexcept final;
 
+	/// Removes all render passes
+	void removeAllPasses() noexcept final;
+
 	/// Sets the priority of the render pass
 	void setPassPriority(RenderPass* pass, int32 priority) noexcept final;
 

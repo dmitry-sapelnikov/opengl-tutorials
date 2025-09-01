@@ -124,7 +124,8 @@ Geometry* createRenderQuad(Renderer& renderer) noexcept
 /// Creates a texture-to-window render pass
 RenderPass* RenderPassFactoryC::createTextureToWindowRenderPass(
 	const Texture* texture,
-	const Rectangle2u& viewport) noexcept
+	u32 materialPassIndex,
+	const Rectangle2u* viewport) noexcept
 {
 	RenderPass* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN
@@ -154,7 +155,7 @@ RenderPass* RenderPassFactoryC::createTextureToWindowRenderPass(
 			material != nullptr,
 			"Failed to create material for texture-to-window render pass");
 
-		MaterialPass* materialPass = material->createPass(0, shader, 1);
+		MaterialPass* materialPass = material->createPass(materialPassIndex, shader, 1);
 
 		GLTUT_CHECK(
 			materialPass != nullptr,
@@ -178,7 +179,7 @@ RenderPass* RenderPassFactoryC::createTextureToWindowRenderPass(
 			0, // Material pass 0
 			nullptr, // No clear color
 			true, // Depth clearing
-			&viewport);
+			viewport);
 
 	GLTUT_CATCH_ALL_END("Failed to create texture-to-window render pass");
 	return result;

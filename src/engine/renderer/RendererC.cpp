@@ -137,6 +137,11 @@ RenderPass* RendererC::createPass(
 	return result;
 }
 
+void RendererC::removeAllPasses() noexcept
+{
+	mPasses.clear();
+}
+
 RenderPass* RendererC::createDepthSortedPass(
 	const Viewpoint* viewpoint,
 	const RenderGeometryGroup* group,

@@ -21,7 +21,8 @@ public:
 	/// Creates a texture-to-window render pass
 	RenderPass* createTextureToWindowRenderPass(
 		const Texture* texture,
-		const Rectangle2u& viewport) noexcept final;
+		u32 materialPassIndex,
+		const Rectangle2u* viewport) noexcept final;
 
 private:
 	/// The render pipeline
