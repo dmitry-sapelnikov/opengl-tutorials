@@ -68,6 +68,9 @@ DeviceOpenGL::DeviceOpenGL(Window& window) :
 
 	// Enable front face culling
 	DeviceOpenGL::setFaceCulling(true, false);
+
+	// Enable scissor test
+	glEnable(GL_SCISSOR_TEST);
 }
 
 void DeviceOpenGL::clear(
@@ -119,6 +122,12 @@ void DeviceOpenGL::setViewport(const Rectangle2u& viewport) noexcept
 	const auto& min = viewport.getMin();
 	const auto& max = viewport.getMax();
 	glViewport(
+		static_cast<GLint>(min.x),
+		static_cast<GLint>(min.y),
+		static_cast<GLsizei>(max.x - min.x),
+		static_cast<GLsizei>(max.y - min.y));
+
+	glScissor(
 		static_cast<GLint>(min.x),
 		static_cast<GLint>(min.y),
 		static_cast<GLsizei>(max.x - min.x),
