@@ -102,7 +102,7 @@ private:
 	std::vector<std::unique_ptr<RenderGeometryGroup>> mGroups;
 
 	/// List of render passes
-	std::vector<std::pair<std::unique_ptr<RenderPass>, u32>> mPasses;
+	std::vector<std::pair<std::unique_ptr<RenderPass>, int32>> mPasses;
 };
 
 // End of the namespace gltut
