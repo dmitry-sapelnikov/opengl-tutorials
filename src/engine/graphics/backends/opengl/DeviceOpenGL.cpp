@@ -66,8 +66,8 @@ DeviceOpenGL::DeviceOpenGL(Window& window) :
 	// Disable VSync
 	enableVSync(false);
 
-	// Enable face culling
-	glEnable(GL_CULL_FACE);
+	// Enable front face culling
+	DeviceOpenGL::setFaceCulling(true, false);
 }
 
 void DeviceOpenGL::clear(
@@ -187,6 +187,14 @@ void DeviceOpenGL::bindTexture(const Texture* texture, u32 slot) noexcept
 
 void DeviceOpenGL::setFaceCulling(bool back, bool front) noexcept
 {
+	if (!back && !front)
+	{
+		// Disable face culling
+		glDisable(GL_CULL_FACE);
+		return;
+	}
+
+	glEnable(GL_CULL_FACE);
 	GLenum cullMode = GL_NONE;
 	if (back && front)
 	{
