@@ -15,7 +15,6 @@ public:
 	/// Creates a texture-to-window render pass
 	virtual RenderPass* createTextureToWindowRenderPass(
 		const Texture* texture,
-		u32 materialPassIndex,
 		const Rectangle2u* viewport) noexcept = 0;
 };
 

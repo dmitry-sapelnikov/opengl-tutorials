@@ -13,15 +13,15 @@ class RenderPassFactoryC : public RenderPassFactory, public NonCopyable
 {
 public:
 	/// Constructor
-	RenderPassFactoryC(Renderer& renderer) noexcept :
+	explicit RenderPassFactoryC(Renderer& renderer) noexcept :
 		mRenderer(renderer)
 	{
+		mShaders.fill(nullptr);
 	}
 
 	/// Creates a texture-to-window render pass
 	RenderPass* createTextureToWindowRenderPass(
 		const Texture* texture,
-		u32 materialPassIndex,
 		const Rectangle2u* viewport) noexcept final;
 
 private:
