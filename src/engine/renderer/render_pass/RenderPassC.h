@@ -90,6 +90,13 @@ public:
 		return mViewport.has_value() ? &mViewport.value() : nullptr;
 	}
 
+	/// Set the face culling state
+	void setFaceCulling(bool back, bool front) noexcept final
+	{
+		mCullBackFaces = back;
+		mCullFrontFaces = front;
+	}
+
 	/// Executes the render pass
 	void execute() noexcept;
 
