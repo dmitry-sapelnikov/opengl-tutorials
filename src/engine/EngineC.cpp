@@ -34,7 +34,7 @@ EngineC::EngineC(u32 windowWidth, u32 windowHeight)
 	// - the current active scene camera
 	// - the window frame buffer
 	const Color clearColor(0.1f, 0.3f, 0.3f);
-	auto* sceneRenderPass = mRenderer->createPass(
+	mSceneRenderPass = mRenderer->createPass(
 		mScene->getActiveCameraViewpoint(),
 		mScene->getRenderGroup(),
 		mDevice->getFramebuffers()->getDefault(),
@@ -42,9 +42,9 @@ EngineC::EngineC(u32 windowWidth, u32 windowHeight)
 		&clearColor,
 		true,
 		nullptr);
-	GLTUT_CHECK(sceneRenderPass != nullptr, "Cannot create the scene render pass");
+	GLTUT_CHECK(mSceneRenderPass != nullptr, "Cannot create the scene render pass");
 
-	auto* depthSortedSceneRenderPass = mRenderer->createDepthSortedPass(
+	mDepthSortedSceneRenderPass = mRenderer->createDepthSortedPass(
 		mScene->getActiveCameraViewpoint(),
 		mScene->getDepthSortedRenderGroup(),
 		mDevice->getFramebuffers()->getDefault(),
@@ -52,7 +52,7 @@ EngineC::EngineC(u32 windowWidth, u32 windowHeight)
 		nullptr,
 		false,
 		nullptr);
-	GLTUT_CHECK(depthSortedSceneRenderPass != nullptr, "Cannot create the depth-sorted scene render pass");
+	GLTUT_CHECK(mDepthSortedSceneRenderPass != nullptr, "Cannot create the depth-sorted scene render pass");
 
 	mFactory = std::make_unique<FactoryC>(*mRenderer, *mScene);
 }

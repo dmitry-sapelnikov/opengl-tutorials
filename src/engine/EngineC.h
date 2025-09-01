@@ -53,6 +53,18 @@ public:
 		return mFactory.get();
 	}
 
+	/// Return the scene render pass
+	RenderPass* getSceneRenderPass() noexcept final
+	{
+		return mSceneRenderPass;
+	}
+
+	/// Return the depth-sorted scene render pass
+	RenderPass* getDepthSortedSceneRenderPass() noexcept final
+	{
+		return mDepthSortedSceneRenderPass;
+	}
+
 	/// Called when the window is resized
 	bool onEvent(const Event& event) noexcept final;
 
@@ -71,6 +83,12 @@ private:
 
 	/// The geometry factory
 	std::unique_ptr<Factory> mFactory;
+
+	/// The default scene render pass
+	RenderPass* mSceneRenderPass = nullptr;
+
+	/// The depth-sorted scene render pass
+	RenderPass* mDepthSortedSceneRenderPass = nullptr;
 };
 
 // End of the namespace gltut
