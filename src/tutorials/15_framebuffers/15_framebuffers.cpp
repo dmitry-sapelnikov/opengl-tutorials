@@ -35,14 +35,26 @@ int main()
 
 		gltut::Rng rng;
 		std::vector<gltut::GeometryNode*> boxes;
-		std::vector<gltut::Vector3> boxPositions;
 		for (size_t i = 0; i < BOX_COUNT; ++i)
 		{
-			boxes.push_back(scene->createGeometry(geometry, material->getMaterial()));
-			boxPositions.emplace_back(
+			gltut::Vector3 position(
 				rng.nextFloat(-POSITION_RANGE, POSITION_RANGE),
 				rng.nextFloat(-POSITION_RANGE, POSITION_RANGE),
 				rng.nextFloat(-POSITION_RANGE, POSITION_RANGE));
+
+			gltut::Vector3 rotation = rng.nextFloat(0, gltut::PI * 2.0f) * 
+				gltut::Vector3(
+					rng.nextFloat(),
+					rng.nextFloat(),
+					rng.nextFloat()).normalize();
+
+			boxes.push_back(scene->createGeometry(
+				geometry,
+				material->getMaterial(),
+				gltut::Matrix4::transformMatrix(
+					position,
+					rotation,
+					gltut::Vector3(1.0f))));
 		}
 
 		gltut::Camera* camera = engine->getScene()->createCamera(
@@ -53,69 +65,61 @@ int main()
 			0.1f,
 			100.0f);
 
-		std::unique_ptr<gltut::CameraController> controller(
+		/*std::unique_ptr<gltut::CameraController> controller(
 			gltut::createMouseCameraController(*camera));
 		GLTUT_CHECK(controller.get() != nullptr, "Failed to create camera controller");
-		engine->getScene()->addCameraController(controller.get());
-
-
-		engine->getRenderer()->removeAllPasses();
-		const gltut::u32 textureSize = 512;
-		auto* colorTexture = renderer->getDevice()->getTextures()->create(
-			nullptr,
-			{ textureSize, textureSize },
-			gltut::TextureFormat::RGBA,
-			{ gltut::TextureFilterMode::NEAREST,
-			gltut::TextureFilterMode::NEAREST,
-			gltut::TextureWrapMode::CLAMP_TO_EDGE });
-
-		GLTUT_CHECK(colorTexture != nullptr, "Failed to create color texture");
-
-		auto* depthTexture = renderer->getDevice()->getTextures()->create(
-			nullptr,
-			{ textureSize, textureSize },
-			gltut::TextureFormat::FLOAT,
-			{ gltut::TextureFilterMode::NEAREST,
-			gltut::TextureFilterMode::NEAREST,
-			gltut::TextureWrapMode::CLAMP_TO_EDGE });
-
-		auto* framebuffer = renderer->getDevice()->getFramebuffers()->create(
-			colorTexture,
-			depthTexture);
-		GLTUT_CHECK(framebuffer, "Failed to create framebuffer");
+		engine->getScene()->addCameraController(controller.get());*/
 
 		gltut::Color clearColor(0.5f, 0.5f, 0.5f);
-		auto* renderToTexturePass = renderer->createPass(
-			scene->getActiveCameraViewpoint(),
-			scene->getRenderGroup(),
-			framebuffer,
-			0,
-			&clearColor,
-			true, // Depth clearing
-			nullptr,
-			true,
-			false);
+		engine->getSceneRenderPass()->setClearColor(&clearColor);
 
-		GLTUT_CHECK(renderToTexturePass != nullptr, "Failed to create shadow map render pass");
-		renderer->setPassPriority(renderToTexturePass, 0);
+		//engine->getRenderer()->removeAllPasses();
+		//const gltut::Point2u textureSize = engine->getWindow()->getSize();
+		//auto* colorTexture = renderer->getDevice()->getTextures()->create(
+		//	nullptr,
+		//	textureSize,
+		//	gltut::TextureFormat::RGBA,
+		//	{ gltut::TextureFilterMode::NEAREST,
+		//	gltut::TextureFilterMode::NEAREST,
+		//	gltut::TextureWrapMode::CLAMP_TO_EDGE });
 
-		auto* textureToWindowPass = engine->getFactory()->getRenderPass()->createTextureToWindowRenderPass(
-			colorTexture,
-			nullptr);
-		renderer->setPassPriority(textureToWindowPass, 1000);
+		//GLTUT_CHECK(colorTexture != nullptr, "Failed to create color texture");
 
-		auto start = std::chrono::high_resolution_clock::now();
+		//auto* depthTexture = renderer->getDevice()->getTextures()->create(
+		//	nullptr,
+		//	textureSize,
+		//	gltut::TextureFormat::FLOAT,
+		//	{ gltut::TextureFilterMode::NEAREST,
+		//	gltut::TextureFilterMode::NEAREST,
+		//	gltut::TextureWrapMode::CLAMP_TO_EDGE });
+
+		//engine->getFactory()->getTexture()->createWindowSizeTextureBinding(colorTexture);
+		//engine->getFactory()->getTexture()->createWindowSizeTextureBinding(depthTexture);
+
+		//auto* framebuffer = renderer->getDevice()->getFramebuffers()->create(
+		//	colorTexture,
+		//	depthTexture);
+		//GLTUT_CHECK(framebuffer, "Failed to create framebuffer");
+
+		//auto* renderToTexturePass = renderer->createPass(
+		//	scene->getActiveCameraViewpoint(),
+		//	scene->getRenderGroup(),
+		//	framebuffer,
+		//	0,
+		//	&clearColor,
+		//	true, // Depth clearing
+		//	nullptr,
+		//	true,
+		//	false);
+
+		//GLTUT_CHECK(renderToTexturePass != nullptr, "Failed to create render to texture pass");
+
+		//auto* textureToWindowPass = engine->getFactory()->getRenderPass()->createTextureToWindowRenderPass(
+		//	colorTexture,
+		//	nullptr);
+
 		do
 		{
-			auto now = std::chrono::high_resolution_clock::now();
-			float time = std::chrono::duration<float>(now - start).count();
-			auto rotation = gltut::Matrix4::rotationMatrix({ time, time, time });
-
-			for (size_t i = 0; i < BOX_COUNT; ++i)
-			{
-				boxes[i]->setTransform(
-					gltut::Matrix4::translationMatrix(boxPositions[i]) * rotation);
-			}
 		} while (engine->update());
 	}
 	GLTUT_APPLICATION_CATCH;

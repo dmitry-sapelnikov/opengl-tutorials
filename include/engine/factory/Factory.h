@@ -5,6 +5,7 @@
 #include "engine/factory/material/MaterialFactory.h"
 #include "engine/factory/render_pass/RenderPassFactory.h"
 #include "engine/factory/shadow/ShadowFactory.h"
+#include "engine/factory/texture/TextureFactory.h"
 
 namespace gltut
 {
@@ -27,6 +28,9 @@ public:
 
 	/// Returns the shadow factory
 	virtual ShadowFactory* getShadow() noexcept = 0;
+
+	/// Returns the texture factory
+	virtual TextureFactory* getTexture() noexcept = 0;
 
 	/// Updates the factory
 	virtual void update() noexcept = 0;

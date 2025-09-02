@@ -7,12 +7,14 @@ namespace gltut
 // Constructor
 FactoryC::FactoryC(
 	Renderer& renderer,
-	Scene& scene) noexcept :
+	Scene& scene,
+	Window& window) noexcept :
 
 	mGeometry(*renderer.getDevice()),
 	mMaterial(renderer, scene),
 	mRenderPass(renderer),
-	mShadow(renderer)
+	mShadow(renderer),
+	mTexture(window)
 {
 }
 

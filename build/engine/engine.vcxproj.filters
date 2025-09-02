@@ -171,6 +171,12 @@
     <Filter Include="src\renderer\render_pass">
       <UniqueIdentifier>{6fa1b9b5-c7ba-49fd-8249-29a276b62227}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\factory\texture">
+      <UniqueIdentifier>{84f29998-5b7b-420d-845d-d16df4c92018}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\factory\texture">
+      <UniqueIdentifier>{958e0128-cd84-4a10-9275-bb4795940606}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\engine\Engine.h">
@@ -536,6 +542,12 @@
     <ClInclude Include="..\..\include\engine\renderer\objects\RenderObject.h">
       <Filter>include\renderer\objects</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\engine\factory\texture\TextureFactory.h">
+      <Filter>include\factory\texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\factory\texture\TextureFactoryC.h">
+      <Filter>src\factory\texture</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\engine\EngineC.cpp">
@@ -666,6 +678,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\engine\renderer\render_pass\RenderPassC.cpp">
       <Filter>src\renderer\render_pass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\factory\texture\TextureFactoryC.cpp">
+      <Filter>src\factory\texture</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

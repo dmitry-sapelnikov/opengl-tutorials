@@ -54,7 +54,7 @@ EngineC::EngineC(u32 windowWidth, u32 windowHeight)
 		nullptr);
 	GLTUT_CHECK(mDepthSortedSceneRenderPass != nullptr, "Cannot create the depth-sorted scene render pass");
 
-	mFactory = std::make_unique<FactoryC>(*mRenderer, *mScene);
+	mFactory = std::make_unique<FactoryC>(*mRenderer, *mScene, *mWindow);
 }
 
 bool EngineC::update() noexcept
