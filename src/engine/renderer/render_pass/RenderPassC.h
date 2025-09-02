@@ -97,6 +97,18 @@ public:
 		mCullFrontFaces = front;
 	}
 
+	/// Returns if the pass is active
+	bool isActive() const noexcept final
+	{
+		return mActive;
+	}
+
+	/// Enables/disables the pass
+	void setActive(bool active) noexcept final
+	{
+		mActive = active;
+	}
+
 	/// Executes the render pass
 	void execute() noexcept;
 
@@ -134,6 +146,9 @@ private:
 
 	/// Enable transparency flag
 	bool mEnableBlending;
+
+	/// Active flag
+	bool mActive = true;
 
 	/// GraphicsDevice
 	GraphicsDevice& mDevice;

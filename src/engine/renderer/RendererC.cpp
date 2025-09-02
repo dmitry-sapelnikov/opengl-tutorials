@@ -217,7 +217,10 @@ void RendererC::execute() noexcept
 {
 	for (const auto& pass : mPasses)
 	{
-		pass.first->execute();
+		if (pass.first->isActive())
+		{
+			pass.first->execute();
+		}
 	}
 }
 

@@ -47,6 +47,12 @@ public:
 	/// Set the face culling state
 	virtual void setFaceCulling(bool back, bool front) noexcept = 0;
 
+	/// Returns if the pass is active
+	virtual bool isActive() const noexcept = 0;
+
+	/// Enables/disables the pass
+	virtual void setActive(bool active) noexcept = 0;
+
 	/// Executes the render pass
 	virtual void execute() noexcept = 0;
 };
