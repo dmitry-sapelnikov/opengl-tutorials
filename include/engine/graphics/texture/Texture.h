@@ -34,6 +34,9 @@ public:
 	/// Returns the size of the texture
 	virtual const Point2u& getSize() const noexcept = 0;
 
+	/// Sets the size of the texture, recreating it. The existing texture data will be lost.
+	virtual void setSize(const Point2u& size) noexcept = 0;
+
 	/// Returns the texture format
 	virtual TextureFormat getFormat() const noexcept = 0;
 

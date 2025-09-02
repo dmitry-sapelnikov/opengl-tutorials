@@ -3,6 +3,7 @@
 // Includes
 #include <string>
 #include <memory>
+#include <deque>
 #include <functional>
 
 #include "engine/core/NonCopyable.h"
@@ -40,7 +41,7 @@ public:
 	u32 getFPS() noexcept final;
 
 	/// Adds an event handler
-	void addEventHandler(EventHandler* handler) noexcept final;
+	void addEventHandler(EventHandler* handler, bool inFront = false) noexcept final;
 
 	/// Removes an event handler. Does nothing if the handler is not found.
 	void removeEventHandler(EventHandler* handler) noexcept final;
@@ -89,7 +90,7 @@ private:
 	std::unique_ptr<WindowCallback> mCallback;
 
 	/// Event handlers
-	std::vector<EventHandler*> mEventHandlers;
+	std::deque<EventHandler*> mEventHandlers;
 
 	/// FPS counter
 	FPSCounter mFPSCounter;

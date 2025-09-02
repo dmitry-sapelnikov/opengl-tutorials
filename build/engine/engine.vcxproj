@@ -27,6 +27,7 @@
     <ClInclude Include="..\..\include\engine\factory\render_pass\RenderPassFactory.h" />
     <ClInclude Include="..\..\include\engine\factory\shader\PhongShaderModel.h" />
     <ClInclude Include="..\..\include\engine\factory\shadow\ShadowFactory.h" />
+    <ClInclude Include="..\..\include\engine\factory\texture\TextureFactory.h" />
     <ClInclude Include="..\..\include\engine\graphics\framebuffer\Framebuffer.h" />
     <ClInclude Include="..\..\include\engine\graphics\framebuffer\FramebufferManager.h" />
     <ClInclude Include="..\..\include\engine\graphics\framebuffer\TextureFramebuffer.h" />
@@ -93,6 +94,7 @@
     <ClInclude Include="..\..\src\engine\factory\shader\StandardShaderBinding.h" />
     <ClInclude Include="..\..\src\engine\factory\shadow\ShadowFactoryC.h" />
     <ClInclude Include="..\..\src\engine\factory\shadow\ShadowMapC.h" />
+    <ClInclude Include="..\..\src\engine\factory\texture\TextureFactoryC.h" />
     <ClInclude Include="..\..\src\engine\graphics\backends\opengl\framebuffer\FramebufferBackupOpenGL.h" />
     <ClInclude Include="..\..\src\engine\graphics\backends\opengl\framebuffer\TextureFramebufferOpenGL.h" />
     <ClInclude Include="..\..\src\engine\graphics\backends\opengl\framebuffer\WindowFramebufferOpenGL.h" />
@@ -149,6 +151,7 @@
     <ClCompile Include="..\..\src\engine\factory\shader\StandardShaderBinding.cpp" />
     <ClCompile Include="..\..\src\engine\factory\shadow\ShadowFactoryC.cpp" />
     <ClCompile Include="..\..\src\engine\factory\shadow\ShadowMapC.cpp" />
+    <ClCompile Include="..\..\src\engine\factory\texture\TextureFactoryC.cpp" />
     <ClCompile Include="..\..\src\engine\graphics\backends\opengl\framebuffer\TextureFramebufferOpenGL.cpp" />
     <ClCompile Include="..\..\src\engine\graphics\backends\opengl\GeometryOpenGL.cpp" />
     <ClCompile Include="..\..\src\engine\graphics\backends\opengl\DeviceOpenGL.cpp" />

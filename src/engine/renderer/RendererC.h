@@ -76,6 +76,9 @@ public:
 	/// Removes a render pass
 	void removePass(RenderPass* pass) noexcept final;
 
+	/// Removes all render passes
+	void removeAllPasses() noexcept final;
+
 	/// Sets the priority of the render pass
 	void setPassPriority(RenderPass* pass, int32 priority) noexcept final;
 
@@ -99,7 +102,7 @@ private:
 	std::vector<std::unique_ptr<RenderGeometryGroup>> mGroups;
 
 	/// List of render passes
-	std::vector<std::pair<std::unique_ptr<RenderPass>, u32>> mPasses;
+	std::vector<std::pair<std::unique_ptr<RenderPass>, int32>> mPasses;
 };
 
 // End of the namespace gltut

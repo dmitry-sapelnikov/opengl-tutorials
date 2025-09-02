@@ -36,6 +36,8 @@ int main()
 	
 		engine->getWindow()->setTitle("Hello Triangle");
 		engine->getWindow()->showFPS(true);
+		// Since our geometry does not have normals, disable face culling
+		engine->getSceneRenderPass()->setFaceCulling(false, false);
 
 		float vertices1[] = {
 			0.5f,  0.5f, 0.0f,  // top right

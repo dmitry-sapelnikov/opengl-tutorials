@@ -38,6 +38,9 @@ public:
 		return mSize;
 	}
 
+	/// Sets the size of the texture, recreating it. The existing texture data will be lost.
+	void setSize(const Point2u& size) noexcept final;
+
 	/// Returns the texture format
 	TextureFormat getFormat() const noexcept final
 	{
@@ -57,6 +60,8 @@ public:
 	void bind(u32 slot) const noexcept final;
 
 private:
+	void create(const void* data) noexcept;
+
 	void setMinFilterMode(TextureFilterMode mode) noexcept;
 
 	void setMagFilterMode(TextureFilterMode mode) noexcept;

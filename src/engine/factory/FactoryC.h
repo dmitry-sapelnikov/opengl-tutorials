@@ -8,6 +8,7 @@
 #include "./material/MaterialFactoryC.h"
 #include "./render_pass/RenderPassFactoryC.h"
 #include "./shadow/ShadowFactoryC.h"
+#include "./texture/TextureFactoryC.h"
 
 namespace gltut
 {
@@ -19,7 +20,8 @@ public:
 	// Constructor
 	FactoryC(
 		Renderer& renderer,
-		Scene& scene) noexcept;
+		Scene& scene,
+		Window& window) noexcept;
 
 	/// Returns the geometry factory
 	GeometryFactory* getGeometry() noexcept final
@@ -45,6 +47,12 @@ public:
 		return &mShadow;
 	}
 
+	/// Returns the texture factory
+	TextureFactory* getTexture() noexcept final
+	{
+		return &mTexture;
+	}
+
 	/// Updates the factory
 	void update() noexcept final
 	{
@@ -64,6 +72,9 @@ private:
 
 	/// The shadow factory
 	ShadowFactoryC mShadow;
+
+	/// The texture factory
+	TextureFactoryC mTexture;
 };
 
 // End of the namespace gltut

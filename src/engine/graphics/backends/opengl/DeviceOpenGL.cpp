@@ -66,8 +66,11 @@ DeviceOpenGL::DeviceOpenGL(Window& window) :
 	// Disable VSync
 	enableVSync(false);
 
-	// Enable face culling
-	glEnable(GL_CULL_FACE);
+	// Enable front face culling
+	DeviceOpenGL::setFaceCulling(true, false);
+
+	// Enable scissor test
+	glEnable(GL_SCISSOR_TEST);
 }
 
 void DeviceOpenGL::clear(
@@ -119,6 +122,12 @@ void DeviceOpenGL::setViewport(const Rectangle2u& viewport) noexcept
 	const auto& min = viewport.getMin();
 	const auto& max = viewport.getMax();
 	glViewport(
+		static_cast<GLint>(min.x),
+		static_cast<GLint>(min.y),
+		static_cast<GLsizei>(max.x - min.x),
+		static_cast<GLsizei>(max.y - min.y));
+
+	glScissor(
 		static_cast<GLint>(min.x),
 		static_cast<GLint>(min.y),
 		static_cast<GLsizei>(max.x - min.x),
@@ -187,6 +196,14 @@ void DeviceOpenGL::bindTexture(const Texture* texture, u32 slot) noexcept
 
 void DeviceOpenGL::setFaceCulling(bool back, bool front) noexcept
 {
+	if (!back && !front)
+	{
+		// Disable face culling
+		glDisable(GL_CULL_FACE);
+		return;
+	}
+
+	glEnable(GL_CULL_FACE);
 	GLenum cullMode = GL_NONE;
 	if (back && front)
 	{

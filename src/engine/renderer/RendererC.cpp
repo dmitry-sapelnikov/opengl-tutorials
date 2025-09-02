@@ -137,6 +137,11 @@ RenderPass* RendererC::createPass(
 	return result;
 }
 
+void RendererC::removeAllPasses() noexcept
+{
+	mPasses.clear();
+}
+
 RenderPass* RendererC::createDepthSortedPass(
 	const Viewpoint* viewpoint,
 	const RenderGeometryGroup* group,
@@ -212,7 +217,10 @@ void RendererC::execute() noexcept
 {
 	for (const auto& pass : mPasses)
 	{
-		pass.first->execute();
+		if (pass.first->isActive())
+		{
+			pass.first->execute();
+		}
 	}
 }
 

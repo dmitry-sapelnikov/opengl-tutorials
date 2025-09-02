@@ -37,6 +37,12 @@ public:
 
 	/// Returns the geometry factory
 	virtual Factory* getFactory() noexcept = 0;
+
+	/// Return the scene render pass
+	virtual RenderPass* getSceneRenderPass() noexcept = 0;
+
+	/// Return the depth-sorted scene render pass
+	virtual RenderPass* getDepthSortedSceneRenderPass() noexcept = 0;
 };
 
 //	Global functions

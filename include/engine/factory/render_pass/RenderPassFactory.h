@@ -15,7 +15,15 @@ public:
 	/// Creates a texture-to-window render pass
 	virtual RenderPass* createTextureToWindowRenderPass(
 		const Texture* texture,
-		const Rectangle2u& viewport) noexcept = 0;
+		const Rectangle2u* viewport) noexcept = 0;
+
+	/// Creates a textures-to-window render pass
+	virtual RenderPass* createTexturesToWindowRenderPass(
+		const Texture** textures,
+		u32 textureCount,
+		const Rectangle2u* viewport,
+		const char* fragmentShader,
+		const char** textureSamplerNames) noexcept = 0;
 };
 
 // End of the namespace gltut

@@ -124,7 +124,7 @@ Geometry* createRenderQuad(Renderer& renderer) noexcept
 /// Creates a texture-to-window render pass
 RenderPass* RenderPassFactoryC::createTextureToWindowRenderPass(
 	const Texture* texture,
-	const Rectangle2u& viewport) noexcept
+	const Rectangle2u* viewport) noexcept
 {
 	RenderPass* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN
@@ -140,49 +140,133 @@ RenderPass* RenderPassFactoryC::createTextureToWindowRenderPass(
 		}
 		ShaderRendererBinding* shader = mShaders[shaderIndex];
 
+		result = createTexturesToWindowRenderPass(
+			viewport,
+			shader->getShader(),
+			&texture,
+			1);
+	GLTUT_CATCH_ALL_END("Failed to create texture-to-window render pass");
+	return result;
+}
+
+/// Creates a textures-to-window render pass
+RenderPass* RenderPassFactoryC::createTexturesToWindowRenderPass(
+	const Texture** textures,
+	u32 textureCount,
+	const Rectangle2u* viewport,
+	const char* fragmentShader,
+	const char** textureSamplerNames) noexcept
+{
+	RenderPass* result = nullptr;
+	try
+	{
+		GLTUT_CHECK(textures != nullptr, "Textures must not be null");
+		GLTUT_CHECK(textureCount > 0, "Texture count must be greater than zero");
+		GLTUT_CHECK(fragmentShader != nullptr, "Fragment shader must not be null");
+		GLTUT_CHECK(textureSamplerNames != nullptr, "Texture sampler names must not be null");
+
 		if (mRenderQuad == nullptr)
 		{
 			mRenderQuad = createRenderQuad(mRenderer);
 			GLTUT_CHECK(
 				mRenderQuad != nullptr,
-				"Failed to create render quad for texture-to-window");
+				"Failed to create render quad for textures-to-window");
 		}
 
-		// Create the render material
-		Material* material = mRenderer.createMaterial();
-		GLTUT_CHECK(
-			material != nullptr,
-			"Failed to create material for texture-to-window render pass");
-
-		MaterialPass* materialPass = material->createPass(0, shader, 1);
+		// Create the shader
+		Shader* shader = mRenderer.getDevice()->getShaders()->create(
+			TEXTURE_TO_WINDOW_VERTEX_SHADER,
+			fragmentShader);
 
 		GLTUT_CHECK(
-			materialPass != nullptr,
-			"Failed to create material pass for texture-to-window render pass");
+			shader != nullptr,
+			"Failed to create shader for textures-to-window render pass");
 
-		materialPass->getTextures()->setTexture(texture, 0);
+		// Set the texture samplers
+		for (u32 i = 0; i < textureCount; ++i)
+		{
+			GLTUT_CHECK(
+				textureSamplerNames[i] != nullptr,
+				"Texture sampler name must not be null");
+			shader->setInt(textureSamplerNames[i], static_cast<int32>(i));
+		}
 
-		RenderObject* object = mRenderer.createGeometry(
-			mRenderQuad,
-			material,
-			Matrix4::identity());
-
-		GLTUT_CHECK(
-			object != nullptr,
-			"Failed to create render object for texture-to-window render pass");
-
-		result = mRenderer.createPass(
-			nullptr, // No viewpoint
-			object,
-			mRenderer.getDevice()->getFramebuffers()->getDefault(),
-			0, // Material pass 0
-			nullptr, // No clear color
-			true, // Depth clearing
-			&viewport);
-
-	GLTUT_CATCH_ALL_END("Failed to create texture-to-window render pass");
+		result = createTexturesToWindowRenderPass(
+			viewport,
+			shader,
+			textures,
+			textureCount);
+	}
+	GLTUT_CATCH_ALL("Failed to create textures-to-window render pass");
 	return result;
 }
+
+RenderPass* RenderPassFactoryC::createTexturesToWindowRenderPass(
+	const Rectangle2u* viewport,
+	Shader* shader,
+	const Texture** textures,
+	u32 texturesCount)
+{
+	GLTUT_CHECK(shader != nullptr, "Shader must not be null");
+	GLTUT_CHECK(textures != nullptr, "Textures must not be null");
+	GLTUT_CHECK(texturesCount > 0, "Texture count must be greater than zero");
+
+	if (mRenderQuad == nullptr)
+	{
+		mRenderQuad = createRenderQuad(mRenderer);
+		GLTUT_CHECK(
+			mRenderQuad != nullptr,
+			"Failed to create render quad for texture-to-window");
+	}
+
+	ShaderRendererBinding* shaderBinding = mRenderer.createShaderBinding(shader);
+	GLTUT_CHECK(
+		shaderBinding != nullptr,
+		"Failed to create shader binding for textures-to-window render pass");
+
+	// Create the render material
+	Material* material = mRenderer.createMaterial();
+	GLTUT_CHECK(
+		material != nullptr,
+		"Failed to create material for texture-to-window render pass");
+
+	MaterialPass* materialPass = material->createPass(0, shaderBinding, texturesCount);
+
+	GLTUT_CHECK(
+		materialPass != nullptr,
+		"Failed to create material pass for texture-to-window render pass");
+
+	for (u32 i = 0; i < texturesCount; ++i)
+	{
+		GLTUT_CHECK(
+			textures[i] != nullptr,
+			"Texture must not be null");
+		materialPass->getTextures()->setTexture(textures[i], i);
+	}
+
+	RenderObject* quadRenderGeometry = mRenderer.createGeometry(
+		mRenderQuad,
+		material,
+		Matrix4::identity());
+
+	GLTUT_CHECK(
+		quadRenderGeometry != nullptr,
+		"Failed to create render quadRenderGeometry for texture-to-window render pass");
+
+	return mRenderer.createPass(
+		nullptr, // No viewpoint
+		quadRenderGeometry,
+		mRenderer.getDevice()->getFramebuffers()->getDefault(),
+		0, // Material pass 0
+		nullptr, // No clear color
+		true, // Depth clearing
+		viewport,
+		false, // No back face culling
+		false // No front face culling
+	);
+	// TODO: add render pass without depth test
+}
+
 
 // End of the namespace gltut
 }
