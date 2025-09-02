@@ -117,7 +117,7 @@ EngineImguiC::EngineImguiC(Engine& engine) :
 		static_cast<HWND>(engine.getWindow()->getHandle()));
 
 	GLTUT_CHECK(mEventHandler != nullptr, "Failed to create ImguiEventHandler");
-	engine.getWindow()->addEventHandler(mEventHandler.get());
+	engine.getWindow()->addEventHandler(mEventHandler.get(), true);
 }
 
 EngineImguiC::~EngineImguiC() noexcept
@@ -157,7 +157,7 @@ EngineImgui* createEngineImgui(Engine* engine) noexcept
 	GLTUT_CATCH_ALL_BEGIN
 		return new EngineImguiC(*engine);
 	GLTUT_CATCH_ALL_END("Failed to create EngineImguiC instance")
-		return nullptr;
+	return nullptr;
 }
 
 void deleteEngineImgui(EngineImgui* engineImgui) noexcept

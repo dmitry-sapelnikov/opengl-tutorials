@@ -27,7 +27,7 @@ public:
 	virtual u32 getFPS() noexcept = 0;
 
 	/// Adds an event handler
-	virtual void addEventHandler(EventHandler* handler) noexcept = 0;
+	virtual void addEventHandler(EventHandler* handler, bool inFront = false) noexcept = 0;
 
 	/// Removes an event handler. Does nothing if the handler is not found.
 	virtual void removeEventHandler(EventHandler* handler) noexcept = 0;

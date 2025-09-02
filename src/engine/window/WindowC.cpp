@@ -3,7 +3,6 @@
 
 #include <iostream>
 #include <Windows.h>
-
 #include "engine/core/Check.h"
 
 namespace gltut
@@ -274,7 +273,7 @@ u32 WindowC::getFPS() noexcept
 	return mFPS;
 }
 
-void WindowC::addEventHandler(EventHandler* handler) noexcept
+void WindowC::addEventHandler(EventHandler* handler, bool inFront) noexcept
 {
 	GLTUT_ASSERT(handler != nullptr);
 	GLTUT_ASSERT(std::find(
@@ -283,7 +282,14 @@ void WindowC::addEventHandler(EventHandler* handler) noexcept
 		handler) == mEventHandlers.end());
 
 	GLTUT_CATCH_ALL_BEGIN
-		mEventHandlers.push_back(handler);
+		if (inFront)
+		{
+			mEventHandlers.push_front(handler);
+		}
+		else
+		{
+			mEventHandlers.push_back(handler);
+		}
 	GLTUT_CATCH_ALL_END("Failed to add an event handler")
 }
 
