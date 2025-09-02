@@ -12,16 +12,71 @@
 static const size_t BOX_COUNT = 100;
 static const float POSITION_RANGE = 5.0f;
 
+// Color inversion fragment shader
+static const char* INVERT_FRAGMENT_SHADER = R"(
+#version 330 core
+in vec2 texCoord;
+out vec4 outColor;
+uniform sampler2D textureSampler;
+
+void main()
+{
+	vec3 color = texture(textureSampler, texCoord).rgb;
+	outColor = vec4(vec3(1.0) - color, 1.0);
+})";
+
+// Grayscale fragment shader
+static const char* GRAYSCALE_FRAGMENT_SHADER = R"(
+#version 330 core
+in vec2 texCoord;
+out vec4 outColor;
+uniform sampler2D textureSampler;
+
+void main()
+{
+	vec3 color = texture(textureSampler, texCoord).rgb;
+	float gray = (color.r + color.g + color.b) / 3.0;
+	outColor = vec4(gray, gray, gray, 1.0);
+})";
+
+// Gaussian blur fragment shader
+static const char* BLUR_FRAGMENT_SHADER = R"(
+#version 330 core
+in vec2 texCoord;
+out vec4 outColor;
+uniform sampler2D textureSampler;
+
+const float offset = 1.0 / 300.0;
+const float kernel[9] = float[](
+	1.0 / 16, 2.0 / 16, 1.0 / 16,
+	2.0 / 16, 4.0 / 16, 2.0 / 16,
+	1.0 / 16, 2.0 / 16, 1.0 / 16
+);
+
+void main()
+{
+	vec3 col = vec3(0.0);
+	for (int i = 0; i < 3; ++i)
+	{
+		for (int j = 0; j < 3; ++j)
+		{
+			vec2 delta = vec2((i - 1) * offset, (j - 1) * offset);
+			col += texture(textureSampler, texCoord + delta).rgb * kernel[i * 3 + j];
+		}
+	}
+	outColor = vec4(col, 1.0);
+})";
+
 ///	The program entry point
 int main()
 {
+	std::unique_ptr<gltut::Engine> engine;
+	gltut::EngineImgui* imgui = nullptr;
 	try
 	{
-		std::unique_ptr<gltut::Engine> engine(gltut::createEngine(1024, 768));
+		engine.reset(gltut::createEngine(1024, 768));
 		GLTUT_CHECK(engine != nullptr, "Failed to create engine");
-
-		engine->getWindow()->setTitle("Camera");
-		engine->getWindow()->showFPS(true);
+		engine->getWindow()->setTitle("Framebuffer Effects");
 
 		auto* renderer = engine->getRenderer();
 		auto* scene = engine->getScene();
@@ -37,12 +92,13 @@ int main()
 		std::vector<gltut::GeometryNode*> boxes;
 		for (size_t i = 0; i < BOX_COUNT; ++i)
 		{
-			gltut::Vector3 position(
+			const gltut::Vector3 position(
 				rng.nextFloat(-POSITION_RANGE, POSITION_RANGE),
 				rng.nextFloat(-POSITION_RANGE, POSITION_RANGE),
 				rng.nextFloat(-POSITION_RANGE, POSITION_RANGE));
 
-			gltut::Vector3 rotation = rng.nextFloat(0, gltut::PI * 2.0f) * 
+			const gltut::Vector3 rotation = 
+				rng.nextFloat(0, gltut::PI * 2.0f) *
 				gltut::Vector3(
 					rng.nextFloat(),
 					rng.nextFloat(),
@@ -70,7 +126,7 @@ int main()
 		GLTUT_CHECK(controller.get() != nullptr, "Failed to create camera controller");
 		engine->getScene()->addCameraController(controller.get());
 
-		gltut::Color clearColor(0.5f, 0.5f, 0.5f);
+		gltut::Color clearColor(0.1f, 0.1f, 0.1f);
 
 		engine->getRenderer()->removeAllPasses();
 		const gltut::Point2u textureSize = engine->getWindow()->getSize();
@@ -111,17 +167,67 @@ int main()
 			true,
 			false);
 
-		GLTUT_CHECK(renderToTexturePass != nullptr, "Failed to create render to texture pass");
+		GLTUT_CHECK(renderToTexturePass, "Failed to create render to texture pass");
 
-		auto* textureToWindowPass = engine->getFactory()->getRenderPass()->createTextureToWindowRenderPass(
-			colorTexture,
-			nullptr);
+		const gltut::Texture* textures[] = { colorTexture };
+		const char* textureNames[] = { "textureSampler" };
+
+		std::vector<std::pair<std::string, const char* >> effects = {
+			{ "Invert", INVERT_FRAGMENT_SHADER },
+			{ "Grayscale", GRAYSCALE_FRAGMENT_SHADER },
+			{ "Blur", BLUR_FRAGMENT_SHADER }
+		};
+
+		std::vector<gltut::RenderPass*> effectPasses;
+		for (const auto& [name, shader] : effects)
+		{
+			gltut::RenderPass* effectPass = engine->getFactory()->getRenderPass()->createTexturesToWindowRenderPass(
+				textures,
+				1,
+				nullptr,
+				shader,
+				textureNames);
+			GLTUT_CHECK(effectPass, ("Failed to create " + name + " pass").c_str());
+			effectPass->setActive(false);
+			effectPasses.push_back(effectPass);
+		}
+
+		imgui = gltut::createEngineImgui(engine.get());
+		GLTUT_CHECK(imgui != nullptr, "Failed to create ImGui engine");
+
+		gltut::u32 currentEffect = 0;
+		effectPasses[currentEffect]->setActive(true);
 
 		do
 		{
+			imgui->newFrame();
+			ImGui::SetNextWindowPos({ 10, 10 }, ImGuiCond_FirstUseEver);
+			ImGui::SetNextWindowSize({ 200, 400 }, ImGuiCond_FirstUseEver);
+
+			ImGui::Begin("Settings");
+			ImGui::Text("FPS: %u", engine->getWindow()->getFPS());
+
+			// Dropdown to select post-processing effect
+			if (ImGui::BeginCombo("Effect", effects[currentEffect].first.c_str()))
+			{
+				for (gltut::u32 i = 0; i < static_cast<gltut::u32>(effects.size()); ++i)
+				{
+					if (ImGui::Selectable(effects[i].first.c_str(), currentEffect == i))
+					{
+						effectPasses[currentEffect]->setActive(false);
+						currentEffect = i;
+						effectPasses[currentEffect]->setActive(true);
+					}
+				}
+				ImGui::EndCombo();
+			}
+			ImGui::End();
 		} while (engine->update());
 	}
 	GLTUT_APPLICATION_CATCH;
+
+	gltut::deleteEngineImgui(imgui);
+	engine.reset();
 
 	return 0;
 }
