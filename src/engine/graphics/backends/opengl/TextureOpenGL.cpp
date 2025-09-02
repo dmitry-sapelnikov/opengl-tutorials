@@ -102,32 +102,58 @@ TextureOpenGL::TextureOpenGL(
 	GLTUT_CHECK(mSize.y > 0, "Texture height is 0");
 
 	//	Get the currently bound texture to restore it after
-	GLint currentTexture;
-	glGetIntegerv(GL_TEXTURE_BINDING_2D, &currentTexture);
-
 	glGenTextures(1, &mId);
 	GLTUT_CHECK(mId != 0, "Failed to generate texture");
 	GLTUT_CHECK(mId < std::numeric_limits<u32>::max(), "Texture ID is out of 32-bit range");
 
-	glBindTexture(GL_TEXTURE_2D, mId);
-	glTexImage2D(
-		GL_TEXTURE_2D,
-		0,
-		toOpenGLFormat(format),
-		mSize.x,
-		mSize.y,
-		0,
-		toOpenGLFormat(format),
-		getChannelType(format),
-		data);
-
+	create(data);
 	setParameters(parameters);
-	glBindTexture(GL_TEXTURE_2D, currentTexture);
 }
 
 TextureOpenGL::~TextureOpenGL()
 {
 	glDeleteTextures(1, &mId);
+}
+
+void TextureOpenGL::setSize(const Point2u& size) noexcept
+{
+	GLTUT_ASSERT(size.x > 0);
+	GLTUT_ASSERT(size.y > 0);
+
+	if (size.x == 0 || size.y == 0)
+	{
+		return;
+	}
+
+	if (size.x == mSize.x && size.y == mSize.y)
+	{
+		return;
+	}
+
+	mSize = size;
+	create(nullptr);
+}
+
+void TextureOpenGL::create(const void* data) noexcept
+{
+	// Get the currently bound texture to restore it after
+	GLint currentTexture;
+	glGetIntegerv(GL_TEXTURE_BINDING_2D, &currentTexture);
+	glBindTexture(GL_TEXTURE_2D, mId);
+
+	glTexImage2D(
+		GL_TEXTURE_2D,
+		0,
+		toOpenGLFormat(mFormat),
+		mSize.x,
+		mSize.y,
+		0,
+		toOpenGLFormat(mFormat),
+		getChannelType(mFormat),
+		data);
+
+	updateMipmap();
+	glBindTexture(GL_TEXTURE_2D, currentTexture);
 }
 
 void TextureOpenGL::setParameters(const TextureParameters& parameters) noexcept
