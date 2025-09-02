@@ -42,16 +42,24 @@ public:
 		const char* fragmentShader) final;
 
 	/// Creates a texture
-	std::unique_ptr<Texture> createBackendTexture(
-		const void* data,
-		const Point2u& size,
-		TextureFormat format,
+	std::unique_ptr<Texture2> createBackendTexture2(
+		const TextureData& data,
+		const TextureParameters& parameters) final;
+
+	/// Creates a texture cubemap for a specific graphics backend
+	std::unique_ptr<TextureCubemap> createBackendTextureCubemap(
+		const TextureData& minusXData,
+		const TextureData& plusXData,
+		const TextureData& minusYData,
+		const TextureData& plusYData,
+		const TextureData& minusZData,
+		const TextureData& plusZData,
 		const TextureParameters& parameters) final;
 
 	/// Creates a framebuffer
 	std::unique_ptr<TextureFramebuffer> createBackendTextureFramebuffer(
-		Texture* color,
-		Texture* depth) final;
+		Texture2* color,
+		Texture2* depth) final;
 
 	/// Binds a texture to a slot
 	void bindTexture(const Texture* texture, u32 slot) noexcept final;

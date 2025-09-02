@@ -177,6 +177,9 @@
     <Filter Include="src\factory\texture">
       <UniqueIdentifier>{958e0128-cd84-4a10-9275-bb4795940606}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\graphics\backends\opengl\texture">
+      <UniqueIdentifier>{ccc9cdd7-609e-432e-b3e4-24e82bd57ba7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\engine\Engine.h">
@@ -410,9 +413,6 @@
     <ClInclude Include="..\..\src\engine\graphics\backends\opengl\ShaderOpenGL.h">
       <Filter>src\graphics\backends\opengl</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\engine\graphics\backends\opengl\TextureOpenGL.h">
-      <Filter>src\graphics\backends\opengl</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\engine\graphics\GraphicsDevice.h">
       <Filter>include\graphics</Filter>
     </ClInclude>
@@ -548,6 +548,24 @@
     <ClInclude Include="..\..\src\engine\factory\texture\TextureFactoryC.h">
       <Filter>src\factory\texture</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\engine\graphics\texture\Texture2.h">
+      <Filter>include\graphics\texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\graphics\texture\TextureCubemap.h">
+      <Filter>include\graphics\texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\graphics\backends\opengl\texture\TextureBackupOpenGL.h">
+      <Filter>src\graphics\backends\opengl\texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\graphics\backends\opengl\texture\Texture2OpenGL.h">
+      <Filter>src\graphics\backends\opengl\texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\graphics\backends\opengl\texture\TextureCubemapOpenGL.h">
+      <Filter>src\graphics\backends\opengl\texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\graphics\backends\opengl\texture\TextureTOpenGL.h">
+      <Filter>src\graphics\backends\opengl\texture</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\engine\EngineC.cpp">
@@ -622,9 +640,6 @@
     <ClCompile Include="..\..\src\engine\graphics\backends\opengl\ShaderOpenGL.cpp">
       <Filter>src\graphics\backends\opengl</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\engine\graphics\backends\opengl\TextureOpenGL.cpp">
-      <Filter>src\graphics\backends\opengl</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\engine\core\FPSCounter.cpp">
       <Filter>src\core</Filter>
     </ClCompile>
@@ -681,6 +696,15 @@
     </ClCompile>
     <ClCompile Include="..\..\src\engine\factory\texture\TextureFactoryC.cpp">
       <Filter>src\factory\texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\graphics\backends\opengl\texture\Texture2OpenGL.cpp">
+      <Filter>src\graphics\backends\opengl\texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\graphics\backends\opengl\texture\TextureCubemapOpenGL.cpp">
+      <Filter>src\graphics\backends\opengl\texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\graphics\backends\opengl\texture\TextureTOpenGL.cpp">
+      <Filter>src\graphics\backends\opengl\texture</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

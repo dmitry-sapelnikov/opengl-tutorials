@@ -4,7 +4,7 @@
 namespace gltut
 {
 
-void TextureFactoryC::createWindowSizeTextureBinding(Texture* texture) noexcept
+void TextureFactoryC::createWindowSizeTextureBinding(Texture2* texture) noexcept
 {
 	if (mWindowSizeTextures.contains(texture))
 	{
@@ -14,7 +14,7 @@ void TextureFactoryC::createWindowSizeTextureBinding(Texture* texture) noexcept
 	texture->setSize(mWindow.getSize());
 }
 
-void TextureFactoryC::removeWindowSizeTextureBinding(Texture* texture) noexcept
+void TextureFactoryC::removeWindowSizeTextureBinding(Texture2* texture) noexcept
 {
 	mWindowSizeTextures.erase(texture);
 }
@@ -23,7 +23,7 @@ bool TextureFactoryC::onEvent(const Event& event) noexcept
 {
 	if (event.type == Event::Type::WINDOW_RESIZE)
 	{
-		for (Texture* texture : mWindowSizeTextures)
+		for (Texture2* texture : mWindowSizeTextures)
 		{
 			texture->setSize(event.windowResize.size);
 		}

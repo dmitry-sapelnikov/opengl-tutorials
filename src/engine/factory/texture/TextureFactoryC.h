@@ -26,10 +26,10 @@ public:
 	}
 
 	/// Creates a binding between a texture and the window size
-	void createWindowSizeTextureBinding(Texture* texture) noexcept final;
+	void createWindowSizeTextureBinding(Texture2* texture) noexcept final;
 
 	/// Removes the window-size texture binding for a texture
-	void removeWindowSizeTextureBinding(Texture* texture) noexcept final;
+	void removeWindowSizeTextureBinding(Texture2* texture) noexcept final;
 
 	/**
 		\brief Called when an event occurs
@@ -40,7 +40,7 @@ public:
 private:
 	Window& mWindow;
 
-	std::unordered_set<Texture*> mWindowSizeTextures;
+	std::unordered_set<Texture2*> mWindowSizeTextures;
 };
 
 // End of the namespace gltut

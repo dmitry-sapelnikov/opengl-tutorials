@@ -1,8 +1,7 @@
 #pragma once
 
 // Includes
-#include "engine/math/Vector2.h"
-#include "engine/scene/nodes/GeometryNode.h"
+#include "engine/graphics/texture/Texture2.h"
 
 namespace gltut
 {
@@ -15,10 +14,10 @@ public:
 	virtual ~TextureFactory() noexcept = default;
 
 	/// Creates a binding between a texture and the window size
-	virtual void createWindowSizeTextureBinding(Texture* texture) noexcept = 0;
+	virtual void createWindowSizeTextureBinding(Texture2* texture) noexcept = 0;
 
 	/// Removes the window-size texture binding for a texture
-	virtual void removeWindowSizeTextureBinding(Texture* texture) noexcept = 0;
+	virtual void removeWindowSizeTextureBinding(Texture2* texture) noexcept = 0;
 };
 
 // End of the namespace gltut

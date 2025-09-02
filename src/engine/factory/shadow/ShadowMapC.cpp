@@ -82,9 +82,9 @@ ShadowMapC::ShadowMapC(
 	GLTUT_CHECK(mFrustumFar > mFrustumNear, "Frustum far must be greater than frustum near");
 
 	mTexture = mRenderer.getDevice()->getTextures()->create(
-		nullptr, // No data, we will render to it
+		{ nullptr, // No data, we will render to it
 		{ textureSize, textureSize },
-		gltut::TextureFormat::FLOAT,
+		gltut::TextureFormat::FLOAT },
 		{ gltut::TextureFilterMode::NEAREST,
 		gltut::TextureFilterMode::NEAREST,
 		gltut::TextureWrapMode::CLAMP_TO_EDGE });

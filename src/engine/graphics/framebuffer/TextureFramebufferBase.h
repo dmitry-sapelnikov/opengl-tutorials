@@ -12,32 +12,32 @@ class TextureFramebufferBase : public TextureFramebuffer, public NonCopyable
 {
 public:
 	/// Returns the color texture
-	Texture* getColor() const noexcept final
+	Texture2* getColor() const noexcept final
 	{
 		return mColor;
 	}
 
 	/// Sets the color texture
-	void setColor(Texture* texture) noexcept;
+	void setColor(Texture2* texture) noexcept;
 
 	/// Returns the depth texture
-	Texture* getDepth() const noexcept final
+	Texture2* getDepth() const noexcept final
 	{
 		return mDepth;
 	}
 
 	/// Sets the depth texture
-	void setDepth(Texture* texture) noexcept;
+	void setDepth(Texture2* texture) noexcept;
 
 	/// Returns the size of the framebuffer
 	Point2u getSize() const noexcept final;
 
 private:
 	/// Color texture
-	Texture* mColor = nullptr;
+	Texture2* mColor = nullptr;
 
 	/// Depth texture
-	Texture* mDepth = nullptr;
+	Texture2* mDepth = nullptr;
 };
 
 // End of the namespace gltut

@@ -7,8 +7,8 @@ namespace gltut
 {
 
 TextureFramebufferOpenGL::TextureFramebufferOpenGL(
-	Texture* color,
-	Texture* depth)
+	Texture2* color,
+	Texture2* depth)
 {
 	glGenFramebuffers(1, &mId);
 	GLTUT_CHECK(mId != 0, "Failed to generate framebuffer");
@@ -22,9 +22,9 @@ TextureFramebufferOpenGL::~TextureFramebufferOpenGL() noexcept
 	glDeleteFramebuffers(1, &mId);
 }
 
-void TextureFramebufferOpenGL::setColor(Texture* texture) noexcept
+void TextureFramebufferOpenGL::setColor(Texture2* texture) noexcept
 {
-	Texture* prevColor = getColor();
+	Texture2* prevColor = getColor();
 	doSetColor(texture);
 	if (!isValid())
 	{
@@ -32,9 +32,9 @@ void TextureFramebufferOpenGL::setColor(Texture* texture) noexcept
 	}
 }
 
-void TextureFramebufferOpenGL::setDepth(Texture* texture) noexcept
+void TextureFramebufferOpenGL::setDepth(Texture2* texture) noexcept
 {
-	Texture* prevDepth = getDepth();
+	Texture2* prevDepth = getDepth();
 	doSetDepth(texture);
 	if (!isValid())
 	{
@@ -42,7 +42,7 @@ void TextureFramebufferOpenGL::setDepth(Texture* texture) noexcept
 	}
 }
 
-void TextureFramebufferOpenGL::doSetColor(Texture* texture) noexcept
+void TextureFramebufferOpenGL::doSetColor(Texture2* texture) noexcept
 {
 	TextureFramebufferBase::setColor(texture);
 	FramebufferBackupOpenGL backup;
@@ -64,7 +64,7 @@ void TextureFramebufferOpenGL::doSetColor(Texture* texture) noexcept
 	}
 }
 
-void TextureFramebufferOpenGL::doSetDepth(Texture* texture) noexcept
+void TextureFramebufferOpenGL::doSetDepth(Texture2* texture) noexcept
 {
 	TextureFramebufferBase::setDepth(texture);
 	FramebufferBackupOpenGL backup;

@@ -20,8 +20,8 @@ public:
 		if the framebuffer could not be created
 	*/
 	virtual TextureFramebuffer* create(
-		Texture* color,
-		Texture* depth) noexcept = 0;
+		Texture2* color,
+		Texture2* depth) noexcept = 0;
 };
 
 // End of the namespace gltut

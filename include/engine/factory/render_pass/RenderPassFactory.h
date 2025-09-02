@@ -14,12 +14,12 @@ public:
 
 	/// Creates a texture-to-window render pass
 	virtual RenderPass* createTextureToWindowRenderPass(
-		const Texture* texture,
+		const Texture2* texture,
 		const Rectangle2u* viewport) noexcept = 0;
 
 	/// Creates a textures-to-window render pass
 	virtual RenderPass* createTexturesToWindowRenderPass(
-		const Texture** textures,
+		const Texture2** textures,
 		u32 textureCount,
 		const Rectangle2u* viewport,
 		const char* fragmentShader,

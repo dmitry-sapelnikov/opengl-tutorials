@@ -109,7 +109,7 @@ private:
 	float mFrustumFar = 0.0f;
 
 	/// The shadow map texture
-	Texture* mTexture = nullptr;
+	Texture2* mTexture = nullptr;
 
 	/// The shadow map framebuffer
 	gltut::TextureFramebuffer* mFramebuffer = nullptr;

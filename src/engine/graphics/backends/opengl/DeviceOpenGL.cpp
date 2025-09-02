@@ -3,13 +3,15 @@
 
 #include <iostream>
 #undef APIENTRY
+#define NOMINMAX
 #include <Windows.h>
 #include <glad/glad.h>
 
 #include "engine/core/Check.h"
 #include "GeometryOpenGL.h"
 #include "ShaderOpenGL.h"
-#include "TextureOpenGL.h"
+#include "texture/Texture2OpenGL.h"
+#include "texture/TextureCubemapOpenGL.h"
 
 #include "../../../core/File.h"
 #include "./framebuffer/TextureFramebufferOpenGL.h"
@@ -156,22 +158,35 @@ std::unique_ptr<Shader> DeviceOpenGL::createBackendShader(
 	return std::make_unique<ShaderOpenGL>(vertexShader, fragmentShader);
 }
 
-std::unique_ptr<Texture> DeviceOpenGL::createBackendTexture(
-	const void* data,
-	const Point2u& size,
-	TextureFormat format,
+std::unique_ptr<Texture2> DeviceOpenGL::createBackendTexture2(
+	const TextureData& data,
 	const TextureParameters& parameters)
 {
-	return std::make_unique<TextureOpenGL>(
-		data,
-		size,
-		format,
+	return std::make_unique<Texture2OpenGL>(data, parameters);
+}
+
+std::unique_ptr<TextureCubemap> DeviceOpenGL::createBackendTextureCubemap(
+	const TextureData& minusXData,
+	const TextureData& plusXData,
+	const TextureData& minusYData,
+	const TextureData& plusYData,
+	const TextureData& minusZData,
+	const TextureData& plusZData,
+	const TextureParameters& parameters)
+{
+	return std::make_unique<TextureCubemapOpenGL>(
+		minusXData,
+		plusXData,
+		minusYData,
+		plusYData,
+		minusZData,
+		plusZData,
 		parameters);
 }
 
 std::unique_ptr<TextureFramebuffer> DeviceOpenGL::createBackendTextureFramebuffer(
-	Texture* color,
-	Texture* depth)
+	Texture2* color,
+	Texture2* depth)
 {
 	return std::make_unique<TextureFramebufferOpenGL>(color, depth);
 }

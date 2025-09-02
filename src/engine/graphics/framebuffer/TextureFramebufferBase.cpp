@@ -5,7 +5,7 @@
 namespace gltut
 {
 // Global classes
-void TextureFramebufferBase::setColor(Texture* texture) noexcept
+void TextureFramebufferBase::setColor(Texture2* texture) noexcept
 {
 	// If the texture is not null and is not a color texture, do nothing
 	if (texture != nullptr &&
@@ -18,7 +18,7 @@ void TextureFramebufferBase::setColor(Texture* texture) noexcept
 	mColor = texture;
 }
 
-void TextureFramebufferBase::setDepth(Texture* texture) noexcept
+void TextureFramebufferBase::setDepth(Texture2* texture) noexcept
 {
 	// If the texture is not null and is not a depth texture, do nothing
 	if (texture != nullptr &&

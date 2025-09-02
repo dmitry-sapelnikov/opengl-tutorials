@@ -13,8 +13,8 @@ Framebuffer* FramebufferManagerC::getDefault() const noexcept
 }
 
 TextureFramebuffer* FramebufferManagerC::create(
-	Texture* color,
-	Texture* depth) noexcept
+	Texture2* color,
+	Texture2* depth) noexcept
 {
 	TextureFramebuffer* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN
