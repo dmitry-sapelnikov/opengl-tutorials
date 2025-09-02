@@ -65,58 +65,57 @@ int main()
 			0.1f,
 			100.0f);
 
-		/*std::unique_ptr<gltut::CameraController> controller(
+		std::unique_ptr<gltut::CameraController> controller(
 			gltut::createMouseCameraController(*camera));
 		GLTUT_CHECK(controller.get() != nullptr, "Failed to create camera controller");
-		engine->getScene()->addCameraController(controller.get());*/
+		engine->getScene()->addCameraController(controller.get());
 
 		gltut::Color clearColor(0.5f, 0.5f, 0.5f);
-		engine->getSceneRenderPass()->setClearColor(&clearColor);
 
-		//engine->getRenderer()->removeAllPasses();
-		//const gltut::Point2u textureSize = engine->getWindow()->getSize();
-		//auto* colorTexture = renderer->getDevice()->getTextures()->create(
-		//	nullptr,
-		//	textureSize,
-		//	gltut::TextureFormat::RGBA,
-		//	{ gltut::TextureFilterMode::NEAREST,
-		//	gltut::TextureFilterMode::NEAREST,
-		//	gltut::TextureWrapMode::CLAMP_TO_EDGE });
+		engine->getRenderer()->removeAllPasses();
+		const gltut::Point2u textureSize = engine->getWindow()->getSize();
+		auto* colorTexture = renderer->getDevice()->getTextures()->create(
+			nullptr,
+			textureSize,
+			gltut::TextureFormat::RGBA,
+			{ gltut::TextureFilterMode::NEAREST,
+			gltut::TextureFilterMode::NEAREST,
+			gltut::TextureWrapMode::CLAMP_TO_EDGE });
 
-		//GLTUT_CHECK(colorTexture != nullptr, "Failed to create color texture");
+		GLTUT_CHECK(colorTexture != nullptr, "Failed to create color texture");
 
-		//auto* depthTexture = renderer->getDevice()->getTextures()->create(
-		//	nullptr,
-		//	textureSize,
-		//	gltut::TextureFormat::FLOAT,
-		//	{ gltut::TextureFilterMode::NEAREST,
-		//	gltut::TextureFilterMode::NEAREST,
-		//	gltut::TextureWrapMode::CLAMP_TO_EDGE });
+		auto* depthTexture = renderer->getDevice()->getTextures()->create(
+			nullptr,
+			textureSize,
+			gltut::TextureFormat::FLOAT,
+			{ gltut::TextureFilterMode::NEAREST,
+			gltut::TextureFilterMode::NEAREST,
+			gltut::TextureWrapMode::CLAMP_TO_EDGE });
 
-		//engine->getFactory()->getTexture()->createWindowSizeTextureBinding(colorTexture);
-		//engine->getFactory()->getTexture()->createWindowSizeTextureBinding(depthTexture);
+		engine->getFactory()->getTexture()->createWindowSizeTextureBinding(colorTexture);
+		engine->getFactory()->getTexture()->createWindowSizeTextureBinding(depthTexture);
 
-		//auto* framebuffer = renderer->getDevice()->getFramebuffers()->create(
-		//	colorTexture,
-		//	depthTexture);
-		//GLTUT_CHECK(framebuffer, "Failed to create framebuffer");
+		auto* framebuffer = renderer->getDevice()->getFramebuffers()->create(
+			colorTexture,
+			depthTexture);
+		GLTUT_CHECK(framebuffer, "Failed to create framebuffer");
 
-		//auto* renderToTexturePass = renderer->createPass(
-		//	scene->getActiveCameraViewpoint(),
-		//	scene->getRenderGroup(),
-		//	framebuffer,
-		//	0,
-		//	&clearColor,
-		//	true, // Depth clearing
-		//	nullptr,
-		//	true,
-		//	false);
+		auto* renderToTexturePass = renderer->createPass(
+			scene->getActiveCameraViewpoint(),
+			scene->getRenderGroup(),
+			framebuffer,
+			0,
+			&clearColor,
+			true, // Depth clearing
+			nullptr,
+			true,
+			false);
 
-		//GLTUT_CHECK(renderToTexturePass != nullptr, "Failed to create render to texture pass");
+		GLTUT_CHECK(renderToTexturePass != nullptr, "Failed to create render to texture pass");
 
-		//auto* textureToWindowPass = engine->getFactory()->getRenderPass()->createTextureToWindowRenderPass(
-		//	colorTexture,
-		//	nullptr);
+		auto* textureToWindowPass = engine->getFactory()->getRenderPass()->createTextureToWindowRenderPass(
+			colorTexture,
+			nullptr);
 
 		do
 		{
