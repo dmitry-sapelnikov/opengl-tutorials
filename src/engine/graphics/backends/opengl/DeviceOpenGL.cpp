@@ -3,13 +3,15 @@
 
 #include <iostream>
 #undef APIENTRY
+#define NOMINMAX
 #include <Windows.h>
 #include <glad/glad.h>
 
 #include "engine/core/Check.h"
 #include "GeometryOpenGL.h"
 #include "ShaderOpenGL.h"
-#include "TextureOpenGL.h"
+#include "texture/Texture2OpenGL.h"
+#include "texture/TextureCubemapOpenGL.h"
 
 #include "../../../core/File.h"
 #include "./framebuffer/TextureFramebufferOpenGL.h"
@@ -156,22 +158,35 @@ std::unique_ptr<Shader> DeviceOpenGL::createBackendShader(
 	return std::make_unique<ShaderOpenGL>(vertexShader, fragmentShader);
 }
 
-std::unique_ptr<Texture> DeviceOpenGL::createBackendTexture(
-	const void* data,
-	const Point2u& size,
-	TextureFormat format,
+std::unique_ptr<Texture2> DeviceOpenGL::createBackendTexture2(
+	const TextureData& data,
 	const TextureParameters& parameters)
 {
-	return std::make_unique<TextureOpenGL>(
-		data,
-		size,
-		format,
+	return std::make_unique<Texture2OpenGL>(data, parameters);
+}
+
+std::unique_ptr<TextureCubemap> DeviceOpenGL::createBackendTextureCubemap(
+	const TextureData& minusXData,
+	const TextureData& plusXData,
+	const TextureData& minusYData,
+	const TextureData& plusYData,
+	const TextureData& minusZData,
+	const TextureData& plusZData,
+	const TextureParameters& parameters)
+{
+	return std::make_unique<TextureCubemapOpenGL>(
+		minusXData,
+		plusXData,
+		minusYData,
+		plusYData,
+		minusZData,
+		plusZData,
 		parameters);
 }
 
 std::unique_ptr<TextureFramebuffer> DeviceOpenGL::createBackendTextureFramebuffer(
-	Texture* color,
-	Texture* depth)
+	Texture2* color,
+	Texture2* depth)
 {
 	return std::make_unique<TextureFramebufferOpenGL>(color, depth);
 }
@@ -229,6 +244,52 @@ void DeviceOpenGL::setBlending(bool enabled) noexcept
 	else
 	{
 		glDisable(GL_BLEND);
+	}
+}
+
+void DeviceOpenGL::setDepthFunction(DepthFunctionType function) noexcept
+{
+	GLenum glFunction = 0;
+	switch (function)
+	{
+	case DepthFunctionType::ALWAYS:
+		glFunction = GL_ALWAYS;
+		break;
+
+	case DepthFunctionType::NEVER:
+		glFunction = GL_NEVER;
+		break;
+
+	case DepthFunctionType::LESS:
+		glFunction = GL_LESS;
+		break;
+
+	case DepthFunctionType::LEQUAL:
+		glFunction = GL_LEQUAL;
+		break;
+
+	case DepthFunctionType::EQUAL:
+		glFunction = GL_EQUAL;
+		break;
+
+	case DepthFunctionType::GEQUAL:
+		glFunction = GL_GEQUAL;
+		break;
+
+	case DepthFunctionType::GREATER:
+		glFunction = GL_GREATER;
+		break;
+
+	case DepthFunctionType::NOTEQUAL:
+		glFunction = GL_NOTEQUAL;
+		break;
+
+	GLTUT_UNEXPECTED_SWITCH_DEFAULT_CASE(function)
+	}
+
+	if (glFunction != 0)
+	{
+		glDepthFunc(glFunction);
 	}
 }
 

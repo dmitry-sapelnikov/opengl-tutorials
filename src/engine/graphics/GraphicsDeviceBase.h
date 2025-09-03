@@ -72,15 +72,23 @@ public:
 		const char* fragmentShader) = 0;
 
 	/// Creates a texture for a specific graphics backend
-	virtual std::unique_ptr<Texture> createBackendTexture(
-		const void* data,
-		const Point2u& size,
-		const TextureFormat format,
+	virtual std::unique_ptr<Texture2> createBackendTexture2(
+		const TextureData& data,
+		const TextureParameters& parameters) = 0;
+
+	/// Creates a texture cubemap for a specific graphics backend
+	virtual std::unique_ptr<TextureCubemap> createBackendTextureCubemap(
+		const TextureData& minusXData,
+		const TextureData& plusXData,
+		const TextureData& minusYData,
+		const TextureData& plusYData,
+		const TextureData& minusZData,
+		const TextureData& plusZData,
 		const TextureParameters& parameters) = 0;
 
 	virtual std::unique_ptr<TextureFramebuffer> createBackendTextureFramebuffer(
-		Texture* color,
-		Texture* depth) = 0;
+		Texture2* color,
+		Texture2* depth) = 0;
 
 	virtual Framebuffer* getDefaultFramebuffer() const noexcept = 0;
 

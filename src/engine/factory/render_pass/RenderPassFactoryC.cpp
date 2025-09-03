@@ -123,7 +123,7 @@ Geometry* createRenderQuad(Renderer& renderer) noexcept
 
 /// Creates a texture-to-window render pass
 RenderPass* RenderPassFactoryC::createTextureToWindowRenderPass(
-	const Texture* texture,
+	const Texture2* texture,
 	const Rectangle2u* viewport) noexcept
 {
 	RenderPass* result = nullptr;
@@ -151,7 +151,7 @@ RenderPass* RenderPassFactoryC::createTextureToWindowRenderPass(
 
 /// Creates a textures-to-window render pass
 RenderPass* RenderPassFactoryC::createTexturesToWindowRenderPass(
-	const Texture** textures,
+	const Texture2** textures,
 	u32 textureCount,
 	const Rectangle2u* viewport,
 	const char* fragmentShader,
@@ -204,7 +204,7 @@ RenderPass* RenderPassFactoryC::createTexturesToWindowRenderPass(
 RenderPass* RenderPassFactoryC::createTexturesToWindowRenderPass(
 	const Rectangle2u* viewport,
 	Shader* shader,
-	const Texture** textures,
+	const Texture2** textures,
 	u32 texturesCount)
 {
 	GLTUT_CHECK(shader != nullptr, "Shader must not be null");

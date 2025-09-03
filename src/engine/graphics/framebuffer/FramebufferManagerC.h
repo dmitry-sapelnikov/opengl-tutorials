@@ -25,8 +25,8 @@ public:
 
 	/// Creates a framebuffer
 	virtual TextureFramebuffer* create(
-		Texture* color,
-		Texture* depth) noexcept final;
+		Texture2* color,
+		Texture2* depth) noexcept final;
 
 private:
 	/// Reference to the graphics device

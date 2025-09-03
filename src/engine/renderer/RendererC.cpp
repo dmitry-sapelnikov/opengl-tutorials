@@ -134,6 +134,8 @@ RenderPass* RendererC::createPass(
 			mShaderBindings),
 			0).first.get();
 	GLTUT_CATCH_ALL_END("Cannot create a scene render pass")
+
+	setPassPriority(result, 0);
 	return result;
 }
 
@@ -171,6 +173,8 @@ RenderPass* RendererC::createDepthSortedPass(
 			mShaderBindings),
 			0).first.get();
 	GLTUT_CATCH_ALL_END("Cannot create a depth-sorted scene render pass")
+
+	setPassPriority(result, 0);
 	return result;
 }
 

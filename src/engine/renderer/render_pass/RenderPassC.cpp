@@ -16,7 +16,7 @@ RenderPassC::RenderPassC(
 	bool cullFront,
 	bool enableBlending,
 	GraphicsDevice& device,
-	const ShaderBindings& shaderBindings) noexcept :
+	const ShaderBindings& shaderBindings) :
 
 	mViewpoint(viewpoint),
 	mObject(object),
@@ -31,6 +31,8 @@ RenderPassC::RenderPassC(
 	mDevice(device),
 	mShaderBindings(shaderBindings)
 {
+	GLTUT_CHECK(object != nullptr, "Object cannot be null");
+	GLTUT_CHECK(target != nullptr, "Target framebuffer cannot be null");
 }
 
 void RenderPassC::execute() noexcept
@@ -43,6 +45,8 @@ void RenderPassC::execute(const RenderObject* target) noexcept
 	mDevice.setFaceCulling(
 		mCullBackFaces,
 		mCullFrontFaces);
+
+	mDevice.setDepthFunction(mDepthFunction);
 
 	mDevice.bindFramebuffer(
 		mTarget, 

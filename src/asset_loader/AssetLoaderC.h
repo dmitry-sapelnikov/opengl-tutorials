@@ -24,32 +24,37 @@ public:
 	*/
 	SceneNode* loadAsset(
 		const char* filePath,
-		PhongShaderModel* phongShader) noexcept final;
+		const AssetMaterialFactory* materialCreator,
+		bool loadTextures) noexcept final;
 
 private:
-	Texture* loadMaterialTexture(
+	/// Vector of materials
+	using MaterialsType = std::vector<const Material*>;
+
+	Texture2* loadMaterialTexture(
 		const std::string& modelDirectory,
 		aiMaterial* mat,
 		aiTextureType type);
 
-	std::vector<PhongMaterialModel*> createMaterials(
+	MaterialsType createMaterials(
 		const std::string& modelDirectory,
 		const aiScene& scene,
-		const PhongShaderModel& phongShader);
+		const AssetMaterialFactory& materialCreator,
+		bool loadTextures);
 
 	Geometry* createGeometry(aiMesh* mesh);
 
 	void processMeshes(
 		const aiScene& scene,
-		const std::vector<PhongMaterialModel*>& materials,
+		const MaterialsType& materials,
 		std::vector<Geometry*>& geometries,
-		std::vector<PhongMaterialModel*>& geometryMaterials);
+		MaterialsType& geometryMaterials);
 
 	SceneNode* createCompoundGeometryNode(
 		aiNode* node,
 		SceneNode* parent,
 		const std::vector<Geometry*>& geometries,
-		const std::vector<PhongMaterialModel*>& geometryMaterials);
+		const MaterialsType& geometryMaterials);
 
 	/// Reference to the engine
 	Engine& mEngine;

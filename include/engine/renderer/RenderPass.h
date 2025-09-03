@@ -6,6 +6,7 @@
 #include "engine/graphics/framebuffer/Framebuffer.h"
 #include "engine/renderer/objects/RenderObject.h"
 #include "engine/renderer/viewpoint/Viewpoint.h"
+#include "engine/graphics/DepthFunctionType.h"
 
 namespace gltut
 {
@@ -46,6 +47,12 @@ public:
 
 	/// Set the face culling state
 	virtual void setFaceCulling(bool back, bool front) noexcept = 0;
+
+	/// Returns the depth function type
+	virtual DepthFunctionType getDepthFunction() const noexcept = 0;
+
+	/// Sets the depth function type
+	virtual void setDepthFunction(DepthFunctionType function) noexcept = 0;
 
 	/// Returns if the pass is active
 	virtual bool isActive() const noexcept = 0;

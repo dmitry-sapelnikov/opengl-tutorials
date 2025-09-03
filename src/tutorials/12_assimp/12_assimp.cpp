@@ -84,7 +84,7 @@ void createLights(
 		lights.push_back(light);
 		lightSources.push_back(lightSource);
 
-		gltut::ShadowMap* shadow = factory->getShadow()->createShadowMap(
+		gltut::ShadowMap* shadow = factory->getScene()->createShadowMap(
 			lightSource,
 			engine.getScene()->getRenderGroup(),
 			10.0f, // Frustum size
@@ -102,6 +102,7 @@ void createLights(
 int main()
 {
 	gltut::EngineImgui* imgui = nullptr;
+	gltut::AssetMaterialFactory* assetMaterialFactory = nullptr;
 	gltut::AssetLoader* assetLoader = nullptr;
 	std::unique_ptr<gltut::Engine> engine;
 
@@ -120,8 +121,17 @@ int main()
 		gltut::MaterialFactory* materialFactory = engine->getFactory()->getMaterial();
 		auto* phongShader = materialFactory->createPhongShader(1,0, 0);
 		GLTUT_CHECK(phongShader, "Failed to create Phong shader");
+		
+		assetMaterialFactory = gltut::createPhongAssetMaterialFactory(
+			materialFactory,
+			phongShader,
+			true);
 
-		auto* backpack = assetLoader->loadAsset("assets/backpack/backpack.obj", phongShader);
+		auto* backpack = assetLoader->loadAsset(
+			"assets/backpack/backpack.obj",
+			assetMaterialFactory,
+			true);
+		GLTUT_CHECK(backpack, "Failed to load backpack asset");
 		backpack->setTransform(gltut::Matrix4::scaleMatrix({ 2.0f, 2.0f, 2.0f }));
 
 		std::vector<gltut::GeometryNode*> lights;
@@ -210,6 +220,7 @@ int main()
 
 	gltut::deleteEngineImgui(imgui);
 	gltut::deleteAssetLoader(assetLoader);
+	gltut::deleteAssetMaterialFactory(assetMaterialFactory);
 
 	return 0;
 }

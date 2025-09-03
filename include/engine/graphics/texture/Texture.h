@@ -18,6 +18,19 @@ enum class TextureFormat
 	TOTAL_COUNT
 };
 
+/// Represents raw texture data
+struct TextureData
+{
+	/// Pointer to the texture data
+	const u8* data = nullptr;
+
+	/// Size of the texture
+	Point2u size = { 0, 0 };
+
+	/// Format of the texture
+	TextureFormat format = TextureFormat::FLOAT;
+};
+
 ///	Represents a texture
 class Texture
 {
@@ -30,15 +43,6 @@ public:
 
 	/// Returns the texture id
 	virtual u32 getId() const noexcept = 0;
-	
-	/// Returns the size of the texture
-	virtual const Point2u& getSize() const noexcept = 0;
-
-	/// Sets the size of the texture, recreating it. The existing texture data will be lost.
-	virtual void setSize(const Point2u& size) noexcept = 0;
-
-	/// Returns the texture format
-	virtual TextureFormat getFormat() const noexcept = 0;
 
 	/// Returns the texture parameters
 	virtual const TextureParameters& getParameters() const noexcept = 0;
@@ -48,15 +52,6 @@ public:
 
 	/// Binds the texture
 	virtual void bind(u32 slot) const noexcept = 0;
-
-	/// Returns the aspect ratio of the texture
-	float getAspectRatio() const noexcept
-	{
-		const auto& size = getSize();
-		return size.y != 0 ?
-			static_cast<float>(size.x) / static_cast<float>(size.y) :
-			1.0f;
-	}
 };
 
 // End of the namespace gltut

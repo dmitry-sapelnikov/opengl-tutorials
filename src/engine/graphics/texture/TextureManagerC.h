@@ -22,28 +22,37 @@ public:
 	{
 	}
 
-	/// Creates a texture from raw data
-	Texture* create(
-		const void* data,
-		const Point2u& size,
-		TextureFormat format,
+	/// Creates a 2D texture from raw data
+	Texture2* create(
+		const TextureData& data,
 		const TextureParameters& parameters) noexcept final;
 
-	/// Loads a texture from an image file
-	Texture* load(
+	/// Loads a 2D texture from an image file
+	Texture2* load(
 		const char* imagePath,
 		const TextureParameters& textureParameters,
 		const LoadParameters& loadParameters) noexcept final;
 
+	/// Loads a cubemap texture from 6 image files
+	TextureCubemap* load(
+		const char* plusXAxisImagePath,
+		const char* minusXAxisImagePath,
+		const char* plusYAxisImagePath,
+		const char* minusYAxisImagePath,
+		const char* plusZAxisImagePath,
+		const char* minusZAxisImagePath,
+		const TextureParameters& textureParameters,
+		const LoadParameters& loadParameters) noexcept final;
+
 	/// Creates a solid color texture
-	const Texture* createSolidColor(const Color& color) noexcept final;
+	const Texture2* createSolidColor(const Color& color) noexcept final;
 
 private:
 	/// Reference to the graphics device
 	GraphicsDeviceBase& mDevice;
 
 	/// Solid color textures
-	std::unordered_map<u32, const Texture*> mSolidColorTextures;
+	std::unordered_map<u32, const Texture2*> mSolidColorTextures;
 };
 
 // End of the namespace gltut

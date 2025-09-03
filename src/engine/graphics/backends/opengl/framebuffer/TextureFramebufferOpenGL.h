@@ -15,27 +15,27 @@ public:
 		\throw std::runtime_error If the framebuffer could not be created
 	*/
 	TextureFramebufferOpenGL(
-		Texture* color,
-		Texture* depth);
+		Texture2* color,
+		Texture2* depth);
 
 	/// Destructor
 	~TextureFramebufferOpenGL() noexcept final;
 
 	/// Sets the color texture
-	void setColor(Texture* texture) noexcept final;
+	void setColor(Texture2* texture) noexcept final;
 
 	/// Sets the depth texture
-	void setDepth(Texture* texture) noexcept final;
+	void setDepth(Texture2* texture) noexcept final;
 
 	/// Binds the framebuffer as the current rendering target
 	void bind() const noexcept final;
 
 private:
 	/// Sets the color texture without validation
-	void doSetColor(Texture* texture) noexcept;
+	void doSetColor(Texture2* texture) noexcept;
 
 	/// Sets the depth texture without validation
-	void doSetDepth(Texture* texture) noexcept;
+	void doSetDepth(Texture2* texture) noexcept;
 
 	/// Checks if the framebuffer is valid
 	bool isValid() const noexcept;

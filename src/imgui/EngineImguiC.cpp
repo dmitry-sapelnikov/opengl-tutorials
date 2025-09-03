@@ -3,6 +3,8 @@
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
 #endif
+
+#define NOMINMAX
 #include <windows.h>
 
 #include "engine/Engine.h"
@@ -112,6 +114,8 @@ EngineImguiC::EngineImguiC(Engine& engine) :
 		nullptr,
 		false,
 		nullptr);
+
+	engine.getRenderer()->setPassPriority(mRenderPass, std::numeric_limits<int>::max());
 
 	mEventHandler = std::make_unique<ImguiEventHandler>(
 		static_cast<HWND>(engine.getWindow()->getHandle()));

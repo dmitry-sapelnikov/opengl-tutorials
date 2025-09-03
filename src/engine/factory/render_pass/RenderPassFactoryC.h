@@ -21,13 +21,13 @@ public:
 
 	/// Creates a texture-to-window render pass
 	RenderPass* createTextureToWindowRenderPass(
-		const Texture* texture,
+		const Texture2* texture,
 		const Rectangle2u* viewport) noexcept final;
 
 
 	/// Creates a textures-to-window render pass
 	RenderPass* createTexturesToWindowRenderPass(
-		const Texture** textures,
+		const Texture2** textures,
 		u32 textureCount,
 		const Rectangle2u* viewport,
 		const char* fragmentShader,
@@ -38,7 +38,7 @@ private:
 	RenderPass* createTexturesToWindowRenderPass(
 		const Rectangle2u* viewport,
 		Shader* shader,
-		const Texture** textures,
+		const Texture2** textures,
 		u32 texturesCount);
 
 	/// The render pipeline

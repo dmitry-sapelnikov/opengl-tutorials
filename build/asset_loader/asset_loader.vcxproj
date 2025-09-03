@@ -12,10 +12,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\asset_loader\AssetLoaderC.cpp" />
+    <ClCompile Include="..\..\src\asset_loader\AssetMaterialFactory.cpp" />
+    <ClCompile Include="..\..\src\asset_loader\PhongAssetMaterialFactory.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\asset_loader\AssetLoader.h" />
+    <ClInclude Include="..\..\include\asset_loader\AssetMaterialFactory.h" />
     <ClInclude Include="..\..\src\asset_loader\AssetLoaderC.h" />
+    <ClInclude Include="..\..\src\asset_loader\PhongAssetMaterialFactory.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
