@@ -46,6 +46,8 @@ void RenderPassC::execute(const RenderObject* target) noexcept
 		mCullBackFaces,
 		mCullFrontFaces);
 
+	mDevice.setDepthFunction(mDepthFunction);
+
 	mDevice.bindFramebuffer(
 		mTarget, 
 		mViewport.has_value() ? &mViewport.value() : nullptr);

@@ -247,5 +247,51 @@ void DeviceOpenGL::setBlending(bool enabled) noexcept
 	}
 }
 
+void DeviceOpenGL::setDepthFunction(DepthFunctionType function) noexcept
+{
+	GLenum glFunction = 0;
+	switch (function)
+	{
+	case DepthFunctionType::ALWAYS:
+		glFunction = GL_ALWAYS;
+		break;
+
+	case DepthFunctionType::NEVER:
+		glFunction = GL_NEVER;
+		break;
+
+	case DepthFunctionType::LESS:
+		glFunction = GL_LESS;
+		break;
+
+	case DepthFunctionType::LEQUAL:
+		glFunction = GL_LEQUAL;
+		break;
+
+	case DepthFunctionType::EQUAL:
+		glFunction = GL_EQUAL;
+		break;
+
+	case DepthFunctionType::GEQUAL:
+		glFunction = GL_GEQUAL;
+		break;
+
+	case DepthFunctionType::GREATER:
+		glFunction = GL_GREATER;
+		break;
+
+	case DepthFunctionType::NOTEQUAL:
+		glFunction = GL_NOTEQUAL;
+		break;
+
+	GLTUT_UNEXPECTED_SWITCH_DEFAULT_CASE(function)
+	}
+
+	if (glFunction != 0)
+	{
+		glDepthFunc(glFunction);
+	}
+}
+
 // End of the namespace gltut
 }

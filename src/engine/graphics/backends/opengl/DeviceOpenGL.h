@@ -70,6 +70,9 @@ public:
 	/// Enable or disables blending
 	virtual void setBlending(bool enabled) noexcept final;
 
+	/// Sets the depth function
+	void setDepthFunction(DepthFunctionType function) noexcept final;
+
 private:
 	/// Sets a framebuffer for rendering
 	void setFramebuffer(Framebuffer* frameBuffer) noexcept final;

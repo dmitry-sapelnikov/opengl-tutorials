@@ -12,7 +12,7 @@
 #include "engine/graphics/framebuffer/FramebufferManager.h"
 #include "engine/graphics/shader/ShaderManager.h"
 #include "engine/graphics/texture/TextureManager.h"
-
+#include "engine/graphics/DepthFunctionType.h"
 
 #include "engine/graphics/framebuffer/TextureFramebuffer.h"
 
@@ -59,6 +59,9 @@ public:
 
 	/// Enable or disables blending
 	virtual void setBlending(bool enabled) noexcept = 0;
+
+	/// Sets the depth function
+	virtual void setDepthFunction(DepthFunctionType function) noexcept = 0;
 };
 
 // End of the namespace gltut

@@ -97,6 +97,18 @@ public:
 		mCullFrontFaces = front;
 	}
 
+	/// Returns the depth function type
+	DepthFunctionType getDepthFunction() const noexcept final
+	{
+		return mDepthFunction;
+	}
+
+	/// Sets the depth function type
+	void setDepthFunction(DepthFunctionType function) noexcept
+	{
+		mDepthFunction = function;
+	}
+
 	/// Returns if the pass is active
 	bool isActive() const noexcept final
 	{
@@ -146,6 +158,9 @@ private:
 
 	/// Enable transparency flag
 	bool mEnableBlending;
+
+	/// Depth function
+	DepthFunctionType mDepthFunction = DepthFunctionType::LESS;
 
 	/// Active flag
 	bool mActive = true;
