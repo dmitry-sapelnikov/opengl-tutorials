@@ -4,6 +4,6 @@
     <None Include="copy_assets.targets" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\tutorials\15_framebuffers\15_framebuffers.cpp" />
+    <ClCompile Include="..\..\..\src\tutorials\16_cubemaps\16_cubemaps.cpp" />
   </ItemGroup>
 </Project>
