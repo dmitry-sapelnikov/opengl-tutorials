@@ -2,18 +2,18 @@
 
 // Includes
 #include <unordered_map>
-#include "engine/factory/shadow/ShadowFactory.h"
+#include "engine/factory/scene/SceneFactory.h"
 #include "./ShadowMapC.h"
 
 
 namespace gltut
 {
 
-class ShadowFactoryC : public ShadowFactory, public NonCopyable
+class SceneFactoryC : public SceneFactory, public NonCopyable
 {
 public:
 	/// Constructor
-	ShadowFactoryC(Renderer& renderer) noexcept :
+	SceneFactoryC(Renderer& renderer) noexcept :
 		mRenderer(renderer)
 	{
 	}

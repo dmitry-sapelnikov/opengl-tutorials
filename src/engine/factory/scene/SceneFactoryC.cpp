@@ -1,11 +1,11 @@
 // Includes
-#include "ShadowFactoryC.h"
+#include "SceneFactoryC.h"
 
 namespace gltut
 {
 
 /// Creates a shadow map for the given light
-ShadowMap* ShadowFactoryC::createShadowMap(
+ShadowMap* SceneFactoryC::createShadowMap(
 	const LightNode* light,
 	const RenderObject* shadowCaster,
 	float frustumSize,
@@ -66,7 +66,7 @@ ShadowMap* ShadowFactoryC::createShadowMap(
 }
 
 /// Updates the shadow factory
-void ShadowFactoryC::update() noexcept
+void SceneFactoryC::update() noexcept
 {
 	for (auto& [light, shadowMap] : mShadowMaps)
 	{

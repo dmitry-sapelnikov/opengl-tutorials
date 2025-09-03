@@ -9,11 +9,11 @@
 namespace gltut
 {
 
-class ShadowFactory
+class SceneFactory
 {
 public:
 	/// Virtual destructor
-	virtual ~ShadowFactory() noexcept = default;
+	virtual ~SceneFactory() noexcept = default;
 
 	/// Creates a texture-to-window render pass
 	virtual ShadowMap* createShadowMap(

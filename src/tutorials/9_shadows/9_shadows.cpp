@@ -126,7 +126,7 @@ void createLights(
 
 		if (DIR_LIGHT_CAST_SHADOWS[i])
 		{
-			gltut::ShadowMap* shadow = factory->getShadow()->createShadowMap(
+			gltut::ShadowMap* shadow = factory->getScene()->createShadowMap(
 				lightSource,
 				engine.getScene()->getRenderGroup(),
 				40.0f, // Frustum size
