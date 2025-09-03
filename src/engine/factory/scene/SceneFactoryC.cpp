@@ -6,24 +6,29 @@ namespace gltut
 
 static const char* CUBEMAP_VERTEX_SHADER = R"(
 #version 330 core
+
+uniform mat4 view;
+uniform mat4 projection;
+
 layout(location = 0) in vec3 position;
 out vec3 texCoords;
-uniform mat4 projection;
-uniform mat4 view;
+
 void main()
 {
 	texCoords = position;
+	// Remove the translation part of the view matrix
 	vec3 viewPos = (view * vec4(position, 0.0)).xyz;
+
 	vec4 pos = projection * vec4(viewPos, 1.0);
 	// A trick to set depth to 1.0
 	gl_Position = pos.xyww;
-	gl_Position.z *= 0.9999;
 })";
 
 static const char* CUBEMAP_FRAGMENT_SHADER = R"(
 #version 330 core
-in vec3 texCoords;
 uniform samplerCube skyboxSampler;
+
+in vec3 texCoords;
 out vec4 outColor;
 
 void main()
@@ -133,6 +138,9 @@ bool SceneFactoryC::createSkybox(
 			false, false); // No face culling
 
 		GLTUT_CHECK(skyboxPass != nullptr, "Failed to create skybox render pass");
+		// Set the depth function to less equal since the z-buffer is filled with 1.0 and
+		// we force the skybox depth to 1.0 in the vertex shader
+		skyboxPass->setDepthFunction(DepthFunctionType::LEQUAL);
 		result = true;
 	}
 	GLTUT_CATCH_ALL("Failed to create skybox")
