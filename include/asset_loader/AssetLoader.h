@@ -21,7 +21,8 @@ public:
 	*/
 	virtual SceneNode* loadAsset(
 		const char* filePath,
-		const AssetMaterialFactory* materialCreator) noexcept = 0;
+		const AssetMaterialFactory* materialCreator,
+		bool loadTextures) noexcept = 0;
 };
 
 // Global functions

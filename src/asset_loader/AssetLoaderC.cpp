@@ -13,7 +13,8 @@ AssetLoaderC::AssetLoaderC(Engine& engine) noexcept :
 
 SceneNode* AssetLoaderC::loadAsset(
 	const char* filePath,
-	const AssetMaterialFactory* materialFactory) noexcept
+	const AssetMaterialFactory* materialFactory,
+	bool loadTextures) noexcept
 {
 	GLTUT_ASSERT(filePath != nullptr);
 	GLTUT_ASSERT(materialFactory != nullptr);
@@ -40,7 +41,7 @@ SceneNode* AssetLoaderC::loadAsset(
 
 		const std::string modelDirectry = std::filesystem::path(filePath).parent_path().string();
 
-		MaterialsType materials = createMaterials(modelDirectry, *scene, *materialFactory);
+		MaterialsType materials = createMaterials(modelDirectry, *scene, *materialFactory, loadTextures);
 		std::vector<Geometry*> geometries;
 		MaterialsType geometryMaterials;
 		processMeshes(
@@ -62,7 +63,8 @@ SceneNode* AssetLoaderC::loadAsset(
 AssetLoaderC::MaterialsType AssetLoaderC::createMaterials(
 	const std::string& modelDirectory,
 	const aiScene& scene,
-	const AssetMaterialFactory& materialFactory)
+	const AssetMaterialFactory& materialFactory,
+	bool loadTextures)
 {
 	std::vector<const Material*> result;
 	try
@@ -70,10 +72,21 @@ AssetLoaderC::MaterialsType AssetLoaderC::createMaterials(
 		for (u32 matInd = 0; matInd < scene.mNumMaterials; ++matInd)
 		{
 			aiMaterial* aiMat = scene.mMaterials[matInd];
+			Texture2* diffuseTexture = nullptr;
+			Texture2* specularTexture = nullptr;
+			Texture2* normalTexture = nullptr;
+
+			if (loadTextures)
+			{
+				diffuseTexture = loadMaterialTexture(modelDirectory, aiMat, aiTextureType_DIFFUSE);
+				specularTexture = loadMaterialTexture(modelDirectory, aiMat, aiTextureType_SPECULAR);
+				normalTexture = loadMaterialTexture(modelDirectory, aiMat, aiTextureType_HEIGHT);
+			}
+
 			const Material* material = materialFactory.createMaterial(
-				loadMaterialTexture(modelDirectory, aiMat, aiTextureType_DIFFUSE),
-				loadMaterialTexture(modelDirectory, aiMat, aiTextureType_SPECULAR),
-				loadMaterialTexture(modelDirectory, aiMat, aiTextureType_HEIGHT));
+				diffuseTexture,
+				specularTexture,
+				normalTexture);
 			GLTUT_CHECK(material != nullptr, "Failed to create a material");
 			result.push_back(material);
 		}

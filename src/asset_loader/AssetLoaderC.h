@@ -24,7 +24,8 @@ public:
 	*/
 	SceneNode* loadAsset(
 		const char* filePath,
-		const AssetMaterialFactory* materialCreator) noexcept final;
+		const AssetMaterialFactory* materialCreator,
+		bool loadTextures) noexcept final;
 
 private:
 	/// Vector of materials
@@ -38,7 +39,8 @@ private:
 	MaterialsType createMaterials(
 		const std::string& modelDirectory,
 		const aiScene& scene,
-		const AssetMaterialFactory& materialCreator);
+		const AssetMaterialFactory& materialCreator,
+		bool loadTextures);
 
 	Geometry* createGeometry(aiMesh* mesh);
 

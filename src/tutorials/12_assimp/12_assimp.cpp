@@ -127,7 +127,11 @@ int main()
 			phongShader,
 			true);
 
-		auto* backpack = assetLoader->loadAsset("assets/backpack/backpack.obj", assetMaterialFactory);
+		auto* backpack = assetLoader->loadAsset(
+			"assets/backpack/backpack.obj",
+			assetMaterialFactory,
+			true);
+		GLTUT_CHECK(backpack, "Failed to load backpack asset");
 		backpack->setTransform(gltut::Matrix4::scaleMatrix({ 2.0f, 2.0f, 2.0f }));
 
 		std::vector<gltut::GeometryNode*> lights;
