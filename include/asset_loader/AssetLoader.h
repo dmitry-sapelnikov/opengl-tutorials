@@ -2,6 +2,7 @@
 
 // Includes
 #include "engine/Engine.h"
+#include "asset_loader/AssetMaterialFactory.h"
 
 namespace gltut
 {
@@ -10,6 +11,9 @@ namespace gltut
 class AssetLoader
 {
 public:
+	/// Virtual destructor
+	virtual ~AssetLoader() noexcept = default;
+
 	/**
 		\brief Loads an asset (geometries, materials textures) from a file
 		\return The scene node representing the asset if it was loaded successfully,
@@ -17,11 +21,14 @@ public:
 	*/
 	virtual SceneNode* loadAsset(
 		const char* filePath,
-		PhongShaderModel* phongShader) noexcept = 0;
+		const AssetMaterialFactory* materialCreator) noexcept = 0;
 };
 
+// Global functions
+/// Creates an asset loader
 AssetLoader* createAssetLoader(Engine* engine) noexcept;
 
+/// Deletes an asset loader
 void deleteAssetLoader(AssetLoader* factory) noexcept;
 
 // End of the namespace gltut

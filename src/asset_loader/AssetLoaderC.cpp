@@ -13,11 +13,12 @@ AssetLoaderC::AssetLoaderC(Engine& engine) noexcept :
 
 SceneNode* AssetLoaderC::loadAsset(
 	const char* filePath,
-	PhongShaderModel* phongShader) noexcept
+	const AssetMaterialFactory* materialFactory) noexcept
 {
 	GLTUT_ASSERT(filePath != nullptr);
-	GLTUT_ASSERT(phongShader != nullptr);
-	if (filePath == nullptr || phongShader == nullptr)
+	GLTUT_ASSERT(materialFactory != nullptr);
+
+	if (filePath == nullptr || materialFactory == nullptr)
 	{
 		return nullptr;
 	}
@@ -39,9 +40,9 @@ SceneNode* AssetLoaderC::loadAsset(
 
 		const std::string modelDirectry = std::filesystem::path(filePath).parent_path().string();
 
-		auto materials = createMaterials(modelDirectry, *scene, *phongShader);
+		MaterialsType materials = createMaterials(modelDirectry, *scene, *materialFactory);
 		std::vector<Geometry*> geometries;
-		std::vector<PhongMaterialModel*> geometryMaterials;
+		MaterialsType geometryMaterials;
 		processMeshes(
 			*scene,
 			materials,
@@ -58,25 +59,22 @@ SceneNode* AssetLoaderC::loadAsset(
 	return nullptr;
 }
 
-std::vector<PhongMaterialModel*> AssetLoaderC::createMaterials(
+AssetLoaderC::MaterialsType AssetLoaderC::createMaterials(
 	const std::string& modelDirectory,
 	const aiScene& scene,
-	const PhongShaderModel& phongShader)
+	const AssetMaterialFactory& materialFactory)
 {
-	std::vector<PhongMaterialModel*> result;
+	std::vector<const Material*> result;
 	try
 	{
 		for (u32 matInd = 0; matInd < scene.mNumMaterials; ++matInd)
 		{
 			aiMaterial* aiMat = scene.mMaterials[matInd];
-			PhongMaterialModel* material =
-				mEngine.getFactory()->getMaterial()->createPhongMaterial(&phongShader, true);
-			GLTUT_CHECK(material != nullptr, "Failed to create a Phong material model");
-
-			material->setDiffuse(loadMaterialTexture(modelDirectory, aiMat, aiTextureType_DIFFUSE));
-			material->setSpecular(loadMaterialTexture(modelDirectory, aiMat, aiTextureType_SPECULAR));
-			material->setNormal(loadMaterialTexture(modelDirectory, aiMat, aiTextureType_HEIGHT));
-
+			const Material* material = materialFactory.createMaterial(
+				loadMaterialTexture(modelDirectory, aiMat, aiTextureType_DIFFUSE),
+				loadMaterialTexture(modelDirectory, aiMat, aiTextureType_SPECULAR),
+				loadMaterialTexture(modelDirectory, aiMat, aiTextureType_HEIGHT));
+			GLTUT_CHECK(material != nullptr, "Failed to create a material");
 			result.push_back(material);
 		}
 	}
@@ -95,7 +93,7 @@ std::vector<PhongMaterialModel*> AssetLoaderC::createMaterials(
 	return result;
 }
 
-Texture* AssetLoaderC::loadMaterialTexture(
+Texture2* AssetLoaderC::loadMaterialTexture(
 	const std::string& modelDirectory,
 	aiMaterial* mat,
 	aiTextureType type)
@@ -124,7 +122,7 @@ SceneNode* AssetLoaderC::createCompoundGeometryNode(
 	aiNode* node,
 	SceneNode* parent,
 	const std::vector<Geometry*>& geometries,
-	const std::vector<PhongMaterialModel*>& geometryMaterials)
+	const MaterialsType& geometryMaterials)
 {
 	Matrix4 transform;
 	for (u32 r = 0; r < 4; ++r)
@@ -143,9 +141,9 @@ SceneNode* AssetLoaderC::createCompoundGeometryNode(
 		GLTUT_CHECK(geometry != nullptr, "Invalid mesh pointer");
 
 		// Obtain the transform
-		const PhongMaterialModel* material = geometryMaterials.at(node->mMeshes[meshInd]);
+		const Material* material = geometryMaterials.at(node->mMeshes[meshInd]);
 		GLTUT_CHECK(material != nullptr, "Invalid material index");
-		mEngine.getScene()->createGeometry(geometry, material->getMaterial(), Matrix4::identity(), result);
+		mEngine.getScene()->createGeometry(geometry, material, Matrix4::identity(), result);
 	}
 
 	for (u32 childInd = 0; childInd < node->mNumChildren; ++childInd)
@@ -242,9 +240,9 @@ Geometry* AssetLoaderC::createGeometry(aiMesh* mesh)
 
 void AssetLoaderC::processMeshes(
 	const aiScene& scene,
-	const std::vector<PhongMaterialModel*>& materials,
+	const MaterialsType& materials,
 	std::vector<Geometry*>& geometries,
-	std::vector<PhongMaterialModel*>& geometryMaterials)
+	MaterialsType& geometryMaterials)
 {
 	GLTUT_CHECK(geometries.empty(), "Geometries vector must be empty");
 	GLTUT_CHECK(geometryMaterials.empty(), "Geometry materials vector must be empty");
