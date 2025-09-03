@@ -33,7 +33,7 @@ public:
 		bool cullFrontFaces,
 		bool enableBlending,
 		GraphicsDevice& device,
-		const ShaderBindings& shaderBindings) noexcept;
+		const ShaderBindings& shaderBindings);
 
 	/// Returns the scene viewpoint
 	const Viewpoint* getViewpoint() const noexcept final

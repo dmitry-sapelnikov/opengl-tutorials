@@ -28,11 +28,14 @@ void invertChannel(
 	}
 }
 
+/**
+	Loads an image from a file and returns the texture data
+	\note The returned data must be freed with stbi_image_free()
+*/
 TextureData loadImage(
 	const char* imagePath,
 	const TextureManager::LoadParameters& parameters)
 {
-	stbi_set_flip_vertically_on_load(true);
 	int width = 0;
 	int height = 0;
 	int channels = 0;
@@ -103,12 +106,15 @@ Texture2* TextureManagerC::load(
 	Texture2* result = nullptr;
 	TextureData textureData;
 
-	GLTUT_CATCH_ALL_BEGIN
+	stbi_set_flip_vertically_on_load(true);
+	try
+	{
 		textureData = loadImage(imagePath, loadParameters);
-	result = create(textureData, textureParameters);
-	GLTUT_CATCH_ALL_END("Failed to load texture from file: " + std::string(imagePath))
+		result = create(textureData, textureParameters);
+	}
+	GLTUT_CATCH_ALL("Failed to load texture from file: " + std::string(imagePath))
 
-		stbi_image_free(const_cast<u8*>(textureData.data));
+	stbi_image_free(const_cast<u8*>(textureData.data));
 	return result;
 }
 
@@ -123,6 +129,9 @@ TextureCubemap* TextureManagerC::load(
 	const LoadParameters& loadParameters) noexcept
 {
 	TextureCubemap* result = nullptr;
+	std::array<TextureData, 6> textureData;
+
+	stbi_set_flip_vertically_on_load(false);
 	try
 	{
 		const std::array<const char*, 6> paths = {
@@ -133,8 +142,6 @@ TextureCubemap* TextureManagerC::load(
 			plusZAxisImagePath,
 			minusZAxisImagePath,
 		};
-
-		std::array<TextureData, 6> textureData;
 
 		for (u32 i = 0; i < paths.size(); ++i)
 		{
@@ -152,6 +159,11 @@ TextureCubemap* TextureManagerC::load(
 				textureParameters)));
 	}
 	GLTUT_CATCH_ALL("Failed to load cubemap texture")
+
+	for (u32 i = 0; i < textureData.size(); ++i)
+	{
+		stbi_image_free(const_cast<u8*>(textureData[i].data));
+	}
 	return result;
 }
 
