@@ -3,6 +3,7 @@
 // Includes
 #include <unordered_map>
 #include "engine/factory/scene/SceneFactory.h"
+#include "engine/factory/geometry/GeometryFactory.h"
 #include "./ShadowMapC.h"
 
 
@@ -13,8 +14,12 @@ class SceneFactoryC : public SceneFactory, public NonCopyable
 {
 public:
 	/// Constructor
-	SceneFactoryC(Renderer& renderer) noexcept :
-		mRenderer(renderer)
+	SceneFactoryC(
+		Renderer& renderer,
+		GeometryFactory& geometryFactory) noexcept :
+
+		mRenderer(renderer),
+		mGeometryFactory(geometryFactory)
 	{
 	}
 
@@ -27,15 +32,32 @@ public:
 		float frustumFar,
 		u32 shadowMapSize) noexcept final;
 
+	/// Creates a skybox for a given cubemap texture and camera
+	bool createSkybox(
+		const TextureCubemap* cubemapTexture,
+		const Viewpoint* viewpoint,
+		const Rectangle2u* viewport) noexcept final;
+
 	/// Updates the shadow factory
 	void update() noexcept final;
 
 private:
-	/// The device
+	Material* createSkyboxMaterial(const TextureCubemap& cubemapTexture);
+
+	/// The renderer
 	Renderer& mRenderer;
+
+	/// The geometry factory
+	GeometryFactory& mGeometryFactory;
 
 	/// The shadow maps
 	std::unordered_map<const LightNode*, ShadowMapC> mShadowMaps;
+
+	/// The skybox cube geometry
+	Geometry* mSkyboxCube = nullptr;
+
+	/// The skybox shader
+	ShaderRendererBinding* mSkyboxShaderBinding = nullptr;
 };
 
 // End of the namespace gltut

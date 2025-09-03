@@ -12,33 +12,6 @@
 static const size_t BOX_COUNT = 100;
 static const float POSITION_RANGE = 5.0f;
 
-static const char* CUBEMAP_VERTEX_SHADER = R"(
-#version 330 core
-layout(location = 0) in vec3 position;
-out vec3 TexCoords;
-uniform mat4 projection;
-uniform mat4 view;
-void main()
-{
-	TexCoords = position;
-	vec4 pos = view * vec4(position, 0.0);
-	pos = projection * vec4(pos.xyz, 1.0);
-	// A trick to set depth to 1.0
-	gl_Position = pos.xyww;
-	gl_Position.z *= 0.9999;
-})";
-
-static const char* CUBEMAP_FRAGMENT_SHADER = R"(
-#version 330 core
-in vec3 TexCoords;
-uniform samplerCube skyboxSampler;
-out vec4 outColor;
-
-void main()
-{
-	outColor = texture(skyboxSampler, TexCoords);
-})";
-
 ///	The program entry point
 int main()
 {
@@ -113,47 +86,13 @@ int main()
 				gltut::TextureFilterMode::LINEAR,
 				gltut::TextureWrapMode::CLAMP_TO_EDGE));
 
-		gltut::Geometry* skyboxCube = engine->getFactory()->getGeometry()->createBox(gltut::Vector3(1.0f));
-		GLTUT_CHECK(skyboxCube, "Failed to create skybox geometry");
+		const bool skyboxCreated = engine->getFactory()->getScene()->createSkybox(
+			skyboxTexture,
+			scene->getActiveCameraViewpoint(),
+			nullptr);
 
-		gltut::Shader* skyboxShader = engine->getDevice()->getShaders()->create(
-			CUBEMAP_VERTEX_SHADER,
-			CUBEMAP_FRAGMENT_SHADER);
-		GLTUT_CHECK(skyboxShader, "Failed to create skybox shader");
-
-		skyboxShader->setInt("skyboxSampler", 0);
-
-		gltut::ShaderRendererBinding* skyboxShaderBinding = engine->getRenderer()->createShaderBinding(skyboxShader);
-		GLTUT_CHECK(skyboxShaderBinding, "Failed to create skybox shader binding");
-		skyboxShaderBinding->bind(
-			gltut::ShaderRendererBinding::Parameter::VIEWPOINT_VIEW_MATRIX,
-			"view");
-
-		skyboxShaderBinding->bind(
-			gltut::ShaderRendererBinding::Parameter::VIEWPOINT_PROJECTION_MATRIX,
-			"projection");
-
-		gltut::Material* skyboxMaterial = engine->getRenderer()->createMaterial();
-		GLTUT_CHECK(skyboxMaterial, "Failed to create skybox material");
-		skyboxMaterial->createPass(0, skyboxShaderBinding, 1);
-		(*skyboxMaterial)[0]->getTextures()->setTexture(skyboxTexture, 0);
-
-		gltut::RenderGeometry* skyboxRenderGeometry = engine->getRenderer()->createGeometry(
-			skyboxCube,
-			skyboxMaterial,
-			{});
-		GLTUT_CHECK(skyboxRenderGeometry != nullptr, "Failed to create skybox render geometry");
-
-		gltut::RenderPass* skyboxPass = engine->getRenderer()->createPass(
-			engine->getScene()->getActiveCameraViewpoint(),
-			skyboxRenderGeometry,
-			engine->getDevice()->getFramebuffers()->getDefault(),
-			0, // Material pass
-			nullptr, // No clear color
-			false, // No depth clearing
-			nullptr, // Full viewport
-			false, false); // No face culling
-
+		GLTUT_CHECK(skyboxCreated, "Failed to create skybox");
+	
 		do
 		{
 			imgui->newFrame();

@@ -13,8 +13,8 @@ FactoryC::FactoryC(
 	mGeometry(*renderer.getDevice()),
 	mMaterial(renderer, scene),
 	mRenderPass(renderer),
-	mScene(renderer),
-	mTexture(window)
+	mTexture(window),
+	mScene(renderer, mGeometry)
 {
 }
 
