@@ -30,7 +30,7 @@ DeviceOpenGL::DeviceOpenGL(Window& window) :
 {
 	GLTUT_CHECK(window.getDeviceContext() != nullptr, "Device context is null")
 
-	HDC hdc = static_cast<HDC>(window.getDeviceContext());
+		HDC hdc = static_cast<HDC>(window.getDeviceContext());
 
 	PIXELFORMATDESCRIPTOR pfd = {};
 	pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
@@ -41,7 +41,7 @@ DeviceOpenGL::DeviceOpenGL(Window& window) :
 	pfd.cDepthBits = 24;
 	pfd.cStencilBits = 8;
 	int pixelFormat = ChoosePixelFormat(hdc, &pfd);
-	
+
 	GLTUT_CHECK(SetPixelFormat(hdc, pixelFormat, &pfd), "Failed to set the pixel format");
 
 	HGLRC hglrc = wglCreateContext(hdc);
@@ -67,9 +67,6 @@ DeviceOpenGL::DeviceOpenGL(Window& window) :
 
 	// Disable VSync
 	enableVSync(false);
-
-	// Enable front face culling
-	DeviceOpenGL::setFaceCulling(true, false);
 
 	// Enable scissor test
 	glEnable(GL_SCISSOR_TEST);
@@ -209,30 +206,32 @@ void DeviceOpenGL::bindTexture(const Texture* texture, u32 slot) noexcept
 	}
 }
 
-void DeviceOpenGL::setFaceCulling(bool back, bool front) noexcept
+void DeviceOpenGL::setFaceCullingMode(FaceCullingMode mode) noexcept
 {
-	if (!back && !front)
+	switch (mode)
 	{
-		// Disable face culling
-		glDisable(GL_CULL_FACE);
-		return;
+	case FaceCullingMode::BACK:
+	{
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
 	}
+	break;
 
-	glEnable(GL_CULL_FACE);
-	GLenum cullMode = GL_NONE;
-	if (back && front)
+	case FaceCullingMode::FRONT:
 	{
-		cullMode = GL_FRONT_AND_BACK;
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_FRONT);
 	}
-	else if (back)
+	break;
+
+	case FaceCullingMode::NONE:
 	{
-		cullMode = GL_BACK;
+		glDisable(GL_CULL_FACE);
 	}
-	else if (front)
-	{
-		cullMode = GL_FRONT;
+	break;
+
+	GLTUT_UNEXPECTED_SWITCH_DEFAULT_CASE(mode)
 	}
-	glCullFace(cullMode);
 }
 
 void DeviceOpenGL::setBlending(bool enabled) noexcept
@@ -284,7 +283,7 @@ void DeviceOpenGL::setDepthFunction(DepthFunctionType function) noexcept
 		glFunction = GL_NOTEQUAL;
 		break;
 
-	GLTUT_UNEXPECTED_SWITCH_DEFAULT_CASE(function)
+		GLTUT_UNEXPECTED_SWITCH_DEFAULT_CASE(function)
 	}
 
 	if (glFunction != 0)

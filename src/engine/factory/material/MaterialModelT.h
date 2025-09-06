@@ -28,7 +28,7 @@ public:
 	}
 
 	// Returns the material associated with this model
-	const Material* getMaterial() const noexcept final
+	Material* getMaterial() const noexcept final
 	{
 		return mMaterial;
 	}

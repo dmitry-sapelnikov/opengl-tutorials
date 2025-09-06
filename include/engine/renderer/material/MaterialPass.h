@@ -5,9 +5,11 @@
 #include "engine/graphics/shader/ShaderParameters.h"
 #include "engine/renderer/shader/ShaderRendererBinding.h"
 #include "engine/renderer/texture/TextureSet.h"
+#include "engine/graphics/FaceCullingMode.h"
 
 namespace gltut
 {
+
 
 // Global classes
 /// The class represents a material for a single render pass
@@ -28,6 +30,18 @@ public:
 
 	/// Returns the textures associated with this material pass
 	virtual TextureSet* getTextures() noexcept = 0;
+
+	/// Returns the material cull mode
+	virtual FaceCullingMode getFaceCullingMode() const noexcept = 0;
+
+	/// Sets the material cull mode
+	virtual void setFaceCullingMode(FaceCullingMode mode) noexcept = 0;
+
+	/// Returns the transparency flag
+	virtual bool isTransparent() const noexcept = 0;
+
+	/// Sets the transparency flag
+	virtual void setTransparent(bool transparent) noexcept = 0;
 
 	/// Binds the material pass for a render geometry
 	virtual void bind(const RenderGeometry* geometry) const noexcept = 0;

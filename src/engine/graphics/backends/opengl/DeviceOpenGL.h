@@ -64,11 +64,11 @@ public:
 	/// Binds a texture to a slot
 	void bindTexture(const Texture* texture, u32 slot) noexcept final;
 
-	/// Set face culling
-	void setFaceCulling(bool back, bool front) noexcept final;
+	/// Set face cull mode
+	void setFaceCullingMode(FaceCullingMode mode) noexcept final;
 
 	/// Enable or disables blending
-	virtual void setBlending(bool enabled) noexcept final;
+	void setBlending(bool enabled) noexcept final;
 
 	/// Sets the depth function
 	void setDepthFunction(DepthFunctionType function) noexcept final;

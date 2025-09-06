@@ -236,6 +236,9 @@ RenderPass* RenderPassFactoryC::createTexturesToWindowRenderPass(
 		materialPass != nullptr,
 		"Failed to create material pass for texture-to-window render pass");
 
+	// Disable face culling
+	materialPass->setFaceCullingMode(FaceCullingMode::NONE);
+
 	for (u32 i = 0; i < texturesCount; ++i)
 	{
 		GLTUT_CHECK(
@@ -260,9 +263,7 @@ RenderPass* RenderPassFactoryC::createTexturesToWindowRenderPass(
 		0, // Material pass 0
 		nullptr, // No clear color
 		true, // Depth clearing
-		viewport,
-		false, // No back face culling
-		false // No front face culling
+		viewport
 	);
 	// TODO: add render pass without depth test
 }

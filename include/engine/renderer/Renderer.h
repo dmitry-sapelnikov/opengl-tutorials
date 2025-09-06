@@ -51,10 +51,7 @@ public:
 		u32 materialPass,
 		const Color* clearColor,
 		bool clearDepth,
-		const Rectangle2u* viewport,
-		bool cullBack = true,
-		bool cullFront = false,
-		bool enableBlending = false) noexcept = 0;
+		const Rectangle2u* viewport) noexcept = 0;
 
 	/// Creates a depth-sorted render pass
 	virtual RenderPass* createDepthSortedPass(
@@ -64,10 +61,7 @@ public:
 		u32 materialPass,
 		const Color* clearColor,
 		bool clearDepth,
-		const Rectangle2u* viewport,
-		bool cullBack = true,
-		bool cullFront = false,
-		bool enableBlending = true) noexcept = 0;
+		const Rectangle2u* viewport) noexcept = 0;
 
 	/// Removes a render pass
 	virtual void removePass(RenderPass* pass) noexcept = 0;

@@ -36,8 +36,6 @@ int main()
 	
 		engine->getWindow()->setTitle("Hello Triangle");
 		engine->getWindow()->showFPS(true);
-		// Since our geometry does not have normals, disable face culling
-		engine->getSceneRenderPass()->setFaceCulling(false, false);
 
 		float vertices1[] = {
 			0.5f,  0.5f, 0.0f,  // top right
@@ -91,6 +89,8 @@ int main()
 
 		auto* pass = material->createPass(0, shaderBinding, 0);
 		GLTUT_CHECK(pass != nullptr, "Failed to create material pass")
+		// The triangle has no normals, so disable back-face culling
+		pass->setFaceCullingMode(gltut::FaceCullingMode::NONE);
 
 		scene->createGeometry(mesh1, material);
 		scene->createGeometry(mesh2, material);

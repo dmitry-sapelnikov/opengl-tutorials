@@ -8,7 +8,7 @@
 
 namespace gltut
 {
-/// Implementation of the Material class
+
 class MaterialPassC final : public MaterialPass, public NonCopyable
 {
 public:
@@ -36,10 +36,37 @@ public:
 		return &mTextures;
 	}
 
+	/// Returns the material face mode
+	FaceCullingMode getFaceCullingMode() const noexcept final
+	{
+		return mFaceCullingMode;
+	}
+
+	/// Sets the material face mode
+	void setFaceCullingMode(FaceCullingMode mode) noexcept final
+	{
+		mFaceCullingMode = mode;
+	}
+
+	/// Returns the transparency flag
+	bool isTransparent() const noexcept final
+	{
+		return mTransparent;
+	}
+
+	/// Sets the transparency flag
+	void setTransparent(bool transparent) noexcept final
+	{
+		mTransparent = transparent;
+	}
+
 	/// Binds the material pass for a render geometry
 	void bind(const RenderGeometry* geometry) const noexcept final;
 
 private:
+	/// The graphics device
+	GraphicsDevice& mDevice;
+
 	/// The shader binding
 	const ShaderRendererBinding* mShaderBinding;
 
@@ -48,6 +75,12 @@ private:
 
 	/// The textures
 	TextureSetC mTextures;
+
+	/// The face mode
+	FaceCullingMode mFaceCullingMode = FaceCullingMode::BACK;
+
+	/// The transparency flag
+	bool mTransparent = false;
 };
 
 // End of the namespace gltut

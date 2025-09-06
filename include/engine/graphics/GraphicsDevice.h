@@ -12,9 +12,10 @@
 #include "engine/graphics/framebuffer/FramebufferManager.h"
 #include "engine/graphics/shader/ShaderManager.h"
 #include "engine/graphics/texture/TextureManager.h"
-#include "engine/graphics/DepthFunctionType.h"
-
 #include "engine/graphics/framebuffer/TextureFramebuffer.h"
+
+#include "engine/graphics/DepthFunctionType.h"
+#include "engine/graphics/FaceCullingMode.h"
 
 namespace gltut
 {
@@ -54,8 +55,8 @@ public:
 	/// Enables or disables vertical synchronization
 	virtual void enableVSync(bool vSync) noexcept = 0;
 
-	/// Sets face cull
-	virtual void setFaceCulling(bool back, bool front) noexcept = 0;
+	/// Sets the face cull mode
+	virtual void setFaceCullingMode(FaceCullingMode mode) noexcept = 0;
 
 	/// Enable or disables blending
 	virtual void setBlending(bool enabled) noexcept = 0;

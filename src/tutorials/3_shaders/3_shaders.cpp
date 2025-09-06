@@ -16,8 +16,6 @@ int main()
 
 		engine->getWindow()->setTitle("Shaders");
 		engine->getWindow()->showFPS(true);
-		// Since our geometry does not have normals, disable face culling
-		engine->getSceneRenderPass()->setFaceCulling(false, false);
 
 		float vertices[] = {
 			// positions         // colors
@@ -73,6 +71,8 @@ int main()
 
 		auto* pass = material->createPass(0, binding, 0);
 		GLTUT_CHECK(pass != nullptr, "Failed to create material pass");
+		// Since our geometry does not have normals, disable face culling
+		pass->setFaceCullingMode(gltut::FaceCullingMode::NONE);
 
 		scene->createGeometry(geometry, material);
 		auto start = std::chrono::high_resolution_clock::now();

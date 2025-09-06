@@ -13,6 +13,7 @@ MaterialPassC::MaterialPassC(
 	const ShaderRendererBinding* shader,
 	u32 textureSlotsCount) noexcept :
 
+	mDevice(device),
 	mShaderBinding(shader),
 	mShaderArguments(shader != nullptr ? 
 		shader->getShader() :
@@ -47,6 +48,9 @@ void MaterialPassC::bind(const RenderGeometry* geometry) const noexcept
 	mShaderBinding->update(geometry);
 	mShaderArguments.bind();
 	mTextures.bind();
+	
+	mDevice.setBlending(isTransparent());
+	mDevice.setFaceCullingMode(getFaceCullingMode());
 }
 
 // End of the namespace gltut

@@ -45,9 +45,6 @@ public:
 	/// Returns the viewport rectangle for this render pass
 	virtual const Rectangle2u* getViewport() const noexcept = 0;
 
-	/// Set the face culling state
-	virtual void setFaceCulling(bool back, bool front) noexcept = 0;
-
 	/// Returns the depth function type
 	virtual DepthFunctionType getDepthFunction() const noexcept = 0;
 

@@ -13,9 +13,6 @@ DepthSortedRenderPassC::DepthSortedRenderPassC(
 	const Color* clearColor,
 	bool clearDepth,
 	const Rectangle2u* viewport,
-	bool cullBack,
-	bool cullFront,
-	bool enableBlending,
 	GraphicsDevice& device,
 	const ShaderBindings& shaderBindings) noexcept :
 
@@ -27,9 +24,6 @@ DepthSortedRenderPassC::DepthSortedRenderPassC(
 		clearColor,
 		clearDepth,
 		viewport,
-		cullBack,
-		cullFront,
-		enableBlending,
 		device,
 		shaderBindings),
 

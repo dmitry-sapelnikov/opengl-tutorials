@@ -163,9 +163,7 @@ int main()
 			0,
 			&clearColor,
 			true, // Depth clearing
-			nullptr,
-			true,
-			false);
+			nullptr);
 
 		GLTUT_CHECK(renderToTexturePass, "Failed to create render to texture pass");
 

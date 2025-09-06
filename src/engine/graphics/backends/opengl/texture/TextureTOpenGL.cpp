@@ -75,7 +75,7 @@ u32 getChannelType(TextureFormat format) noexcept
 	case TextureFormat::FLOAT:
 		return GL_FLOAT;
 
-	GLTUT_UNEXPECTED_SWITCH_DEFAULT_CASE(format)
+		GLTUT_UNEXPECTED_SWITCH_DEFAULT_CASE(format)
 	}
 	return 0;
 }

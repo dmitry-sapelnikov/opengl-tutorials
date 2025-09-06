@@ -29,9 +29,6 @@ public:
 		const Color* clearColor,
 		bool clearDepth,
 		const Rectangle2u* viewport,
-		bool cullBackFaces,
-		bool cullFrontFaces,
-		bool enableBlending,
 		GraphicsDevice& device,
 		const ShaderBindings& shaderBindings);
 
@@ -90,13 +87,6 @@ public:
 		return mViewport.has_value() ? &mViewport.value() : nullptr;
 	}
 
-	/// Set the face culling state
-	void setFaceCulling(bool back, bool front) noexcept final
-	{
-		mCullBackFaces = back;
-		mCullFrontFaces = front;
-	}
-
 	/// Returns the depth function type
 	DepthFunctionType getDepthFunction() const noexcept final
 	{
@@ -149,15 +139,6 @@ private:
 
 	/// The viewport for this render pass
 	std::optional<Rectangle2u> mViewport;
-
-	/// Cull back faces flag
-	bool mCullBackFaces;
-
-	/// Cull front faces flag
-	bool mCullFrontFaces;
-
-	/// Enable transparency flag
-	bool mEnableBlending;
 
 	/// Depth function
 	DepthFunctionType mDepthFunction = DepthFunctionType::LESS;

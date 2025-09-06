@@ -569,6 +569,9 @@
     <ClInclude Include="..\..\include\engine\renderer\RenderPass.h">
       <Filter>include\renderer</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\engine\graphics\FaceCullingMode.h">
+      <Filter>include\graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\engine\EngineC.cpp">

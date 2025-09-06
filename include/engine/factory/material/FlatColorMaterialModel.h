@@ -13,7 +13,7 @@ public:
 	virtual ~FlatColorMaterialModel() = default;
 	
 	/// Returns the underlying material
-	virtual const Material* getMaterial() const noexcept = 0;
+	virtual Material* getMaterial() const noexcept = 0;
 
 	/// Sets the color texture
 	virtual void setColor(const Texture* color) noexcept = 0;
