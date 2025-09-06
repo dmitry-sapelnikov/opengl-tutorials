@@ -37,15 +37,15 @@ public:
 	}
 
 	/// Returns the material face mode
-	FaceCullingMode getFaceCullingMode() const noexcept final
+	FaceCullingMode getFaceCulling() const noexcept final
 	{
-		return mFaceCullingMode;
+		return mFaceCulling;
 	}
 
 	/// Sets the material face mode
-	void setFaceCullingMode(FaceCullingMode mode) noexcept final
+	void setFaceCulling(FaceCullingMode mode) noexcept final
 	{
-		mFaceCullingMode = mode;
+		mFaceCulling = mode;
 	}
 
 	/// Returns the transparency flag
@@ -58,6 +58,17 @@ public:
 	void setTransparent(bool transparent) noexcept final
 	{
 		mTransparent = transparent;
+	}
+
+	/// Sets the polygon fill mode
+	void setPolygonFill(
+		PolygonFillMode mode,
+		float size = 1.0f,
+		bool enableSizeInShader = false) noexcept
+	{
+		mPolygonFill = mode;
+		mPolygonFillSize = size;
+		mPolygonFillSizeInShader = enableSizeInShader;
 	}
 
 	/// Binds the material pass for a render geometry
@@ -77,10 +88,19 @@ private:
 	TextureSetC mTextures;
 
 	/// The face mode
-	FaceCullingMode mFaceCullingMode = FaceCullingMode::BACK;
+	FaceCullingMode mFaceCulling = FaceCullingMode::BACK;
 
 	/// The transparency flag
 	bool mTransparent = false;
+
+	/// The polygon fill mode
+	PolygonFillMode mPolygonFill = PolygonFillMode::SOLID;
+
+	/// The polygon fill size
+	float mPolygonFillSize = 1.0f;
+
+	/// If true, the polygon fill size is passed to the shader
+	bool mPolygonFillSizeInShader = false;
 };
 
 // End of the namespace gltut

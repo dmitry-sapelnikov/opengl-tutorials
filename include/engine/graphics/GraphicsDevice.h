@@ -14,8 +14,7 @@
 #include "engine/graphics/texture/TextureManager.h"
 #include "engine/graphics/framebuffer/TextureFramebuffer.h"
 
-#include "engine/graphics/DepthFunctionType.h"
-#include "engine/graphics/FaceCullingMode.h"
+#include "engine/graphics/RenderModes.h"
 
 namespace gltut
 {
@@ -56,13 +55,29 @@ public:
 	virtual void enableVSync(bool vSync) noexcept = 0;
 
 	/// Sets the face cull mode
-	virtual void setFaceCullingMode(FaceCullingMode mode) noexcept = 0;
+	virtual void setFaceCulling(FaceCullingMode mode) noexcept = 0;
 
 	/// Enable or disables blending
 	virtual void setBlending(bool enabled) noexcept = 0;
 
 	/// Sets the depth function
-	virtual void setDepthFunction(DepthFunctionType function) noexcept = 0;
+	virtual void setDepthTest(DepthTestMode mode) noexcept = 0;
+
+	/**
+		\brief Sets the polygon fill mode
+
+		\param mode The polygon fill mode
+
+		\param size The size of the polygon outline.
+		Used only if mode is PolygonFillMode::LINE or PolygonFillMode::POINT
+
+		\param enableSizeInShader If true, the size parameter is passed to the shader.
+		Used only if mode is PolygonFillMode::POINT
+	*/
+	virtual void setPolygonFill(
+		PolygonFillMode mode,
+		float size = 1.0f,
+		bool enableSizeInShader = false) noexcept = 0;
 };
 
 // End of the namespace gltut

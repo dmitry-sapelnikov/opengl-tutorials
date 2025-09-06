@@ -36,7 +36,7 @@ void RenderPassC::execute() noexcept
 
 void RenderPassC::execute(const RenderObject* target) noexcept
 {
-	mDevice.setDepthFunction(mDepthFunction);
+	mDevice.setDepthTest(mDepthTest);
 
 	mDevice.bindFramebuffer(
 		mTarget, 

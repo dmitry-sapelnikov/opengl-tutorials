@@ -206,7 +206,7 @@ void DeviceOpenGL::bindTexture(const Texture* texture, u32 slot) noexcept
 	}
 }
 
-void DeviceOpenGL::setFaceCullingMode(FaceCullingMode mode) noexcept
+void DeviceOpenGL::setFaceCulling(FaceCullingMode mode) noexcept
 {
 	switch (mode)
 	{
@@ -246,40 +246,40 @@ void DeviceOpenGL::setBlending(bool enabled) noexcept
 	}
 }
 
-void DeviceOpenGL::setDepthFunction(DepthFunctionType function) noexcept
+void DeviceOpenGL::setDepthTest(DepthTestMode mode) noexcept
 {
 	GLenum glFunction = 0;
-	switch (function)
+	switch (mode)
 	{
-	case DepthFunctionType::ALWAYS:
+	case DepthTestMode::ALWAYS:
 		glFunction = GL_ALWAYS;
 		break;
 
-	case DepthFunctionType::NEVER:
+	case DepthTestMode::NEVER:
 		glFunction = GL_NEVER;
 		break;
 
-	case DepthFunctionType::LESS:
+	case DepthTestMode::LESS:
 		glFunction = GL_LESS;
 		break;
 
-	case DepthFunctionType::LEQUAL:
+	case DepthTestMode::LEQUAL:
 		glFunction = GL_LEQUAL;
 		break;
 
-	case DepthFunctionType::EQUAL:
+	case DepthTestMode::EQUAL:
 		glFunction = GL_EQUAL;
 		break;
 
-	case DepthFunctionType::GEQUAL:
+	case DepthTestMode::GEQUAL:
 		glFunction = GL_GEQUAL;
 		break;
 
-	case DepthFunctionType::GREATER:
+	case DepthTestMode::GREATER:
 		glFunction = GL_GREATER;
 		break;
 
-	case DepthFunctionType::NOTEQUAL:
+	case DepthTestMode::NOTEQUAL:
 		glFunction = GL_NOTEQUAL;
 		break;
 
@@ -289,6 +289,45 @@ void DeviceOpenGL::setDepthFunction(DepthFunctionType function) noexcept
 	if (glFunction != 0)
 	{
 		glDepthFunc(glFunction);
+	}
+}
+
+void DeviceOpenGL::setPolygonFill(
+	PolygonFillMode mode,
+	float size,
+	bool enableSizeInShader) noexcept
+{
+	switch (mode)
+	{
+	case PolygonFillMode::SOLID:
+		{
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		}
+		break;
+
+	case PolygonFillMode::LINE:
+		{
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			glLineWidth(size);
+		}
+		break;
+
+	case PolygonFillMode::POINT:
+		{
+			glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+			glPointSize(size);
+			if (enableSizeInShader)
+			{
+				glEnable(GL_PROGRAM_POINT_SIZE);
+			}
+			else
+			{
+				glDisable(GL_PROGRAM_POINT_SIZE);
+			}
+		}
+		break;
+
+	GLTUT_UNEXPECTED_SWITCH_DEFAULT_CASE(mode)
 	}
 }
 

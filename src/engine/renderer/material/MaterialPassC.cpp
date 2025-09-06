@@ -50,7 +50,11 @@ void MaterialPassC::bind(const RenderGeometry* geometry) const noexcept
 	mTextures.bind();
 	
 	mDevice.setBlending(isTransparent());
-	mDevice.setFaceCullingMode(getFaceCullingMode());
+	mDevice.setFaceCulling(getFaceCulling());
+	mDevice.setPolygonFill(
+		mPolygonFill,
+		mPolygonFillSize,
+		mPolygonFillSizeInShader);
 }
 
 // End of the namespace gltut

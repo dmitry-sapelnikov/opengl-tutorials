@@ -56,6 +56,12 @@ public:
 		return mMaterialPass;
 	}
 
+	/// Sets the material pass for this render pass
+	void setMaterialPass(u32 pass) noexcept
+	{
+		mMaterialPass = pass;
+	}
+
 	/// Returns the clear color for the render target,
 	/// nullptr if the buffer should not be cleared
 	const Color* getClearColor() const noexcept final
@@ -88,15 +94,15 @@ public:
 	}
 
 	/// Returns the depth function type
-	DepthFunctionType getDepthFunction() const noexcept final
+	DepthTestMode getDepthTest() const noexcept final
 	{
-		return mDepthFunction;
+		return mDepthTest;
 	}
 
 	/// Sets the depth function type
-	void setDepthFunction(DepthFunctionType function) noexcept
+	void setDepthTest(DepthTestMode mode) noexcept
 	{
-		mDepthFunction = function;
+		mDepthTest = mode;
 	}
 
 	/// Returns if the pass is active
@@ -141,7 +147,7 @@ private:
 	std::optional<Rectangle2u> mViewport;
 
 	/// Depth function
-	DepthFunctionType mDepthFunction = DepthFunctionType::LESS;
+	DepthTestMode mDepthTest = DepthTestMode::LESS;
 
 	/// Active flag
 	bool mActive = true;

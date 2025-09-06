@@ -563,13 +563,10 @@
     <ClInclude Include="..\..\src\engine\factory\scene\ShadowMapC.h">
       <Filter>src\factory\scene</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\engine\graphics\DepthFunctionType.h">
-      <Filter>include\graphics</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\engine\renderer\RenderPass.h">
       <Filter>include\renderer</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\engine\graphics\FaceCullingMode.h">
+    <ClInclude Include="..\..\include\engine\graphics\RenderModes.h">
       <Filter>include\graphics</Filter>
     </ClInclude>
   </ItemGroup>

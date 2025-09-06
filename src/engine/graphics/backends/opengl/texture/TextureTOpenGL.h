@@ -17,10 +17,10 @@ static_assert(sizeof(GLuint) == sizeof(u32), "GLuint must be the same size as u3
 u32 toOpenGLFormat(TextureFormat format) noexcept;
 
 /// Converts a TextureFilterMode to an OpenGL filter mode
-u32 toOpenGLFilterMode(TextureFilterMode filterMode) noexcept;
+u32 toOpenGLFilter(TextureFilterMode filterMode) noexcept;
 
 /// Converts a TextureWrapMode to an OpenGL wrap mode
-u32 toOpenGLWrapMode(TextureWrapMode wrapMode) noexcept;
+u32 toOpenGLWrap(TextureWrapMode wrapMode) noexcept;
 
 /// Converts a TextureFormat to an OpenGL channel type
 u32 getChannelType(TextureFormat format) noexcept;
@@ -53,9 +53,9 @@ public:
 		{
 		}
 		
-		setMinFilterMode(parameters.minFilter, false);
-		setMagFilterMode(parameters.magFilter, false);
-		setWrapMode(parameters.wrapMode);
+		setMinFilter(parameters.minFilter, false);
+		setMagFilter(parameters.magFilter, false);
+		setWrap(parameters.wrapMode);
 	}
 
 	~TextureTOpenGL() noexcept
@@ -76,12 +76,12 @@ public:
 
 	void setParameters(const TextureParameters& parameters) noexcept final
 	{
-		setMinFilterMode(parameters.minFilter, true);
-		setMagFilterMode(parameters.magFilter, true);
-		setWrapMode(parameters.wrapMode);
+		setMinFilter(parameters.minFilter, true);
+		setMagFilter(parameters.magFilter, true);
+		setWrap(parameters.wrapMode);
 	}
 
-	void setWrapMode(TextureWrapMode wrapMode) noexcept
+	void setWrap(TextureWrapMode wrapMode) noexcept
 	{
 		mParameters.wrapMode = wrapMode;
 		TextureBackupOpenGL backup(glTextureType);
@@ -135,26 +135,26 @@ protected:
 	}
 
 private:
-	void setMinFilterMode(TextureFilterMode mode, bool mipmap) noexcept
+	void setMinFilter(TextureFilterMode mode, bool mipmap) noexcept
 	{
 		TextureBackupOpenGL backup(glTextureType);
 
 		mParameters.minFilter = mode;
 		glBindTexture(glTextureType, mId);
-		glTexParameteri(glTextureType, GL_TEXTURE_MIN_FILTER, toOpenGLFilterMode(mode));
+		glTexParameteri(glTextureType, GL_TEXTURE_MIN_FILTER, toOpenGLFilter(mode));
 		if (mipmap)
 		{
 			updateMipmap();
 		}
 	}
 
-	void setMagFilterMode(TextureFilterMode mode, bool mipmap) noexcept
+	void setMagFilter(TextureFilterMode mode, bool mipmap) noexcept
 	{
 		TextureBackupOpenGL backup(glTextureType);
 
 		mParameters.magFilter = mode;
 		glBindTexture(glTextureType, mId);
-		glTexParameteri(glTextureType, GL_TEXTURE_MAG_FILTER, toOpenGLFilterMode(mode));
+		glTexParameteri(glTextureType, GL_TEXTURE_MAG_FILTER, toOpenGLFilter(mode));
 		if (mipmap)
 		{
 			updateMipmap();

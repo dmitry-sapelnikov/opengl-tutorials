@@ -140,7 +140,7 @@ bool SceneFactoryC::createSkybox(
 		GLTUT_CHECK(skyboxPass != nullptr, "Failed to create skybox render pass");
 		// Set the depth function to less equal since the z-buffer is filled with 1.0 and
 		// we force the skybox depth to 1.0 in the vertex shader
-		skyboxPass->setDepthFunction(DepthFunctionType::LEQUAL);
+		skyboxPass->setDepthTest(DepthTestMode::LEQUAL);
 		result = true;
 	}
 	GLTUT_CATCH_ALL("Failed to create skybox")
@@ -176,7 +176,7 @@ gltut::Material* SceneFactoryC::createSkyboxMaterial(const TextureCubemap& cubem
 	GLTUT_CHECK(pass != nullptr, "Failed to create skybox material pass");
 
 	// Set front face culling since we are inside the skybox
-	pass->setFaceCullingMode(FaceCullingMode::FRONT);
+	pass->setFaceCulling(FaceCullingMode::FRONT);
 	pass->getTextures()->setTexture(&cubemapTexture, 0);
 
 	return skyboxMaterial;

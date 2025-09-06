@@ -28,8 +28,7 @@
     <ClInclude Include="..\..\include\engine\factory\scene\SceneFactory.h" />
     <ClInclude Include="..\..\include\engine\factory\shader\PhongShaderModel.h" />
     <ClInclude Include="..\..\include\engine\factory\texture\TextureFactory.h" />
-    <ClInclude Include="..\..\include\engine\graphics\DepthFunctionType.h" />
-    <ClInclude Include="..\..\include\engine\graphics\FaceCullingMode.h" />
+    <ClInclude Include="..\..\include\engine\graphics\RenderModes.h" />
     <ClInclude Include="..\..\include\engine\graphics\framebuffer\Framebuffer.h" />
     <ClInclude Include="..\..\include\engine\graphics\framebuffer\FramebufferManager.h" />
     <ClInclude Include="..\..\include\engine\graphics\framebuffer\TextureFramebuffer.h" />

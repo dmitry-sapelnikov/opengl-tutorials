@@ -6,7 +6,7 @@
 #include "engine/graphics/framebuffer/Framebuffer.h"
 #include "engine/renderer/objects/RenderObject.h"
 #include "engine/renderer/viewpoint/Viewpoint.h"
-#include "engine/graphics/DepthFunctionType.h"
+#include "engine/graphics/RenderModes.h"
 
 namespace gltut
 {
@@ -42,14 +42,17 @@ public:
 	/// Returns the material layer for this render pass
 	virtual u32 getMaterialPass() const noexcept = 0;
 
+	/// Sets the material layer for this render pass
+	virtual void setMaterialPass(u32 pass) noexcept = 0;
+
 	/// Returns the viewport rectangle for this render pass
 	virtual const Rectangle2u* getViewport() const noexcept = 0;
 
 	/// Returns the depth function type
-	virtual DepthFunctionType getDepthFunction() const noexcept = 0;
+	virtual DepthTestMode getDepthTest() const noexcept = 0;
 
 	/// Sets the depth function type
-	virtual void setDepthFunction(DepthFunctionType function) noexcept = 0;
+	virtual void setDepthTest(DepthTestMode mode) noexcept = 0;
 
 	/// Returns if the pass is active
 	virtual bool isActive() const noexcept = 0;

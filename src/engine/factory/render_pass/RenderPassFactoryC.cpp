@@ -237,7 +237,7 @@ RenderPass* RenderPassFactoryC::createTexturesToWindowRenderPass(
 		"Failed to create material pass for texture-to-window render pass");
 
 	// Disable face culling
-	materialPass->setFaceCullingMode(FaceCullingMode::NONE);
+	materialPass->setFaceCulling(FaceCullingMode::NONE);
 
 	for (u32 i = 0; i < texturesCount; ++i)
 	{

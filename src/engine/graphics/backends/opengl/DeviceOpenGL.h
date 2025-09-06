@@ -65,13 +65,18 @@ public:
 	void bindTexture(const Texture* texture, u32 slot) noexcept final;
 
 	/// Set face cull mode
-	void setFaceCullingMode(FaceCullingMode mode) noexcept final;
+	void setFaceCulling(FaceCullingMode mode) noexcept final;
 
 	/// Enable or disables blending
 	void setBlending(bool enabled) noexcept final;
 
 	/// Sets the depth function
-	void setDepthFunction(DepthFunctionType function) noexcept final;
+	void setDepthTest(DepthTestMode mode) noexcept final;
+
+	void setPolygonFill(
+		PolygonFillMode mode,
+		float size = 1.0f,
+		bool enableSizeInShader = false) noexcept final;
 
 private:
 	/// Sets a framebuffer for rendering
