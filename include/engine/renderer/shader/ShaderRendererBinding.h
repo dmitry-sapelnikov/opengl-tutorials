@@ -8,6 +8,7 @@ namespace gltut
 //	Global classes
 class RenderGeometry;
 class Viewpoint;
+class Renderer;
 
 /// Binds shader parameters to renderer parameters
 class ShaderRendererBinding : public ShaderBinding
@@ -48,6 +49,18 @@ public:
 	/// Updates the shader binding for a render geometry
 	virtual void update(const RenderGeometry* geometry) const noexcept = 0;
 };
+
+// Global functions
+
+///	Creates a standard shader binding with common parameters
+ShaderRendererBinding* createStandardShaderBinding(
+	Renderer* renderer,
+	const char* vertexShaderSource,
+	const char* fragmentShaderSource,
+	const char* modelMatrixName = "model",
+	const char* viewMatrixName = "view",
+	const char* projectionMatrixName = "projection",
+	const char* normalMatrixName = nullptr) noexcept;
 
 // End of the namespace gltut
 }
