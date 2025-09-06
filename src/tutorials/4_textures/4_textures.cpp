@@ -69,6 +69,7 @@ int main()
 
 		materialPass->getTextures()->setTexture(texture1, 0);
 		materialPass->getTextures()->setTexture(texture2, 1);
+		materialPass->setFaceCullingMode(gltut::FaceCullingMode::NONE);
 
 		scene->createGeometry(geometry, material);
 		while (engine->update())
