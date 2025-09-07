@@ -1,6 +1,5 @@
 // Includes
 #include "FlatColorShader.h"
-#include "./StandardShaderBinding.h"
 
 namespace gltut
 {
@@ -53,7 +52,7 @@ void main()
 ShaderRendererBinding* createFlatColorShader(Renderer& renderer) noexcept
 {
 	ShaderRendererBinding* result = createStandardShaderBinding(
-		renderer,
+		&renderer,
 		FLAT_COLOR_VERTEX_SHADER,
 		FLAT_COLOR_FRAGMENT_SHADER);
 

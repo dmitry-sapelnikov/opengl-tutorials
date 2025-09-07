@@ -102,7 +102,6 @@
     <ClInclude Include="..\..\src\engine\factory\shader\DepthShader.h" />
     <ClInclude Include="..\..\src\engine\factory\shader\FlatColorShader.h" />
     <ClInclude Include="..\..\src\engine\factory\shader\PhongShaderModelC.h" />
-    <ClInclude Include="..\..\src\engine\factory\shader\StandardShaderBinding.h" />
     <ClInclude Include="..\..\src\engine\factory\texture\TextureFactoryC.h" />
     <ClInclude Include="..\..\src\engine\graphics\backends\opengl\framebuffer\FramebufferBackupOpenGL.h" />
     <ClInclude Include="..\..\src\engine\graphics\backends\opengl\framebuffer\TextureFramebufferOpenGL.h" />
@@ -167,7 +166,6 @@
     <ClCompile Include="..\..\src\engine\factory\shader\DepthShader.cpp" />
     <ClCompile Include="..\..\src\engine\factory\shader\FlatColorShader.cpp" />
     <ClCompile Include="..\..\src\engine\factory\shader\PhongShaderModelC.cpp" />
-    <ClCompile Include="..\..\src\engine\factory\shader\StandardShaderBinding.cpp" />
     <ClCompile Include="..\..\src\engine\factory\texture\TextureFactoryC.cpp" />
     <ClCompile Include="..\..\src\engine\graphics\backends\opengl\framebuffer\TextureFramebufferOpenGL.cpp" />
     <ClCompile Include="..\..\src\engine\graphics\backends\opengl\GeometryOpenGL.cpp" />

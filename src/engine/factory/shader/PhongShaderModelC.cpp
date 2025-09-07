@@ -1,7 +1,6 @@
 // Includes
 #include <string>
 #include "PhongShaderModelC.h"
-#include "./StandardShaderBinding.h"
 
 namespace gltut
 {
@@ -405,16 +404,19 @@ PhongShaderModelC::PhongShaderModelC(
 	shaderHeader += LIGHT_UNIFORMS;
 
 	mRendererBinding = createStandardShaderBinding(
-		mRenderer,
+		&mRenderer,
 		(shaderHeader + PHONG_VERTEX_SHADER).c_str(),
-		(shaderHeader + PHONG_FRAGMENT_SHADER).c_str());
+		(shaderHeader + PHONG_FRAGMENT_SHADER).c_str(),
+		"model",
+		"view",
+		"projection",
+		"normalMat");
 
 	GLTUT_CHECK(mRendererBinding != nullptr, "Failed to create Phong shader binding");
 	auto* shader = mRendererBinding->getTarget();
 	GLTUT_CHECK(shader != nullptr, "Invalid shader pointer");
 
 	mRendererBinding->bind(RendererBinding::Parameter::VIEWPOINT_POSITION, "viewPos");
-	mRendererBinding->bind(RendererBinding::Parameter::GEOMETRY_NORMAL_MATRIX, "normalMat");
 
 	shader->setInt("diffuseSampler", 0);
 	shader->setInt("specularSampler", 1);

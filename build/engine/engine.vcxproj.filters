@@ -491,9 +491,6 @@
     <ClInclude Include="..\..\src\engine\renderer\shader\ShaderRendererBindingC.h">
       <Filter>src\renderer\shader</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\engine\factory\shader\StandardShaderBinding.h">
-      <Filter>src\factory\shader</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\engine\factory\shader\PhongShaderModel.h">
       <Filter>include\factory\shader</Filter>
     </ClInclude>
@@ -699,9 +696,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\engine\renderer\shader\ShaderRendererBindingC.cpp">
       <Filter>src\renderer\shader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\engine\factory\shader\StandardShaderBinding.cpp">
-      <Filter>src\factory\shader</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\engine\factory\shader\DepthShader.cpp">
       <Filter>src\factory\shader</Filter>
