@@ -13,11 +13,10 @@ DepthSortedRenderPassC::DepthSortedRenderPassC(
 	const Color* clearColor,
 	bool clearDepth,
 	const Rectangle2u* viewport,
-	bool cullBack,
-	bool cullFront,
-	bool enableBlending,
 	GraphicsDevice& device,
-	const ShaderBindings& shaderBindings) noexcept :
+	const ShaderBindings& shaderBindings,
+	const ShaderUniformBufferBindings& shaderUniformBufferBindings
+	) noexcept :
 
 	RenderPassC(
 		viewpoint,
@@ -27,11 +26,9 @@ DepthSortedRenderPassC::DepthSortedRenderPassC(
 		clearColor,
 		clearDepth,
 		viewport,
-		cullBack,
-		cullFront,
-		enableBlending,
 		device,
-		shaderBindings),
+		shaderBindings,
+		shaderUniformBufferBindings),
 
 	mGroup(group)
 {

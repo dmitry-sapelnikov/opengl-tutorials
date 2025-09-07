@@ -6,6 +6,7 @@
 #include "engine/core/NonCopyable.h"
 #include "engine/graphics/GraphicsDevice.h"
 #include "engine/renderer/shader/ShaderRendererBinding.h"
+#include "engine/renderer/shader/ShaderUniformBufferRendererBinding.h"
 #include "engine/renderer/RenderPass.h"
 
 namespace gltut
@@ -20,6 +21,10 @@ public:
 	using ShaderBindings =
 		std::vector<std::unique_ptr<ShaderRendererBinding>>;
 
+	/// Vector of shader uniform buffer bindings
+	using ShaderUniformBufferBindings =
+		std::vector<std::unique_ptr<ShaderUniformBufferRendererBinding>>;
+
 	/// Constructor
 	RenderPassC(
 		const Viewpoint* viewpoint,
@@ -29,11 +34,9 @@ public:
 		const Color* clearColor,
 		bool clearDepth,
 		const Rectangle2u* viewport,
-		bool cullBackFaces,
-		bool cullFrontFaces,
-		bool enableBlending,
 		GraphicsDevice& device,
-		const ShaderBindings& shaderBindings);
+		const ShaderBindings& shaderBindings,
+		const ShaderUniformBufferBindings& shaderUniformBufferBindings);
 
 	/// Returns the scene viewpoint
 	const Viewpoint* getViewpoint() const noexcept final
@@ -57,6 +60,12 @@ public:
 	u32 getMaterialPass() const noexcept final
 	{
 		return mMaterialPass;
+	}
+
+	/// Sets the material pass for this render pass
+	void setMaterialPass(u32 pass) noexcept
+	{
+		mMaterialPass = pass;
 	}
 
 	/// Returns the clear color for the render target,
@@ -90,23 +99,16 @@ public:
 		return mViewport.has_value() ? &mViewport.value() : nullptr;
 	}
 
-	/// Set the face culling state
-	void setFaceCulling(bool back, bool front) noexcept final
-	{
-		mCullBackFaces = back;
-		mCullFrontFaces = front;
-	}
-
 	/// Returns the depth function type
-	DepthFunctionType getDepthFunction() const noexcept final
+	DepthTestMode getDepthTest() const noexcept final
 	{
-		return mDepthFunction;
+		return mDepthTest;
 	}
 
 	/// Sets the depth function type
-	void setDepthFunction(DepthFunctionType function) noexcept
+	void setDepthTest(DepthTestMode mode) noexcept
 	{
-		mDepthFunction = function;
+		mDepthTest = mode;
 	}
 
 	/// Returns if the pass is active
@@ -150,17 +152,8 @@ private:
 	/// The viewport for this render pass
 	std::optional<Rectangle2u> mViewport;
 
-	/// Cull back faces flag
-	bool mCullBackFaces;
-
-	/// Cull front faces flag
-	bool mCullFrontFaces;
-
-	/// Enable transparency flag
-	bool mEnableBlending;
-
 	/// Depth function
-	DepthFunctionType mDepthFunction = DepthFunctionType::LESS;
+	DepthTestMode mDepthTest = DepthTestMode::LESS;
 
 	/// Active flag
 	bool mActive = true;
@@ -170,6 +163,9 @@ private:
 
 	/// Shader-renderer bindings
 	const ShaderBindings& mShaderBindings;
+
+	/// Shader uniform buffer bindings
+	const ShaderUniformBufferBindings& mShaderUniformBufferBindings;
 };
 
 // End of the namespace gltut

@@ -33,6 +33,14 @@ public:
 	void removeShaderBinding(
 		ShaderRendererBinding* binding) noexcept final;
 
+	/// Creates a shader uniform buffer binding
+	ShaderUniformBufferRendererBinding* createShaderUniformBufferBinding(
+		ShaderUniformBuffer* buffer) noexcept final;
+
+	/// Removes a shader uniform buffer binding
+	void removeShaderUniformBufferBinding(
+		ShaderUniformBufferRendererBinding* binding) noexcept final;
+
 	/// Creates a material
 	Material* createMaterial() noexcept final;
 
@@ -56,10 +64,7 @@ public:
 		u32 materialPass,
 		const Color* clearColor,
 		bool clearDepth,
-		const Rectangle2u* viewport,
-		bool cullBackFaces = true,
-		bool cullFrontFaces = false,
-		bool enableBlending = false) noexcept final;
+		const Rectangle2u* viewport) noexcept final;
 
 	RenderPass* createDepthSortedPass(
 		const Viewpoint* viewpoint,
@@ -68,10 +73,7 @@ public:
 		u32 materialPass,
 		const Color* clearColor,
 		bool clearDepth,
-		const Rectangle2u* viewport,
-		bool cullBackFaces = true,
-		bool cullFrontFaces = false,
-		bool enableBlending = true) noexcept final;
+		const Rectangle2u* viewport) noexcept final;
 
 	/// Removes a render pass
 	void removePass(RenderPass* pass) noexcept final;
@@ -91,6 +93,9 @@ private:
 
 	/// Shader renderer bindings
 	std::vector<std::unique_ptr<ShaderRendererBinding>> mShaderBindings;
+
+	/// Shader uniform buffer bindings
+	std::vector<std::unique_ptr<ShaderUniformBufferRendererBinding>> mShaderUniformBufferBindings;
 
 	/// Materials
 	std::vector<std::unique_ptr<Material>> mMaterials;

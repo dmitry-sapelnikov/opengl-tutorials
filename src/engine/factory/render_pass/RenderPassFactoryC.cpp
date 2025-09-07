@@ -142,7 +142,7 @@ RenderPass* RenderPassFactoryC::createTextureToWindowRenderPass(
 
 		result = createTexturesToWindowRenderPass(
 			viewport,
-			shader->getShader(),
+			shader->getTarget(),
 			&texture,
 			1);
 	GLTUT_CATCH_ALL_END("Failed to create texture-to-window render pass");
@@ -230,11 +230,18 @@ RenderPass* RenderPassFactoryC::createTexturesToWindowRenderPass(
 		material != nullptr,
 		"Failed to create material for texture-to-window render pass");
 
-	MaterialPass* materialPass = material->createPass(0, shaderBinding, texturesCount);
+	MaterialPass* materialPass = material->createPass(
+		0,
+		shaderBinding,
+		texturesCount,
+		0); // No uniform buffers
 
 	GLTUT_CHECK(
 		materialPass != nullptr,
 		"Failed to create material pass for texture-to-window render pass");
+
+	// Disable face culling
+	materialPass->setFaceCulling(FaceCullingMode::NONE);
 
 	for (u32 i = 0; i < texturesCount; ++i)
 	{
@@ -260,9 +267,7 @@ RenderPass* RenderPassFactoryC::createTexturesToWindowRenderPass(
 		0, // Material pass 0
 		nullptr, // No clear color
 		true, // Depth clearing
-		viewport,
-		false, // No back face culling
-		false // No front face culling
+		viewport
 	);
 	// TODO: add render pass without depth test
 }

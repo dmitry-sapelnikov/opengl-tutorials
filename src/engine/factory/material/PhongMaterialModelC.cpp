@@ -9,7 +9,8 @@ PhongMaterialModelC::PhongMaterialModelC(
 	Renderer& renderer,
 	Scene& scene,
 	const PhongShaderModel& phongShader,
-	ShaderRendererBinding* depthShader) :
+	ShaderRendererBinding* depthShader,
+	const ShaderUniformBuffer& viewProjectionBuffer) :
 
 	MaterialModelT<PhongMaterialModel>(renderer),
 	mScene(scene),
@@ -20,8 +21,13 @@ PhongMaterialModelC::PhongMaterialModelC(
 		phongShader.getShader(),
 		PhongShaderModel::TEXTURE_SLOTS_COUNT + 
 		phongShader.getMaxDirectionalLights() + 
-		phongShader.getMaxSpotLights());
+		phongShader.getMaxSpotLights(),
+		0); // No uniform buffers
+
 	GLTUT_CHECK(lightingPass != nullptr, "Failed to create a material pass");
+	lightingPass->getShaderUniformBuffers()->set(
+		&viewProjectionBuffer,
+		PhongShaderModel::VIEW_PROJECTION_BUFFER_BINDING_POINT);
 
 	if (depthShader != nullptr)
 	{
@@ -30,11 +36,16 @@ PhongMaterialModelC::PhongMaterialModelC(
 			depthShader,
 			PhongShaderModel::TEXTURE_SLOTS_COUNT + 
 			phongShader.getMaxDirectionalLights() +
-			phongShader.getMaxSpotLights());
+			phongShader.getMaxSpotLights(),
+			0); // No uniform buffers
 
 		GLTUT_CHECK(
 			depthPass != nullptr,
 			"Failed to create the depth pass for the Phong material model");
+
+		depthPass->getShaderUniformBuffers()->set(
+			&viewProjectionBuffer,
+			PhongShaderModel::VIEW_PROJECTION_BUFFER_BINDING_POINT);
 	}
 
 	mTextureSetBinding = mScene.createTextureSetBinding(lightingPass->getTextures());

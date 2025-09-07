@@ -8,6 +8,7 @@
 #include "./geometry/GeometryManagerC.h"
 #include "./framebuffer/FramebufferManagerC.h"
 #include "./shader/ShaderManagerC.h"
+#include "./shader/ShaderUniformBufferManagerC.h"
 #include "./texture/TextureManagerC.h"
 
 namespace gltut
@@ -41,6 +42,12 @@ public:
 		return &mShaders;
 	}
 
+	/// Returns the shader uniform buffer manager
+	ShaderUniformBufferManager* getShaderUniformBuffers() noexcept final
+	{
+		return &mShaderUniformBuffers;
+	}
+
 	/// Returns texture manager	
 	TextureManager* getTextures() noexcept final
 	{
@@ -70,6 +77,10 @@ public:
 	virtual std::unique_ptr<Shader> createBackendShader(
 		const char* vertexShader,
 		const char* fragmentShader) = 0;
+
+	/// Creates a shader uniform buffer for a specific graphics backend
+	virtual std::unique_ptr<ShaderUniformBuffer> createBackendShaderUniformBuffer(
+		u32 sizeInBytes) = 0;
 
 	/// Creates a texture for a specific graphics backend
 	virtual std::unique_ptr<Texture2> createBackendTexture2(
@@ -110,6 +121,9 @@ private:
 
 	/// Shaders
 	ShaderManagerC mShaders;
+
+	/// Shader uniform buffers
+	ShaderUniformBufferManagerC mShaderUniformBuffers;
 
 	/// Textures
 	TextureManagerC mTextures;

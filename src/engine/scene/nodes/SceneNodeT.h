@@ -108,7 +108,9 @@ public:
 
 		GLTUT_CATCH_ALL_BEGIN
 			const auto findResult = std::find(mChildren.begin(), mChildren.end(), child);
-			GLTUT_ASSERT(findResult != mChildren.end());
+			GLTUT_CHECK(
+				findResult != mChildren.end(),
+				"The specified node is not a child of this node");
 			mChildren.erase(findResult);
 			child->setParent(nullptr);
 		GLTUT_CATCH_ALL_END("Failed to remove child node")

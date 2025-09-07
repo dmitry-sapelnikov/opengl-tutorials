@@ -1,7 +1,6 @@
 // Includes
 #include <string>
 #include "PhongShaderModelC.h"
-#include "./StandardShaderBinding.h"
 
 namespace gltut
 {
@@ -60,10 +59,15 @@ uniform SpotLight spotLights[MAX_SPOT_LIGHTS];
 // Vertex shader source code for Phong shading
 static const char* PHONG_VERTEX_SHADER = R"(
 // Uniforms
+
+layout (std140) uniform ViewProjection
+{
+	mat4 view;
+	mat4 projection;
+};
+
 uniform mat4 model;
-uniform mat4 view;
 uniform vec3 viewPos;
-uniform mat4 projection;
 uniform mat3 normalMat;
 
 // Inputs
@@ -404,17 +408,19 @@ PhongShaderModelC::PhongShaderModelC(
 	shaderHeader += "#define MAX_SPOT_LIGHTS " + std::to_string(maxSpotLights) + "\n";
 	shaderHeader += LIGHT_UNIFORMS;
 
-	mRendererBinding = createStandardShaderBinding(
-		mRenderer,
+	mRendererShaderBinding = createStandardShaderBinding(
+		&mRenderer,
 		(shaderHeader + PHONG_VERTEX_SHADER).c_str(),
-		(shaderHeader + PHONG_FRAGMENT_SHADER).c_str());
+		(shaderHeader + PHONG_FRAGMENT_SHADER).c_str(),
+		"model",
+		nullptr, nullptr, // No bindings for view and projection matrices - they are in the uniform buffer
+		"normalMat");
 
-	GLTUT_CHECK(mRendererBinding != nullptr, "Failed to create Phong shader binding");
-	auto* shader = mRendererBinding->getShader();
-	GLTUT_CHECK(shader != nullptr, "Invalid shader pointer");
+	GLTUT_CHECK(mRendererShaderBinding != nullptr, "Failed to create Phong shader binding");
+	auto* shader = mRendererShaderBinding->getTarget();
+	shader->setUniformBlockBindingPoint("ViewProjection", VIEW_PROJECTION_BUFFER_BINDING_POINT);
 
-	mRendererBinding->bind(ShaderRendererBinding::Parameter::VIEWPOINT_POSITION, "viewPos");
-	mRendererBinding->bind(ShaderRendererBinding::Parameter::GEOMETRY_NORMAL_MATRIX, "normalMat");
+	mRendererShaderBinding->bind(RendererBinding::Parameter::VIEWPOINT_POSITION, "viewPos");
 
 	shader->setInt("diffuseSampler", 0);
 	shader->setInt("specularSampler", 1);
@@ -431,31 +437,31 @@ PhongShaderModelC::PhongShaderModelC(
 	mSceneBinding = scene.createShaderBinding(shader);
 	GLTUT_CHECK(mSceneBinding != nullptr, "Failed to create scene shader binding");
 
-	mSceneBinding->bind(SceneShaderBinding::Parameter::DIRECTIONAL_LIGHT_DIRECTION, "directionalLights.dir");
-	mSceneBinding->bind(SceneShaderBinding::Parameter::DIRECTIONAL_LIGHT_AMBIENT_COLOR, "directionalLights.color.ambient");
-	mSceneBinding->bind(SceneShaderBinding::Parameter::DIRECTIONAL_LIGHT_DIFFUSE_COLOR, "directionalLights.color.diffuse");
-	mSceneBinding->bind(SceneShaderBinding::Parameter::DIRECTIONAL_LIGHT_SPECULAR_COLOR, "directionalLights.color.specular");
-	mSceneBinding->bind(SceneShaderBinding::Parameter::DIRECTIONAL_LIGHT_SHADOW_MATRIX, "directionalLights.shadowMatrix");
+	mSceneBinding->bind(SceneBinding::Parameter::DIRECTIONAL_LIGHT_DIRECTION, "directionalLights.dir");
+	mSceneBinding->bind(SceneBinding::Parameter::DIRECTIONAL_LIGHT_AMBIENT_COLOR, "directionalLights.color.ambient");
+	mSceneBinding->bind(SceneBinding::Parameter::DIRECTIONAL_LIGHT_DIFFUSE_COLOR, "directionalLights.color.diffuse");
+	mSceneBinding->bind(SceneBinding::Parameter::DIRECTIONAL_LIGHT_SPECULAR_COLOR, "directionalLights.color.specular");
+	mSceneBinding->bind(SceneBinding::Parameter::DIRECTIONAL_LIGHT_SHADOW_MATRIX, "directionalLights.shadowMatrix");
 
-	mSceneBinding->bind(SceneShaderBinding::Parameter::POINT_LIGHT_POSITION, "pointLights.pos");
-	mSceneBinding->bind(SceneShaderBinding::Parameter::POINT_LIGHT_AMBIENT_COLOR, "pointLights.color.ambient");
-	mSceneBinding->bind(SceneShaderBinding::Parameter::POINT_LIGHT_DIFFUSE_COLOR, "pointLights.color.diffuse");
-	mSceneBinding->bind(SceneShaderBinding::Parameter::POINT_LIGHT_SPECULAR_COLOR, "pointLights.color.specular");
-	mSceneBinding->bind(SceneShaderBinding::Parameter::POINT_LIGHT_LINEAR_ATTENUATION, "pointLights.linAttenuation");
-	mSceneBinding->bind(SceneShaderBinding::Parameter::POINT_LIGHT_QUADRATIC_ATTENUATION, "pointLights.quadAttenuation");
+	mSceneBinding->bind(SceneBinding::Parameter::POINT_LIGHT_POSITION, "pointLights.pos");
+	mSceneBinding->bind(SceneBinding::Parameter::POINT_LIGHT_AMBIENT_COLOR, "pointLights.color.ambient");
+	mSceneBinding->bind(SceneBinding::Parameter::POINT_LIGHT_DIFFUSE_COLOR, "pointLights.color.diffuse");
+	mSceneBinding->bind(SceneBinding::Parameter::POINT_LIGHT_SPECULAR_COLOR, "pointLights.color.specular");
+	mSceneBinding->bind(SceneBinding::Parameter::POINT_LIGHT_LINEAR_ATTENUATION, "pointLights.linAttenuation");
+	mSceneBinding->bind(SceneBinding::Parameter::POINT_LIGHT_QUADRATIC_ATTENUATION, "pointLights.quadAttenuation");
 
-	mSceneBinding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_POSITION, "spotLights.pos");
-	mSceneBinding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_DIRECTION, "spotLights.dir");
-	mSceneBinding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_INNER_ANGLE_COS, "spotLights.innerAngleCos");
-	mSceneBinding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_OUTER_ANGLE_COS, "spotLights.outerAngleCos");
-	mSceneBinding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_AMBIENT_COLOR, "spotLights.color.ambient");
-	mSceneBinding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_DIFFUSE_COLOR, "spotLights.color.diffuse");
-	mSceneBinding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_SPECULAR_COLOR, "spotLights.color.specular");
-	mSceneBinding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_LINEAR_ATTENUATION, "spotLights.linAttenuation");
-	mSceneBinding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_QUADRATIC_ATTENUATION, "spotLights.quadAttenuation");
-	mSceneBinding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_SHADOW_MATRIX, "spotLights.shadowMatrix");
-	mSceneBinding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_SHADOW_NEAR, "spotLights.shadowNear");
-	mSceneBinding->bind(SceneShaderBinding::Parameter::SPOT_LIGHT_SHADOW_FAR, "spotLights.shadowFar");
+	mSceneBinding->bind(SceneBinding::Parameter::SPOT_LIGHT_POSITION, "spotLights.pos");
+	mSceneBinding->bind(SceneBinding::Parameter::SPOT_LIGHT_DIRECTION, "spotLights.dir");
+	mSceneBinding->bind(SceneBinding::Parameter::SPOT_LIGHT_INNER_ANGLE_COS, "spotLights.innerAngleCos");
+	mSceneBinding->bind(SceneBinding::Parameter::SPOT_LIGHT_OUTER_ANGLE_COS, "spotLights.outerAngleCos");
+	mSceneBinding->bind(SceneBinding::Parameter::SPOT_LIGHT_AMBIENT_COLOR, "spotLights.color.ambient");
+	mSceneBinding->bind(SceneBinding::Parameter::SPOT_LIGHT_DIFFUSE_COLOR, "spotLights.color.diffuse");
+	mSceneBinding->bind(SceneBinding::Parameter::SPOT_LIGHT_SPECULAR_COLOR, "spotLights.color.specular");
+	mSceneBinding->bind(SceneBinding::Parameter::SPOT_LIGHT_LINEAR_ATTENUATION, "spotLights.linAttenuation");
+	mSceneBinding->bind(SceneBinding::Parameter::SPOT_LIGHT_QUADRATIC_ATTENUATION, "spotLights.quadAttenuation");
+	mSceneBinding->bind(SceneBinding::Parameter::SPOT_LIGHT_SHADOW_MATRIX, "spotLights.shadowMatrix");
+	mSceneBinding->bind(SceneBinding::Parameter::SPOT_LIGHT_SHADOW_NEAR, "spotLights.shadowNear");
+	mSceneBinding->bind(SceneBinding::Parameter::SPOT_LIGHT_SHADOW_FAR, "spotLights.shadowFar");
 
 	setMaxShadowMapBias(DEFAULT_MAX_SHADOW_MAP_BIAS);
 	setMinShadowMapBias(DEFAULT_MIN_SHADOW_MAP_BIAS);
@@ -463,10 +469,10 @@ PhongShaderModelC::PhongShaderModelC(
 
 PhongShaderModelC::~PhongShaderModelC() noexcept
 {
-	Shader* shader = mRendererBinding != nullptr ?
-		mRendererBinding->getShader() :
+	Shader* shader = mRendererShaderBinding != nullptr ?
+		mRendererShaderBinding->getTarget() :
 		nullptr;
-	mRenderer.removeShaderBinding(mRendererBinding);
+	mRenderer.removeShaderBinding(mRendererShaderBinding);
 	mScene.removeShaderBinding(mSceneBinding);
 	mRenderer.getDevice()->getShaders()->remove(shader);
 }
@@ -474,14 +480,14 @@ PhongShaderModelC::~PhongShaderModelC() noexcept
 void PhongShaderModelC::setMinShadowMapBias(float bias) noexcept
 {
 	mMinShadowMapBias = clamp(bias, 0.0f, mMaxShadowMapBias);
-	mRendererBinding->getShader()->setFloat(
+	mRendererShaderBinding->getTarget()->setFloat(
 		"minShadowMapBias", mMinShadowMapBias);
 }
 
 void PhongShaderModelC::setMaxShadowMapBias(float bias) noexcept
 {
 	mMaxShadowMapBias = std::max(0.0f, bias);
-	mRendererBinding->getShader()->setFloat(
+	mRendererShaderBinding->getTarget()->setFloat(
 		"maxShadowMapBias", mMaxShadowMapBias);
 	setMinShadowMapBias(mMinShadowMapBias);
 }

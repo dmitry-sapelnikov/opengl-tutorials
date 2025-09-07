@@ -1,6 +1,5 @@
 // Includes
 #include "FlatColorShader.h"
-#include "./StandardShaderBinding.h"
 
 namespace gltut
 {
@@ -10,9 +9,12 @@ static const char* FLAT_COLOR_VERTEX_SHADER = R"(
 #version 330 core
 
 // Uniforms
+layout (std140) uniform ViewProjection
+{
+	mat4 view;
+	mat4 projection;
+};
 uniform mat4 model;
-uniform mat4 view;
-uniform mat4 projection;
 
 // Inputs
 layout (location = 0) in vec3 inPos;
@@ -53,15 +55,22 @@ void main()
 ShaderRendererBinding* createFlatColorShader(Renderer& renderer) noexcept
 {
 	ShaderRendererBinding* result = createStandardShaderBinding(
-		renderer,
+		&renderer,
 		FLAT_COLOR_VERTEX_SHADER,
-		FLAT_COLOR_FRAGMENT_SHADER);
+		FLAT_COLOR_FRAGMENT_SHADER,
+		"model",
+		nullptr, nullptr); // Don't need view, projection - using uniform buffer
 
-	if (result != nullptr)
+	if (result == nullptr)
 	{
-		result->getShader()->setInt("colorSampler", 0);
-		result->getShader()->setFloat("transparencyThreshold", 0.0f);
+		return result;
 	}
+
+	result->getTarget()->setInt("colorSampler", 0);
+	result->getTarget()->setFloat("transparencyThreshold", 0.0f);
+	result->getTarget()->setUniformBlockBindingPoint(
+		"ViewProjection",
+		0); // Binding point 0 for view/projection matrix uniform buffer
 	return result;
 }
 

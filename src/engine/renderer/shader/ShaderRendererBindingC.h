@@ -9,11 +9,11 @@ namespace gltut
 {
 // Global classes
 /// Implementation of the SceneShaderBinding interface
-class ShaderRendererBindingC final : public ShaderBindingT<ShaderRendererBinding>
+class ShaderRendererBindingC final : public ShaderBindingT<ShaderRendererBinding, RendererBinding::Parameter>
 {
 public:
 	/// Constructor
-	using ShaderBindingT<ShaderRendererBinding>::ShaderBindingT;
+	using ShaderBindingT<ShaderRendererBinding, RendererBinding::Parameter>::ShaderBindingT;
 
 	/// Updates the shader for a viewpoint
 	void update(const Viewpoint* viewpoint, float aspectRatio) const noexcept final;

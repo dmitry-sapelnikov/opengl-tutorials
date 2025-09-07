@@ -83,30 +83,30 @@ gltut::Material* createRefractiveMaterial(
 	auto* shaderBinding = renderer->createShaderBinding(refractionShader);
 	GLTUT_CHECK(shaderBinding != nullptr, "Failed to create scene shader binding");
 	shaderBinding->bind(
-		gltut::ShaderRendererBinding::Parameter::GEOMETRY_MATRIX,
+		gltut::RendererBinding::Parameter::GEOMETRY_MATRIX,
 		"model"
 	);
 
 	shaderBinding->bind(
-		gltut::ShaderRendererBinding::Parameter::VIEWPOINT_VIEW_MATRIX,
+		gltut::RendererBinding::Parameter::VIEWPOINT_VIEW_MATRIX,
 		"view");
 
 	shaderBinding->bind(
-		gltut::ShaderRendererBinding::Parameter::VIEWPOINT_PROJECTION_MATRIX,
+		gltut::RendererBinding::Parameter::VIEWPOINT_PROJECTION_MATRIX,
 		"projection");
 
 	shaderBinding->bind(
-		gltut::ShaderRendererBinding::Parameter::GEOMETRY_NORMAL_MATRIX,
+		gltut::RendererBinding::Parameter::GEOMETRY_NORMAL_MATRIX,
 		"normalMat");
 
 	shaderBinding->bind(
-		gltut::ShaderRendererBinding::Parameter::VIEWPOINT_POSITION,
+		gltut::RendererBinding::Parameter::VIEWPOINT_POSITION,
 		"cameraPosition");
 
 	gltut::Material* refractiveMaterial = renderer->createMaterial();
 	GLTUT_CHECK(refractiveMaterial != nullptr, "Failed to create refractive material");
 
-	gltut::MaterialPass* pass = refractiveMaterial->createPass(0, shaderBinding, 1);
+	gltut::MaterialPass* pass = refractiveMaterial->createPass(0, shaderBinding, 1, 0);
 	GLTUT_CHECK(pass != nullptr, "Failed to create material pass");
 	pass->getTextures()->setTexture(skyboxTexture, 0);
 

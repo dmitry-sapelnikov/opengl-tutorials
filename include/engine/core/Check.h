@@ -6,11 +6,11 @@
 #include <iostream>
 
 // Macros
-/// Assert macro
+/// Assert if macro
 #ifdef NDEBUG
-#define GLTUT_ASSERT(condition) (void)(condition)
+#define GLTUT_ASSERT(condition) (condition)
 #else
-#define GLTUT_ASSERT(condition) assert(condition)
+#define GLTUT_ASSERT(condition) (assert(condition), condition)
 #endif
 
 /// Assert that a string is not empty

@@ -10,7 +10,7 @@ namespace gltut
 {
 // Global classes
 /// Base implementation of the ShaderBinding interface
-template <typename ShaderBindingInterface>
+template <typename ShaderBindingInterface, typename ShaderBindingParameter>
 class ShaderBindingT : public ShaderBindingInterface, public NonCopyable
 {
 public:
@@ -20,14 +20,14 @@ public:
 
 	/// Constructor
 	explicit ShaderBindingT(Shader* shader) noexcept :
-		mShader(shader)
+		mTarget(shader)
 	{
 	}
 
 	/// Returns the shader associated with this binding
-	Shader* getShader() const noexcept final
+	Shader* getTarget() const noexcept final
 	{
-		return mShader;
+		return mTarget;
 	}
 
 	/**
@@ -35,12 +35,12 @@ public:
 		\param shader The shader to set
 		\param resetParameters If true, clears all bound shader parameters
 	*/
-	void setShader(
-		Shader* shader,
-		bool resetParameters = false) noexcept final
+	void setTarget(
+		Shader* target,
+		bool reset = false) noexcept final
 	{
-		mShader = shader;
-		if (resetParameters)
+		mTarget = target;
+		if (reset)
 		{
 			for (auto& name : mShaderParameters)
 			{
@@ -57,11 +57,11 @@ public:
 
 	/// Binds a scene object parameter to a shader parameter
 	virtual void bind(
-		typename ShaderBindingInterface::Parameter parameter,
+		typename ShaderBindingParameter parameter,
 		const char* shaderParameter) noexcept final
 	{
 		const size_t index = static_cast<size_t>(parameter);
-		if (index >= static_cast<u32>(ShaderBindingInterface::Parameter::TOTAL_COUNT))
+		if (index >= static_cast<u32>(ShaderBindingParameter::TOTAL_COUNT))
 		{
 			return;
 		}
@@ -91,7 +91,7 @@ public:
 
 	/// Returns the name of a shader parameter bound to a scene parameter
 	const char* getBoundShaderParameter(
-		typename ShaderBindingInterface::Parameter parameter) const noexcept final
+		typename ShaderBindingParameter parameter) const noexcept final
 	{
 		const auto& result = mShaderParameters[static_cast<size_t>(parameter)];
 		return result.empty() ? nullptr : result.c_str();
@@ -100,20 +100,20 @@ public:
 protected:
 	/// Return 2 parts of a shader parameter name
 	const ShaderParameterParts& getShaderParameterParts(
-		typename ShaderBindingInterface::Parameter parameter) const noexcept
+		typename ShaderBindingParameter parameter) const noexcept
 	{
 		return mShaderParameterParts[static_cast<size_t>(parameter)];
 	}
 
 private:
 	/// The shader associated with this binding
-	Shader* mShader;
+	Shader* mTarget;
 
 	/// Names of scene parameters
-	std::array<std::string, static_cast<u32>(ShaderBindingInterface::Parameter::TOTAL_COUNT)> mShaderParameters;
+	std::array<std::string, static_cast<u32>(ShaderBindingParameter::TOTAL_COUNT)> mShaderParameters;
 
 	/// Names of scene parameters split into parts
-	std::array<ShaderParameterParts, static_cast<u32>(ShaderBindingInterface::Parameter::TOTAL_COUNT)> mShaderParameterParts;
+	std::array<ShaderParameterParts, static_cast<u32>(ShaderBindingParameter::TOTAL_COUNT)> mShaderParameterParts;
 };
 
 // End of the namespace gltut

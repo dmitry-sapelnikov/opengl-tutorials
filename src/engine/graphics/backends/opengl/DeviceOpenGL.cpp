@@ -9,7 +9,8 @@
 
 #include "engine/core/Check.h"
 #include "GeometryOpenGL.h"
-#include "ShaderOpenGL.h"
+#include "shader/ShaderOpenGL.h"
+#include "shader/ShaderUniformBufferOpenGL.h"
 #include "texture/Texture2OpenGL.h"
 #include "texture/TextureCubemapOpenGL.h"
 
@@ -30,7 +31,7 @@ DeviceOpenGL::DeviceOpenGL(Window& window) :
 {
 	GLTUT_CHECK(window.getDeviceContext() != nullptr, "Device context is null")
 
-	HDC hdc = static_cast<HDC>(window.getDeviceContext());
+		HDC hdc = static_cast<HDC>(window.getDeviceContext());
 
 	PIXELFORMATDESCRIPTOR pfd = {};
 	pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
@@ -41,7 +42,7 @@ DeviceOpenGL::DeviceOpenGL(Window& window) :
 	pfd.cDepthBits = 24;
 	pfd.cStencilBits = 8;
 	int pixelFormat = ChoosePixelFormat(hdc, &pfd);
-	
+
 	GLTUT_CHECK(SetPixelFormat(hdc, pixelFormat, &pfd), "Failed to set the pixel format");
 
 	HGLRC hglrc = wglCreateContext(hdc);
@@ -67,9 +68,6 @@ DeviceOpenGL::DeviceOpenGL(Window& window) :
 
 	// Disable VSync
 	enableVSync(false);
-
-	// Enable front face culling
-	DeviceOpenGL::setFaceCulling(true, false);
 
 	// Enable scissor test
 	glEnable(GL_SCISSOR_TEST);
@@ -158,6 +156,12 @@ std::unique_ptr<Shader> DeviceOpenGL::createBackendShader(
 	return std::make_unique<ShaderOpenGL>(vertexShader, fragmentShader);
 }
 
+std::unique_ptr<ShaderUniformBuffer> DeviceOpenGL::createBackendShaderUniformBuffer(
+	u32 sizeInBytes)
+{
+	return std::make_unique<ShaderUniformBufferOpenGL>(sizeInBytes);
+}
+
 std::unique_ptr<Texture2> DeviceOpenGL::createBackendTexture2(
 	const TextureData& data,
 	const TextureParameters& parameters)
@@ -209,30 +213,42 @@ void DeviceOpenGL::bindTexture(const Texture* texture, u32 slot) noexcept
 	}
 }
 
-void DeviceOpenGL::setFaceCulling(bool back, bool front) noexcept
+void DeviceOpenGL::bindShaderUniformBuffer(
+	const ShaderUniformBuffer* buffer,
+	u32 bindingPoint) noexcept
 {
-	if (!back && !front)
-	{
-		// Disable face culling
-		glDisable(GL_CULL_FACE);
-		return;
-	}
+	glBindBufferBase(
+		GL_UNIFORM_BUFFER,
+		static_cast<GLuint>(bindingPoint),
+		buffer != nullptr ? static_cast<GLuint>(buffer->getId()) : 0);
+}
 
-	glEnable(GL_CULL_FACE);
-	GLenum cullMode = GL_NONE;
-	if (back && front)
+void DeviceOpenGL::setFaceCulling(FaceCullingMode mode) noexcept
+{
+	switch (mode)
 	{
-		cullMode = GL_FRONT_AND_BACK;
-	}
-	else if (back)
+	case FaceCullingMode::BACK:
 	{
-		cullMode = GL_BACK;
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
 	}
-	else if (front)
+	break;
+
+	case FaceCullingMode::FRONT:
 	{
-		cullMode = GL_FRONT;
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_FRONT);
 	}
-	glCullFace(cullMode);
+	break;
+
+	case FaceCullingMode::NONE:
+	{
+		glDisable(GL_CULL_FACE);
+	}
+	break;
+
+	GLTUT_UNEXPECTED_SWITCH_DEFAULT_CASE(mode)
+	}
 }
 
 void DeviceOpenGL::setBlending(bool enabled) noexcept
@@ -247,49 +263,88 @@ void DeviceOpenGL::setBlending(bool enabled) noexcept
 	}
 }
 
-void DeviceOpenGL::setDepthFunction(DepthFunctionType function) noexcept
+void DeviceOpenGL::setDepthTest(DepthTestMode mode) noexcept
 {
 	GLenum glFunction = 0;
-	switch (function)
+	switch (mode)
 	{
-	case DepthFunctionType::ALWAYS:
+	case DepthTestMode::ALWAYS:
 		glFunction = GL_ALWAYS;
 		break;
 
-	case DepthFunctionType::NEVER:
+	case DepthTestMode::NEVER:
 		glFunction = GL_NEVER;
 		break;
 
-	case DepthFunctionType::LESS:
+	case DepthTestMode::LESS:
 		glFunction = GL_LESS;
 		break;
 
-	case DepthFunctionType::LEQUAL:
+	case DepthTestMode::LEQUAL:
 		glFunction = GL_LEQUAL;
 		break;
 
-	case DepthFunctionType::EQUAL:
+	case DepthTestMode::EQUAL:
 		glFunction = GL_EQUAL;
 		break;
 
-	case DepthFunctionType::GEQUAL:
+	case DepthTestMode::GEQUAL:
 		glFunction = GL_GEQUAL;
 		break;
 
-	case DepthFunctionType::GREATER:
+	case DepthTestMode::GREATER:
 		glFunction = GL_GREATER;
 		break;
 
-	case DepthFunctionType::NOTEQUAL:
+	case DepthTestMode::NOTEQUAL:
 		glFunction = GL_NOTEQUAL;
 		break;
 
-	GLTUT_UNEXPECTED_SWITCH_DEFAULT_CASE(function)
+		GLTUT_UNEXPECTED_SWITCH_DEFAULT_CASE(function)
 	}
 
 	if (glFunction != 0)
 	{
 		glDepthFunc(glFunction);
+	}
+}
+
+void DeviceOpenGL::setPolygonFill(
+	PolygonFillMode mode,
+	float size,
+	bool enableSizeInShader) noexcept
+{
+	switch (mode)
+	{
+	case PolygonFillMode::SOLID:
+		{
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		}
+		break;
+
+	case PolygonFillMode::LINE:
+		{
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			glLineWidth(size);
+		}
+		break;
+
+	case PolygonFillMode::POINT:
+		{
+			glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+			glPointSize(size);
+			if (enableSizeInShader)
+			{
+				glEnable(GL_PROGRAM_POINT_SIZE);
+			}
+			else
+			{
+				glDisable(GL_PROGRAM_POINT_SIZE);
+			}
+		}
+		break;
+
+	GLTUT_UNEXPECTED_SWITCH_DEFAULT_CASE(mode)
 	}
 }
 

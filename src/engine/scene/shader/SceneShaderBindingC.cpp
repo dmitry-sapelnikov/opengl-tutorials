@@ -68,23 +68,23 @@ static void setFloat(
 // Global classes
 void SceneShaderBindingC::update(const Scene* scene) const noexcept
 {
-	if (getShader() == nullptr || scene == nullptr)
+	if (getTarget() == nullptr || scene == nullptr)
 	{
 		return;
 	}
-	getShader()->bind();
+	getTarget()->bind();
 	updateLights(*scene);
 }
 
 void SceneShaderBindingC::updateLight(
 	const LightNode& light,
 	u32 lightInd,
-	SceneShaderBinding::Parameter position,
-	SceneShaderBinding::Parameter ambientColor,
-	SceneShaderBinding::Parameter diffuseColor,
-	SceneShaderBinding::Parameter specularColor) const noexcept
+	SceneBinding::Parameter position,
+	SceneBinding::Parameter ambientColor,
+	SceneBinding::Parameter diffuseColor,
+	SceneBinding::Parameter specularColor) const noexcept
 {
-	Shader* shader = getShader();
+	Shader* shader = getTarget();
 	GLTUT_ASSERT(shader != nullptr);
 
 	setVector3(
@@ -114,7 +114,7 @@ void SceneShaderBindingC::updateLight(
 
 void SceneShaderBindingC::updateLights(const Scene& scene) const
 {
-	Shader* shader = getShader();
+	Shader* shader = getTarget();
 	GLTUT_ASSERT(shader != nullptr);
 
 	u32 directionalInd = 0;
@@ -136,20 +136,20 @@ void SceneShaderBindingC::updateLights(const Scene& scene) const
 			updateLight(
 				*light,
 				directionalInd,
-				Parameter::DIRECTIONAL_LIGHT_POSITION,
-				Parameter::DIRECTIONAL_LIGHT_AMBIENT_COLOR,
-				Parameter::DIRECTIONAL_LIGHT_DIFFUSE_COLOR,
-				Parameter::DIRECTIONAL_LIGHT_SPECULAR_COLOR);
+				SceneBinding::Parameter::DIRECTIONAL_LIGHT_POSITION,
+				SceneBinding::Parameter::DIRECTIONAL_LIGHT_AMBIENT_COLOR,
+				SceneBinding::Parameter::DIRECTIONAL_LIGHT_DIFFUSE_COLOR,
+				SceneBinding::Parameter::DIRECTIONAL_LIGHT_SPECULAR_COLOR);
 
 			setVector3(
 				*shader,
-				getShaderParameterParts(Parameter::DIRECTIONAL_LIGHT_DIRECTION),
+				getShaderParameterParts(SceneBinding::Parameter::DIRECTIONAL_LIGHT_DIRECTION),
 				lightInd,
 				light->getGlobalDirection());
 
 			setMatrix4(
 				*shader,
-				getShaderParameterParts(Parameter::DIRECTIONAL_LIGHT_SHADOW_MATRIX),
+				getShaderParameterParts(SceneBinding::Parameter::DIRECTIONAL_LIGHT_SHADOW_MATRIX),
 				directionalInd,
 				light->getShadowMap() != nullptr ?
 					light->getShadowMap()->getShadowMatrix() :
@@ -164,20 +164,20 @@ void SceneShaderBindingC::updateLights(const Scene& scene) const
 			updateLight(
 				*light,
 				pointInd,
-				Parameter::POINT_LIGHT_POSITION,
-				Parameter::POINT_LIGHT_AMBIENT_COLOR,
-				Parameter::POINT_LIGHT_DIFFUSE_COLOR,
-				Parameter::POINT_LIGHT_SPECULAR_COLOR);
+				SceneBinding::Parameter::POINT_LIGHT_POSITION,
+				SceneBinding::Parameter::POINT_LIGHT_AMBIENT_COLOR,
+				SceneBinding::Parameter::POINT_LIGHT_DIFFUSE_COLOR,
+				SceneBinding::Parameter::POINT_LIGHT_SPECULAR_COLOR);
 
 			setFloat(
 				*shader,
-				getShaderParameterParts(Parameter::POINT_LIGHT_LINEAR_ATTENUATION),
+				getShaderParameterParts(SceneBinding::Parameter::POINT_LIGHT_LINEAR_ATTENUATION),
 				spotInd,
 				light->getLinearAttenuation());
 
 			setFloat(
 				*shader,
-				getShaderParameterParts(Parameter::POINT_LIGHT_QUADRATIC_ATTENUATION),
+				getShaderParameterParts(SceneBinding::Parameter::POINT_LIGHT_QUADRATIC_ATTENUATION),
 				spotInd,
 				light->getQuadraticAttenuation());
 
@@ -187,48 +187,47 @@ void SceneShaderBindingC::updateLights(const Scene& scene) const
 
 		case LightNode::Type::SPOT:
 		{
-			const Parameter direction = Parameter::SPOT_LIGHT_DIRECTION;
 			updateLight(
 				*light,
 				spotInd,
-				Parameter::SPOT_LIGHT_POSITION,
-				Parameter::SPOT_LIGHT_AMBIENT_COLOR,
-				Parameter::SPOT_LIGHT_DIFFUSE_COLOR,
-				Parameter::SPOT_LIGHT_SPECULAR_COLOR);
+				SceneBinding::Parameter::SPOT_LIGHT_POSITION,
+				SceneBinding::Parameter::SPOT_LIGHT_AMBIENT_COLOR,
+				SceneBinding::Parameter::SPOT_LIGHT_DIFFUSE_COLOR,
+				SceneBinding::Parameter::SPOT_LIGHT_SPECULAR_COLOR);
 
 			setVector3(
 				*shader,
-				getShaderParameterParts(Parameter::SPOT_LIGHT_DIRECTION),
+				getShaderParameterParts(SceneBinding::Parameter::SPOT_LIGHT_DIRECTION),
 				spotInd,
 				light->getGlobalDirection());
 
 			setFloat(
 				*shader,
-				getShaderParameterParts(Parameter::SPOT_LIGHT_INNER_ANGLE_COS),
+				getShaderParameterParts(SceneBinding::Parameter::SPOT_LIGHT_INNER_ANGLE_COS),
 				spotInd,
 				std::cos(light->getInnerAngle()));
 
 			setFloat(
 				*shader,
-				getShaderParameterParts(Parameter::SPOT_LIGHT_OUTER_ANGLE_COS),
+				getShaderParameterParts(SceneBinding::Parameter::SPOT_LIGHT_OUTER_ANGLE_COS),
 				spotInd,
 				std::cos(light->getOuterAngle()));
 
 			setFloat(
 				*shader,
-				getShaderParameterParts(Parameter::SPOT_LIGHT_LINEAR_ATTENUATION),
+				getShaderParameterParts(SceneBinding::Parameter::SPOT_LIGHT_LINEAR_ATTENUATION),
 				spotInd,
 				light->getLinearAttenuation());
 
 			setFloat(
 				*shader,
-				getShaderParameterParts(Parameter::SPOT_LIGHT_QUADRATIC_ATTENUATION),
+				getShaderParameterParts(SceneBinding::Parameter::SPOT_LIGHT_QUADRATIC_ATTENUATION),
 				spotInd,
 				light->getQuadraticAttenuation());
 
 			setMatrix4(
 				*shader,
-				getShaderParameterParts(Parameter::SPOT_LIGHT_SHADOW_MATRIX),
+				getShaderParameterParts(SceneBinding::Parameter::SPOT_LIGHT_SHADOW_MATRIX),
 				spotInd,
 				light->getShadowMap() != nullptr ?
 					light->getShadowMap()->getShadowMatrix() :
@@ -237,7 +236,7 @@ void SceneShaderBindingC::updateLights(const Scene& scene) const
 
 			setFloat(
 				*shader,
-				getShaderParameterParts(Parameter::SPOT_LIGHT_SHADOW_NEAR),
+				getShaderParameterParts(SceneBinding::Parameter::SPOT_LIGHT_SHADOW_NEAR),
 				spotInd,
 				light->getShadowMap() != nullptr ?
 					light->getShadowMap()->getFrustumNear() :
@@ -245,7 +244,7 @@ void SceneShaderBindingC::updateLights(const Scene& scene) const
 
 			setFloat(
 				*shader,
-				getShaderParameterParts(Parameter::SPOT_LIGHT_SHADOW_FAR),
+				getShaderParameterParts(SceneBinding::Parameter::SPOT_LIGHT_SHADOW_FAR),
 				spotInd,
 				light->getShadowMap() != nullptr ?
 					light->getShadowMap()->getFrustumFar() :

@@ -12,11 +12,9 @@ RenderPassC::RenderPassC(
 	const Color* clearColor,
 	bool clearDepth,
 	const Rectangle2u* viewport,
-	bool cullBack,
-	bool cullFront,
-	bool enableBlending,
 	GraphicsDevice& device,
-	const ShaderBindings& shaderBindings) :
+	const ShaderBindings& shaderBindings,
+	const ShaderUniformBufferBindings& shaderUniformBufferBindings) :
 
 	mViewpoint(viewpoint),
 	mObject(object),
@@ -25,11 +23,9 @@ RenderPassC::RenderPassC(
 	mClearColor(clearColor ? std::make_optional(*clearColor) : std::nullopt),
 	mClearDepth(clearDepth),
 	mViewport(viewport ? std::make_optional(*viewport) : std::nullopt),
-	mCullBackFaces(cullBack),
-	mCullFrontFaces(cullFront),
-	mEnableBlending(enableBlending),
 	mDevice(device),
-	mShaderBindings(shaderBindings)
+	mShaderBindings(shaderBindings),
+	mShaderUniformBufferBindings(shaderUniformBufferBindings)
 {
 	GLTUT_CHECK(object != nullptr, "Object cannot be null");
 	GLTUT_CHECK(target != nullptr, "Target framebuffer cannot be null");
@@ -42,11 +38,7 @@ void RenderPassC::execute() noexcept
 
 void RenderPassC::execute(const RenderObject* target) noexcept
 {
-	mDevice.setFaceCulling(
-		mCullBackFaces,
-		mCullFrontFaces);
-
-	mDevice.setDepthFunction(mDepthFunction);
+	mDevice.setDepthTest(mDepthTest);
 
 	mDevice.bindFramebuffer(
 		mTarget, 
@@ -55,8 +47,6 @@ void RenderPassC::execute(const RenderObject* target) noexcept
 	mDevice.clear(
 		mClearColor.has_value() ? &mClearColor.value() : nullptr,
 		mClearDepth);
-
-	mDevice.setBlending(mEnableBlending);
 
 	const Point2u viewportSize = mViewport.has_value() ?
 		mViewport->getSize() :
@@ -68,6 +58,11 @@ void RenderPassC::execute(const RenderObject* target) noexcept
 		1.0f;
 
 	for (const auto& binding : mShaderBindings)
+	{
+		binding->update(mViewpoint, aspectRatio);
+	}
+
+	for (const auto& binding : mShaderUniformBufferBindings)
 	{
 		binding->update(mViewpoint, aspectRatio);
 	}

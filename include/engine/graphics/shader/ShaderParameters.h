@@ -18,6 +18,9 @@ public:
 	/// Returns the location of a shader parameter
 	virtual int32 getParameterLocation(const char* name) const noexcept = 0;
 
+	/// Returns the index of a shader uniform block
+	virtual int32 getUniformBlockIndex(const char* name) const noexcept = 0;
+
 	/// Sets an integer value to a shader parameter
 	virtual void setInt(int32 location, int value) noexcept = 0;
 
@@ -39,12 +42,23 @@ public:
 	/// Sets a 4x4 matrix to a shader parameter
 	virtual void setMat4(int32 location, const float* data) noexcept = 0;
 
+	/// Sets a binding point to a shader uniform block
+	virtual void setUniformBlockBindingPoint(int32 location, u32 bindingPoint) noexcept = 0;
+
 	/// Returns the location of a shader parameter, asserting that it exists
 	int32 getParameterLocationChecked(const char* name) const noexcept
 	{
-		const int location = getParameterLocation(name);
+		const int32 location = getParameterLocation(name);
 		GLTUT_ASSERT(location >= 0);
 		return location;
+	}
+
+	/// Returns the location of a shader uniform block, asserting that it exists
+	int32 getUniformBlockIndexChecked(const char* name) const noexcept
+	{
+		const int32 index = getUniformBlockIndex(name);
+		GLTUT_ASSERT(index >= 0);
+		return index;
 	}
 
 	/// Sets an integer value to a shader parameter
@@ -87,6 +101,12 @@ public:
 	void setMat4(const char* name, const float* data) noexcept
 	{
 		setMat4(getParameterLocationChecked(name), data);
+	}
+
+	/// Sets a binding point to a shader uniform block
+	void setUniformBlockBindingPoint(const char* name, u32 bindingPoint) noexcept
+	{
+		setUniformBlockBindingPoint(getUniformBlockIndexChecked(name), bindingPoint);
 	}
 };
 

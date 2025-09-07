@@ -8,11 +8,11 @@ namespace gltut
 {
 // Global classes
 /// Implementation of the SceneShaderBinding interface
-class SceneShaderBindingC final : public ShaderBindingT<SceneShaderBinding>
+class SceneShaderBindingC final : public ShaderBindingT<SceneShaderBinding, SceneBinding::Parameter>
 {
 public:
 	/// Constructor
-	using ShaderBindingT<SceneShaderBinding>::ShaderBindingT;
+	using ShaderBindingT<SceneShaderBinding, SceneBinding::Parameter>::ShaderBindingT;
 
 	/// Updates the shader binding for a scene
 	void update(const Scene* scene) const noexcept final;
@@ -22,10 +22,10 @@ private:
 	void updateLight(
 		const LightNode& light,
 		u32 lightInd,
-		SceneShaderBinding::Parameter position,
-		SceneShaderBinding::Parameter ambientColor,
-		SceneShaderBinding::Parameter diffuseColor,
-		SceneShaderBinding::Parameter specularColor) const noexcept;
+		SceneBinding::Parameter position,
+		SceneBinding::Parameter ambientColor,
+		SceneBinding::Parameter diffuseColor,
+		SceneBinding::Parameter specularColor) const noexcept;
 
 	/// Updates light binding
 	void updateLights(const Scene& scene) const;

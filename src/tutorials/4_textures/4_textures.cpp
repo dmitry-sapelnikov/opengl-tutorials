@@ -64,11 +64,12 @@ int main()
 		auto* material = renderer->createMaterial();
 		GLTUT_CHECK(material != nullptr, "Failed to create material")
 
-		auto* materialPass = material->createPass(0, shaderBinding, 2);
+		auto* materialPass = material->createPass(0, shaderBinding, 2, 0);
 		GLTUT_CHECK(materialPass != nullptr, "Failed to create material pass");
 
 		materialPass->getTextures()->setTexture(texture1, 0);
 		materialPass->getTextures()->setTexture(texture2, 1);
+		materialPass->setFaceCulling(gltut::FaceCullingMode::NONE);
 
 		scene->createGeometry(geometry, material);
 		while (engine->update())

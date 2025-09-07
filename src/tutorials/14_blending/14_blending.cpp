@@ -35,6 +35,7 @@ int main()
 				gltut::TextureFilterMode::LINEAR,
 				gltut::TextureWrapMode::CLAMP_TO_EDGE)));
 
+		material->getMaterial()->getPass(0)->setTransparent(true);
 		GLTUT_CHECK(material != nullptr, "Failed to create material");
 
 		gltut::Rng rng;

@@ -134,13 +134,13 @@ bool SceneFactoryC::createSkybox(
 			0, // Material pass
 			nullptr, // No clear color
 			false, // No depth clearing
-			nullptr, // Full viewport
-			false, false); // No face culling
+			nullptr // Full viewport
+			);
 
 		GLTUT_CHECK(skyboxPass != nullptr, "Failed to create skybox render pass");
 		// Set the depth function to less equal since the z-buffer is filled with 1.0 and
 		// we force the skybox depth to 1.0 in the vertex shader
-		skyboxPass->setDepthFunction(DepthFunctionType::LEQUAL);
+		skyboxPass->setDepthTest(DepthTestMode::LEQUAL);
 		result = true;
 	}
 	GLTUT_CATCH_ALL("Failed to create skybox")
@@ -162,18 +162,27 @@ gltut::Material* SceneFactoryC::createSkyboxMaterial(const TextureCubemap& cubem
 		GLTUT_CHECK(mSkyboxShaderBinding != nullptr, "Failed to create skybox shader binding");
 
 		mSkyboxShaderBinding->bind(
-			gltut::ShaderRendererBinding::Parameter::VIEWPOINT_VIEW_MATRIX,
+			gltut::RendererBinding::Parameter::VIEWPOINT_VIEW_MATRIX,
 			"view");
 
 		mSkyboxShaderBinding->bind(
-			gltut::ShaderRendererBinding::Parameter::VIEWPOINT_PROJECTION_MATRIX,
+			gltut::RendererBinding::Parameter::VIEWPOINT_PROJECTION_MATRIX,
 			"projection");
 	}
 
 	gltut::Material* skyboxMaterial = mRenderer.createMaterial();
 	GLTUT_CHECK(skyboxMaterial != nullptr, "Failed to create skybox material");
-	skyboxMaterial->createPass(0, mSkyboxShaderBinding, 1);
-	(*skyboxMaterial)[0]->getTextures()->setTexture(&cubemapTexture, 0);
+	auto* pass = skyboxMaterial->createPass(
+		0,
+		mSkyboxShaderBinding,
+		1, // One texture
+		0); // No uniform buffers
+
+	GLTUT_CHECK(pass != nullptr, "Failed to create skybox material pass");
+
+	// Set front face culling since we are inside the skybox
+	pass->setFaceCulling(FaceCullingMode::FRONT);
+	pass->getTextures()->setTexture(&cubemapTexture, 0);
 
 	return skyboxMaterial;
 }

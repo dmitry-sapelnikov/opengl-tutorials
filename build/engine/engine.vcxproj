@@ -28,7 +28,7 @@
     <ClInclude Include="..\..\include\engine\factory\scene\SceneFactory.h" />
     <ClInclude Include="..\..\include\engine\factory\shader\PhongShaderModel.h" />
     <ClInclude Include="..\..\include\engine\factory\texture\TextureFactory.h" />
-    <ClInclude Include="..\..\include\engine\graphics\DepthFunctionType.h" />
+    <ClInclude Include="..\..\include\engine\graphics\RenderModes.h" />
     <ClInclude Include="..\..\include\engine\graphics\framebuffer\Framebuffer.h" />
     <ClInclude Include="..\..\include\engine\graphics\framebuffer\FramebufferManager.h" />
     <ClInclude Include="..\..\include\engine\graphics\framebuffer\TextureFramebuffer.h" />
@@ -37,9 +37,11 @@
     <ClInclude Include="..\..\include\engine\graphics\geometry\VertexFormat.h" />
     <ClInclude Include="..\..\include\engine\graphics\GraphicsDevice.h" />
     <ClInclude Include="..\..\include\engine\graphics\shader\Shader.h" />
-    <ClInclude Include="..\..\include\engine\graphics\shader\ShaderBinding.h" />
+    <ClInclude Include="..\..\include\engine\graphics\shader\BindingT.h" />
     <ClInclude Include="..\..\include\engine\graphics\shader\ShaderManager.h" />
     <ClInclude Include="..\..\include\engine\graphics\shader\ShaderParameters.h" />
+    <ClInclude Include="..\..\include\engine\graphics\shader\ShaderUniformBuffer.h" />
+    <ClInclude Include="..\..\include\engine\graphics\shader\ShaderUniformBufferManager.h" />
     <ClInclude Include="..\..\include\engine\graphics\texture\Texture.h" />
     <ClInclude Include="..\..\include\engine\graphics\texture\Texture2.h" />
     <ClInclude Include="..\..\include\engine\graphics\texture\TextureCubemap.h" />
@@ -64,7 +66,10 @@
     <ClInclude Include="..\..\include\engine\renderer\objects\RenderObject.h" />
     <ClInclude Include="..\..\include\engine\renderer\Renderer.h" />
     <ClInclude Include="..\..\include\engine\renderer\RenderPass.h" />
+    <ClInclude Include="..\..\include\engine\renderer\shader\RendererBinding.h" />
     <ClInclude Include="..\..\include\engine\renderer\shader\ShaderRendererBinding.h" />
+    <ClInclude Include="..\..\include\engine\renderer\shader\ShaderUniformBufferRendererBinding.h" />
+    <ClInclude Include="..\..\include\engine\renderer\shader\ShaderUniformBufferSet.h" />
     <ClInclude Include="..\..\include\engine\renderer\texture\TextureSet.h" />
     <ClInclude Include="..\..\include\engine\renderer\viewpoint\Viewpoint.h" />
     <ClInclude Include="..\..\include\engine\scene\camera\Camera.h" />
@@ -75,6 +80,7 @@
     <ClInclude Include="..\..\include\engine\scene\nodes\ShadowMap.h" />
     <ClInclude Include="..\..\include\engine\scene\Scene.h" />
     <ClInclude Include="..\..\include\engine\scene\shader\SceneShaderBinding.h" />
+    <ClInclude Include="..\..\include\engine\scene\shader\SceneBinding.h" />
     <ClInclude Include="..\..\include\engine\scene\texture\SceneTextureSetBinding.h" />
     <ClInclude Include="..\..\include\engine\window\Event.h" />
     <ClInclude Include="..\..\include\engine\window\EventHandler.h" />
@@ -96,14 +102,14 @@
     <ClInclude Include="..\..\src\engine\factory\shader\DepthShader.h" />
     <ClInclude Include="..\..\src\engine\factory\shader\FlatColorShader.h" />
     <ClInclude Include="..\..\src\engine\factory\shader\PhongShaderModelC.h" />
-    <ClInclude Include="..\..\src\engine\factory\shader\StandardShaderBinding.h" />
     <ClInclude Include="..\..\src\engine\factory\texture\TextureFactoryC.h" />
     <ClInclude Include="..\..\src\engine\graphics\backends\opengl\framebuffer\FramebufferBackupOpenGL.h" />
     <ClInclude Include="..\..\src\engine\graphics\backends\opengl\framebuffer\TextureFramebufferOpenGL.h" />
     <ClInclude Include="..\..\src\engine\graphics\backends\opengl\framebuffer\WindowFramebufferOpenGL.h" />
     <ClInclude Include="..\..\src\engine\graphics\backends\opengl\GeometryOpenGL.h" />
     <ClInclude Include="..\..\src\engine\graphics\backends\opengl\DeviceOpenGL.h" />
-    <ClInclude Include="..\..\src\engine\graphics\backends\opengl\ShaderOpenGL.h" />
+    <ClInclude Include="..\..\src\engine\graphics\backends\opengl\shader\ShaderOpenGL.h" />
+    <ClInclude Include="..\..\src\engine\graphics\backends\opengl\shader\ShaderUniformBufferOpenGL.h" />
     <ClInclude Include="..\..\src\engine\graphics\backends\opengl\texture\Texture2OpenGL.h" />
     <ClInclude Include="..\..\src\engine\graphics\backends\opengl\texture\TextureBackupOpenGL.h" />
     <ClInclude Include="..\..\src\engine\graphics\backends\opengl\texture\TextureCubemapOpenGL.h" />
@@ -116,6 +122,8 @@
     <ClInclude Include="..\..\src\engine\graphics\shader\ShaderBindingT.h" />
     <ClInclude Include="..\..\src\engine\graphics\shader\ShaderArguments.h" />
     <ClInclude Include="..\..\src\engine\graphics\shader\ShaderManagerC.h" />
+    <ClInclude Include="..\..\src\engine\graphics\shader\ShaderUniformBufferBindingT.h" />
+    <ClInclude Include="..\..\src\engine\graphics\shader\ShaderUniformBufferManagerC.h" />
     <ClInclude Include="..\..\src\engine\graphics\texture\stb_image.h" />
     <ClInclude Include="..\..\src\engine\graphics\texture\TextureManagerC.h" />
     <ClInclude Include="..\..\src\engine\renderer\material\MaterialC.h" />
@@ -126,6 +134,8 @@
     <ClInclude Include="..\..\src\engine\renderer\render_pass\DepthSortedRenderPassC.h" />
     <ClInclude Include="..\..\src\engine\renderer\render_pass\RenderPassC.h" />
     <ClInclude Include="..\..\src\engine\renderer\shader\ShaderRendererBindingC.h" />
+    <ClInclude Include="..\..\src\engine\renderer\shader\ShaderUniformBufferRendererBindingC.h" />
+    <ClInclude Include="..\..\src\engine\renderer\shader\ShaderUniformBufferSetC.h" />
     <ClInclude Include="..\..\src\engine\renderer\texture\TextureSetC.h" />
     <ClInclude Include="..\..\src\engine\renderer\viewpoint\ViewpointC.h" />
     <ClInclude Include="..\..\src\engine\scene\camera\CameraC.h" />
@@ -156,12 +166,12 @@
     <ClCompile Include="..\..\src\engine\factory\shader\DepthShader.cpp" />
     <ClCompile Include="..\..\src\engine\factory\shader\FlatColorShader.cpp" />
     <ClCompile Include="..\..\src\engine\factory\shader\PhongShaderModelC.cpp" />
-    <ClCompile Include="..\..\src\engine\factory\shader\StandardShaderBinding.cpp" />
     <ClCompile Include="..\..\src\engine\factory\texture\TextureFactoryC.cpp" />
     <ClCompile Include="..\..\src\engine\graphics\backends\opengl\framebuffer\TextureFramebufferOpenGL.cpp" />
     <ClCompile Include="..\..\src\engine\graphics\backends\opengl\GeometryOpenGL.cpp" />
     <ClCompile Include="..\..\src\engine\graphics\backends\opengl\DeviceOpenGL.cpp" />
-    <ClCompile Include="..\..\src\engine\graphics\backends\opengl\ShaderOpenGL.cpp" />
+    <ClCompile Include="..\..\src\engine\graphics\backends\opengl\shader\ShaderOpenGL.cpp" />
+    <ClCompile Include="..\..\src\engine\graphics\backends\opengl\shader\ShaderUniformBufferOpenGL.cpp" />
     <ClCompile Include="..\..\src\engine\graphics\backends\opengl\texture\Texture2OpenGL.cpp" />
     <ClCompile Include="..\..\src\engine\graphics\backends\opengl\texture\TextureCubemapOpenGL.cpp" />
     <ClCompile Include="..\..\src\engine\graphics\backends\opengl\texture\TextureTOpenGL.cpp" />
@@ -171,6 +181,7 @@
     <ClCompile Include="..\..\src\engine\graphics\GraphicsDeviceBase.cpp" />
     <ClCompile Include="..\..\src\engine\graphics\shader\ShaderArguments.cpp" />
     <ClCompile Include="..\..\src\engine\graphics\shader\ShaderManagerC.cpp" />
+    <ClCompile Include="..\..\src\engine\graphics\shader\ShaderUniformBufferManagerC.cpp" />
     <ClCompile Include="..\..\src\engine\graphics\texture\stb_image.cpp" />
     <ClCompile Include="..\..\src\engine\graphics\texture\TextureManagerC.cpp" />
     <ClCompile Include="..\..\src\engine\renderer\material\MaterialC.cpp" />
@@ -180,6 +191,8 @@
     <ClCompile Include="..\..\src\engine\renderer\render_pass\DepthSortedRenderPassC.cpp" />
     <ClCompile Include="..\..\src\engine\renderer\render_pass\RenderPassC.cpp" />
     <ClCompile Include="..\..\src\engine\renderer\shader\ShaderRendererBindingC.cpp" />
+    <ClCompile Include="..\..\src\engine\renderer\shader\ShaderUniformBufferRendererBindingC.cpp" />
+    <ClCompile Include="..\..\src\engine\renderer\shader\ShaderUniformBufferSetC.cpp" />
     <ClCompile Include="..\..\src\engine\renderer\texture\TextureSetC.cpp" />
     <ClCompile Include="..\..\src\engine\scene\camera\CameraC.cpp" />
     <ClCompile Include="..\..\src\engine\scene\camera\FPSCameraControllerC.cpp" />

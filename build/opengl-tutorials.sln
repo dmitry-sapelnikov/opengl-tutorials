@@ -47,6 +47,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "15_framebuffers", "tutorial
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "16_cubemaps", "tutorials\16_cubemaps\16_cubemaps.vcxproj", "{28F4F2F0-509D-4C51-B832-2ECA034ACE11}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "17_advanced_hlsl", "tutorials\17_advanced_hlsl\17_advanced_hlsl.vcxproj", "{EA61C8A8-5D36-4EDF-AFB0-1D6F949D0052}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -137,6 +139,10 @@ Global
 		{28F4F2F0-509D-4C51-B832-2ECA034ACE11}.Debug|x64.Build.0 = Debug|x64
 		{28F4F2F0-509D-4C51-B832-2ECA034ACE11}.Release|x64.ActiveCfg = Release|x64
 		{28F4F2F0-509D-4C51-B832-2ECA034ACE11}.Release|x64.Build.0 = Release|x64
+		{EA61C8A8-5D36-4EDF-AFB0-1D6F949D0052}.Debug|x64.ActiveCfg = Debug|x64
+		{EA61C8A8-5D36-4EDF-AFB0-1D6F949D0052}.Debug|x64.Build.0 = Debug|x64
+		{EA61C8A8-5D36-4EDF-AFB0-1D6F949D0052}.Release|x64.ActiveCfg = Release|x64
+		{EA61C8A8-5D36-4EDF-AFB0-1D6F949D0052}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -159,6 +165,7 @@ Global
 		{332D4EDB-C267-449C-AEBA-CEC64EF1D64D} = {0397819A-9899-4953-AE17-B1F07ADBB3B9}
 		{C51D0841-D4AA-475F-86D8-5DB635D2F565} = {0397819A-9899-4953-AE17-B1F07ADBB3B9}
 		{28F4F2F0-509D-4C51-B832-2ECA034ACE11} = {0397819A-9899-4953-AE17-B1F07ADBB3B9}
+		{EA61C8A8-5D36-4EDF-AFB0-1D6F949D0052} = {0397819A-9899-4953-AE17-B1F07ADBB3B9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6671FED5-F651-4A55-91AE-C9B03C9D54D5}

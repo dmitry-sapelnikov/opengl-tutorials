@@ -44,6 +44,9 @@ public:
 	void update() noexcept final;
 
 private:
+	/// Creates the view projection matrix uniform buffer
+	void createViewProjectionBuffer();
+
 	/// Creates the flat color shader
 	void createFlatColorShader();
 
@@ -55,6 +58,9 @@ private:
 
 	/// The scene
 	Scene& mScene;
+
+	/// View projection matrix uniform buffer
+	ShaderUniformBufferRendererBinding* mViewProjectionBuffer = nullptr;
 
 	/// Flat color shader binding
 	ShaderRendererBinding* mFlatColorShader = nullptr;

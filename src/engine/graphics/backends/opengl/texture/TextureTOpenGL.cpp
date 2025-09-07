@@ -27,7 +27,7 @@ u32 toOpenGLFormat(TextureFormat format) noexcept
 	return 0;
 }
 
-u32 toOpenGLFilterMode(TextureFilterMode filterMode) noexcept
+u32 toOpenGLFilter(TextureFilterMode filterMode) noexcept
 {
 	switch (filterMode)
 	{
@@ -48,7 +48,7 @@ u32 toOpenGLFilterMode(TextureFilterMode filterMode) noexcept
 	return 0;
 }
 
-u32 toOpenGLWrapMode(TextureWrapMode wrapMode) noexcept
+u32 toOpenGLWrap(TextureWrapMode wrapMode) noexcept
 {
 	switch (wrapMode)
 	{
@@ -75,7 +75,7 @@ u32 getChannelType(TextureFormat format) noexcept
 	case TextureFormat::FLOAT:
 		return GL_FLOAT;
 
-	GLTUT_UNEXPECTED_SWITCH_DEFAULT_CASE(format)
+		GLTUT_UNEXPECTED_SWITCH_DEFAULT_CASE(format)
 	}
 	return 0;
 }

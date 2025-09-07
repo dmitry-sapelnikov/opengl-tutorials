@@ -3,6 +3,7 @@
 // Includes
 #include "engine/graphics/GraphicsDevice.h"
 #include "engine/renderer/shader/ShaderRendererBinding.h"
+#include "engine/renderer/shader/ShaderUniformBufferRendererBinding.h"
 #include "engine/renderer/objects/RenderGeometry.h"
 #include "engine/renderer/objects/RenderGeometryGroup.h"
 #include "engine/renderer/RenderPass.h"
@@ -28,6 +29,14 @@ public:
 	virtual void removeShaderBinding(
 		ShaderRendererBinding* binding) noexcept = 0;
 
+	/// Creates a shader uniform buffer binding
+	virtual ShaderUniformBufferRendererBinding* createShaderUniformBufferBinding(
+		ShaderUniformBuffer* buffer) noexcept = 0;
+
+	/// Removes a shader uniform buffer binding
+	virtual void removeShaderUniformBufferBinding(
+		ShaderUniformBufferRendererBinding* binding) noexcept = 0;
+
 	/// Creates a material
 	virtual Material* createMaterial() noexcept = 0;
 
@@ -51,10 +60,7 @@ public:
 		u32 materialPass,
 		const Color* clearColor,
 		bool clearDepth,
-		const Rectangle2u* viewport,
-		bool cullBack = true,
-		bool cullFront = false,
-		bool enableBlending = false) noexcept = 0;
+		const Rectangle2u* viewport) noexcept = 0;
 
 	/// Creates a depth-sorted render pass
 	virtual RenderPass* createDepthSortedPass(
@@ -64,10 +70,7 @@ public:
 		u32 materialPass,
 		const Color* clearColor,
 		bool clearDepth,
-		const Rectangle2u* viewport,
-		bool cullBack = true,
-		bool cullFront = false,
-		bool enableBlending = true) noexcept = 0;
+		const Rectangle2u* viewport) noexcept = 0;
 
 	/// Removes a render pass
 	virtual void removePass(RenderPass* pass) noexcept = 0;

@@ -180,6 +180,9 @@
     <Filter Include="src\factory\scene">
       <UniqueIdentifier>{20bf9bd1-b9ce-4421-89be-cea4e68c5d2e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\graphics\backends\opengl\shader">
+      <UniqueIdentifier>{f47bba61-f45a-4878-8ddb-38ae9b2e201f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\engine\Engine.h">
@@ -404,9 +407,6 @@
     <ClInclude Include="..\..\src\engine\graphics\backends\opengl\DeviceOpenGL.h">
       <Filter>src\graphics\backends\opengl</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\engine\graphics\backends\opengl\ShaderOpenGL.h">
-      <Filter>src\graphics\backends\opengl</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\engine\graphics\GraphicsDevice.h">
       <Filter>include\graphics</Filter>
     </ClInclude>
@@ -419,7 +419,7 @@
     <ClInclude Include="..\..\include\engine\graphics\shader\Shader.h">
       <Filter>include\graphics\shader</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\engine\graphics\shader\ShaderBinding.h">
+    <ClInclude Include="..\..\include\engine\graphics\shader\BindingT.h">
       <Filter>include\graphics\shader</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\engine\graphics\shader\ShaderParameters.h">
@@ -491,9 +491,6 @@
     <ClInclude Include="..\..\src\engine\renderer\shader\ShaderRendererBindingC.h">
       <Filter>src\renderer\shader</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\engine\factory\shader\StandardShaderBinding.h">
-      <Filter>src\factory\shader</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\engine\factory\shader\PhongShaderModel.h">
       <Filter>include\factory\shader</Filter>
     </ClInclude>
@@ -563,11 +560,47 @@
     <ClInclude Include="..\..\src\engine\factory\scene\ShadowMapC.h">
       <Filter>src\factory\scene</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\engine\graphics\DepthFunctionType.h">
-      <Filter>include\graphics</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\engine\renderer\RenderPass.h">
       <Filter>include\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\graphics\RenderModes.h">
+      <Filter>include\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\graphics\shader\ShaderUniformBuffer.h">
+      <Filter>include\graphics\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\graphics\shader\ShaderUniformBufferManager.h">
+      <Filter>include\graphics\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\graphics\shader\ShaderUniformBufferManagerC.h">
+      <Filter>src\graphics\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\graphics\backends\opengl\shader\ShaderOpenGL.h">
+      <Filter>src\graphics\backends\opengl\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\graphics\backends\opengl\shader\ShaderUniformBufferOpenGL.h">
+      <Filter>src\graphics\backends\opengl\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\renderer\shader\ShaderUniformBufferSet.h">
+      <Filter>include\renderer\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\renderer\shader\ShaderUniformBufferSetC.h">
+      <Filter>src\renderer\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\renderer\shader\ShaderUniformBufferRendererBinding.h">
+      <Filter>include\renderer\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\scene\shader\SceneBinding.h">
+      <Filter>include\scene\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\renderer\shader\RendererBinding.h">
+      <Filter>include\renderer\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\graphics\shader\ShaderUniformBufferBindingT.h">
+      <Filter>src\graphics\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\engine\renderer\shader\ShaderUniformBufferRendererBindingC.h">
+      <Filter>src\renderer\shader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -640,9 +673,6 @@
     <ClCompile Include="..\..\src\engine\graphics\backends\opengl\DeviceOpenGL.cpp">
       <Filter>src\graphics\backends\opengl</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\engine\graphics\backends\opengl\ShaderOpenGL.cpp">
-      <Filter>src\graphics\backends\opengl</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\engine\core\FPSCounter.cpp">
       <Filter>src\core</Filter>
     </ClCompile>
@@ -666,9 +696,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\engine\renderer\shader\ShaderRendererBindingC.cpp">
       <Filter>src\renderer\shader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\engine\factory\shader\StandardShaderBinding.cpp">
-      <Filter>src\factory\shader</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\engine\factory\shader\DepthShader.cpp">
       <Filter>src\factory\shader</Filter>
@@ -708,6 +735,21 @@
     </ClCompile>
     <ClCompile Include="..\..\src\engine\factory\scene\ShadowMapC.cpp">
       <Filter>src\factory\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\graphics\shader\ShaderUniformBufferManagerC.cpp">
+      <Filter>src\graphics\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\graphics\backends\opengl\shader\ShaderOpenGL.cpp">
+      <Filter>src\graphics\backends\opengl\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\graphics\backends\opengl\shader\ShaderUniformBufferOpenGL.cpp">
+      <Filter>src\graphics\backends\opengl\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\renderer\shader\ShaderUniformBufferSetC.cpp">
+      <Filter>src\renderer\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\renderer\shader\ShaderUniformBufferRendererBindingC.cpp">
+      <Filter>src\renderer\shader</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

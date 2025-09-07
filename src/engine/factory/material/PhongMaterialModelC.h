@@ -17,7 +17,8 @@ public:
 		Renderer& renderer,
 		Scene& scene,
 		const PhongShaderModel& phongShader,
-		ShaderRendererBinding* depthShader);
+		ShaderRendererBinding* depthShader,
+		const ShaderUniformBuffer& viewProjectionBuffer);
 
 	/// Virtual destructor
 	~PhongMaterialModelC() noexcept final;

@@ -39,15 +39,15 @@ int main()
 		auto* materialBinding = device->createShaderBinding(shader);
 		GLTUT_CHECK(materialBinding, "Failed to create light shader material binding");
 		materialBinding->bind(
-			gltut::ShaderRendererBinding::Parameter::GEOMETRY_MATRIX,
+			gltut::RendererBinding::Parameter::GEOMETRY_MATRIX,
 			"model");
 
 		materialBinding->bind(
-			gltut::ShaderRendererBinding::Parameter::VIEWPOINT_VIEW_MATRIX,
+			gltut::RendererBinding::Parameter::VIEWPOINT_VIEW_MATRIX,
 			"view");
 
 		materialBinding->bind(
-			gltut::ShaderRendererBinding::Parameter::VIEWPOINT_PROJECTION_MATRIX,
+			gltut::RendererBinding::Parameter::VIEWPOINT_PROJECTION_MATRIX,
 			"projection");
 
 		gltut::Texture* texture1 = device->getDevice()->getTextures()->load("assets/container.jpg", {});
@@ -59,7 +59,7 @@ int main()
 		auto* material = device->createMaterial();
 		GLTUT_CHECK(material != nullptr, "Failed to create material");
 
-		auto* materialPass = material->createPass(0, materialBinding, 2);
+		auto* materialPass = material->createPass(0, materialBinding, 2, 0);
 		GLTUT_CHECK(materialPass != nullptr, "Failed to create material pass");
 
 		materialPass->getTextures()->setTexture(texture1, 0);

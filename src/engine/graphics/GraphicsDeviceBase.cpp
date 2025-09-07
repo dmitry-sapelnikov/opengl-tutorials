@@ -12,6 +12,7 @@ GraphicsDeviceBase::GraphicsDeviceBase(Window& window) noexcept :
 	mGeometries(*this),
 	mFramebuffers(*this),
 	mShaders(*this),
+	mShaderUniformBuffers(*this),
 	mTextures(*this)
 {
 }

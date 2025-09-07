@@ -275,13 +275,17 @@ u32 WindowC::getFPS() noexcept
 
 void WindowC::addEventHandler(EventHandler* handler, bool inFront) noexcept
 {
-	GLTUT_ASSERT(handler != nullptr);
-	GLTUT_ASSERT(std::find(
-		mEventHandlers.begin(),
-		mEventHandlers.end(),
-		handler) == mEventHandlers.end());
+	if (!GLTUT_ASSERT(handler != nullptr) ||
+		!GLTUT_ASSERT(std::find(
+			mEventHandlers.begin(),
+			mEventHandlers.end(),
+			handler) == mEventHandlers.end()))
+	{
+		return;
+	}
 
-	GLTUT_CATCH_ALL_BEGIN
+	try
+	{
 		if (inFront)
 		{
 			mEventHandlers.push_front(handler);
@@ -290,7 +294,8 @@ void WindowC::addEventHandler(EventHandler* handler, bool inFront) noexcept
 		{
 			mEventHandlers.push_back(handler);
 		}
-	GLTUT_CATCH_ALL_END("Failed to add an event handler")
+	}
+	GLTUT_CATCH_ALL("Failed to add an event handler")
 }
 
 void WindowC::removeEventHandler(EventHandler* handler) noexcept
