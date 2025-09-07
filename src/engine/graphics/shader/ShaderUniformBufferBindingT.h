@@ -49,7 +49,7 @@ public:
 		u32 offset) noexcept final
 	{
 		const size_t index = static_cast<size_t>(parameter);
-		if (GLTUT_ASSERT(index >= static_cast<u32>(ShaderUniformBufferBindingParameter::TOTAL_COUNT)))
+		if (GLTUT_ASSERT(index < static_cast<u32>(ShaderUniformBufferBindingParameter::TOTAL_COUNT)))
 		{
 			mParameterOffsets[index] = offset;
 		}
