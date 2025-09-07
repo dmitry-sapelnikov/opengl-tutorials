@@ -1,6 +1,5 @@
 // Includes
 #include "DepthShader.h"
-#include "./StandardShaderBinding.h"
 
 namespace gltut
 {
@@ -35,7 +34,7 @@ void main()
 ShaderRendererBinding* createDepthShader(Renderer& renderer) noexcept
 {
 	return createStandardShaderBinding(
-		renderer,
+		&renderer,
 		DEPTH_VERTEX_SHADER,
 		DEPTH_FRAGMENT_SHADER);
 }

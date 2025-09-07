@@ -8,7 +8,8 @@ namespace gltut
 FlatColorMaterialModelC::FlatColorMaterialModelC(
 	Renderer& renderer,
 	ShaderRendererBinding& shader,
-	ShaderRendererBinding* depthShader) :
+	ShaderRendererBinding* depthShader,
+	ShaderUniformBuffer& viewProjectionBuffer) :
 	MaterialModelT<FlatColorMaterialModel>(renderer)
 {
 	// Create a material pass with the flat color shader binding
@@ -16,9 +17,10 @@ FlatColorMaterialModelC::FlatColorMaterialModelC(
 		static_cast<u32>(MaterialPassIndex::LIGHTING),
 		&shader,
 		1, // One texture slot (the color texture)
-		0); // No shader uniform buffers
+		1); // 1 uniform buffer
 
 	GLTUT_CHECK(colorPass != nullptr, "Failed to create a material pass");
+	colorPass->getShaderUniformBuffers()->set(&viewProjectionBuffer, 0);
 
 	if (depthShader != nullptr)
 	{
@@ -27,8 +29,10 @@ FlatColorMaterialModelC::FlatColorMaterialModelC(
 			static_cast<u32>(MaterialPassIndex::DEPTH),
 			depthShader,
 			0, // No texture slots
-			0); // No shader uniform buffers
+			1); // 1 uniform buffer
+
 		GLTUT_CHECK(depthPass != nullptr, "Failed to create a depth pass");
+		depthPass->getShaderUniformBuffers()->set(&viewProjectionBuffer, 0);
 	}
 }
 

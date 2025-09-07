@@ -16,7 +16,8 @@ public:
 	FlatColorMaterialModelC(
 		Renderer& renderer,
 		ShaderRendererBinding& shader,
-		ShaderRendererBinding* depthShader);
+		ShaderRendererBinding* depthShader,
+		ShaderUniformBuffer& viewProjectionBuffer);
 
 	void setColor(const Texture* color) noexcept final;
 

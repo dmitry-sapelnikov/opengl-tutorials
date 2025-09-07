@@ -17,6 +17,13 @@ MaterialFactoryC::MaterialFactoryC(
 
 MaterialFactoryC::~MaterialFactoryC() noexcept
 {
+	auto* uniformBuffers = mRenderer.getDevice()->getShaderUniformBuffers();
+	if (mViewProjectionBuffer != nullptr)
+	{
+		uniformBuffers->remove(mViewProjectionBuffer->getTarget());
+		mRenderer.removeShaderUniformBufferBinding(mViewProjectionBuffer);
+	}
+
 	auto* shaders = mRenderer.getDevice()->getShaders();
 	if (mFlatColorShader != nullptr)
 	{
@@ -36,6 +43,7 @@ FlatColorMaterialModel* MaterialFactoryC::createFlatColorMaterial(
 {
 	FlatColorMaterialModel* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN
+		createViewProjectionBuffer();
 		createFlatColorShader();
 		if (castShadows)
 		{
@@ -44,7 +52,8 @@ FlatColorMaterialModel* MaterialFactoryC::createFlatColorMaterial(
 		result = &mFlatColorModels.emplace_back(
 			mRenderer,
 			*mFlatColorShader,
-			castShadows ? mDepthShader : nullptr);
+			castShadows ? mDepthShader : nullptr,
+			*mViewProjectionBuffer->getTarget());
 	GLTUT_CATCH_ALL_END("Cannot create a flat color material model")
 	return result;
 }
@@ -88,6 +97,27 @@ PhongMaterialModel* MaterialFactoryC::createPhongMaterial(
 			castShadows ? mDepthShader : nullptr);
 	GLTUT_CATCH_ALL_END("Cannot create a Phong material model")
 	return result;
+}
+
+void MaterialFactoryC::createViewProjectionBuffer()
+{
+	static_assert(sizeof(Matrix4) == 16 * sizeof(float));
+
+	if (mViewProjectionBuffer == nullptr)
+	{
+		auto* buffer = mRenderer.getDevice()->getShaderUniformBuffers()->create(sizeof(Matrix4) * 2);
+		GLTUT_CHECK(
+			buffer != nullptr,
+			"Failed to create view projection uniform buffer");
+
+		mViewProjectionBuffer = mRenderer.createShaderUniformBufferBinding(buffer);
+		GLTUT_CHECK(
+			mViewProjectionBuffer != nullptr,
+			"Failed to create view projection uniform buffer binding");
+
+		mViewProjectionBuffer->bind(RendererBinding::Parameter::VIEWPOINT_VIEW_MATRIX, 0);
+		mViewProjectionBuffer->bind(RendererBinding::Parameter::VIEWPOINT_PROJECTION_MATRIX, sizeof(Matrix4));
+	}
 }
 
 void MaterialFactoryC::createFlatColorShader()
