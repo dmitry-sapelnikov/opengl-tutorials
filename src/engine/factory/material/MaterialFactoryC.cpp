@@ -65,6 +65,7 @@ PhongShaderModel* MaterialFactoryC::createPhongShader(
 {
 	PhongShaderModel* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN
+		createViewProjectionBuffer();
 		result = &mPhongShaders.emplace_back(
 			mRenderer,
 			mScene,
@@ -79,7 +80,8 @@ PhongMaterialModel* MaterialFactoryC::createPhongMaterial(
 	const PhongShaderModel* phongShader,
 	bool castShadows) noexcept
 {
-	if (phongShader == nullptr)
+	if (!GLTUT_ASSERT(phongShader != nullptr) ||
+		!GLTUT_ASSERT(mViewProjectionBuffer != nullptr))
 	{
 		return nullptr;
 	}
@@ -94,7 +96,8 @@ PhongMaterialModel* MaterialFactoryC::createPhongMaterial(
 			mRenderer,
 			mScene,
 			*phongShader,
-			castShadows ? mDepthShader : nullptr);
+			castShadows ? mDepthShader : nullptr,
+			*mViewProjectionBuffer->getTarget());
 	GLTUT_CATCH_ALL_END("Cannot create a Phong material model")
 	return result;
 }

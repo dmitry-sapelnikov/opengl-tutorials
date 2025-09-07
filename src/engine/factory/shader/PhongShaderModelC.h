@@ -26,7 +26,7 @@ public:
 	/// Returns the material binding
 	ShaderRendererBinding* getShader() const noexcept final
 	{
-		return mRendererBinding;
+		return mRendererShaderBinding;
 	}
 
 	/// Returns the maximum number of directional lights
@@ -89,8 +89,8 @@ private:
 	/// The scene
 	Scene& mScene;
 
-	/// The material binding
-	ShaderRendererBinding* mRendererBinding = nullptr;
+	/// Renderer shader binding
+	ShaderRendererBinding* mRendererShaderBinding = nullptr;
 
 	/// The scene binding
 	SceneShaderBinding* mSceneBinding = nullptr;

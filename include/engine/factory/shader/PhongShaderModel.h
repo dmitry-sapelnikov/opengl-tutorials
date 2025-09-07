@@ -21,6 +21,9 @@ public:
 	/// The default max bias
 	static constexpr float DEFAULT_MAX_SHADOW_MAP_BIAS = 0.005f;
 
+	/// The binding point for the view-projection matrix uniform buffer
+	static constexpr u32 VIEW_PROJECTION_BUFFER_BINDING_POINT = 0;
+
 	/// Virtual destructor
 	virtual ~PhongShaderModel() noexcept = default;
 

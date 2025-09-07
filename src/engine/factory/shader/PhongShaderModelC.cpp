@@ -59,10 +59,15 @@ uniform SpotLight spotLights[MAX_SPOT_LIGHTS];
 // Vertex shader source code for Phong shading
 static const char* PHONG_VERTEX_SHADER = R"(
 // Uniforms
+
+layout (std140) uniform ViewProjection
+{
+	mat4 view;
+	mat4 projection;
+};
+
 uniform mat4 model;
-uniform mat4 view;
 uniform vec3 viewPos;
-uniform mat4 projection;
 uniform mat3 normalMat;
 
 // Inputs
@@ -403,20 +408,19 @@ PhongShaderModelC::PhongShaderModelC(
 	shaderHeader += "#define MAX_SPOT_LIGHTS " + std::to_string(maxSpotLights) + "\n";
 	shaderHeader += LIGHT_UNIFORMS;
 
-	mRendererBinding = createStandardShaderBinding(
+	mRendererShaderBinding = createStandardShaderBinding(
 		&mRenderer,
 		(shaderHeader + PHONG_VERTEX_SHADER).c_str(),
 		(shaderHeader + PHONG_FRAGMENT_SHADER).c_str(),
 		"model",
-		"view",
-		"projection",
+		nullptr, nullptr, // No bindings for view and projection matrices - they are in the uniform buffer
 		"normalMat");
 
-	GLTUT_CHECK(mRendererBinding != nullptr, "Failed to create Phong shader binding");
-	auto* shader = mRendererBinding->getTarget();
-	GLTUT_CHECK(shader != nullptr, "Invalid shader pointer");
+	GLTUT_CHECK(mRendererShaderBinding != nullptr, "Failed to create Phong shader binding");
+	auto* shader = mRendererShaderBinding->getTarget();
+	shader->setUniformBlockBindingPoint("ViewProjection", VIEW_PROJECTION_BUFFER_BINDING_POINT);
 
-	mRendererBinding->bind(RendererBinding::Parameter::VIEWPOINT_POSITION, "viewPos");
+	mRendererShaderBinding->bind(RendererBinding::Parameter::VIEWPOINT_POSITION, "viewPos");
 
 	shader->setInt("diffuseSampler", 0);
 	shader->setInt("specularSampler", 1);
@@ -465,10 +469,10 @@ PhongShaderModelC::PhongShaderModelC(
 
 PhongShaderModelC::~PhongShaderModelC() noexcept
 {
-	Shader* shader = mRendererBinding != nullptr ?
-		mRendererBinding->getTarget() :
+	Shader* shader = mRendererShaderBinding != nullptr ?
+		mRendererShaderBinding->getTarget() :
 		nullptr;
-	mRenderer.removeShaderBinding(mRendererBinding);
+	mRenderer.removeShaderBinding(mRendererShaderBinding);
 	mScene.removeShaderBinding(mSceneBinding);
 	mRenderer.getDevice()->getShaders()->remove(shader);
 }
@@ -476,14 +480,14 @@ PhongShaderModelC::~PhongShaderModelC() noexcept
 void PhongShaderModelC::setMinShadowMapBias(float bias) noexcept
 {
 	mMinShadowMapBias = clamp(bias, 0.0f, mMaxShadowMapBias);
-	mRendererBinding->getTarget()->setFloat(
+	mRendererShaderBinding->getTarget()->setFloat(
 		"minShadowMapBias", mMinShadowMapBias);
 }
 
 void PhongShaderModelC::setMaxShadowMapBias(float bias) noexcept
 {
 	mMaxShadowMapBias = std::max(0.0f, bias);
-	mRendererBinding->getTarget()->setFloat(
+	mRendererShaderBinding->getTarget()->setFloat(
 		"maxShadowMapBias", mMaxShadowMapBias);
 	setMinShadowMapBias(mMinShadowMapBias);
 }
