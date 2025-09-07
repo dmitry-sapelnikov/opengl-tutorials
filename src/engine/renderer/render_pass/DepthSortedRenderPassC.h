@@ -22,7 +22,8 @@ public:
 		bool clearDepth,
 		const Rectangle2u* viewport,
 		GraphicsDevice& device,
-		const ShaderBindings& shaderBindings) noexcept;
+		const ShaderBindings& shaderBindings,
+		const ShaderUniformBufferBindings& shaderUniformBufferBindings) noexcept;
 
 	/// Executes the render pass
 	void execute() noexcept final;

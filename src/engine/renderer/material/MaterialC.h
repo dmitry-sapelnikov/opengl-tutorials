@@ -22,7 +22,8 @@ public:
 	MaterialPass* createPass(
 		u32 index,
 		const ShaderRendererBinding* shader,
-		u32 textureSlotsCount) noexcept final;
+		u32 textureSlotsCount,
+		u32 shaderBindingPointsCount) noexcept final;
 
 	/// Removes a material pass by index
 	void removePass(u32 index) noexcept final;

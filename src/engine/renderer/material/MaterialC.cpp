@@ -8,7 +8,8 @@ namespace gltut
 MaterialPass* MaterialC::createPass(
 	u32 index,
 	const ShaderRendererBinding* shader,
-	u32 textureSlotsCount) noexcept
+	u32 textureSlotsCount,
+	u32 shaderBindingPointsCount) noexcept
 {
 	if (index < mPasses.size() && mPasses[index] != nullptr)
 	{
@@ -17,7 +18,12 @@ MaterialPass* MaterialC::createPass(
 
 	MaterialPass* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN
-		auto pass = std::make_unique<MaterialPassC>(mDevice, shader, textureSlotsCount);
+		auto pass = std::make_unique<MaterialPassC>(
+			mDevice,
+			shader,
+			textureSlotsCount,
+			shaderBindingPointsCount);
+
 		if (index >= mPasses.size())
 		{
 			mPasses.resize(index + 1);

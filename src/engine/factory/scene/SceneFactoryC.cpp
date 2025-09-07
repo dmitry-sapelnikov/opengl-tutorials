@@ -162,17 +162,22 @@ gltut::Material* SceneFactoryC::createSkyboxMaterial(const TextureCubemap& cubem
 		GLTUT_CHECK(mSkyboxShaderBinding != nullptr, "Failed to create skybox shader binding");
 
 		mSkyboxShaderBinding->bind(
-			gltut::ShaderRendererBinding::Parameter::VIEWPOINT_VIEW_MATRIX,
+			gltut::RendererBinding::Parameter::VIEWPOINT_VIEW_MATRIX,
 			"view");
 
 		mSkyboxShaderBinding->bind(
-			gltut::ShaderRendererBinding::Parameter::VIEWPOINT_PROJECTION_MATRIX,
+			gltut::RendererBinding::Parameter::VIEWPOINT_PROJECTION_MATRIX,
 			"projection");
 	}
 
 	gltut::Material* skyboxMaterial = mRenderer.createMaterial();
 	GLTUT_CHECK(skyboxMaterial != nullptr, "Failed to create skybox material");
-	auto* pass = skyboxMaterial->createPass(0, mSkyboxShaderBinding, 1);
+	auto* pass = skyboxMaterial->createPass(
+		0,
+		mSkyboxShaderBinding,
+		1, // One texture
+		0); // No uniform buffers
+
 	GLTUT_CHECK(pass != nullptr, "Failed to create skybox material pass");
 
 	// Set front face culling since we are inside the skybox

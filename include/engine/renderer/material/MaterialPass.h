@@ -4,6 +4,7 @@
 #include "engine/graphics/texture/Texture.h"
 #include "engine/graphics/shader/ShaderParameters.h"
 #include "engine/renderer/shader/ShaderRendererBinding.h"
+#include "engine/renderer/shader/ShaderUniformBufferSet.h"
 #include "engine/renderer/texture/TextureSet.h"
 #include "engine/graphics/RenderModes.h"
 
@@ -30,6 +31,9 @@ public:
 
 	/// Returns the textures associated with this material pass
 	virtual TextureSet* getTextures() noexcept = 0;
+
+	/// Returns the uniform buffers associated with this material pass
+	virtual ShaderUniformBufferSet* getShaderUniformBuffers() noexcept = 0;
 
 	/// Returns the material cull mode
 	virtual FaceCullingMode getFaceCulling() const noexcept = 0;

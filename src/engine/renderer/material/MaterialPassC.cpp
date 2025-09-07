@@ -11,14 +11,16 @@ namespace gltut
 MaterialPassC::MaterialPassC(
 	GraphicsDevice& device,
 	const ShaderRendererBinding* shader,
-	u32 textureSlotsCount) noexcept :
+	u32 textureSlotsCount,
+	u32 shaderBindingPointsCount) noexcept :
 
 	mDevice(device),
 	mShaderBinding(shader),
 	mShaderArguments(shader != nullptr ? 
-		shader->getShader() :
+		shader->getTarget() :
 		nullptr),
-	mTextures(device, textureSlotsCount)
+	mTextures(device, textureSlotsCount),
+	mShaderUniformBuffers(device, shaderBindingPointsCount)
 {
 }
 
@@ -32,7 +34,7 @@ void MaterialPassC::setShader(const ShaderRendererBinding* shader) noexcept
 {
 	mShaderBinding = shader;
 	mShaderArguments.setShader(shader != nullptr ?
-		shader->getShader() :
+		shader->getTarget() :
 		nullptr);
 }
 
@@ -40,7 +42,7 @@ void MaterialPassC::bind(const RenderGeometry* geometry) const noexcept
 {
 	if (geometry == nullptr ||
 		mShaderBinding == nullptr || 
-		mShaderBinding->getShader() == nullptr)
+		mShaderBinding->getTarget() == nullptr)
 	{
 		return;
 	}
@@ -48,6 +50,7 @@ void MaterialPassC::bind(const RenderGeometry* geometry) const noexcept
 	mShaderBinding->update(geometry);
 	mShaderArguments.bind();
 	mTextures.bind();
+	mShaderUniformBuffers.bind();
 	
 	mDevice.setBlending(isTransparent());
 	mDevice.setFaceCulling(getFaceCulling());

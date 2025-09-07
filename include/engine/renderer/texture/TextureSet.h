@@ -12,6 +12,9 @@ namespace gltut
 class TextureSet
 {
 public:
+	/// Virtual destructor
+	virtual ~TextureSet() noexcept = default;
+
 	/// Returns the texture associated with the specified slot
 	virtual const Texture* getTexture(u32 slot) const noexcept = 0;
 

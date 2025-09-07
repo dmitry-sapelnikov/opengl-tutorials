@@ -140,7 +140,7 @@ int main()
 		gltut::Material* material = renderer->createMaterial();
 		GLTUT_CHECK(material != nullptr, "Failed to create material");
 
-		gltut::MaterialPass* materialPass0 = material->createPass(0, pointShader, 0);
+		gltut::MaterialPass* materialPass0 = material->createPass(0, pointShader, 0, 0);
 		GLTUT_CHECK(materialPass0 != nullptr, "Failed to create material pass");
 		materialPass0->setFaceCulling(gltut::FaceCullingMode::NONE);
 		materialPass0->setPolygonFill(gltut::PolygonFillMode::POINT, 1.0, true);
@@ -150,11 +150,11 @@ int main()
 			TWO_SIDED_VERTEX_SHADER,
 			TWO_SIDED_FRAGMENT_SHADER);
 
-		twoSidedShader->getShader()->setInt("innerSideSampler", 0);
-		twoSidedShader->getShader()->setInt("outerSideSampler", 1);
+		twoSidedShader->getTarget()->setInt("innerSideSampler", 0);
+		twoSidedShader->getTarget()->setInt("outerSideSampler", 1);
 
 		GLTUT_CHECK(twoSidedShader != nullptr, "Failed to create two-sided shader");
-		gltut::MaterialPass* materialPass1 = material->createPass(1, twoSidedShader, 2);
+		gltut::MaterialPass* materialPass1 = material->createPass(1, twoSidedShader, 2, 0);
 		GLTUT_CHECK(materialPass1 != nullptr, "Failed to create material pass");
 		materialPass1->setFaceCulling(gltut::FaceCullingMode::NONE);
 
@@ -172,7 +172,7 @@ int main()
 			FRAG_COORD_FRAGMENT_SHADER);
 
 		GLTUT_CHECK(fragCoordShader != nullptr, "Failed to create frag coord shader");
-		gltut::MaterialPass* materialPass2 = material->createPass(2, fragCoordShader, 0);
+		gltut::MaterialPass* materialPass2 = material->createPass(2, fragCoordShader, 0, 0);
 		GLTUT_CHECK(materialPass2 != nullptr, "Failed to create material pass");
 
 		gltut::GeometryNode* box = scene->createGeometry(
@@ -181,7 +181,7 @@ int main()
 			gltut::Matrix4::identity());
 		GLTUT_CHECK(box != nullptr, "Failed to create box");
 
-		pointShader->getShader()->setFloat("pointSize", 10.0f);
+		pointShader->getTarget()->setFloat("pointSize", 10.0f);
 
 		const char* shaderNames[] = { "Points", "Two-Sided", "FragCoord" };
 		int currentShader = 0;

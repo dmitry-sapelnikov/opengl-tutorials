@@ -95,6 +95,15 @@ int32 ShaderOpenGL::getParameterLocation(const char* name) const noexcept
 	return glGetUniformLocation(mProgram, name);
 }
 
+int32 ShaderOpenGL::getUniformBlockIndex(const char* name) const noexcept
+{
+	GLTUT_ASSERT_STRING(name);
+	bind();
+
+	GLuint result = glGetUniformBlockIndex(mProgram, name);
+	return GLTUT_ASSERT(result != GL_INVALID_INDEX) ? static_cast<int32>(result) : -1;
+}
+
 void ShaderOpenGL::setInt(int32 location, int value) noexcept
 {
 	bind();
@@ -137,6 +146,14 @@ void ShaderOpenGL::setMat4(int32 location, const float* data) noexcept
 	glUniformMatrix4fv(location, 1, GL_FALSE, data);
 }
 
+void ShaderOpenGL::setUniformBlockBindingPoint(int32 location, u32 bindingPoint) noexcept
+{
+	if GLTUT_ASSERT(location >= 0)
+	{
+		bind();
+		glUniformBlockBinding(mProgram, static_cast<GLuint>(location), bindingPoint);
+	}
+}
 
 // End of the namespace gltut
 }

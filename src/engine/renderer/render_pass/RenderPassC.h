@@ -6,6 +6,7 @@
 #include "engine/core/NonCopyable.h"
 #include "engine/graphics/GraphicsDevice.h"
 #include "engine/renderer/shader/ShaderRendererBinding.h"
+#include "engine/renderer/shader/ShaderUniformBufferRendererBinding.h"
 #include "engine/renderer/RenderPass.h"
 
 namespace gltut
@@ -20,6 +21,10 @@ public:
 	using ShaderBindings =
 		std::vector<std::unique_ptr<ShaderRendererBinding>>;
 
+	/// Vector of shader uniform buffer bindings
+	using ShaderUniformBufferBindings =
+		std::vector<std::unique_ptr<ShaderUniformBufferRendererBinding>>;
+
 	/// Constructor
 	RenderPassC(
 		const Viewpoint* viewpoint,
@@ -30,7 +35,8 @@ public:
 		bool clearDepth,
 		const Rectangle2u* viewport,
 		GraphicsDevice& device,
-		const ShaderBindings& shaderBindings);
+		const ShaderBindings& shaderBindings,
+		const ShaderUniformBufferBindings& shaderUniformBufferBindings);
 
 	/// Returns the scene viewpoint
 	const Viewpoint* getViewpoint() const noexcept final
@@ -157,6 +163,9 @@ private:
 
 	/// Shader-renderer bindings
 	const ShaderBindings& mShaderBindings;
+
+	/// Shader uniform buffer bindings
+	const ShaderUniformBufferBindings& mShaderUniformBufferBindings;
 };
 
 // End of the namespace gltut

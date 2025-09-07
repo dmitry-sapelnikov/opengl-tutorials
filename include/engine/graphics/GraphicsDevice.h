@@ -11,6 +11,7 @@
 #include "engine/graphics/geometry/GeometryManager.h"
 #include "engine/graphics/framebuffer/FramebufferManager.h"
 #include "engine/graphics/shader/ShaderManager.h"
+#include "engine/graphics/shader/ShaderUniformBufferManager.h"
 #include "engine/graphics/texture/TextureManager.h"
 #include "engine/graphics/framebuffer/TextureFramebuffer.h"
 
@@ -40,11 +41,19 @@ public:
 	/// Return the shader manager
 	virtual ShaderManager* getShaders() = 0;
 
+	/// Returns the shader uniform buffer manager
+	virtual ShaderUniformBufferManager* getShaderUniformBuffers() = 0;
+
 	/// Returns the texture manager
 	virtual TextureManager* getTextures() = 0;
 
 	/// Binds a texture to a slot
 	virtual void bindTexture(const Texture* texture, u32 slot) noexcept = 0;
+
+	/// Binds a shader uniform buffer to a binding point
+	virtual void bindShaderUniformBuffer(
+		const ShaderUniformBuffer* buffer,
+		u32 bindingPoint) noexcept = 0;
 
 	/// Binds a framebuffer
 	virtual void bindFramebuffer(

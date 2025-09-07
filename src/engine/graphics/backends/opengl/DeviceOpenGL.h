@@ -41,6 +41,10 @@ public:
 		const char* vertexShader,
 		const char* fragmentShader) final;
 
+	/// Creates a shader uniform buffer
+	std::unique_ptr<ShaderUniformBuffer> createBackendShaderUniformBuffer(
+		u32 sizeInBytes) final;
+
 	/// Creates a texture
 	std::unique_ptr<Texture2> createBackendTexture2(
 		const TextureData& data,
@@ -63,6 +67,11 @@ public:
 
 	/// Binds a texture to a slot
 	void bindTexture(const Texture* texture, u32 slot) noexcept final;
+
+	/// Binds a shader uniform buffer to a binding point
+	void bindShaderUniformBuffer(
+		const ShaderUniformBuffer* buffer,
+		u32 bindingPoint) noexcept final;
 
 	/// Set face cull mode
 	void setFaceCulling(FaceCullingMode mode) noexcept final;

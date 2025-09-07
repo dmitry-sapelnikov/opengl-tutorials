@@ -33,6 +33,9 @@ public:
 	/// Vector of shader parameter locations and their values
 	using ParameterValues = std::vector<std::pair<int32, ParameterValue>>;
 
+	/// Vector of uniform block binding points
+	using UniformBlockBindingPoints = std::vector<std::pair<int32, u32>>;
+
 	/// Constructor
 	explicit ShaderArguments(Shader* shader) noexcept;
 
@@ -44,6 +47,9 @@ public:
 
 	/// Returns the parameter location
 	int32 getParameterLocation(const char* name) const noexcept final;
+
+	/// Returns the index of a shader uniform block
+	int32 getUniformBlockIndex(const char* name) const noexcept final;
 
 	/// Sets an integer value to a shader parameter
 	void setInt(int32 location, int value) noexcept final;
@@ -66,6 +72,9 @@ public:
 	/// Sets a 4x4 matrix to a shader parameter
 	void setMat4(int32 location, const float* data) noexcept final;
 
+	/// Sets a binding point to a shader uniform block
+	void setUniformBlockBindingPoint(int32 location, u32 bindingPoint) noexcept final;
+
 	/// Binds the controlled shader, then sets the shader parameters
 	void bind() const noexcept;
 
@@ -75,6 +84,9 @@ private:
 
 	/// Shader parameter values
 	ParameterValues mParameterValues;
+
+	/// Shader uniform block binding points
+	UniformBlockBindingPoints mUniformBlockBindingPoints;
 };
 
 // End of the namespace gltut

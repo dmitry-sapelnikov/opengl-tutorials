@@ -20,13 +20,13 @@ MaterialFactoryC::~MaterialFactoryC() noexcept
 	auto* shaders = mRenderer.getDevice()->getShaders();
 	if (mFlatColorShader != nullptr)
 	{
-		shaders->remove(mFlatColorShader->getShader());
+		shaders->remove(mFlatColorShader->getTarget());
 		mRenderer.removeShaderBinding(mFlatColorShader);
 	}
 
 	if (mDepthShader != nullptr)
 	{
-		shaders->remove(mDepthShader->getShader());
+		shaders->remove(mDepthShader->getTarget());
 		mRenderer.removeShaderBinding(mDepthShader);
 	}
 }

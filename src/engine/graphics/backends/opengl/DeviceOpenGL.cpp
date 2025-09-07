@@ -9,7 +9,8 @@
 
 #include "engine/core/Check.h"
 #include "GeometryOpenGL.h"
-#include "ShaderOpenGL.h"
+#include "shader/ShaderOpenGL.h"
+#include "shader/ShaderUniformBufferOpenGL.h"
 #include "texture/Texture2OpenGL.h"
 #include "texture/TextureCubemapOpenGL.h"
 
@@ -155,6 +156,12 @@ std::unique_ptr<Shader> DeviceOpenGL::createBackendShader(
 	return std::make_unique<ShaderOpenGL>(vertexShader, fragmentShader);
 }
 
+std::unique_ptr<ShaderUniformBuffer> DeviceOpenGL::createBackendShaderUniformBuffer(
+	u32 sizeInBytes)
+{
+	return std::make_unique<ShaderUniformBufferOpenGL>(sizeInBytes);
+}
+
 std::unique_ptr<Texture2> DeviceOpenGL::createBackendTexture2(
 	const TextureData& data,
 	const TextureParameters& parameters)
@@ -204,6 +211,16 @@ void DeviceOpenGL::bindTexture(const Texture* texture, u32 slot) noexcept
 	{
 		texture->bind(slot);
 	}
+}
+
+void DeviceOpenGL::bindShaderUniformBuffer(
+	const ShaderUniformBuffer* buffer,
+	u32 bindingPoint) noexcept
+{
+	glBindBufferBase(
+		GL_UNIFORM_BUFFER,
+		static_cast<GLuint>(bindingPoint),
+		buffer != nullptr ? static_cast<GLuint>(buffer->getId()) : 0);
 }
 
 void DeviceOpenGL::setFaceCulling(FaceCullingMode mode) noexcept

@@ -23,6 +23,9 @@ public:
 	/// Returns the location of a shader variable
 	int32 getParameterLocation(const char* name) const noexcept final;
 
+	/// Returns the index of a shader uniform block
+	int32 getUniformBlockIndex(const char* name) const noexcept final;
+
 	/// Sets an integer value to a shader variable
 	void setInt(int32 location, int value) noexcept final;
 
@@ -43,6 +46,9 @@ public:
 
 	/// Sets a 4x4 matrix to a shader variable
 	void setMat4(int32 location, const float* data) noexcept final;
+
+	/// Sets a binding point to a shader uniform block
+	void setUniformBlockBindingPoint(int32 location, u32 bindingPoint) noexcept final;
 
 	/// Binds the shader
 	void bind() const noexcept final;

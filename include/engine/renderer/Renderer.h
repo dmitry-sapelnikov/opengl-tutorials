@@ -3,6 +3,7 @@
 // Includes
 #include "engine/graphics/GraphicsDevice.h"
 #include "engine/renderer/shader/ShaderRendererBinding.h"
+#include "engine/renderer/shader/ShaderUniformBufferRendererBinding.h"
 #include "engine/renderer/objects/RenderGeometry.h"
 #include "engine/renderer/objects/RenderGeometryGroup.h"
 #include "engine/renderer/RenderPass.h"
@@ -27,6 +28,14 @@ public:
 	/// Removes a shader material binding
 	virtual void removeShaderBinding(
 		ShaderRendererBinding* binding) noexcept = 0;
+
+	/// Creates a shader uniform buffer binding
+	virtual ShaderUniformBufferRendererBinding* createShaderUniformBufferBinding(
+		ShaderUniformBuffer* buffer) noexcept = 0;
+
+	/// Removes a shader uniform buffer binding
+	virtual void removeShaderUniformBufferBinding(
+		ShaderUniformBufferRendererBinding* binding) noexcept = 0;
 
 	/// Creates a material
 	virtual Material* createMaterial() noexcept = 0;

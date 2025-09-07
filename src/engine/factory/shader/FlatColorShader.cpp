@@ -59,8 +59,8 @@ ShaderRendererBinding* createFlatColorShader(Renderer& renderer) noexcept
 
 	if (result != nullptr)
 	{
-		result->getShader()->setInt("colorSampler", 0);
-		result->getShader()->setFloat("transparencyThreshold", 0.0f);
+		result->getTarget()->setInt("colorSampler", 0);
+		result->getTarget()->setFloat("transparencyThreshold", 0.0f);
 	}
 	return result;
 }

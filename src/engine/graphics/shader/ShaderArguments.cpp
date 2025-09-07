@@ -4,15 +4,15 @@
 namespace gltut
 {
 // Local functions
-template <typename T>
+template <typename TargetType, typename T>
 void addParameterValue(
-	ShaderArguments::ParameterValues& target,
+	TargetType& target,
 	int32 location,
 	const T& value) noexcept
 {
 	GLTUT_ASSERT(location >= 0);
-
-	GLTUT_CATCH_ALL_BEGIN
+	try
+	{
 		// We use a simple linear search to find the location assuming that
 		// the number of parameters is small enough.
 		auto findResult = std::find_if(
@@ -27,7 +27,8 @@ void addParameterValue(
 		{
 			target.emplace_back(location, value);
 		}
-	GLTUT_CATCH_ALL_END("Failed to set shader parameter")
+	}
+	GLTUT_CATCH_ALL("Failed to set shader parameter")
 }
 
 // Global classes
@@ -55,6 +56,13 @@ int32 ShaderArguments::getParameterLocation(const char* name) const noexcept
 	GLTUT_ASSERT_STRING(name);
 	GLTUT_ASSERT(mShader != nullptr);
 	return mShader->getParameterLocation(name);
+}
+
+int32 ShaderArguments::getUniformBlockIndex(const char* name) const noexcept
+{
+	GLTUT_ASSERT_STRING(name);
+	GLTUT_ASSERT(mShader != nullptr);
+	return mShader->getUniformBlockIndex(name);
 }
 
 void ShaderArguments::setInt(int32 location, int value) noexcept
@@ -92,13 +100,18 @@ void ShaderArguments::setMat4(int32 location, const float* value) noexcept
 	addParameterValue(mParameterValues, location, Matrix4(value));
 }
 
+void ShaderArguments::setUniformBlockBindingPoint(int32 location, u32 bindingPoint) noexcept
+{
+	addParameterValue(mUniformBlockBindingPoints, location, bindingPoint);
+}
+
 void ShaderArguments::bind() const noexcept
 {
 	if (mShader == nullptr)
 	{
 		return;
 	}
-	
+
 	mShader->bind();
 	for (const auto& [location, value] : mParameterValues)
 	{
@@ -152,6 +165,11 @@ void ShaderArguments::bind() const noexcept
 
 		GLTUT_UNEXPECTED_SWITCH_DEFAULT_CASE(value.index());
 		}
+	}
+
+	for (const auto& [location, bindingPoint] : mUniformBlockBindingPoints)
+	{
+		mShader->setUniformBlockBindingPoint(location, bindingPoint);
 	}
 }
 

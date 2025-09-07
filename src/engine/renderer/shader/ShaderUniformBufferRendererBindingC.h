@@ -1,19 +1,20 @@
 #pragma once
 
 // Includes
-#include "../../graphics/shader/ShaderBindingT.h"
-#include "engine/renderer/shader/ShaderRendererBinding.h"
+#include "../../graphics/shader/ShaderUniformBufferBindingT.h"
+#include "engine/renderer/shader/ShaderUniformBufferRendererBinding.h"
 #include "engine/renderer/viewpoint/Viewpoint.h"
 
 namespace gltut
 {
 // Global classes
 /// Implementation of the SceneShaderBinding interface
-class ShaderRendererBindingC final : public ShaderBindingT<ShaderRendererBinding, RendererBinding::Parameter>
+class ShaderUniformBufferRendererBindingC final :
+	public ShaderUniformBufferBindingT<ShaderUniformBufferRendererBinding, RendererBinding::Parameter>
 {
 public:
 	/// Constructor
-	using ShaderBindingT<ShaderRendererBinding, RendererBinding::Parameter>::ShaderBindingT;
+	using ShaderUniformBufferBindingT<ShaderUniformBufferRendererBinding, RendererBinding::Parameter>::ShaderUniformBufferBindingT;
 
 	/// Updates the shader for a viewpoint
 	void update(const Viewpoint* viewpoint, float aspectRatio) const noexcept final;

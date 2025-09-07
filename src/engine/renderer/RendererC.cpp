@@ -7,6 +7,7 @@
 #include "./render_pass/DepthSortedRenderPassC.h"
 #include "./material/MaterialC.h"
 #include "./shader/ShaderRendererBindingC.h"
+#include "./shader/ShaderUniformBufferRendererBindingC.h"
 #include "./objects/RenderGeometryC.h"
 #include "./objects/RenderGeometryGroupC.h"
 
@@ -59,6 +60,31 @@ void RendererC::removeShaderBinding(
 	if (it != mShaderBindings.end())
 	{
 		mShaderBindings.erase(it);
+	}
+}
+
+ShaderUniformBufferRendererBinding* RendererC::createShaderUniformBufferBinding(
+	ShaderUniformBuffer* buffer) noexcept
+{
+	return createElement<ShaderUniformBufferRendererBinding, ShaderUniformBufferRendererBindingC>(
+		mShaderUniformBufferBindings,
+		"shader uniform buffer binding",
+		buffer);
+}
+
+void RendererC::removeShaderUniformBufferBinding(
+	ShaderUniformBufferRendererBinding* binding) noexcept
+{
+	auto it = std::find_if(
+		mShaderUniformBufferBindings.begin(),
+		mShaderUniformBufferBindings.end(),
+		[&binding](const auto& currentBinding)
+		{
+			return currentBinding.get() == binding;
+		});
+	if (it != mShaderUniformBufferBindings.end())
+	{
+		mShaderUniformBufferBindings.erase(it);
 	}
 }
 
@@ -125,7 +151,8 @@ RenderPass* RendererC::createPass(
 			clearDepth,
 			viewport,
 			mDevice,
-			mShaderBindings),
+			mShaderBindings,
+			mShaderUniformBufferBindings),
 			0).first.get();
 	GLTUT_CATCH_ALL_END("Cannot create a scene render pass")
 
@@ -158,7 +185,8 @@ RenderPass* RendererC::createDepthSortedPass(
 			clearDepth,
 			viewport,
 			mDevice,
-			mShaderBindings),
+			mShaderBindings,
+			mShaderUniformBufferBindings),
 			0).first.get();
 	GLTUT_CATCH_ALL_END("Cannot create a depth-sorted scene render pass")
 

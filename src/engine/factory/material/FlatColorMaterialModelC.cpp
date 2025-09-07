@@ -15,7 +15,8 @@ FlatColorMaterialModelC::FlatColorMaterialModelC(
 	auto* colorPass = getMaterial().createPass(
 		static_cast<u32>(MaterialPassIndex::LIGHTING),
 		&shader,
-		1);
+		1, // One texture slot (the color texture)
+		0); // No shader uniform buffers
 
 	GLTUT_CHECK(colorPass != nullptr, "Failed to create a material pass");
 
@@ -25,7 +26,8 @@ FlatColorMaterialModelC::FlatColorMaterialModelC(
 		auto* depthPass = getMaterial().createPass(
 			static_cast<u32>(MaterialPassIndex::DEPTH),
 			depthShader,
-			0);
+			0, // No texture slots
+			0); // No shader uniform buffers
 		GLTUT_CHECK(depthPass != nullptr, "Failed to create a depth pass");
 	}
 }
@@ -50,7 +52,7 @@ void FlatColorMaterialModelC::setTransparencyThreshold(float threshold) noexcept
 
 	if (thresholdInRange && pass != nullptr)
 	{
-		pass->getShader()->getShader()->setFloat("transparencyThreshold", threshold);
+		pass->getShader()->getTarget()->setFloat("transparencyThreshold", threshold);
 	}
 }
 

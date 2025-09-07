@@ -5,6 +5,7 @@
 #include "engine/renderer/material/MaterialPass.h"
 #include "../../graphics/shader/ShaderArguments.h"
 #include "../texture/TextureSetC.h"
+#include "../shader/ShaderUniformBufferSetC.h"
 
 namespace gltut
 {
@@ -16,7 +17,8 @@ public:
 	explicit MaterialPassC(
 		GraphicsDevice& device,
 		const ShaderRendererBinding* shader,
-		u32 textureSlotsCount) noexcept;
+		u32 textureSlotsCount,
+		u32 shaderBindingPointsCount) noexcept;
 
 	/// Returns the shader binding
 	const ShaderRendererBinding* getShader() const noexcept final;
@@ -34,6 +36,12 @@ public:
 	TextureSet* getTextures() noexcept final
 	{
 		return &mTextures;
+	}
+
+	/// Returns the uniform buffers associated with this material pass
+	ShaderUniformBufferSet* getShaderUniformBuffers() noexcept final
+	{
+		return &mShaderUniformBuffers;
 	}
 
 	/// Returns the material face mode
@@ -86,6 +94,9 @@ private:
 
 	/// The textures
 	TextureSetC mTextures;
+
+	/// The shader uniform buffers
+	ShaderUniformBufferSetC mShaderUniformBuffers;
 
 	/// The face mode
 	FaceCullingMode mFaceCulling = FaceCullingMode::BACK;

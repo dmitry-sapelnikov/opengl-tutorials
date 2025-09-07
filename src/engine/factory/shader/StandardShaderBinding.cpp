@@ -23,9 +23,9 @@ ShaderRendererBinding* createStandardShaderBinding(
 		result = renderer.createShaderBinding(shader);
 		GLTUT_CHECK(result != nullptr, "Cannot create a shader renderer binding");
 
-		result->bind(ShaderRendererBinding::Parameter::VIEWPOINT_VIEW_MATRIX, "view");
-		result->bind(ShaderRendererBinding::Parameter::VIEWPOINT_PROJECTION_MATRIX, "projection");
-		result->bind(ShaderRendererBinding::Parameter::GEOMETRY_MATRIX, "model");
+		result->bind(RendererBinding::Parameter::VIEWPOINT_VIEW_MATRIX, "view");
+		result->bind(RendererBinding::Parameter::VIEWPOINT_PROJECTION_MATRIX, "projection");
+		result->bind(RendererBinding::Parameter::GEOMETRY_MATRIX, "model");
 
 		return result;
 	GLTUT_CATCH_ALL_END("Cannot create a material shader");

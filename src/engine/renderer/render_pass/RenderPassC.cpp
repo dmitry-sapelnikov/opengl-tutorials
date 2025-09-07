@@ -13,7 +13,8 @@ RenderPassC::RenderPassC(
 	bool clearDepth,
 	const Rectangle2u* viewport,
 	GraphicsDevice& device,
-	const ShaderBindings& shaderBindings) :
+	const ShaderBindings& shaderBindings,
+	const ShaderUniformBufferBindings& shaderUniformBufferBindings) :
 
 	mViewpoint(viewpoint),
 	mObject(object),
@@ -23,7 +24,8 @@ RenderPassC::RenderPassC(
 	mClearDepth(clearDepth),
 	mViewport(viewport ? std::make_optional(*viewport) : std::nullopt),
 	mDevice(device),
-	mShaderBindings(shaderBindings)
+	mShaderBindings(shaderBindings),
+	mShaderUniformBufferBindings(shaderUniformBufferBindings)
 {
 	GLTUT_CHECK(object != nullptr, "Object cannot be null");
 	GLTUT_CHECK(target != nullptr, "Target framebuffer cannot be null");
@@ -56,6 +58,11 @@ void RenderPassC::execute(const RenderObject* target) noexcept
 		1.0f;
 
 	for (const auto& binding : mShaderBindings)
+	{
+		binding->update(mViewpoint, aspectRatio);
+	}
+
+	for (const auto& binding : mShaderUniformBufferBindings)
 	{
 		binding->update(mViewpoint, aspectRatio);
 	}
