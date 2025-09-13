@@ -26,6 +26,11 @@ public:
 		const Vector2& size,
 		const CreationOptions& options) noexcept final;
 
+	Geometry* createPlane(
+		const Vector2& size,
+		const Point2u& subdivisions,
+		const CreationOptions& options) noexcept final;
+
 	Geometry* createBox(
 		const Vector3& size,
 		const CreationOptions& options) noexcept final;

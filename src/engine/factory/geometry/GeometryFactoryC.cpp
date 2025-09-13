@@ -129,6 +129,81 @@ Geometry* GeometryFactoryC::createQuad(
 		options);
 }
 
+Geometry* GeometryFactoryC::createPlane(
+	const Vector2& size,
+	const Point2u& subdivisions,
+	const CreationOptions& options) noexcept
+{
+	if (!GLTUT_ASSERT(subdivisions.x > 0 && subdivisions.y > 0))
+	{
+		return nullptr;
+	}
+
+	Geometry* result = nullptr;
+	std::vector<Vector3> positions;
+	positions.reserve((subdivisions.x + 1) * (subdivisions.y + 1));
+
+	std::vector<Vector2> textureCoordinates;
+	if (options.textureCoordinates)
+	{
+		textureCoordinates.reserve((subdivisions.x + 1) * (subdivisions.y + 1));
+	}
+
+	std::vector<u32> indices;
+	indices.reserve(subdivisions.x * subdivisions.y * 6);
+
+	const float xStep = size.x / subdivisions.x;
+	const float yStep = size.y / subdivisions.y;
+
+	const float xStart = -0.5f * size.x;
+	const float yStart = -0.5f * size.y;
+
+	for (u32 yInd = 0; yInd <= subdivisions.y; ++yInd)
+	{
+		const float y = yStart + static_cast<float>(yInd) * yStep;
+		const float t = static_cast<float>(yInd) / subdivisions.y;
+		for (u32 xInd = 0; xInd <= subdivisions.x; ++xInd)
+		{
+			const float x = xStart + static_cast<float>(xInd) * xStep;
+			const float s = static_cast<float>(xInd) / subdivisions.x;
+			positions.push_back({ x, y, 0.0f });
+			if (options.textureCoordinates)
+			{
+				textureCoordinates.push_back({ s, t });
+			}
+
+			if (xInd != subdivisions.x && yInd != subdivisions.y)
+			{
+				const u32 i0 = yInd * (subdivisions.x + 1) + xInd;
+				const u32 i1 = i0 + 1;
+				const u32 i2 = i0 + (subdivisions.x + 1);
+				const u32 i3 = i2 + 1;
+				indices.push_back(i0);
+				indices.push_back(i1);
+				indices.push_back(i3);
+				indices.push_back(i3);
+				indices.push_back(i2);
+				indices.push_back(i0);
+			}
+		}
+	}
+
+	std::vector<Vector3> normals;
+	if (options.normal)
+	{
+		normals.resize(positions.size(), { 0.0f, 0.0f, 1.0f });
+	}
+
+	return createGeometry(
+		positions.data(),
+		normals.data(),
+		textureCoordinates.data(),
+		static_cast<u32>(positions.size()),
+		indices.data(),
+		static_cast<u32>(indices.size()),
+		options);
+}
+
 Geometry* GeometryFactoryC::createBox(
 	const Vector3& size,
 	const CreationOptions& options) noexcept
