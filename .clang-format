@@ -1,0 +1,21 @@
+{ 
+    BasedOnStyle: LLVM, 
+    UseTab: Always,
+    IndentWidth: 4,
+    TabWidth: 4,
+    BreakBeforeBraces: Allman,
+    AllowShortIfStatementsOnASingleLine: false, 
+    IndentCaseLabels: false,
+    ColumnLimit: 0, 
+    AccessModifierOffset: -4, 
+    NamespaceIndentation: None, 
+    FixNamespaceComments: false, 
+    PointerAlignment: Left,
+    IndentPPDirectives: None,
+    BreakConstructorInitializers: AfterColon,
+    ConstructorInitializerIndentWidth: 4,
+    AlignOperands : true,
+    BreakBeforeTernaryOperators : true,
+    SpaceBeforeCpp11BracedList : true,
+    BinPackArguments: false
+}
