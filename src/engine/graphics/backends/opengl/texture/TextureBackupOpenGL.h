@@ -1,8 +1,12 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 #pragma once
 
 // Includes
-#include <glad/glad.h>
 #include "engine/core/Check.h"
+#include <glad/glad.h>
 
 namespace gltut
 {

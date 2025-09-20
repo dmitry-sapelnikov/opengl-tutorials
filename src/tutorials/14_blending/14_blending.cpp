@@ -1,17 +1,31 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 // Includes
 #include <array>
 #include <chrono>
 #include <iostream>
 #include <string>
 
+#include "engine/Engine.h"
 #include "engine/core/Check.h"
 #include "engine/math/Rng.h"
-#include "engine/Engine.h"
 
+namespace
+{
+// Local constants
+
+/// Number of quads to create
 static const size_t QUAD_COUNT = 100;
+
+/// Range for random quad positions
 static const float POSITION_RANGE = 5.0f;
 
-///	The program entry point
+// End of the anonymous namespace
+}
+
+/// The program entry point
 int main()
 {
 	try
@@ -56,9 +70,9 @@ int main()
 		}
 
 		gltut::Camera* camera = engine->getScene()->createCamera(
-			{ 0.0f, 0.0f, 20.0f },
-			{ 0.0f, 0.0f, 0.0f },
-			{ 0.0f, 1.0f, 0.0f },
+			{0.0f, 0.0f, 20.0f},
+			{0.0f, 0.0f, 0.0f},
+			{0.0f, 1.0f, 0.0f},
 			45.0f,
 			0.1f,
 			100.0f);
@@ -72,6 +86,6 @@ int main()
 		{
 		}
 	}
-	GLTUT_APPLICATION_CATCH;
+	GLTUT_APPLICATION_CATCH
 	return 0;
 }

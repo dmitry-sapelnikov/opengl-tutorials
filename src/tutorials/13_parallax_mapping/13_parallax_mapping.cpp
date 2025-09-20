@@ -1,19 +1,32 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 // Includes
 #include <array>
 #include <chrono>
 #include <iostream>
 #include <string>
 
+#include "engine/Engine.h"
 #include "engine/core/Check.h"
 #include "engine/math/Rng.h"
-#include "engine/Engine.h"
 
 #include "imgui/EngineImgui.h"
 
-const gltut::Vector3 DIR_LIGHT_POSITION = { 0.0f, 0.0f, 10.0f };
-const gltut::Color DIR_LIGHT_COLOR = { 1.0f, 1.0f, 1.0f };
+namespace
+{
 
-/// Creates light
+// Local constants
+/// Directional light position
+const gltut::Vector3 DIR_LIGHT_POSITION = {0.0f, 0.0f, 10.0f};
+
+/// Directional light color
+const gltut::Color DIR_LIGHT_COLOR = {1.0f, 1.0f, 1.0f};
+
+// Local functions
+
+/// Creates a Phong material model
 gltut::PhongMaterialModel* createPhongMaterialModel(gltut::Engine& engine)
 {
 	gltut::MaterialFactory* materialFactory = engine.getFactory()->getMaterial();
@@ -28,7 +41,11 @@ gltut::PhongMaterialModel* createPhongMaterialModel(gltut::Engine& engine)
 	GLTUT_CHECK(diffuseTexture, "Failed to create diffuse texture");
 	phongMaterialModel->setDiffuse(diffuseTexture);
 
-	const gltut::Texture* specularTexture = device->getTextures()->createSolidColor({ 0.5f, 0.5f, 0.5f, });
+	const gltut::Texture* specularTexture = device->getTextures()->createSolidColor({
+		0.5f,
+		0.5f,
+		0.5f,
+	});
 	GLTUT_CHECK(specularTexture, "Failed to create specular texture");
 	phongMaterialModel->setSpecular(const_cast<gltut::Texture*>(specularTexture));
 
@@ -50,6 +67,7 @@ gltut::PhongMaterialModel* createPhongMaterialModel(gltut::Engine& engine)
 	return phongMaterialModel;
 }
 
+/// Creates a light source + its visual representation
 std::pair<gltut::GeometryNode*, gltut::LightNode*> createLight(gltut::Engine& engine)
 {
 	auto* lightGeometry = engine.getFactory()->getGeometry()->createSphere(0.5f, 16);
@@ -69,14 +87,17 @@ std::pair<gltut::GeometryNode*, gltut::LightNode*> createLight(gltut::Engine& en
 		light);
 
 	lightSource->setTarget(-DIR_LIGHT_POSITION);
-	lightSource->setAmbient({ 0.0f, 0.0f, 0.0f });
+	lightSource->setAmbient({0.0f, 0.0f, 0.0f});
 	lightSource->setDiffuse(DIR_LIGHT_COLOR);
 	lightSource->setSpecular(DIR_LIGHT_COLOR);
 
-	return { light, lightSource };
+	return {light, lightSource};
 }
 
-///	The program entry point
+// End of the anonymous namespace
+}
+
+/// The program entry point
 int main()
 {
 	gltut::EngineImgui* imgui = nullptr;
@@ -101,14 +122,14 @@ int main()
 		scene->createGeometry(
 			floorGeometry,
 			phongMaterialModel->getMaterial(),
-			gltut::Matrix4::translationMatrix({ 0.0f, -0.5f, 0.0f }));
+			gltut::Matrix4::translationMatrix({0.0f, -0.5f, 0.0f}));
 
 		auto [lightNode, lightSource] = createLight(*engine);
 
 		gltut::Camera* camera = engine->getScene()->createCamera(
-			{ -10.0f, 10.0f, 30.0f },
-			{ 0.0f, 0.0f, 0.0f },
-			{ 0.0f, 1.0f, 0.0f },
+			{-10.0f, 10.0f, 30.0f},
+			{0.0f, 0.0f, 0.0f},
+			{0.0f, 1.0f, 0.0f},
 			45.0f,
 			0.1f,
 			150.0f);
@@ -120,7 +141,7 @@ int main()
 		engine->getScene()->addCameraController(controller.get());
 
 		float depthScale = 0.1f;
-		phongMaterialModel->setDepthtScale(depthScale);
+		phongMaterialModel->setDepthScale(depthScale);
 
 		float lightAzimuth = 0.0f;
 		float lightInclination = 0.0f;
@@ -128,8 +149,8 @@ int main()
 		do
 		{
 			imgui->newFrame();
-			ImGui::SetNextWindowPos({ 10, 10 }, ImGuiCond_FirstUseEver);
-			ImGui::SetNextWindowSize({ 200, 400 }, ImGuiCond_FirstUseEver);
+			ImGui::SetNextWindowPos({10, 10}, ImGuiCond_FirstUseEver);
+			ImGui::SetNextWindowSize({200, 400}, ImGuiCond_FirstUseEver);
 			ImGui::Begin("Settings");
 
 			ImGui::Text("FPS: %u", engine->getWindow()->getFPS());
@@ -154,16 +175,16 @@ int main()
 				const float azimuthRad = gltut::toRadians(lightAzimuth);
 				const float inclinationRad = gltut::toRadians(lightInclination);
 				const gltut::Matrix4 rotation =
-					gltut::Matrix4::rotationMatrix({ 0.0f, azimuthRad, 0.0f }) *
-					gltut::Matrix4::rotationMatrix({ -inclinationRad, 0.0f, 0.0f });
+					gltut::Matrix4::rotationMatrix({0.0f, azimuthRad, 0.0f}) *
+					gltut::Matrix4::rotationMatrix({-inclinationRad, 0.0f, 0.0f});
 
-				lightNode->setTransform(rotation * gltut::Matrix4::translationMatrix({ 0.0, 0.0f, 20.0f }));
+				lightNode->setTransform(rotation * gltut::Matrix4::translationMatrix({0.0, 0.0f, 20.0f}));
 				firstSetup = false;
 			}
 
 			if (ImGui::SliderFloat("Height Scale", &depthScale, -0.2f, 0.2f, "%.3f"))
 			{
-				phongMaterialModel->setDepthtScale(depthScale);
+				phongMaterialModel->setDepthScale(depthScale);
 			}
 
 			ImGui::End();

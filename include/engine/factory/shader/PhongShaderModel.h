@@ -1,3 +1,7 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 #pragma once
 
 // Includes
@@ -5,7 +9,11 @@
 
 namespace gltut
 {
-// Global functions
+// Global classes
+/**
+	The Phong shader model interface. Provides access to the underlying shader
+	and its properties.
+*/
 class PhongShaderModel
 {
 public:

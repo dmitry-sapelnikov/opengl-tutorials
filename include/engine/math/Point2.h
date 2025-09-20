@@ -1,3 +1,7 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 #pragma once
 
 // Libraries
@@ -5,6 +9,7 @@
 
 namespace gltut
 {
+// Global classes
 /// Represents a 2D point with integral components
 /// Unsigned 32-bit point
 using Point2u = Vector2T<u32>;

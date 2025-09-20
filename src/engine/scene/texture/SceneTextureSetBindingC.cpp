@@ -1,10 +1,14 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 // Includes
 #include "SceneTextureSetBindingC.h"
 #include "engine/scene/Scene.h"
 
 namespace gltut
 {
-
+// Global classes
 void SceneTextureSetBindingC::update(const Scene* scene) const noexcept
 {
 	u32 directionalInd = 0;
@@ -28,8 +32,7 @@ void SceneTextureSetBindingC::update(const Scene* scene) const noexcept
 		{
 		case LightNode::Type::DIRECTIONAL:
 		{
-			if (const u32* startSlot = getStartTextureSlot(
-				Parameter::DIRECTIONAL_LIGHT_SHADOW_MAP);
+			if (const u32* startSlot = getStartTextureSlot(Parameter::DIRECTIONAL_LIGHT_SHADOW_MAP);
 				startSlot != nullptr)
 			{
 				mTextureSet->setTexture(shadowTexture, *startSlot + directionalInd);
@@ -41,7 +44,7 @@ void SceneTextureSetBindingC::update(const Scene* scene) const noexcept
 		case LightNode::Type::SPOT:
 		{
 			if (const u32* startSlot = getStartTextureSlot(
-				Parameter::SPOT_LIGHT_SHADOW_MAP);
+					Parameter::SPOT_LIGHT_SHADOW_MAP);
 				startSlot != nullptr)
 			{
 				mTextureSet->setTexture(shadowTexture, *startSlot + spotInd);

@@ -1,10 +1,14 @@
-#pragma once
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
 
-// Includes
+#pragma once
 
 namespace gltut
 {
-
+// Global classes
+	
+// Forward declarations
 class RenderGeometry;
 class Viewpoint;
 

@@ -1,19 +1,23 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 #pragma once
 
 // Includes
-#include <vector>
 #include <optional>
+#include <vector>
+
 #include "engine/core/NonCopyable.h"
 #include "engine/graphics/GraphicsDevice.h"
+#include "engine/renderer/RenderPass.h"
 #include "engine/renderer/shader/ShaderRendererBinding.h"
 #include "engine/renderer/shader/ShaderUniformBufferRendererBinding.h"
-#include "engine/renderer/RenderPass.h"
 
 namespace gltut
 {
-//	Global classes
-
-///	Represents a render pass of the scene
+// Global classes
+/// Implementation of the RenderPass interface
 class RenderPassC : public RenderPass, public NonCopyable
 {
 public:

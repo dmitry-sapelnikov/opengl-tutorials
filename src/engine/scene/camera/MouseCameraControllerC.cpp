@@ -1,11 +1,15 @@
-//	Includes
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
+// Includes
 #include "MouseCameraControllerC.h"
-#include <algorithm>
 #include "engine/core/Check.h"
+#include <algorithm>
 
 namespace gltut
 {
-//	Global classes
+// Global classes
 MouseCameraControllerC::MouseCameraControllerC(
 	Camera& camera,
 	float mouseSpeed,
@@ -22,8 +26,8 @@ MouseCameraControllerC::MouseCameraControllerC(
 	GLTUT_CHECK(mMouseSpeed > 0.0F, "The rotation speed must be positive");
 	GLTUT_CHECK(mZoomSpeed > 0.0F, "The zoom speed must be positive");
 	GLTUT_CHECK(mTargetMinDistance > 0.0F, "The minimum target distance must be positive");
-	GLTUT_CHECK(mTargetMaxDistance > mTargetMinDistance, 
-		"The maximum target distance must be greater than the minimum target distance");
+	GLTUT_CHECK(mTargetMaxDistance > mTargetMinDistance,
+				"The maximum target distance must be greater than the minimum target distance");
 
 	const auto& view = camera.getView();
 	mPrevZoom = std::clamp(
@@ -62,14 +66,14 @@ void MouseCameraControllerC::updateCamera(u64, u32) noexcept
 	auto& camera = getCamera();
 	auto& view = camera.getView();
 
-	//	Zoom
+	// Zoom
 	if (mPrevZoom != mCurrentZoom)
 	{
 		view.setPosition(view.getTarget() - view.getDirection() * mCurrentZoom);
 		mPrevZoom = mCurrentZoom;
 	}
 
-	//	Rotation
+	// Rotation
 	if (mMouseButtons.left)
 	{
 		if (!mRotating)
@@ -90,7 +94,7 @@ void MouseCameraControllerC::updateCamera(u64, u32) noexcept
 			mPitch = std::clamp(mPitch, -89.0f, 89.0f);
 
 			const Vector3 localDir = setDistanceAzimuthInclination(
-				{ 1.0f, toRadians(mYaw), toRadians(mPitch) });
+				{1.0f, toRadians(mYaw), toRadians(mPitch)});
 
 			const Vector3 direction = mPitchYawBasis * localDir;
 			view.setPosition(view.getTarget() - direction * mCurrentZoom);
@@ -104,7 +108,7 @@ void MouseCameraControllerC::updateCamera(u64, u32) noexcept
 		mRotating = false;
 	}
 
-	//	Translation
+	// Translation
 	if (mMouseButtons.middle)
 	{
 		if (!mTranslating)
@@ -113,9 +117,9 @@ void MouseCameraControllerC::updateCamera(u64, u32) noexcept
 			mTranslating = true;
 			mInitialTarget = view.getTarget();
 			mInitialPosition = view.getPosition();
-			mProjectionViewInv = (
-				camera.getProjection().getMatrix() *
-				camera.getView().getMatrix()).getInverse();
+			mProjectionViewInv = (camera.getProjection().getMatrix() *
+								  camera.getView().getMatrix())
+									 .getInverse();
 
 			mWindowSize = camera.getProjection().getWindow()->getSize();
 			mDragStart = screenToCameraRay(mMouseStart, mWindowSize, mInitialPosition, mProjectionViewInv);
@@ -127,7 +131,7 @@ void MouseCameraControllerC::updateCamera(u64, u32) noexcept
 				mWindowSize,
 				mInitialPosition,
 				mProjectionViewInv);
-			
+
 			const Vector3 distance = mInitialTarget - mInitialPosition;
 			const float proj = distance.dot(currentDrag);
 			GLTUT_ASSERT(proj > 0.0F);
@@ -169,7 +173,7 @@ bool MouseCameraControllerC::onEvent(const Event& event) noexcept
 	return false;
 }
 
-//	Global functions
+// Global functions
 CameraController* createMouseCameraController(
 	Camera& camera,
 	float rotationSpeed,
@@ -178,15 +182,16 @@ CameraController* createMouseCameraController(
 	float targetMaxDistance) noexcept
 {
 	GLTUT_CATCH_ALL_BEGIN
-		return new MouseCameraControllerC(
-			camera,
-			rotationSpeed,
-			zoomSpeed,
-			targetMinDistance,
-			targetMaxDistance);
+	return new MouseCameraControllerC(
+		camera,
+		rotationSpeed,
+		zoomSpeed,
+		targetMinDistance,
+		targetMaxDistance);
 
 	GLTUT_CATCH_ALL_END("Cannot create a mouse camera controller")
 	return nullptr;
 }
 
-} // end namespace
+// End of the namespace gltut
+}

@@ -1,3 +1,7 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 // Includes
 #include "TextureCubemapOpenGL.h"
 #include <array>
@@ -27,8 +31,7 @@ TextureCubemapOpenGL::TextureCubemapOpenGL(
 		&plusYData,
 		&minusYData,
 		&plusZData,
-		&minusZData
-	};
+		&minusZData};
 
 	for (size_t i = 0; i < faces.size(); ++i)
 	{

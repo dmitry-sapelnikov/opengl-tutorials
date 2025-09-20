@@ -1,3 +1,7 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 #pragma once
 
 // Includes
@@ -5,8 +9,8 @@
 #include "engine/graphics/GraphicsDevice.h"
 #include "engine/window/Window.h"
 
-#include "./geometry/GeometryManagerC.h"
 #include "./framebuffer/FramebufferManagerC.h"
+#include "./geometry/GeometryManagerC.h"
 #include "./shader/ShaderManagerC.h"
 #include "./shader/ShaderUniformBufferManagerC.h"
 #include "./texture/TextureManagerC.h"
@@ -48,7 +52,7 @@ public:
 		return &mShaderUniformBuffers;
 	}
 
-	/// Returns texture manager	
+	/// Returns texture manager
 	TextureManager* getTextures() noexcept final
 	{
 		return &mTextures;

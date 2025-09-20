@@ -1,3 +1,7 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 #pragma once
 
 // Includes
@@ -16,7 +20,7 @@ struct Event
 	{
 		/// None
 		NONE = 0,
-		
+
 		/// Mouse event.
 		MOUSE,
 
@@ -71,7 +75,7 @@ struct Event
 		/// Mouse buttons
 		struct Buttons
 		{
-			bool left= false;
+			bool left = false;
 			bool right = false;
 			bool middle = false;
 		};
@@ -80,7 +84,7 @@ struct Event
 		Type type = Type::NONE;
 
 		/// Position of the mouse cursor
-		Point2i position{ 0, 0 };
+		Point2i position {0, 0};
 
 		/// mouse wheel delta, often 1.0 or -1.0, but can have other values < 0.f or > 0.f;
 		/** Only valid if event was EMIE_MOUSE_WHEEL */

@@ -1,3 +1,7 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 #pragma once
 
 // Includes
@@ -6,7 +10,7 @@
 
 namespace gltut
 {
-//	Global classes
+// Global classes
 /// The class represents a shader binding for scene parameters
 class SceneShaderBinding : public BindingT<Shader>, public SceneBinding
 {

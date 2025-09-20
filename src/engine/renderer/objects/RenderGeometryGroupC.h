@@ -1,15 +1,19 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 #pragma once
 
 // Includes
-#include <vector>
 #include "engine/core/NonCopyable.h"
 #include "engine/renderer/objects/RenderGeometryGroup.h"
+#include <vector>
 
 namespace gltut
 {
-//	Global classes
+// Global classes
 
-///	Represents a render group
+/// Represents a render group
 class RenderGeometryGroupC final : public RenderGeometryGroup, public NonCopyable
 {
 public:

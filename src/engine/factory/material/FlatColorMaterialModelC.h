@@ -1,14 +1,17 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 #pragma once
 
 // Includes
+#include "./MaterialModelT.h"
 #include "engine/factory/material/FlatColorMaterialModel.h"
 #include "engine/factory/material/MaterialFactory.h"
-#include "./MaterialModelT.h"
 
 namespace gltut
 {
 // Global classes
-
 /// Implementation of the FlatColorMaterialModel interface
 class FlatColorMaterialModelC final : public MaterialModelT<FlatColorMaterialModel>
 {

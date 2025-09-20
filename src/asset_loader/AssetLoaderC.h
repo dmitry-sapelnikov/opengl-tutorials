@@ -1,16 +1,20 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 #pragma once
 
 // Includes
 #include <assimp/Importer.hpp>
-#include <assimp/scene.h>
 #include <assimp/postprocess.h>
+#include <assimp/scene.h>
 
-#include "engine/core/NonCopyable.h"
 #include "asset_loader/AssetLoader.h"
+#include "engine/core/NonCopyable.h"
 
 namespace gltut
 {
-
+// Global classes
 /// Implementation of the AssetLoader class
 class AssetLoaderC final : public AssetLoader, public NonCopyable
 {
@@ -31,25 +35,30 @@ private:
 	/// Vector of materials
 	using MaterialsType = std::vector<const Material*>;
 
+	/// Loads a texture from a material
 	Texture2* loadMaterialTexture(
 		const std::string& modelDirectory,
 		aiMaterial* mat,
 		aiTextureType type);
 
+	/// Creates materials from a scene
 	MaterialsType createMaterials(
 		const std::string& modelDirectory,
 		const aiScene& scene,
 		const AssetMaterialFactory& materialCreator,
 		bool loadTextures);
 
+	/// Creates a geometry from an aiMesh
 	Geometry* createGeometry(aiMesh* mesh);
 
+	/// Processes meshes from a scene
 	void processMeshes(
 		const aiScene& scene,
 		const MaterialsType& materials,
 		std::vector<Geometry*>& geometries,
 		MaterialsType& geometryMaterials);
 
+	/// Creates a compound geometry node from an aiNode
 	SceneNode* createCompoundGeometryNode(
 		aiNode* node,
 		SceneNode* parent,

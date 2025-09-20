@@ -1,3 +1,7 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 #pragma once
 
 // Includes
@@ -5,21 +9,25 @@
 
 namespace gltut
 {
-
+// Global classes
 /// A RAII class to backup the currently bound framebuffer
 class FramebufferBackupOpenGL
 {
 public:
+	/// Constructor. Backs up the currently bound framebuffer
 	FramebufferBackupOpenGL() noexcept
 	{
 		glGetIntegerv(GL_FRAMEBUFFER_BINDING, &mFramebuffer);
 	}
 
+	/// Destructor. Restores the previously bound framebuffer
 	~FramebufferBackupOpenGL() noexcept
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, mFramebuffer);
 	}
+
 private:
+	/// The previously bound framebuffer
 	GLint mFramebuffer = 0;
 };
 

@@ -1,10 +1,14 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 // Includes
 #include "SceneC.h"
 #include "engine/core/Check.h"
 
 namespace gltut
 {
-
+// Global classes
 SceneC::SceneC(
 	Window& window,
 	Renderer& renderer) :
@@ -14,11 +18,11 @@ SceneC::SceneC(
 {
 	mOpaqueRenderGroup = mRenderer.createGeometryGroup();
 	GLTUT_CHECK(mOpaqueRenderGroup != nullptr,
-		"Cannot create a render group for the scene");
+				"Cannot create a render group for the scene");
 
 	mDepthSortedRenderGroup = mRenderer.createGeometryGroup();
 	GLTUT_CHECK(mDepthSortedRenderGroup != nullptr,
-		"Cannot create a render group for transparent objects in the scene");
+				"Cannot create a render group for transparent objects in the scene");
 
 	// Get creation time in ms using high resolution clock
 	mCreationTime = std::chrono::high_resolution_clock::now();
@@ -29,8 +33,9 @@ SceneShaderBinding* SceneC::createShaderBinding(Shader* shader) noexcept
 {
 	SceneShaderBinding* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN
-		result = mShaderBindings.emplace_back(
-			std::make_unique<SceneShaderBindingC>(shader)).get();
+	result = mShaderBindings.emplace_back(
+								std::make_unique<SceneShaderBindingC>(shader))
+				 .get();
 	GLTUT_CATCH_ALL_END("Cannot create a shader binding")
 	return result;
 }
@@ -38,16 +43,17 @@ SceneShaderBinding* SceneC::createShaderBinding(Shader* shader) noexcept
 void SceneC::removeShaderBinding(SceneShaderBinding* binding) noexcept
 {
 	GLTUT_CATCH_ALL_BEGIN
-		auto it = std::find_if(
-			mShaderBindings.begin(),
-			mShaderBindings.end(),
-			[binding](const auto& b) {
-				return b.get() == binding;
-			});
-		if (it != mShaderBindings.end())
+	auto it = std::find_if(
+		mShaderBindings.begin(),
+		mShaderBindings.end(),
+		[binding](const auto& b)
 		{
-			mShaderBindings.erase(it);
-		}
+			return b.get() == binding;
+		});
+	if (it != mShaderBindings.end())
+	{
+		mShaderBindings.erase(it);
+	}
 	GLTUT_CATCH_ALL_END("Cannot remove a shader binding")
 }
 
@@ -56,8 +62,9 @@ SceneTextureSetBinding* SceneC::createTextureSetBinding(
 {
 	SceneTextureSetBinding* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN
-		result = mTextureSetBindings.emplace_back(
-			std::make_unique<SceneTextureSetBindingC>(textureSet)).get();
+	result = mTextureSetBindings.emplace_back(
+									std::make_unique<SceneTextureSetBindingC>(textureSet))
+				 .get();
 	GLTUT_CATCH_ALL_END("Cannot create a texture set binding")
 	return result;
 }
@@ -65,17 +72,17 @@ SceneTextureSetBinding* SceneC::createTextureSetBinding(
 void SceneC::removeTextureSetBinding(SceneTextureSetBinding* binding) noexcept
 {
 	GLTUT_CATCH_ALL_BEGIN
-		auto it = std::find_if(
-			mTextureSetBindings.begin(),
-			mTextureSetBindings.end(),
-			[binding](const auto& b)
-			{
-				return b.get() == binding;
-			});
-		if (it != mTextureSetBindings.end())
+	auto it = std::find_if(
+		mTextureSetBindings.begin(),
+		mTextureSetBindings.end(),
+		[binding](const auto& b)
 		{
-			mTextureSetBindings.erase(it);
-		}
+			return b.get() == binding;
+		});
+	if (it != mTextureSetBindings.end())
+	{
+		mTextureSetBindings.erase(it);
+	}
 	GLTUT_CATCH_ALL_END("Cannot remove a texture set binding")
 }
 
@@ -85,7 +92,7 @@ SceneNode* SceneC::createGeometryGroup(
 {
 	SceneNode* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN
-		result = &mGroups.emplace_back(transform, parent);
+	result = &mGroups.emplace_back(transform, parent);
 	GLTUT_CATCH_ALL_END("Cannot create a scene group")
 	return result;
 }
@@ -117,7 +124,7 @@ GeometryNode* SceneC::createGeometry(
 	}
 	GeometryNode* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN
-		result = &mGeometries.emplace_back(*renderGeometry, transform, parent);
+	result = &mGeometries.emplace_back(*renderGeometry, transform, parent);
 	GLTUT_CATCH_ALL_END("Cannot create a scene geometry");
 	return result;
 }
@@ -129,7 +136,7 @@ LightNode* SceneC::createLight(
 {
 	LightNode* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN
-		result = &mLights.emplace_back(type, transform, parent);
+	result = &mLights.emplace_back(type, transform, parent);
 	GLTUT_CATCH_ALL_END("Cannot create a light")
 	return result;
 }
@@ -145,20 +152,20 @@ Camera* SceneC::createCamera(
 {
 	Camera* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN
-		result = &mCameras.emplace_back(
-			mWindow,
-			position,
-			target,
-			up,
-			fovDegrees,
-			nearPlane,
-			farPlan,
-			aspectRatio);
-		// Set the active camera if it is not set yet
-		if (getActiveCamera() == nullptr)
-		{
-			setActiveCamera(result);
-		}
+	result = &mCameras.emplace_back(
+		mWindow,
+		position,
+		target,
+		up,
+		fovDegrees,
+		nearPlane,
+		farPlan,
+		aspectRatio);
+	// Set the active camera if it is not set yet
+	if (getActiveCamera() == nullptr)
+	{
+		setActiveCamera(result);
+	}
 	GLTUT_CATCH_ALL_END("Cannot create a camera")
 	return result;
 }
@@ -173,22 +180,22 @@ void SceneC::addCameraController(CameraController* controller) noexcept
 {
 	GLTUT_ASSERT(controller != nullptr);
 	GLTUT_CATCH_ALL_BEGIN
-		mCameraControllers.push_back(controller);
+	mCameraControllers.push_back(controller);
 	GLTUT_CATCH_ALL_END("Cannot add a camera controller")
 }
 
 void SceneC::removeCameraController(CameraController* controller) noexcept
 {
 	GLTUT_CATCH_ALL_BEGIN
-		auto it = std::find(
-			mCameraControllers.begin(),
-			mCameraControllers.end(),
-			controller);
+	auto it = std::find(
+		mCameraControllers.begin(),
+		mCameraControllers.end(),
+		controller);
 
-		if (it != mCameraControllers.end())
-		{
-			mCameraControllers.erase(it);
-		}
+	if (it != mCameraControllers.end())
+	{
+		mCameraControllers.erase(it);
+	}
 	GLTUT_CATCH_ALL_END("Cannot remove a camera controller")
 }
 
@@ -196,11 +203,13 @@ void SceneC::update() noexcept
 {
 	const auto currentTime = std::chrono::high_resolution_clock::now();
 	const auto timeMs = std::chrono::duration_cast<std::chrono::milliseconds>(
-		currentTime - mCreationTime).count();
+							currentTime - mCreationTime)
+							.count();
 
 	const auto timeDeltaMs = static_cast<u32>(
 		std::chrono::duration_cast<std::chrono::milliseconds>(
-		currentTime - mLastUpdateTime).count());
+			currentTime - mLastUpdateTime)
+			.count());
 
 	if (timeDeltaMs == 0)
 	{

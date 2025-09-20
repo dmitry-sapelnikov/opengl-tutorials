@@ -1,12 +1,16 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 #pragma once
 
-//	Includes
-#include "engine/math/Point2.h"
+// Includes
 #include "engine/math/Aabb.h"
+#include "engine/math/Point2.h"
 
 namespace gltut
 {
-//	Global classes
+// Global classes
 /// Represents a 2D rectangle with unsigned integral coordinates
 using Rectangle2u = AABB<2, Point2u>;
 

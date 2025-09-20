@@ -1,3 +1,7 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 #pragma once
 
 // Includes
@@ -6,7 +10,8 @@
 namespace gltut
 {
 
-/// A group scene node implementation
+// Global classes
+/// Implementation of the group node abstraction
 class GroupNodeC final : public SceneNodeT<SceneNode>
 {
 public:

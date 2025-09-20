@@ -1,3 +1,7 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 #pragma once
 
 // Includes
@@ -11,7 +15,7 @@ class FlatColorMaterialModel
 public:
 	/// Virtual destructor
 	virtual ~FlatColorMaterialModel() = default;
-	
+
 	/// Returns the underlying material
 	virtual Material* getMaterial() const noexcept = 0;
 

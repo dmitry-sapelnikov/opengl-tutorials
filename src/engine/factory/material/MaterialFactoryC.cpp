@@ -1,7 +1,11 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 // Includes
 #include "MaterialFactoryC.h"
-#include "../shader/FlatColorShader.h"
 #include "../shader/DepthShader.h"
+#include "../shader/FlatColorShader.h"
 
 namespace gltut
 {
@@ -43,17 +47,17 @@ FlatColorMaterialModel* MaterialFactoryC::createFlatColorMaterial(
 {
 	FlatColorMaterialModel* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN
-		createViewProjectionBuffer();
-		createFlatColorShader();
-		if (castShadows)
-		{
-			createDepthShader();
-		}
-		result = &mFlatColorModels.emplace_back(
-			mRenderer,
-			*mFlatColorShader,
-			castShadows ? mDepthShader : nullptr,
-			*mViewProjectionBuffer->getTarget());
+	createViewProjectionBuffer();
+	createFlatColorShader();
+	if (castShadows)
+	{
+		createDepthShader();
+	}
+	result = &mFlatColorModels.emplace_back(
+		mRenderer,
+		*mFlatColorShader,
+		castShadows ? mDepthShader : nullptr,
+		*mViewProjectionBuffer->getTarget());
 	GLTUT_CATCH_ALL_END("Cannot create a flat color material model")
 	return result;
 }
@@ -65,13 +69,13 @@ PhongShaderModel* MaterialFactoryC::createPhongShader(
 {
 	PhongShaderModel* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN
-		createViewProjectionBuffer();
-		result = &mPhongShaders.emplace_back(
-			mRenderer,
-			mScene,
-			maxDirectionalLights,
-			maxPointLights,
-			maxSpotLights);
+	createViewProjectionBuffer();
+	result = &mPhongShaders.emplace_back(
+		mRenderer,
+		mScene,
+		maxDirectionalLights,
+		maxPointLights,
+		maxSpotLights);
 	GLTUT_CATCH_ALL_END("Cannot create a Phong shader")
 	return result;
 }
@@ -88,16 +92,16 @@ PhongMaterialModel* MaterialFactoryC::createPhongMaterial(
 
 	PhongMaterialModel* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN
-		if (castShadows)
-		{
-			createDepthShader();
-		}
-		result = &mPhongModels.emplace_back(
-			mRenderer,
-			mScene,
-			*phongShader,
-			castShadows ? mDepthShader : nullptr,
-			*mViewProjectionBuffer->getTarget());
+	if (castShadows)
+	{
+		createDepthShader();
+	}
+	result = &mPhongModels.emplace_back(
+		mRenderer,
+		mScene,
+		*phongShader,
+		castShadows ? mDepthShader : nullptr,
+		*mViewProjectionBuffer->getTarget());
 	GLTUT_CATCH_ALL_END("Cannot create a Phong material model")
 	return result;
 }

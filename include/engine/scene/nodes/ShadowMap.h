@@ -1,3 +1,7 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 #pragma once
 
 // Includes
@@ -6,7 +10,6 @@
 
 namespace gltut
 {
-
 // Global classes
 /// Contains the colors used for a light source
 class ShadowMap
@@ -21,12 +24,12 @@ public:
 	/// Returns the shadow map viewpoint
 	virtual const Viewpoint* getViewpoint() const noexcept = 0;
 
-	/// Returns the near plane of the shadow map
+	/// Returns the near clipping plane of the shadow map
 	virtual float getFrustumNear() const noexcept = 0;
 
-	/// Returns the far plane of the shadow map
+	/// Returns the far clipping plane of the shadow map
 	virtual float getFrustumFar() const noexcept = 0;
-	
+
 	/// Returns view-projection matrix for the shadow map
 	virtual Matrix4 getShadowMatrix() const noexcept = 0;
 

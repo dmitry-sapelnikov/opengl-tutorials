@@ -1,3 +1,7 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 #pragma once
 
 // Includes
@@ -9,8 +13,11 @@
 
 namespace gltut
 {
-//	Global classes
-///	The engine
+// Global classes
+/**
+	\brief The main engine interface.
+	Provides access to the window, device, scene, renderer and factories.
+*/
 class Engine
 {
 public:
@@ -45,13 +52,15 @@ public:
 	virtual RenderPass* getDepthSortedSceneRenderPass() noexcept = 0;
 };
 
-//	Global functions
+// Global functions
 /**
-	\brief Creates an engine instance
+	\brief Creates the engine instance
 	\return The engine if it was created successfully, nullptr otherwise
 	\note The caller is responsible for deleting the instance
 */
 Engine* createEngine(u32 windowWidth, u32 windowHeight) noexcept;
+
+/// \todo Add deleteEngine function
 
 // End of the namespace gltut
 }

@@ -1,3 +1,7 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 // Includes
 #include "TextureFramebufferOpenGL.h"
 #include "FramebufferBackupOpenGL.h"
@@ -5,7 +9,7 @@
 
 namespace gltut
 {
-
+// Global classes
 TextureFramebufferOpenGL::TextureFramebufferOpenGL(
 	Texture2* color,
 	Texture2* depth)

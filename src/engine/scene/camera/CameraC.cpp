@@ -1,3 +1,7 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 // Includes
 #include "CameraC.h"
 
@@ -92,7 +96,7 @@ Matrix4 CameraProjectionC::getMatrix(float aspectRatio) const noexcept
 		mFarPlane);
 }
 
-//	Global functions
+// Global functions
 Vector3 screenToCameraRay(
 	const Point2i& screenPoint,
 	const Point2u& windowSize,

@@ -1,11 +1,15 @@
-//	Includes
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
+// Includes
 #include <algorithm>
 #include "FPSCameraControllerC.h"
 #include "engine/core/Check.h"
 
 namespace gltut
 {
-//	Global classes
+// Global classes
 FPSCameraControllerC::FPSCameraControllerC(
 	Camera& camera,
 	float translationSpeed,
@@ -128,7 +132,7 @@ bool FPSCameraControllerC::onEvent(const Event& event) noexcept
 	return false;
 }
 
-//	Global functions
+// Global functions
 CameraController* createFPSCameraController(
 	Camera& camera,
 	float translationSpeed,

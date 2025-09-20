@@ -1,14 +1,17 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 #pragma once
 
 // Includes
-#include "RenderPassC.h"
 #include "../objects/RenderGeometryGroupC.h"
+#include "RenderPassC.h"
 
 namespace gltut
 {
-//	Global classes
-
-///	Represents a render pass of the scene
+// Global classes
+/// Implementation of a depth-sorted render pass
 class DepthSortedRenderPassC final : public RenderPassC
 {
 public:
@@ -29,10 +32,13 @@ public:
 	void execute() noexcept final;
 
 private:
+	/// The group to render
 	const RenderGeometryGroup* mGroup;
 
+	/// The depth-sorted group
 	RenderGeometryGroupC mSortedGroup;
 
+	/// The view matrix
 	Matrix4 mViewMatrix;
 };
 

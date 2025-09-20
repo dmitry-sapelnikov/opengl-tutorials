@@ -1,12 +1,17 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 // Includes
 #include <array>
 #include <chrono>
 #include <iostream>
 #include <string>
-#include "engine/core/Check.h"
-#include "engine/Engine.h"
 
-///	The program entry point
+#include "engine/Engine.h"
+#include "engine/core/Check.h"
+
+/// The program entry point
 int main()
 {
 	try
@@ -19,15 +24,33 @@ int main()
 
 		float vertices[] = {
 			// positions       // texture coords
-			 0.5f,  0.5f, 0.0f, 1.0f, 1.0f,   // top right
-			 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,   // bottom right
-			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,   // bottom left
-			-0.5f,  0.5f, 0.0f, 0.0f, 1.0f    // top left 
+			0.5f,
+			0.5f,
+			0.0f,
+			1.0f,
+			1.0f, // top right
+			0.5f,
+			-0.5f,
+			0.0f,
+			1.0f,
+			0.0f, // bottom right
+			-0.5f,
+			-0.5f,
+			0.0f,
+			0.0f,
+			0.0f, // bottom left
+			-0.5f,
+			0.5f,
+			0.0f,
+			0.0f,
+			1.0f // top left
 		};
 
 		gltut::u32 indices[] = {
-			 0, 1, 3, // first triangle
-			 1, 2, 3  // second triangle
+			0, 1, 3, // first triangle
+			1,
+			2,
+			3 // second triangle
 		};
 
 		auto* device = engine->getDevice();

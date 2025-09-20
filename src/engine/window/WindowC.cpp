@@ -1,25 +1,31 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 // Includes
 #include "WindowC.h"
 
-#include <iostream>
-#include <Windows.h>
 #include "engine/core/Check.h"
+#include <Windows.h>
+#include <iostream>
 
 namespace gltut
 {
 
-#define CALL_WINAPI_WITH_ASSERT(apiCall) \
-{\
-	const auto apiCallResult = (apiCall);\
-	GLTUT_ASSERT(apiCallResult);\
-}
+// Local macros
+#define CALL_WINAPI_WITH_ASSERT(apiCall)      \
+	{                                         \
+		const auto apiCallResult = (apiCall); \
+		GLTUT_ASSERT(apiCallResult);          \
+	}
 
-//	Local classes
+// Local classes outside the anonymous namespace
 class WindowCallback : public EventHandler
 {
 public:
 	WindowCallback(WindowC& window) noexcept
-		: mWindow(window)
+		:
+		mWindow(window)
 	{
 	}
 
@@ -37,7 +43,7 @@ public:
 				break;
 			}
 		}
-		/// It is the root event handler, 
+		/// It is the root event handler,
 		/// so we stop the event propagation
 		return true;
 	}
@@ -51,22 +57,26 @@ private:
 	WindowC& mWindow;
 };
 
-//	Local constants
-//	Window class name
-static constexpr const wchar_t* WINDOW_CLASS_NAME = L"OpenGLWindow";
-
-// Local functions
+// Local functions outside the anonymous namespace
 /// Retrieves the WindowCallback object from the window handle
 static WindowCallback* getWindowCallback(HWND hwnd)
 {
 	return reinterpret_cast<WindowCallback*>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
 }
 
+namespace
+{
+// Local constants
+// Window class name
+static constexpr const wchar_t* WINDOW_CLASS_NAME = L"OpenGLWindow";
+
+// Local functions
+
 /// The window procedure
-static LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	Event event;
-	event.raw = { message, (void*)wParam, (void*)lParam };
+	event.raw = {message, (void*)wParam, (void*)lParam};
 
 	switch (message)
 	{
@@ -80,7 +90,7 @@ static LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 	case WM_MOUSEWHEEL:
 	{
 		event.type = gltut::Event::Type::MOUSE;
-		event.mouse.position = { LOWORD(lParam), HIWORD(lParam) };
+		event.mouse.position = {LOWORD(lParam), HIWORD(lParam)};
 		event.mouse.buttons.left = (wParam & MK_LBUTTON) != 0;
 		event.mouse.buttons.right = (wParam & MK_RBUTTON) != 0;
 		event.mouse.buttons.middle = (wParam & MK_MBUTTON) != 0;
@@ -119,16 +129,16 @@ static LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 		{
 			event.mouse.type = gltut::Event::MouseEvent::Type::WHEEL;
 			/// Here is the fix for the mouse position when the mouse wheel is scrolled.
-			POINT p = { 0, 0 };
+			POINT p = {0, 0};
 			ClientToScreen(hWnd, &p);
-			event.mouse.position -= { p.x, p.y };
-			event.mouse.wheel = 
-				static_cast<float>(static_cast<short>(HIWORD(wParam))) / 
+			event.mouse.position -= {p.x, p.y};
+			event.mouse.wheel =
+				static_cast<float>(static_cast<short>(HIWORD(wParam))) /
 				static_cast<float>(WHEEL_DELTA);
 		}
 		break;
 
-		GLTUT_UNEXPECTED_SWITCH_DEFAULT_CASE(message)
+			GLTUT_UNEXPECTED_SWITCH_DEFAULT_CASE(message)
 		}
 
 		getWindowCallback(hWnd)->onEvent(event);
@@ -184,7 +194,7 @@ static LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 	case WM_SIZE:
 	{
 		event.type = Event::Type::WINDOW_RESIZE;
-		event.windowResize.size = { LOWORD(lParam), HIWORD(lParam) };
+		event.windowResize.size = {LOWORD(lParam), HIWORD(lParam)};
 		auto* callback = getWindowCallback(hWnd);
 		callback->onEvent(event);
 		callback->swapBuffers();
@@ -201,6 +211,9 @@ static LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 		return DefWindowProc(hWnd, message, wParam, lParam);
 	}
 	return 0;
+}
+
+// End of the anonymous namespace
 }
 
 // Global classes
@@ -228,8 +241,14 @@ WindowC::WindowC(
 			WINDOW_CLASS_NAME,
 			L"",
 			WS_OVERLAPPEDWINDOW,
-			CW_USEDEFAULT, CW_USEDEFAULT, width, height,
-			nullptr, nullptr, GetModuleHandle(nullptr), nullptr);
+			CW_USEDEFAULT,
+			CW_USEDEFAULT,
+			width,
+			height,
+			nullptr,
+			nullptr,
+			GetModuleHandle(nullptr),
+			nullptr);
 
 		GLTUT_CHECK(mWindow != nullptr, "Failed to create window");
 
@@ -277,9 +296,9 @@ void WindowC::addEventHandler(EventHandler* handler, bool inFront) noexcept
 {
 	if (!GLTUT_ASSERT(handler != nullptr) ||
 		!GLTUT_ASSERT(std::find(
-			mEventHandlers.begin(),
-			mEventHandlers.end(),
-			handler) == mEventHandlers.end()))
+						  mEventHandlers.begin(),
+						  mEventHandlers.end(),
+						  handler) == mEventHandlers.end()))
 	{
 		return;
 	}
@@ -316,12 +335,12 @@ Point2i WindowC::getCursorPosition() const noexcept
 	POINT point;
 	CALL_WINAPI_WITH_ASSERT(GetCursorPos(&point));
 	CALL_WINAPI_WITH_ASSERT(ScreenToClient((HWND)mWindow, &point));
-	return { point.x, point.y };
+	return {point.x, point.y};
 }
 
 void WindowC::setCursorPosition(const Point2i& position) noexcept
 {
-	POINT point = { position.x, position.y };
+	POINT point = {position.x, position.y};
 	CALL_WINAPI_WITH_ASSERT(ClientToScreen((HWND)mWindow, &point));
 	CALL_WINAPI_WITH_ASSERT(SetCursorPos(point.x, point.y));
 }
@@ -377,7 +396,7 @@ void WindowC::updateSize() noexcept
 
 	GLTUT_ASSERT(intWidth > 0);
 	GLTUT_ASSERT(intHeight > 0);
-	mSize = { static_cast<u32>(intWidth), static_cast<u32>(intHeight) };
+	mSize = {static_cast<u32>(intWidth), static_cast<u32>(intHeight)};
 }
 
 // End of the namespace gltut

@@ -1,15 +1,27 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 // Includes
 #include <array>
 #include <chrono>
 #include <iostream>
 #include <string>
 
+#include "engine/Engine.h"
 #include "engine/core/Check.h"
 #include "engine/math/Rng.h"
-#include "engine/Engine.h"
 #include "imgui/EngineImgui.h"
 
+namespace
+{
+
+// Local constants
+
+/// Number of boxes to create
 static const size_t BOX_COUNT = 100;
+
+/// Range for random box positions
 static const float POSITION_RANGE = 5.0f;
 
 // Color inversion fragment shader
@@ -67,7 +79,10 @@ void main()
 	outColor = vec4(col, 1.0);
 })";
 
-///	The program entry point
+// End of the anonymous namespace
+}
+
+/// The program entry point
 int main()
 {
 	std::unique_ptr<gltut::Engine> engine;
@@ -97,12 +112,13 @@ int main()
 				rng.nextFloat(-POSITION_RANGE, POSITION_RANGE),
 				rng.nextFloat(-POSITION_RANGE, POSITION_RANGE));
 
-			const gltut::Vector3 rotation = 
+			const gltut::Vector3 rotation =
 				rng.nextFloat(0, gltut::PI * 2.0f) *
 				gltut::Vector3(
 					rng.nextFloat(),
 					rng.nextFloat(),
-					rng.nextFloat()).normalize();
+					rng.nextFloat())
+					.normalize();
 
 			boxes.push_back(scene->createGeometry(
 				geometry,
@@ -114,9 +130,9 @@ int main()
 		}
 
 		gltut::Camera* camera = engine->getScene()->createCamera(
-			{ 0.0f, 0.0f, 20.0f },
-			{ 0.0f, 0.0f, 0.0f },
-			{ 0.0f, 1.0f, 0.0f },
+			{0.0f, 0.0f, 20.0f},
+			{0.0f, 0.0f, 0.0f},
+			{0.0f, 1.0f, 0.0f},
 			45.0f,
 			0.1f,
 			100.0f);
@@ -131,22 +147,22 @@ int main()
 		engine->getRenderer()->removeAllPasses();
 		const gltut::Point2u textureSize = engine->getWindow()->getSize();
 		auto* colorTexture = renderer->getDevice()->getTextures()->create(
-			{ nullptr,
-			textureSize,
-			gltut::TextureFormat::RGBA },
-			{ gltut::TextureFilterMode::NEAREST,
-			gltut::TextureFilterMode::NEAREST,
-			gltut::TextureWrapMode::CLAMP_TO_EDGE });
+			{nullptr,
+			 textureSize,
+			 gltut::TextureFormat::RGBA},
+			{gltut::TextureFilterMode::NEAREST,
+			 gltut::TextureFilterMode::NEAREST,
+			 gltut::TextureWrapMode::CLAMP_TO_EDGE});
 
 		GLTUT_CHECK(colorTexture != nullptr, "Failed to create color texture");
 
 		auto* depthTexture = renderer->getDevice()->getTextures()->create(
-			{ nullptr,
-			textureSize,
-			gltut::TextureFormat::FLOAT },
-			{ gltut::TextureFilterMode::NEAREST,
-			gltut::TextureFilterMode::NEAREST,
-			gltut::TextureWrapMode::CLAMP_TO_EDGE });
+			{nullptr,
+			 textureSize,
+			 gltut::TextureFormat::FLOAT},
+			{gltut::TextureFilterMode::NEAREST,
+			 gltut::TextureFilterMode::NEAREST,
+			 gltut::TextureWrapMode::CLAMP_TO_EDGE});
 
 		engine->getFactory()->getTexture()->createWindowSizeTextureBinding(colorTexture);
 		engine->getFactory()->getTexture()->createWindowSizeTextureBinding(depthTexture);
@@ -167,14 +183,13 @@ int main()
 
 		GLTUT_CHECK(renderToTexturePass, "Failed to create render to texture pass");
 
-		const gltut::Texture2* textures[] = { colorTexture };
-		const char* textureNames[] = { "textureSampler" };
+		const gltut::Texture2* textures[] = {colorTexture};
+		const char* textureNames[] = {"textureSampler"};
 
-		std::vector<std::pair<std::string, const char* >> effects = {
-			{ "Invert", INVERT_FRAGMENT_SHADER },
-			{ "Grayscale", GRAYSCALE_FRAGMENT_SHADER },
-			{ "Blur", BLUR_FRAGMENT_SHADER }
-		};
+		std::vector<std::pair<std::string, const char*>> effects = {
+			{"Invert", INVERT_FRAGMENT_SHADER},
+			{"Grayscale", GRAYSCALE_FRAGMENT_SHADER},
+			{"Blur", BLUR_FRAGMENT_SHADER}};
 
 		std::vector<gltut::RenderPass*> effectPasses;
 		for (const auto& [name, shader] : effects)
@@ -199,8 +214,8 @@ int main()
 		do
 		{
 			imgui->newFrame();
-			ImGui::SetNextWindowPos({ 10, 10 }, ImGuiCond_FirstUseEver);
-			ImGui::SetNextWindowSize({ 200, 400 }, ImGuiCond_FirstUseEver);
+			ImGui::SetNextWindowPos({10, 10}, ImGuiCond_FirstUseEver);
+			ImGui::SetNextWindowSize({200, 400}, ImGuiCond_FirstUseEver);
 
 			ImGui::Begin("Settings");
 			ImGui::Text("FPS: %u", engine->getWindow()->getFPS());

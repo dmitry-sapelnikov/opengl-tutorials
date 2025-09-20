@@ -1,6 +1,10 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 #pragma once
 
-//	Includes
+// Includes
 #include "engine/core/NonCopyable.h"
 #include "engine/math/Point2.h"
 #include "engine/scene/camera/CameraController.h"
@@ -8,11 +12,8 @@
 namespace gltut
 {
 
-///	RTS-style camera animator
-class MouseCameraControllerC final :
-	public CameraController,
-	public EventHandler,
-	public NonCopyable
+/// Implementation of the mouse camera controller
+class MouseCameraControllerC final : public CameraController, public EventHandler, public NonCopyable
 {
 public:
 	/// Constructor
@@ -23,7 +24,7 @@ public:
 		float targetMinDistance,
 		float targetMaxDistance);
 
-	///	Destructor
+	/// Destructor
 	~MouseCameraControllerC() noexcept final;
 
 	/// Returns the camera
@@ -47,19 +48,19 @@ private:
 	/// The camera
 	Camera& mCamera;
 
-	///	Rotation speed
+	/// Rotation speed
 	float mMouseSpeed;
 
-	///	Zoom speed
+	/// Zoom speed
 	float mZoomSpeed;
 
-	///	Camera position
+	/// Camera position
 	Vector3 mPosition;
 
-	///	Camera target
+	/// Camera target
 	Vector3 mInitialTarget;
 
-	///	Camera position
+	/// Camera position
 	Vector3 mInitialPosition;
 
 	Point2u mWindowSize;
@@ -77,31 +78,31 @@ private:
 	/// The basis for the pitch and yaw
 	Matrix4 mPitchYawBasis = Matrix4::identity();
 
-	///	Min allowed distance to the camera target
+	/// Min allowed distance to the camera target
 	float mTargetMinDistance = 0.1f;
 
-	///	Max allowed distance from the camera target
+	/// Max allowed distance from the camera target
 	float mTargetMaxDistance = 10000.0f;
 
-	///	Rotation process flag
+	/// Rotation process flag
 	bool mRotating = false;
 
-	///	Translation process flag
+	/// Translation process flag
 	bool mTranslating = false;
 
-	///	Translation start point in the screen coordinates
+	/// Translation start point in the screen coordinates
 	Point2i mMouseStart;
 
 	float mPrevZoom = 0.0f;
 
-	///	Current zoom value
+	/// Current zoom value
 	float mCurrentZoom = 0.0f;
 
-	///	Mouse position in the screen coordinates
+	/// Mouse position in the screen coordinates
 	Point2i mMousePosition;
 
 	Event::MouseEvent::Buttons mMouseButtons;
 };
 
-//	End of the namespace gltut
+// End of the namespace gltut
 }

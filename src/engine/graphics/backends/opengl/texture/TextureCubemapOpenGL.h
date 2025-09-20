@@ -1,12 +1,18 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 #pragma once
 
 // Includes
-#include "engine/graphics/texture/TextureCubemap.h"
 #include "TextureTOpenGL.h"
+#include "engine/graphics/texture/TextureCubemap.h"
 
 namespace gltut
 {
 
+// Global classes
+/// OpenGL implementation of a cubemap texture
 class TextureCubemapOpenGL final : public TextureTOpenGL<TextureCubemap, GL_TEXTURE_CUBE_MAP>
 {
 public:

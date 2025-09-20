@@ -1,15 +1,24 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 // Includes
 #include <array>
 #include <chrono>
 #include <iostream>
 #include <string>
 
+#include "asset_loader/AssetLoader.h"
+#include "engine/Engine.h"
 #include "engine/core/Check.h"
 #include "engine/math/Rng.h"
-#include "engine/Engine.h"
 #include "imgui/EngineImgui.h"
-#include "asset_loader/AssetLoader.h"
 
+namespace
+{
+// Local constants
+
+/// Refraction vertex shader
 static const char* REFRACTION_VERTEX_SHADER = R"(
 #version 330 core
 layout(location = 0) in vec3 inPosition;
@@ -31,6 +40,7 @@ void main()
 }
 )";
 
+/// Refraction fragment shader
 static const char* REFRACTION_FRAGMENT_SHADER = R"(
 #version 330 core
 in vec3 position;
@@ -48,6 +58,9 @@ void main()
 }
 )";
 
+// Local classes
+
+/// Material factory that always returns the same material
 class MaterialFactory : public gltut::AssetMaterialFactory
 {
 public:
@@ -68,6 +81,8 @@ private:
 	gltut::Material* mMaterial;
 };
 
+// Local functions
+/// Creates a refractive material
 gltut::Material* createRefractiveMaterial(
 	gltut::Renderer* renderer,
 	gltut::TextureCubemap* skyboxTexture)
@@ -84,8 +99,7 @@ gltut::Material* createRefractiveMaterial(
 	GLTUT_CHECK(shaderBinding != nullptr, "Failed to create scene shader binding");
 	shaderBinding->bind(
 		gltut::RendererBinding::Parameter::GEOMETRY_MATRIX,
-		"model"
-	);
+		"model");
 
 	shaderBinding->bind(
 		gltut::RendererBinding::Parameter::VIEWPOINT_VIEW_MATRIX,
@@ -113,8 +127,10 @@ gltut::Material* createRefractiveMaterial(
 	return refractiveMaterial;
 }
 
+// End of the anonymous namespace
+}
 
-///	The program entry point
+/// The program entry point
 int main()
 {
 	std::unique_ptr<gltut::Engine> engine;
@@ -138,17 +154,17 @@ int main()
 
 		GLTUT_CHECK(geometry != nullptr, "Failed to create geometry")
 
-			gltut::TextureCubemap* skyboxTexture = engine->getDevice()->getTextures()->load(
-				"assets/skybox/left.jpg",
-				"assets/skybox/right.jpg",
-				"assets/skybox/bottom.jpg",
-				"assets/skybox/top.jpg",
-				"assets/skybox/back.jpg",
-				"assets/skybox/front.jpg",
-				gltut::TextureParameters(
-					gltut::TextureFilterMode::LINEAR,
-					gltut::TextureFilterMode::LINEAR,
-					gltut::TextureWrapMode::CLAMP_TO_EDGE));
+		gltut::TextureCubemap* skyboxTexture = engine->getDevice()->getTextures()->load(
+			"assets/skybox/left.jpg",
+			"assets/skybox/right.jpg",
+			"assets/skybox/bottom.jpg",
+			"assets/skybox/top.jpg",
+			"assets/skybox/back.jpg",
+			"assets/skybox/front.jpg",
+			gltut::TextureParameters(
+				gltut::TextureFilterMode::LINEAR,
+				gltut::TextureFilterMode::LINEAR,
+				gltut::TextureWrapMode::CLAMP_TO_EDGE));
 
 		gltut::Material* refractiveMaterial = createRefractiveMaterial(renderer, skyboxTexture);
 		MaterialFactory factory(refractiveMaterial);
@@ -156,9 +172,9 @@ int main()
 		GLTUT_CHECK(backpack != nullptr, "Failed to load backpack model");
 
 		gltut::Camera* camera = engine->getScene()->createCamera(
-			{ 0.0f, 0.0f, 20.0f },
-			{ 0.0f, 0.0f, 0.0f },
-			{ 0.0f, 1.0f, 0.0f },
+			{0.0f, 0.0f, 20.0f},
+			{0.0f, 0.0f, 0.0f},
+			{0.0f, 1.0f, 0.0f},
 			45.0f,
 			0.1f,
 			200.0f);
@@ -178,8 +194,8 @@ int main()
 		do
 		{
 			imgui->newFrame();
-			ImGui::SetNextWindowPos({ 10, 10 }, ImGuiCond_FirstUseEver);
-			ImGui::SetNextWindowSize({ 200, 400 }, ImGuiCond_FirstUseEver);
+			ImGui::SetNextWindowPos({10, 10}, ImGuiCond_FirstUseEver);
+			ImGui::SetNextWindowSize({200, 400}, ImGuiCond_FirstUseEver);
 			ImGui::Begin("Settings");
 			ImGui::Text("FPS: %u", engine->getWindow()->getFPS());
 			ImGui::End();

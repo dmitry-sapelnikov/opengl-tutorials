@@ -1,17 +1,31 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 // Includes
 #include <array>
 #include <chrono>
 #include <iostream>
 #include <string>
 
+#include "engine/Engine.h"
 #include "engine/core/Check.h"
 #include "engine/math/Rng.h"
-#include "engine/Engine.h"
 
-static const size_t BOX_COUNT = 100;
-static const float POSITION_RANGE = 5.0f;
+namespace
+{
+// Local constants
 
-///	The program entry point
+/// Number of boxes
+const size_t BOX_COUNT = 100;
+
+/// Range for the random position of the boxes
+const float POSITION_RANGE = 5.0f;
+
+// End of the anonymous namespace
+}
+
+/// The program entry point
 int main()
 {
 	try
@@ -67,7 +81,7 @@ int main()
 				rng.nextFloat(-POSITION_RANGE, POSITION_RANGE));
 		}
 
-		gltut::Matrix4 view = gltut::Matrix4::translationMatrix({ 0.0f, 0.0f, -20.0f });
+		gltut::Matrix4 view = gltut::Matrix4::translationMatrix({0.0f, 0.0f, -20.0f});
 		shader->setMat4("view", view.data());
 
 		auto start = std::chrono::high_resolution_clock::now();
@@ -85,7 +99,7 @@ int main()
 
 			auto now = std::chrono::high_resolution_clock::now();
 			float time = std::chrono::duration<float>(now - start).count();
-			auto rotation = gltut::Matrix4::rotationMatrix({ time, time, time });
+			auto rotation = gltut::Matrix4::rotationMatrix({time, time, time});
 
 			for (size_t i = 0; i < BOX_COUNT; ++i)
 			{
@@ -97,3 +111,4 @@ int main()
 	GLTUT_APPLICATION_CATCH;
 	return 0;
 }
+

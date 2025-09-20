@@ -1,13 +1,17 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 // Includes
 #include "EngineC.h"
 
-#include <stdexcept>
 #include <iostream>
+#include <stdexcept>
 
+#include "factory/FactoryC.h"
 #include "graphics/backends/opengl/DeviceOpenGL.h"
 #include "scene/SceneC.h"
 #include "window/WindowC.h"
-#include "factory/FactoryC.h"
 
 namespace gltut
 {
@@ -91,3 +95,4 @@ Engine* createEngine(u32 windowWidth, u32 windowHeight) noexcept
 
 // End of the namespace gltut
 }
+

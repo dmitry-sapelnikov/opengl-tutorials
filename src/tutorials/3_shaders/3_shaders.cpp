@@ -1,12 +1,45 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 // Includes
+#include "engine/Engine.h"
+#include "engine/core/Check.h"
 #include <array>
 #include <chrono>
 #include <iostream>
 #include <string>
-#include "engine/core/Check.h"
-#include "engine/Engine.h"
 
-///	The program entry point
+namespace
+{
+// Local constants
+/// Vertex shader source code
+const char* VERTEX_SHADER = R"(
+#version 330 core
+layout (location = 0) in vec3 aPos;
+layout (location = 1) in vec4 aColor;
+out vec4 ourColor;
+void main()
+{
+	gl_Position = vec4(aPos, 1.0);
+	ourColor = aColor;
+})";
+
+// Fragment shader source code
+const char* FRAGMENT_SHADER = R"(
+#version 330 core
+in vec4 ourColor;
+out vec4 FragColor;
+uniform float colorScale;
+void main()
+{
+	FragColor = colorScale * ourColor;
+})";
+
+// End of the anonymous namespace
+}
+
+/// The program entry point
 int main()
 {
 	try
@@ -19,40 +52,45 @@ int main()
 
 		float vertices[] = {
 			// positions         // colors
-			 0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f, 1.0f,   // bottom right
-			-0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f, 1.0f,   // bottom left
-			 0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f, 1.0f   // top 
+			0.5f,
+			-0.5f,
+			0.0f,
+			1.0f,
+			0.0f,
+			0.0f,
+			1.0f, // bottom right
+			-0.5f,
+			-0.5f,
+			0.0f,
+			0.0f,
+			1.0f,
+			0.0f,
+			1.0f, // bottom left
+			0.0f,
+			0.5f,
+			0.0f,
+			0.0f,
+			0.0f,
+			1.0f,
+			1.0f // top
 		};
 
-		std::array<unsigned, 3> indices = {  // note that we start from 0!
-			0, 1, 2,  // first Triangle
+		std::array<unsigned, 3> indices = {
+			// note that we start from 0!
+			0,
+			1,
+			2, // first Triangle
 		};
 
 		auto* device = engine->getDevice();
 		auto* scene = engine->getScene();
 
 		gltut::Shader* shader = device->getShaders()->create(
-			"#version 330 core\n"
-			"layout (location = 0) in vec3 aPos;\n"
-			"layout (location = 1) in vec4 aColor;\n"
-			"out vec4 ourColor;\n"
-			"void main()\n"
-			"{\n"
-			"	gl_Position = vec4(aPos, 1.0);\n"
-			"	ourColor = aColor;\n"
-			"}",
-
-			"#version 330 core\n"
-			"in vec4 ourColor;\n"
-			"out vec4 FragColor;\n"
-			"uniform float colorScale;"
-			"void main()\n"
-			"{\n"
-			"	FragColor = colorScale * ourColor;\n"
-			"}");
+			VERTEX_SHADER,
+			FRAGMENT_SHADER);
 
 		GLTUT_CHECK(shader != 0, "Failed to create shader program")
-		
+
 		auto* geometry = device->getGeometries()->create(
 			gltut::VERTEX_FORMAT_POS3_COLOR4,
 			3,

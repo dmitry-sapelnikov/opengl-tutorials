@@ -1,36 +1,49 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 // Includes
 #include <array>
 #include <chrono>
 #include <iostream>
 #include <string>
 
+#include "engine/Engine.h"
 #include "engine/core/Check.h"
 #include "engine/math/Rng.h"
-#include "engine/Engine.h"
 
 #include "imgui/EngineImgui.h"
 
-
-// Slightly yellowish light
+namespace
+{
+// Local constants
+/// Number of directional lights in the scene
 constexpr size_t DIRECTIONAL_LIGHT_COUNT = 2;
+
+/// Number of directional lights actually used
 constexpr size_t USED_DIRECTIONAL_LIGHT_COUNT = 2;
+
 static_assert(
 	DIRECTIONAL_LIGHT_COUNT >= USED_DIRECTIONAL_LIGHT_COUNT,
 	"Used directional light count must be less than or equal to the total directional light count");
 
+/// Maximum number of point lights in the scene
 const gltut::Vector3 DIR_LIGHT_POSITIONS[DIRECTIONAL_LIGHT_COUNT] = {
-	{ 10.0f, 10.0f, 0.0f },
-	{ -5.0f, 5.0f, 15.0f } };
+	{10.0f, 10.0f, 0.0f},
+	{-5.0f, 5.0f, 15.0f}};
 
+/// Directional light colors
 const gltut::Color DIR_LIGHT_COLORS[DIRECTIONAL_LIGHT_COUNT] = {
-	{ 1.5f, 1.5f, 1.5f },
-	{ 1.2f, 1.2f, 1.2f } };
+	{1.5f, 1.5f, 1.5f},
+	{1.2f, 1.2f, 1.2f}};
 
+/// Whether each directional light casts shadows
 const bool DIR_LIGHT_CAST_SHADOWS[DIRECTIONAL_LIGHT_COUNT] = {
 	true, // First light casts shadows
 	false // Second light does not cast shadows
 };
 
+// Local functions
 /// Creates boxes
 void createBoxes(
 	gltut::Engine& engine,
@@ -70,7 +83,7 @@ void createBoxes(
 	}
 }
 
-/// Creates light
+/// Creates a light source + its visual representation
 std::pair<gltut::GeometryNode*, gltut::LightNode*> createLight(
 	gltut::Scene& scene,
 	const gltut::Material& material,
@@ -89,9 +102,10 @@ std::pair<gltut::GeometryNode*, gltut::LightNode*> createLight(
 	lightSource->setDiffuse(color);
 	lightSource->setSpecular(color);
 
-	return { light, lightSource };
+	return {light, lightSource};
 }
 
+/// Creates the lights in the scene
 void createLights(
 	gltut::Engine& engine,
 	std::vector<gltut::GeometryNode*>& lights,
@@ -132,7 +146,7 @@ void createLights(
 				40.0f, // Frustum size
 				0.5f,  // Near plane
 				50.0f, // Far plane
-				2048);  // Shadow map size
+				2048); // Shadow map size
 			GLTUT_CHECK(shadow, "Failed to create shadow map");
 			lightSource->setShadowMap(shadow);
 
@@ -141,6 +155,7 @@ void createLights(
 	}
 }
 
+/// Creates a Phong shader
 gltut::PhongShaderModel* createPhongShader(
 	gltut::Engine* engine,
 	gltut::u32 maxDirectionalLights,
@@ -156,6 +171,7 @@ gltut::PhongShaderModel* createPhongShader(
 	return phongShader;
 }
 
+/// Creates a Phong material model
 gltut::PhongMaterialModel* createPhongMaterialModel(
 	gltut::Engine* engine,
 	gltut::PhongShaderModel* phongShader)
@@ -178,125 +194,130 @@ gltut::PhongMaterialModel* createPhongMaterialModel(
 	return phongMaterialModel;
 }
 
-///	The program entry point
+// End of the anonymous namespace
+}
+
+/// The program entry point
 int main()
 {
 	gltut::EngineImgui* imgui = nullptr;
 	std::unique_ptr<gltut::Engine> engine;
 
 	GLTUT_CATCH_ALL_BEGIN
-		engine.reset(gltut::createEngine(1024, 768));
-		GLTUT_CHECK(engine, "Failed to create engine");
+	engine.reset(gltut::createEngine(1024, 768));
+	GLTUT_CHECK(engine, "Failed to create engine");
 
-		engine->getWindow()->setTitle("Lighting");
+	engine->getWindow()->setTitle("Lighting");
 
-		// Create the Imgui connector
-		imgui = gltut::createEngineImgui(engine.get());
-		GLTUT_CHECK(imgui, "Failed to create ImGui instance");
+	// Create the Imgui connector
+	imgui = gltut::createEngineImgui(engine.get());
+	GLTUT_CHECK(imgui, "Failed to create ImGui instance");
 
-		auto* scene = engine->getScene();
+	auto* scene = engine->getScene();
 
-		gltut::PhongShaderModel* phongShader = createPhongShader(
-			engine.get(),
-			0,
-			0, // No point lights
-			USED_DIRECTIONAL_LIGHT_COUNT); // No spot lights
+	gltut::PhongShaderModel* phongShader = createPhongShader(
+		engine.get(),
+		0,
+		0,							   // No point lights
+		USED_DIRECTIONAL_LIGHT_COUNT); // No spot lights
 
-		gltut::PhongMaterialModel* phongMaterialModel = createPhongMaterialModel(
-			engine.get(),
-			phongShader);
+	gltut::PhongMaterialModel* phongMaterialModel = createPhongMaterialModel(
+		engine.get(),
+		phongShader);
 
-		auto* floorGeometry = engine->getFactory()->getGeometry()->createBox({ 20.0f, 1.0f, 20.0f });
-		GLTUT_CHECK(floorGeometry, "Failed to create floor geometry");
-		scene->createGeometry(
-			floorGeometry,
-			phongMaterialModel->getMaterial(),
-			gltut::Matrix4::translationMatrix({ 0.0f, -0.5f, 0.0f }));
+	auto* floorGeometry = engine->getFactory()->getGeometry()->createBox({20.0f, 1.0f, 20.0f});
+	GLTUT_CHECK(floorGeometry, "Failed to create floor geometry");
+	scene->createGeometry(
+		floorGeometry,
+		phongMaterialModel->getMaterial(),
+		gltut::Matrix4::translationMatrix({0.0f, -0.5f, 0.0f}));
 
-		createBoxes(*engine, phongMaterialModel);
+	createBoxes(*engine, phongMaterialModel);
 
-		std::vector<gltut::GeometryNode*> lights;
-		std::vector<gltut::LightNode*> lightSources;
-		std::vector<gltut::ShadowMap*> shadows;
-		createLights(*engine, lights, lightSources, shadows);
-		
-		gltut::Camera* camera = engine->getScene()->createCamera(
-			{ -2.0f, 2.0f, 6.0f },
-			{ 0.0f, 0.0f, 0.0f },
-			{ 0.0f, 1.0f, 0.0f },
-			45.0f,
-			0.1f,
-			150.0f);
-		GLTUT_CHECK(camera, "Failed to create camera");
+	std::vector<gltut::GeometryNode*> lights;
+	std::vector<gltut::LightNode*> lightSources;
+	std::vector<gltut::ShadowMap*> shadows;
+	createLights(*engine, lights, lightSources, shadows);
 
-		std::unique_ptr<gltut::CameraController> controller(
-			gltut::createMouseCameraController(*camera));
-		GLTUT_CHECK(controller, "Failed to create camera controller");
-		engine->getScene()->addCameraController(controller.get());
+	gltut::Camera* camera = engine->getScene()->createCamera(
+		{-2.0f, 2.0f, 6.0f},
+		{0.0f, 0.0f, 0.0f},
+		{0.0f, 1.0f, 0.0f},
+		45.0f,
+		0.1f,
+		150.0f);
+	GLTUT_CHECK(camera, "Failed to create camera");
 
-		const auto startTime = std::chrono::high_resolution_clock::now();
-		float lightAzimuth = 0.0f;
-		while (true)
-		{
-			const auto now = std::chrono::high_resolution_clock::now();
-			const float time = std::chrono::duration<float>(now - startTime).count();
+	std::unique_ptr<gltut::CameraController> controller(
+		gltut::createMouseCameraController(*camera));
+	GLTUT_CHECK(controller, "Failed to create camera controller");
+	engine->getScene()->addCameraController(controller.get());
 
-			imgui->newFrame();
-			ImGui::SetNextWindowPos({ 10, 10 }, ImGuiCond_FirstUseEver);
-			ImGui::SetNextWindowSize({ 200, 400 }, ImGuiCond_FirstUseEver);
-			ImGui::Begin("Settings");
+	const auto startTime = std::chrono::high_resolution_clock::now();
+	float lightAzimuth = 0.0f;
+	while (true)
+	{
+		const auto now = std::chrono::high_resolution_clock::now();
+		const float time = std::chrono::duration<float>(now - startTime).count();
 
-			ImGui::Text("FPS: %u", engine->getWindow()->getFPS());
-			ImGui::Text("Time: %.2f seconds", time);
+		imgui->newFrame();
+		ImGui::SetNextWindowPos({10, 10}, ImGuiCond_FirstUseEver);
+		ImGui::SetNextWindowSize({200, 400}, ImGuiCond_FirstUseEver);
+		ImGui::Begin("Settings");
 
-			// Right azimuth numeric control with range 0 to 360 degrees
-			if (ImGui::SliderAngle(
+		ImGui::Text("FPS: %u", engine->getWindow()->getFPS());
+		ImGui::Text("Time: %.2f seconds", time);
+
+		// Right azimuth numeric control with range 0 to 360 degrees
+		if (ImGui::SliderAngle(
 				"Light Azimuth",
 				&lightAzimuth,
-				0.0f, 360.0f,
+				0.0f,
+				360.0f,
 				"%0.1f degrees"))
-			{
-				gltut::Matrix4 lightTransform =
-					gltut::Matrix4::rotationMatrix({ 0, lightAzimuth, 0 }) *
-					gltut::Matrix4::translationMatrix(DIR_LIGHT_POSITIONS[0]);
+		{
+			gltut::Matrix4 lightTransform =
+				gltut::Matrix4::rotationMatrix({0, lightAzimuth, 0}) *
+				gltut::Matrix4::translationMatrix(DIR_LIGHT_POSITIONS[0]);
 
-				lights[0]->setTransform(lightTransform);
+			lights[0]->setTransform(lightTransform);
+		}
+
+		// Bias controls for phong shader
+		if (ImGui::CollapsingHeader("Shadow Map Bias"))
+		{
+			float minBias = phongShader->getMinShadowMapBias();
+			if (ImGui::SliderFloat("Min Bias", &minBias, 0.0f, 0.1f))
+			{
+				phongShader->setMinShadowMapBias(minBias);
 			}
 
-			// Bias controls for phong shader
-			if (ImGui::CollapsingHeader("Shadow Map Bias"))
+			float maxBias = phongShader->getMaxShadowMapBias();
+			if (ImGui::SliderFloat("Max Bias", &maxBias, 0.0f, 0.1f))
 			{
-				float minBias = phongShader->getMinShadowMapBias();
-				if (ImGui::SliderFloat("Min Bias", &minBias, 0.0f, 0.1f))
-				{
-					phongShader->setMinShadowMapBias(minBias);
-				}
-
-				float maxBias = phongShader->getMaxShadowMapBias();
-				if (ImGui::SliderFloat("Max Bias", &maxBias, 0.0f, 0.1f))
-				{
-					phongShader->setMaxShadowMapBias(maxBias);
-				}
-			}
-
-			// Display the shadow map textures
-			ImGui::Text("Shadow Maps:");
-			for (size_t i = 0; i < shadows.size(); ++i)
-			{
-				ImGui::Text("Shadow Map %zu", i);
-				ImGui::Image(
-					shadows[i]->getTexture()->getId(),
-					{ 200, 200 },
-					{ 0, 1 }, { 1, 0 });
-			}
-
-			ImGui::End();
-
-			if (!engine->update())
-			{
-				break;
+				phongShader->setMaxShadowMapBias(maxBias);
 			}
 		}
+
+		// Display the shadow map textures
+		ImGui::Text("Shadow Maps:");
+		for (size_t i = 0; i < shadows.size(); ++i)
+		{
+			ImGui::Text("Shadow Map %zu", i);
+			ImGui::Image(
+				shadows[i]->getTexture()->getId(),
+				{200, 200},
+				{0, 1},
+				{1, 0});
+		}
+
+		ImGui::End();
+
+		if (!engine->update())
+		{
+			break;
+		}
+	}
 	GLTUT_CATCH_ALL_END("Failed to run 9_shadows example");
 
 	gltut::deleteEngineImgui(imgui);

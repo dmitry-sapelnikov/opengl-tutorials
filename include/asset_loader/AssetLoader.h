@@ -1,13 +1,17 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 #pragma once
 
 // Includes
-#include "engine/Engine.h"
 #include "asset_loader/AssetMaterialFactory.h"
+#include "engine/Engine.h"
 
 namespace gltut
 {
 // Global classes
-/// Loads assets from files
+/// Loads assets from files using the Assimp library
 class AssetLoader
 {
 public:

@@ -1,17 +1,21 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 #pragma once
 
 // Includes
 #include "engine/renderer/objects/RenderGeometryGroup.h"
 #include "engine/scene/camera/CameraController.h"
-#include "engine/scene/shader/SceneShaderBinding.h"
-#include "engine/scene/texture/SceneTextureSetBinding.h"
 #include "engine/scene/nodes/GeometryNode.h"
 #include "engine/scene/nodes/LightNode.h"
+#include "engine/scene/shader/SceneShaderBinding.h"
+#include "engine/scene/texture/SceneTextureSetBinding.h"
 
 namespace gltut
 {
 // Global classes
-/// The class represents a scene
+/// The class represents the scene
 class Scene
 {
 public:
@@ -44,7 +48,7 @@ public:
 		\param farPlane The far plane
 		\param aspectRatio The aspect ratio, i.e. width / height.
 		If nullptr, the aspect ratio is calculated from the window size.
-		
+
 		\return The camera if it was added successfully, nullptr otherwise
 
 		\note If there is no active camera, the added camera becomes the active camera.
@@ -71,7 +75,7 @@ public:
 	*/
 	virtual void removeCameraController(CameraController* controller) noexcept = 0;
 
-	///	Creates a binding between a shader and the scene
+	/// Creates a binding between a shader and the scene
 	virtual SceneShaderBinding* createShaderBinding(Shader* shader) noexcept = 0;
 
 	/// Removes a shader binding from the scene

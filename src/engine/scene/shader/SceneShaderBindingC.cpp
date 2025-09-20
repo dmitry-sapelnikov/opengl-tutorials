@@ -1,3 +1,7 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 // Includes
 #include "SceneShaderBindingC.h"
 #include "engine/graphics/shader/Shader.h"
@@ -6,11 +10,12 @@
 namespace gltut
 {
 
-// Local functions
 namespace
 {
+// Local functions
 
-static std::string getFullParameter(
+/// Returns the full parameter name with index and attribute	
+std::string getFullParameter(
 	const std::pair<std::string, std::string>& parameterAttribute,
 	u32 index)
 {
@@ -19,12 +24,12 @@ static std::string getFullParameter(
 	{
 		return "";
 	}
-	return
-		parameter + "[" + std::to_string(index) + "]" +
-		(attribute.empty() ? "" : "." + attribute);
+	return parameter + "[" + std::to_string(index) + "]" +
+		   (attribute.empty() ? "" : "." + attribute);
 }
 
-static void setVector3(
+/// Sets a 3D vector shader parameter
+void setVector3(
 	Shader& shader,
 	const std::pair<std::string, std::string>& parameterAttribute,
 	u32 index,
@@ -37,7 +42,8 @@ static void setVector3(
 	}
 }
 
-static void setMatrix4(
+/// Sets a 4x4 matrix shader parameter
+void setMatrix4(
 	Shader& shader,
 	const std::pair<std::string, std::string>& parameterAttribute,
 	u32 index,
@@ -50,7 +56,8 @@ static void setMatrix4(
 	}
 }
 
-static void setFloat(
+/// Sets a float shader parameter
+void setFloat(
 	Shader& shader,
 	const std::pair<std::string, std::string>& parameterAttribute,
 	u32 index,
@@ -63,6 +70,7 @@ static void setFloat(
 	}
 }
 
+// End of the anonymous namespace
 }
 
 // Global classes
@@ -151,9 +159,8 @@ void SceneShaderBindingC::updateLights(const Scene& scene) const
 				*shader,
 				getShaderParameterParts(SceneBinding::Parameter::DIRECTIONAL_LIGHT_SHADOW_MATRIX),
 				directionalInd,
-				light->getShadowMap() != nullptr ?
-					light->getShadowMap()->getShadowMatrix() :
-					// Set zero matrix
+				light->getShadowMap() != nullptr ? light->getShadowMap()->getShadowMatrix() :
+												 // Set zero matrix
 					Matrix4());
 			++directionalInd;
 		}
@@ -229,32 +236,27 @@ void SceneShaderBindingC::updateLights(const Scene& scene) const
 				*shader,
 				getShaderParameterParts(SceneBinding::Parameter::SPOT_LIGHT_SHADOW_MATRIX),
 				spotInd,
-				light->getShadowMap() != nullptr ?
-					light->getShadowMap()->getShadowMatrix() :
-					// Set zero matrix
+				light->getShadowMap() != nullptr ? light->getShadowMap()->getShadowMatrix() :
+												 // Set zero matrix
 					Matrix4());
 
 			setFloat(
 				*shader,
 				getShaderParameterParts(SceneBinding::Parameter::SPOT_LIGHT_SHADOW_NEAR),
 				spotInd,
-				light->getShadowMap() != nullptr ?
-					light->getShadowMap()->getFrustumNear() :
-					0.0f);
+				light->getShadowMap() != nullptr ? light->getShadowMap()->getFrustumNear() : 0.0f);
 
 			setFloat(
 				*shader,
 				getShaderParameterParts(SceneBinding::Parameter::SPOT_LIGHT_SHADOW_FAR),
 				spotInd,
-				light->getShadowMap() != nullptr ?
-					light->getShadowMap()->getFrustumFar() :
-				0.0f);
+				light->getShadowMap() != nullptr ? light->getShadowMap()->getFrustumFar() : 0.0f);
 
 			++spotInd;
 		}
 		break;
 
-		GLTUT_UNEXPECTED_SWITCH_DEFAULT_CASE(light->getType())
+			GLTUT_UNEXPECTED_SWITCH_DEFAULT_CASE(light->getType())
 		}
 	}
 }

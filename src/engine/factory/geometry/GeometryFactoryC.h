@@ -1,9 +1,13 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 #pragma once
 
 // Includes
 #include "engine/core/NonCopyable.h"
-#include "engine/graphics/GraphicsDevice.h"
 #include "engine/factory/geometry/GeometryFactory.h"
+#include "engine/graphics/GraphicsDevice.h"
 
 namespace gltut
 {

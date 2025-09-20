@@ -1,14 +1,20 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 #pragma once
 
-//	Includes
+// Includes
+#include <cmath>
 #include <random>
+
 #include "engine/core/Check.h"
 #include "engine/core/Types.h"
 
 namespace gltut
 {
 // Global classes
-///	 Represents a random-number generator with the uniform distribution
+/// Represents a random-number generator with the uniform distribution
 class Rng
 {
 public:
@@ -25,14 +31,14 @@ public:
 		return mImplementation();
 	}
 
-	///	Generates a random float in the range [0, 1)
+	/// Generates a random float in the range [0, 1)
 	float nextFloat() noexcept
 	{
 		return std::generate_canonical<float, std::numeric_limits<float>::digits>(
 			mImplementation);
 	}
 
-	///	Generates a random float in the range [lowerLimit, upperLimit)
+	/// Generates a random float in the range [lowerLimit, upperLimit)
 	float nextFloat(float lowerLimit, float upperLimit) noexcept
 	{
 		GLTUT_ASSERT(lowerLimit <= upperLimit);
@@ -40,9 +46,9 @@ public:
 	}
 
 private:
-	///	Implementation
+	/// Implementation
 	std::mt19937 mImplementation;
 };
 
-//	End of the namespace gltut
+// End of the namespace gltut
 }

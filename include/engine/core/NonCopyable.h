@@ -1,7 +1,12 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 #pragma once
 
 namespace gltut
 {
+// Global classes
 /**
 	The class provides
 	non-copyable and non-movable properties to a derived class
@@ -10,25 +15,25 @@ namespace gltut
 class NonCopyable
 {
 public:
-	///	 Deleted copy constructor
+	///  Deleted copy constructor
 	NonCopyable(const NonCopyable&) = delete;
 
-	///	 Deleted copy assignment operator
+	///  Deleted copy assignment operator
 	void operator=(const NonCopyable&) = delete;
 
-	///	Deleted move constructor
+	/// Deleted move constructor
 	NonCopyable(NonCopyable&& other) = delete;
 
-	///	Deleted move operator
+	/// Deleted move operator
 	NonCopyable& operator=(NonCopyable&& other) = delete;
 
 protected:
-	///	Default constructor
+	/// Default constructor
 	NonCopyable() = default;
 
-	///	Destructor
+	/// Destructor
 	~NonCopyable() = default;
 };
 
-//	End of the namespace gltut
+// End of the namespace gltut
 }

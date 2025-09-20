@@ -1,3 +1,7 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 // Includes
 #include "PhongMaterialModelC.h"
 #include "engine/factory/material/MaterialPassIndex.h"
@@ -19,10 +23,10 @@ PhongMaterialModelC::PhongMaterialModelC(
 	MaterialPass* lightingPass = getMaterial().createPass(
 		static_cast<u32>(MaterialPassIndex::LIGHTING),
 		phongShader.getShader(),
-		PhongShaderModel::TEXTURE_SLOTS_COUNT + 
-		phongShader.getMaxDirectionalLights() + 
-		phongShader.getMaxSpotLights(),
-		0); // No uniform buffers
+		PhongShaderModel::TEXTURE_SLOTS_COUNT +
+			phongShader.getMaxDirectionalLights() +
+			phongShader.getMaxSpotLights(),
+		1); // No uniform buffers
 
 	GLTUT_CHECK(lightingPass != nullptr, "Failed to create a material pass");
 	lightingPass->getShaderUniformBuffers()->set(
@@ -34,10 +38,10 @@ PhongMaterialModelC::PhongMaterialModelC(
 		MaterialPass* depthPass = getMaterial().createPass(
 			static_cast<u32>(MaterialPassIndex::DEPTH),
 			depthShader,
-			PhongShaderModel::TEXTURE_SLOTS_COUNT + 
-			phongShader.getMaxDirectionalLights() +
-			phongShader.getMaxSpotLights(),
-			0); // No uniform buffers
+			PhongShaderModel::TEXTURE_SLOTS_COUNT +
+				phongShader.getMaxDirectionalLights() +
+				phongShader.getMaxSpotLights(),
+			1); // No uniform buffers
 
 		GLTUT_CHECK(
 			depthPass != nullptr,
@@ -50,7 +54,7 @@ PhongMaterialModelC::PhongMaterialModelC(
 
 	mTextureSetBinding = mScene.createTextureSetBinding(lightingPass->getTextures());
 	GLTUT_CHECK(mTextureSetBinding != nullptr, "Failed to create a texture set binding");
-	
+
 	mTextureSetBinding->bind(
 		SceneTextureSetBinding::Parameter::DIRECTIONAL_LIGHT_SHADOW_MAP,
 		PhongShaderModel::TEXTURE_SLOTS_COUNT);
@@ -86,11 +90,11 @@ void PhongMaterialModelC::setDepth(const Texture* height) noexcept
 	getMaterial()[0]->getTextures()->setTexture(height, 3);
 	if (height == nullptr)
 	{
-		setDepthtScale(0.0f);
+		setDepthScale(0.0f);
 	}
 }
 
-void PhongMaterialModelC::setDepthtScale(float depthScale) noexcept
+void PhongMaterialModelC::setDepthScale(float depthScale) noexcept
 {
 	getMaterial()[0]->getShaderArguments()->setFloat("depthScale", depthScale);
 }

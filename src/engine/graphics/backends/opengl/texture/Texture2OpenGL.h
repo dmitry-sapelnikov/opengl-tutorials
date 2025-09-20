@@ -1,16 +1,21 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 #pragma once
 
 // Includes
-#include <string>
-#include <glad/glad.h>
+#include "TextureTOpenGL.h"
 #include "engine/core/NonCopyable.h"
 #include "engine/core/Types.h"
 #include "engine/graphics/texture/Texture2.h"
-#include "TextureTOpenGL.h"
+#include <glad/glad.h>
+#include <string>
 
 namespace gltut
 {
-
+// Global classes
+/// OpenGL implementation of a 2D texture
 class Texture2OpenGL final : public TextureTOpenGL<Texture2, GL_TEXTURE_2D>
 {
 public:
@@ -34,10 +39,14 @@ public:
 		return mFormat;
 	}
 
-	/// Sets the size of the texture, recreating it. The existing texture data will be lost.
+	/**
+		\brief Sets the size of the texture, recreating it.
+		The existing texture data will be lost.
+	*/
 	void setSize(const Point2u& size) noexcept final;
 
 private:
+	/// Creates the texture with the given data
 	void create(const void* data) noexcept;
 
 	/// Texture size

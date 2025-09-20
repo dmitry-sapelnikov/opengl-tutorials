@@ -1,3 +1,7 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 #pragma once
 
 // Includes
@@ -7,7 +11,9 @@
 
 namespace gltut
 {
-//	Global classes
+// Global classes
+
+// Forward declarations
 class Renderer;
 
 /// Binds shader parameters to renderer parameters
@@ -26,7 +32,7 @@ public:
 
 // Global functions
 
-///	Creates a standard shader binding with common parameters
+/// Creates a standard shader binding with common parameters
 ShaderRendererBinding* createStandardShaderBinding(
 	Renderer* renderer,
 	const char* vertexShaderSource,

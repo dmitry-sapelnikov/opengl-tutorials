@@ -1,13 +1,18 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 // Includes
 #include "RenderPassFactoryC.h"
 
 namespace gltut
 {
 
-/// </summary>
 namespace
 {
 // Local constants
+
+/// Vertex shader for texture-to-window rendering
 static const char* TEXTURE_TO_WINDOW_VERTEX_SHADER = R"(
 	#version 330 core
 	layout(location = 0) in vec3 inPos;
@@ -20,6 +25,7 @@ static const char* TEXTURE_TO_WINDOW_VERTEX_SHADER = R"(
 	};
 )";
 
+/// Fragment shader for texture-to-window rendering (single channel)
 const char* TEXTURE_TO_WINDOW_FRAGMENT_SHADER_RGB = R"(
 #version 330 core
 in vec2 texCoord;
@@ -31,7 +37,8 @@ void main()
 	outColor = vec4(color, 1.0);
 })";
 
-const char* TEXTURE_TO_WINDOW_FRAGMENT_SHADER_RGBA = R"(
+/// Fragment shader for texture-to-window rendering (RGB and RGBA)
+const char* TEXTURE_TO_WINDOW_FRAGMENT_SHADER_RGB_RGBA = R"(
 #version 330 core
 in vec2 texCoord;
 out vec4 outColor;
@@ -41,6 +48,7 @@ void main()
 	outColor = texture(textureSampler, texCoord);
 })";
 
+/// Fragment shader for texture-to-window rendering (float)
 const char* TEXTURE_TO_WINDOW_FRAGMENT_SHADER_FLOAT = R"(
 #version 330 core
 in vec2 texCoord;
@@ -51,7 +59,6 @@ void main()
 	float depth = texture(textureSampler, texCoord).r;
 	outColor = vec4(depth, depth, depth, 1.0);
 })";
-
 
 // Local functions
 /// Creates a texture-to-render target shader
@@ -64,7 +71,7 @@ ShaderRendererBinding* createShader(Renderer& renderer, TextureFormat format)
 	{
 		shader = renderer.getDevice()->getShaders()->create(
 			TEXTURE_TO_WINDOW_VERTEX_SHADER,
-			TEXTURE_TO_WINDOW_FRAGMENT_SHADER_RGBA);
+			TEXTURE_TO_WINDOW_FRAGMENT_SHADER_RGB_RGBA);
 	}
 	break;
 
@@ -72,7 +79,7 @@ ShaderRendererBinding* createShader(Renderer& renderer, TextureFormat format)
 	{
 		shader = renderer.getDevice()->getShaders()->create(
 			TEXTURE_TO_WINDOW_VERTEX_SHADER,
-			TEXTURE_TO_WINDOW_FRAGMENT_SHADER_RGBA);
+			TEXTURE_TO_WINDOW_FRAGMENT_SHADER_RGB_RGBA);
 	}
 	break;
 
@@ -84,7 +91,7 @@ ShaderRendererBinding* createShader(Renderer& renderer, TextureFormat format)
 	}
 	break;
 
-	GLTUT_UNEXPECTED_SWITCH_DEFAULT_CASE(format)
+		GLTUT_UNEXPECTED_SWITCH_DEFAULT_CASE(format)
 	}
 
 	GLTUT_CHECK(shader != nullptr, "Failed to create texture-to-render-target shader");
@@ -98,16 +105,17 @@ Geometry* createRenderQuad(Renderer& renderer) noexcept
 	Geometry* result = nullptr;
 
 	GLTUT_CATCH_ALL_BEGIN
-		float vertices1[] = {
-					1.0f,  1.0f, 0.0f, 1.0f, 1.0f, // top right
-					1.0f, -1.0f, 0.0f, 1.0f, 0.0f, // bottom right
-					-1.0f, -1.0f, 0.0f, 0.0f, 0.0f, // bottom left
-					-1.0f,  1.0f, 0.0f, 0.0f, 1.0f, // top left 
+	float vertices1[] = {
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f,	// top right
+		1.0f, -1.0f, 0.0f, 1.0f, 0.0f,	// bottom right
+		-1.0f, -1.0f, 0.0f, 0.0f, 0.0f, // bottom left
+		-1.0f, 1.0f, 0.0f, 0.0f, 1.0f,	// top left
 	};
 
-	unsigned indices[] = {  // note that we start from 0!
-		0, 1, 3,  // first Triangle
-		1, 2, 3   // second Triangle
+	unsigned indices[] = {
+		// note that we start from 0!
+		0, 1, 3, // first Triangle
+		1, 2, 3	 // second Triangle
 	};
 
 	result = renderer.getDevice()->getGeometries()->create(
@@ -119,8 +127,10 @@ Geometry* createRenderQuad(Renderer& renderer) noexcept
 	GLTUT_CATCH_ALL_END("Failed to create render quad for texture-to-window");
 	return result;
 }
+// End of the anonymous namespace
 }
 
+// Global classes
 /// Creates a texture-to-window render pass
 RenderPass* RenderPassFactoryC::createTextureToWindowRenderPass(
 	const Texture2* texture,
@@ -128,23 +138,23 @@ RenderPass* RenderPassFactoryC::createTextureToWindowRenderPass(
 {
 	RenderPass* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN
-		GLTUT_CHECK(texture != nullptr, "Texture must not be null");
+	GLTUT_CHECK(texture != nullptr, "Texture must not be null");
 
-		const size_t shaderIndex = static_cast<size_t>(texture->getFormat());
-		if (mShaders[shaderIndex] == nullptr)
-		{
-			mShaders[shaderIndex] = createShader(mRenderer, texture->getFormat());
-			GLTUT_CHECK(
-				mShaders[shaderIndex] != nullptr,
-				"Failed to create shader for texture-to-window render pass");
-		}
-		ShaderRendererBinding* shader = mShaders[shaderIndex];
+	const size_t shaderIndex = static_cast<size_t>(texture->getFormat());
+	if (mShaders[shaderIndex] == nullptr)
+	{
+		mShaders[shaderIndex] = createShader(mRenderer, texture->getFormat());
+		GLTUT_CHECK(
+			mShaders[shaderIndex] != nullptr,
+			"Failed to create shader for texture-to-window render pass");
+	}
+	ShaderRendererBinding* shader = mShaders[shaderIndex];
 
-		result = createTexturesToWindowRenderPass(
-			viewport,
-			shader->getTarget(),
-			&texture,
-			1);
+	result = createTexturesToWindowRenderPass(
+		viewport,
+		shader->getTarget(),
+		&texture,
+		1);
 	GLTUT_CATCH_ALL_END("Failed to create texture-to-window render pass");
 	return result;
 }
@@ -264,14 +274,13 @@ RenderPass* RenderPassFactoryC::createTexturesToWindowRenderPass(
 		nullptr, // No viewpoint
 		quadRenderGeometry,
 		mRenderer.getDevice()->getFramebuffers()->getDefault(),
-		0, // Material pass 0
+		0,		 // Material pass 0
 		nullptr, // No clear color
-		true, // Depth clearing
-		viewport
-	);
-	// TODO: add render pass without depth test
+		true,	 // Depth clearing
+		viewport);
+	
+	/// \todo: add render pass without depth test
 }
-
 
 // End of the namespace gltut
 }

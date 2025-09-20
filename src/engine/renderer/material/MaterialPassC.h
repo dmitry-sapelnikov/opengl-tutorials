@@ -1,15 +1,21 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 #pragma once
 
 // Includes
 #include "engine/core/NonCopyable.h"
 #include "engine/renderer/material/MaterialPass.h"
+
 #include "../../graphics/shader/ShaderArguments.h"
-#include "../texture/TextureSetC.h"
 #include "../shader/ShaderUniformBufferSetC.h"
+#include "../texture/TextureSetC.h"
 
 namespace gltut
 {
-
+// Global classes
+/// Implementation of the MaterialPass interface
 class MaterialPassC final : public MaterialPass, public NonCopyable
 {
 public:

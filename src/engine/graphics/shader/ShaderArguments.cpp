@@ -1,7 +1,14 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 // Includes
 #include "ShaderArguments.h"
 
 namespace gltut
+{
+
+namespace
 {
 // Local functions
 template <typename TargetType, typename T>
@@ -16,8 +23,8 @@ void addParameterValue(
 		// We use a simple linear search to find the location assuming that
 		// the number of parameters is small enough.
 		auto findResult = std::find_if(
-			target.begin(), target.end(),
-			[location](const auto& pair) { return pair.first == location; });
+			target.begin(), target.end(), [location](const auto& pair)
+			{ return pair.first == location; });
 
 		if (findResult != target.end())
 		{
@@ -29,6 +36,9 @@ void addParameterValue(
 		}
 	}
 	GLTUT_CATCH_ALL("Failed to set shader parameter")
+}
+
+// End of the anonymous namespace
 }
 
 // Global classes
@@ -77,17 +87,17 @@ void ShaderArguments::setFloat(int32 location, float value) noexcept
 
 void ShaderArguments::setVec2(int32 location, float x, float y) noexcept
 {
-	addParameterValue(mParameterValues, location, std::array<float, 2>{ x, y });
+	addParameterValue(mParameterValues, location, std::array<float, 2> {x, y});
 }
 
 void ShaderArguments::setVec3(int32 location, float x, float y, float z) noexcept
 {
-	addParameterValue(mParameterValues, location, std::array<float, 3>{ x, y, z });
+	addParameterValue(mParameterValues, location, std::array<float, 3> {x, y, z});
 }
 
 void ShaderArguments::setVec4(int32 location, float x, float y, float z, float w) noexcept
 {
-	addParameterValue(mParameterValues, location, std::array<float, 4>{ x, y, z, w });
+	addParameterValue(mParameterValues, location, std::array<float, 4> {x, y, z, w});
 }
 
 void ShaderArguments::setMat3(int32 location, const float* value) noexcept
@@ -121,7 +131,6 @@ void ShaderArguments::bind() const noexcept
 		{
 			mShader->setInt(location, std::get<int>(value));
 		}
-
 		break;
 
 		case 1:

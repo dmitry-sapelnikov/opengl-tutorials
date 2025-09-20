@@ -1,3 +1,7 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 #pragma once
 
 // Includes
@@ -7,7 +11,7 @@
 
 namespace gltut
 {
-//	Global classes
+// Global classes
 class Renderer;
 
 /// Binds shader parameters to renderer parameters

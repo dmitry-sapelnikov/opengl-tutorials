@@ -1,3 +1,7 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 #pragma once
 
 // Includes
@@ -7,6 +11,8 @@ namespace gltut
 {
 
 // Global classes
+
+/// Represents a set of shader uniform buffers
 class ShaderUniformBufferSet
 {
 public:

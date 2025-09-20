@@ -1,3 +1,7 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 #pragma once
 
 // Includes
@@ -6,9 +10,8 @@
 
 namespace gltut
 {
-
 // Global classes
-/// Interface for texture management
+/// Interface for geometry management
 class GeometryManager : public ItemManager<Geometry>
 {
 public:

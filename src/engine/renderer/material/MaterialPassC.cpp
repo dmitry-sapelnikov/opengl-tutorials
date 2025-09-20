@@ -1,3 +1,7 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 // Includes
 #include "MaterialPassC.h"
 
@@ -7,7 +11,7 @@
 
 namespace gltut
 {
-//	Global classes
+// Global classes
 MaterialPassC::MaterialPassC(
 	GraphicsDevice& device,
 	const ShaderRendererBinding* shader,
@@ -16,9 +20,7 @@ MaterialPassC::MaterialPassC(
 
 	mDevice(device),
 	mShaderBinding(shader),
-	mShaderArguments(shader != nullptr ? 
-		shader->getTarget() :
-		nullptr),
+	mShaderArguments(shader != nullptr ? shader->getTarget() : nullptr),
 	mTextures(device, textureSlotsCount),
 	mShaderUniformBuffers(device, shaderBindingPointsCount)
 {
@@ -33,15 +35,13 @@ const ShaderRendererBinding* MaterialPassC::getShader() const noexcept
 void MaterialPassC::setShader(const ShaderRendererBinding* shader) noexcept
 {
 	mShaderBinding = shader;
-	mShaderArguments.setShader(shader != nullptr ?
-		shader->getTarget() :
-		nullptr);
+	mShaderArguments.setShader(shader != nullptr ? shader->getTarget() : nullptr);
 }
 
 void MaterialPassC::bind(const RenderGeometry* geometry) const noexcept
 {
 	if (geometry == nullptr ||
-		mShaderBinding == nullptr || 
+		mShaderBinding == nullptr ||
 		mShaderBinding->getTarget() == nullptr)
 	{
 		return;
@@ -51,7 +51,7 @@ void MaterialPassC::bind(const RenderGeometry* geometry) const noexcept
 	mShaderArguments.bind();
 	mTextures.bind();
 	mShaderUniformBuffers.bind();
-	
+
 	mDevice.setBlending(isTransparent());
 	mDevice.setFaceCulling(getFaceCulling());
 	mDevice.setPolygonFill(

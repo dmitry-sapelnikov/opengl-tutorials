@@ -1,7 +1,12 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 #pragma once
 
 // Includes
 #include <array>
+
 #include "engine/core/NonCopyable.h"
 #include "engine/scene/texture/SceneTextureSetBinding.h"
 
@@ -84,7 +89,7 @@ public:
 private:
 	/// The bound texture set
 	TextureSet* mTextureSet = nullptr;
-	
+
 	/// The shader parameters for the scene parameters
 	std::array<u32, TOTAL_PARAMETERS> mParameters;
 };

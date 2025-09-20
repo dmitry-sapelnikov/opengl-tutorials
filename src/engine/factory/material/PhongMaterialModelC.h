@@ -1,9 +1,13 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 #pragma once
 
 // Includes
+#include "./MaterialModelT.h"
 #include "engine/factory/material/PhongMaterialModel.h"
 #include "engine/scene/Scene.h"
-#include "./MaterialModelT.h"
 
 namespace gltut
 {
@@ -42,7 +46,7 @@ public:
 	void setDepth(const Texture* height) noexcept final;
 
 	// Sets the height scale
-	void setDepthtScale(float depthScale) noexcept final;
+	void setDepthScale(float depthScale) noexcept final;
 
 	// Sets the shininess value
 	void setShininess(float shininess) noexcept final;

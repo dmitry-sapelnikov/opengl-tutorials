@@ -1,10 +1,14 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 // Includes
 #include "DepthSortedRenderPassC.h"
 
 namespace gltut
 {
 
-//	Global classes
+// Global classes
 DepthSortedRenderPassC::DepthSortedRenderPassC(
 	const Viewpoint* viewpoint,
 	const RenderGeometryGroup* group,
@@ -15,8 +19,7 @@ DepthSortedRenderPassC::DepthSortedRenderPassC(
 	const Rectangle2u* viewport,
 	GraphicsDevice& device,
 	const ShaderBindings& shaderBindings,
-	const ShaderUniformBufferBindings& shaderUniformBufferBindings
-	) noexcept :
+	const ShaderUniformBufferBindings& shaderUniformBufferBindings) noexcept :
 
 	RenderPassC(
 		viewpoint,

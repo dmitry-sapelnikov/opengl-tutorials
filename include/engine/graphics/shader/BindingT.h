@@ -1,11 +1,13 @@
-#pragma once
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
 
-// Includes
+#pragma once
 
 namespace gltut
 {
-//	Global classes
-/// The class represents a binding of a target object
+// Global classes
+/// Interface for a binding to a target of type TargetType
 template <typename TargetType>
 class BindingT
 {

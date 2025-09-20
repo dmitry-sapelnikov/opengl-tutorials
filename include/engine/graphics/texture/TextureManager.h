@@ -1,10 +1,14 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 #pragma once
 
 // Includes
-#include "engine/math/Color.h"
 #include "engine/core/ItemManager.h"
 #include "engine/graphics/texture/Texture2.h"
 #include "engine/graphics/texture/TextureCubemap.h"
+#include "engine/math/Color.h"
 
 namespace gltut
 {
@@ -17,7 +21,7 @@ public:
 	/// Parameters for loading a texture from a file
 	struct LoadParameters
 	{
-		bool invertChannel[4] = { false, false, false, false };
+		bool invertChannel[4] = {false, false, false, false};
 	};
 
 	/// Creates a texture with the given parameters
@@ -33,12 +37,12 @@ public:
 
 	/// Loads a cubemap texture from 6 files
 	virtual TextureCubemap* load(
-        const char* plusXAxisImagePath,
-        const char* minusXAxisImagePath,
-        const char* plusYAxisImagePath,
-        const char* minusYAxisImagePath,
-        const char* plusZAxisImagePath,
-        const char* minusZAxisImagePath,
+		const char* plusXAxisImagePath,
+		const char* minusXAxisImagePath,
+		const char* plusYAxisImagePath,
+		const char* minusYAxisImagePath,
+		const char* plusZAxisImagePath,
+		const char* minusZAxisImagePath,
 		const TextureParameters& textureParameters = {},
 		const LoadParameters& loadParameters = {}) noexcept = 0;
 

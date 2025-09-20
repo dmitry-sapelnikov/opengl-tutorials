@@ -1,3 +1,7 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 #pragma once
 
 // Includes
@@ -5,7 +9,7 @@
 
 namespace gltut
 {
-///	Represents a framebuffer
+/// Represents a framebuffer
 /// A framebuffer is a collection of textures that
 /// can be used for off-screen rendering.
 class Framebuffer

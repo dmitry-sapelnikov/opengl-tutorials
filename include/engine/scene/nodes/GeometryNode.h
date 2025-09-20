@@ -1,8 +1,12 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 #pragma once
 
 // Includes
-#include "engine/math/Matrix4.h"
 #include "engine/graphics/geometry/Geometry.h"
+#include "engine/math/Matrix4.h"
 #include "engine/renderer/objects/RenderGeometry.h"
 #include "engine/scene/nodes/SceneNode.h"
 

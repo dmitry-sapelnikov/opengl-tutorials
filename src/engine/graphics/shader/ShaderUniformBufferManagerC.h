@@ -1,13 +1,17 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 #pragma once
 
 // Includes
-#include "engine/graphics/Shader/ShaderUniformBufferManager.h"
 #include "../../core/ItemManagerT.h"
+#include "engine/graphics/Shader/ShaderUniformBufferManager.h"
 
 namespace gltut
 {
-
-/// GraphicsDevice base class
+// Global classes
+// Forward declarations
 class GraphicsDeviceBase;
 
 /// Implementation of the ShaderUniformBufferManager interface

@@ -1,12 +1,17 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 // Includes
 #include <array>
 #include <chrono>
 #include <iostream>
 #include <string>
-#include "engine/core/Check.h"
-#include "engine/Engine.h"
 
-///	The program entry point
+#include "engine/Engine.h"
+#include "engine/core/Check.h"
+
+/// The program entry point
 int main()
 {
 	try
@@ -19,15 +24,33 @@ int main()
 
 		float vertices[] = {
 			// positions       // texture coords
-			 0.5f,  0.5f, 0.0f, 1.0f, 1.0f,   // top right
-			 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,   // bottom right
-			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,   // bottom left
-			-0.5f,  0.5f, 0.0f, 0.0f, 1.0f    // top left 
+			0.5f,
+			0.5f,
+			0.0f,
+			1.0f,
+			1.0f, // top right
+			0.5f,
+			-0.5f,
+			0.0f,
+			1.0f,
+			0.0f, // bottom right
+			-0.5f,
+			-0.5f,
+			0.0f,
+			0.0f,
+			0.0f, // bottom left
+			-0.5f,
+			0.5f,
+			0.0f,
+			0.0f,
+			1.0f // top left
 		};
 
 		gltut::u32 indices[] = {
-			 0, 1, 3, // first triangle
-			 1, 2, 3  // second triangle
+			0, 1, 3, // first triangle
+			1,
+			2,
+			3 // second triangle
 		};
 
 		auto* device = engine->getDevice();
@@ -58,7 +81,7 @@ int main()
 		gltut::Texture* texture1 = device->getTextures()->load("assets/container.jpg", {});
 		GLTUT_CHECK(texture1 != nullptr, "Failed to load texture")
 
-			gltut::Texture* texture2 = device->getTextures()->load("assets/awesomeface.png");
+		gltut::Texture* texture2 = device->getTextures()->load("assets/awesomeface.png");
 		GLTUT_CHECK(texture2 != nullptr, "Failed to load texture")
 
 		auto* material = renderer->createMaterial();
@@ -78,9 +101,9 @@ int main()
 			auto now = std::chrono::high_resolution_clock::now();
 			float time = std::chrono::duration<float>(now - start).count();
 			object->setTransform(
-				gltut::Matrix4::rotationMatrix({ 0.0f, 0.0f, time }) *
-				gltut::Matrix4::translationMatrix({ 0.5f, 0.f, 0.f }) *
-				gltut::Matrix4::scaleMatrix({ 0.5f, 0.5f, 0.5 }));
+				gltut::Matrix4::rotationMatrix({0.0f, 0.0f, time}) *
+				gltut::Matrix4::translationMatrix({0.5f, 0.f, 0.f}) *
+				gltut::Matrix4::scaleMatrix({0.5f, 0.5f, 0.5}));
 		}
 	}
 	GLTUT_APPLICATION_CATCH;

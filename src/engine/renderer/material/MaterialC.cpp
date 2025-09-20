@@ -1,10 +1,14 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 // Includes
 #include "MaterialC.h"
 #include "./MaterialPassC.h"
 
 namespace gltut
 {
-//	Global classes
+// Global classes
 MaterialPass* MaterialC::createPass(
 	u32 index,
 	const ShaderRendererBinding* shader,

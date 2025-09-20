@@ -1,18 +1,24 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 #pragma once
 
 // Includes
 #include <memory>
-#include "engine/core/NonCopyable.h"
+
 #include "engine/Engine.h"
+#include "engine/core/NonCopyable.h"
 #include "engine/factory/Factory.h"
 
 #include "./graphics/GraphicsDeviceBase.h"
+#include "./renderer/RendererC.h"
 #include "./scene/SceneC.h"
 #include "./window/WindowC.h"
-#include "./renderer/RendererC.h"
 
 namespace gltut
 {
+// Global classes
 /// Implementation of the Engine class
 class EngineC final : public Engine, public EventHandler, public NonCopyable
 {
@@ -23,7 +29,7 @@ public:
 	/// Runs the engine
 	bool update() noexcept final;
 
-	///	Returns the window
+	/// Returns the window
 	Window* getWindow() noexcept final
 	{
 		return mWindow.get();
@@ -72,7 +78,7 @@ private:
 	/// The window
 	std::unique_ptr<WindowC> mWindow;
 
-	///	The device
+	/// The device
 	std::unique_ptr<GraphicsDeviceBase> mDevice;
 
 	/// The render pipeline

@@ -1,12 +1,18 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 #pragma once
 
 // Includes
 #include <glad/glad.h>
+
 #include "../../../framebuffer/WindowFramebufferBase.h"
 
 namespace gltut
 {
-
+// Global classes
+/// Implementation of a window framebuffer using OpenGL
 class WindowFramebufferOpenGL final : public WindowFramebufferBase
 {
 public:

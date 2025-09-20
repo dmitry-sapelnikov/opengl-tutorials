@@ -1,17 +1,18 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 #pragma once
 
-//	Includes
+// Includes
 #include "engine/core/NonCopyable.h"
 #include "engine/scene/camera/CameraController.h"
 
 namespace gltut
 {
 
-///	RTS-style camera animator
-class FPSCameraControllerC final :
-	public CameraController,
-	public EventHandler,
-	public NonCopyable
+/// Implementation of the FPS (first-person shooter) camera controller
+class FPSCameraControllerC final : public CameraController, public EventHandler, public NonCopyable
 {
 public:
 	/// Constructor
@@ -20,8 +21,7 @@ public:
 		float translationSpeed,
 		float mouseSensitivity);
 
-
-	///	Destructor
+	/// Destructor
 	~FPSCameraControllerC() noexcept final;
 
 	/// Returns the camera
@@ -45,22 +45,22 @@ private:
 	/// The camera
 	Camera& mCamera;
 
-	///	Translation speed, units per second
+	/// Translation speed, units per second
 	float mTranslationSpeed;
 
-	///	Mouse sensitivity, degrees per pixel
+	/// Mouse sensitivity, degrees per pixel
 	float mMouseSensitivity;
 
-	///	Front movement flag
+	/// Front movement flag
 	bool mMoveFront = false;
 
-	///	Back movement flag
+	/// Back movement flag
 	bool mMoveBack = false;
 
-	///	Left movement flag
+	/// Left movement flag
 	bool mMoveLeft = false;
 
-	///	Right movement flag
+	/// Right movement flag
 	bool mMoveRight = false;
 
 	/// The current mouse position
@@ -79,5 +79,5 @@ private:
 	Matrix4 mPitchYawBasis = Matrix4::identity();
 };
 
-//	End of the namespace gltut
+// End of the namespace gltut
 }

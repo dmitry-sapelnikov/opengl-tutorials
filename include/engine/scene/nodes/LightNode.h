@@ -1,3 +1,7 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 #pragma once
 
 // Includes
@@ -25,16 +29,16 @@ public:
 	};
 
 	/// Default ambient color
-	static constexpr Color DEFAULT_AMBIENT { 0.1f, 0.1f, 0.1f, 1.0f };
+	static constexpr Color DEFAULT_AMBIENT {0.1f, 0.1f, 0.1f, 1.0f};
 
 	/// Default diffuse color
-	static constexpr Color DEFAULT_DIFFUSE { 1.0f, 1.0f, 1.0f, 1.0f };
+	static constexpr Color DEFAULT_DIFFUSE {1.0f, 1.0f, 1.0f, 1.0f};
 
 	/// Default specular color
-	static constexpr Color DEFAULT_SPECULAR { 1.0f, 1.0f, 1.0f, 1.0f };
+	static constexpr Color DEFAULT_SPECULAR {1.0f, 1.0f, 1.0f, 1.0f};
 
 	/// Default light direction
-	static constexpr Vector3 DEFAULT_DIRECTION { 0.0f, -1.0f, 0.0f };
+	static constexpr Vector3 DEFAULT_DIRECTION {0.0f, -1.0f, 0.0f};
 
 	/// Virtual destructor
 	virtual ~LightNode() noexcept = default;
@@ -69,8 +73,8 @@ public:
 	/// Returns the outer angle for spot lights, in radians
 	virtual float getOuterAngle() const noexcept = 0;
 
-	/// Sets the outer cut-off angle, in radians. 
-	///	Clamps the outer angle to [0, PI] and the inner angle to [0, outer angle].
+	/// Sets the outer cut-off angle, in radians.
+	/// Clamps the outer angle to [0, PI] and the inner angle to [0, outer angle].
 	virtual void setOuterAngle(float angleRadians) noexcept = 0;
 
 	/// Returns the inner angle for spot lights, in radians

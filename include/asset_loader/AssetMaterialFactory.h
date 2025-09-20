@@ -1,3 +1,7 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 #pragma once
 
 // Includes
@@ -6,7 +10,6 @@
 namespace gltut
 {
 // Global classes
-
 /// Asset material creation interface
 class AssetMaterialFactory
 {
@@ -29,7 +32,7 @@ AssetMaterialFactory* createPhongAssetMaterialFactory(
 	bool castShadows) noexcept;
 
 /// Deletes a material factory
-void deleteAssetMaterialFactory(AssetMaterialFactory* creator) noexcept;
+void deleteAssetMaterialFactory(AssetMaterialFactory* factory) noexcept;
 
 // End of the namespace gltut
 }

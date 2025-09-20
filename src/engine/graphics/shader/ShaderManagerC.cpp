@@ -1,3 +1,7 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 // Includes
 #include "ShaderManagerC.h"
 #include "../../core/File.h"
@@ -13,9 +17,9 @@ Shader* ShaderManagerC::create(
 {
 	Shader* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN
-		result = add(mDevice.createBackendShader(
-			vertexShader,
-			fragmentShader));
+	result = add(mDevice.createBackendShader(
+		vertexShader,
+		fragmentShader));
 	GLTUT_CATCH_ALL_END("Failed to create shader program")
 	return result;
 }
@@ -26,11 +30,11 @@ Shader* ShaderManagerC::load(
 {
 	Shader* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN
-		result = add(mDevice.createBackendShader(
-			readFileToString(vertexShaderPath).c_str(),
-			readFileToString(fragmentShaderPath).c_str()));
+	result = add(mDevice.createBackendShader(
+		readFileToString(vertexShaderPath).c_str(),
+		readFileToString(fragmentShaderPath).c_str()));
 	GLTUT_CATCH_ALL_END("Failed to load shader from files")
-		return result;
+	return result;
 }
 
 // End of the namespace gltut

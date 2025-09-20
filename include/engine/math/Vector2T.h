@@ -1,11 +1,16 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 #pragma once
 
-// Libraries
+// Includes
 #include "engine/core/Check.h"
 #include "engine/core/Types.h"
 
 namespace gltut
 {
+// Global classes
 /// Represents a 2D Vector
 template <typename T>
 struct Vector2T
@@ -78,9 +83,6 @@ struct Vector2T
 		return x == 0 && y == 0;
 	}
 };
-
-/// Unsigned 32-bit point
-using Vector2 = Vector2T<float>;
 
 // End of the namespace gltut
 }

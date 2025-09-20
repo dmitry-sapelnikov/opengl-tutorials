@@ -1,3 +1,7 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 #pragma once
 
 // Includes
@@ -12,4 +16,3 @@ ShaderRendererBinding* createDepthShader(Renderer& renderer) noexcept;
 
 // End of the namespace gltut
 }
-

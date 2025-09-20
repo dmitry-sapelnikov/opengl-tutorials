@@ -1,38 +1,46 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 #pragma once
 
 // Includes
 #include "RendererC.h"
+
 #include <algorithm>
-#include "./render_pass/RenderPassC.h"
-#include "./render_pass/DepthSortedRenderPassC.h"
+
 #include "./material/MaterialC.h"
-#include "./shader/ShaderRendererBindingC.h"
-#include "./shader/ShaderUniformBufferRendererBindingC.h"
 #include "./objects/RenderGeometryC.h"
 #include "./objects/RenderGeometryGroupC.h"
+#include "./render_pass/DepthSortedRenderPassC.h"
+#include "./render_pass/RenderPassC.h"
+#include "./shader/ShaderRendererBindingC.h"
+#include "./shader/ShaderUniformBufferRendererBindingC.h"
 
 namespace gltut
 {
 
 namespace
 {
-	/// Helper function to create an element in a container
-	template <typename InterfaceType, typename ClassType, typename ...Args>
-	InterfaceType* createElement(
-		std::vector<std::unique_ptr<InterfaceType>>& container,
-		const std::string& elementName,
-		Args&&... args)
-	{
-		InterfaceType* result = nullptr;
-		GLTUT_CATCH_ALL_BEGIN
-			result = container.emplace_back(
-				std::make_unique<ClassType>(std::forward<Args>(args)...)).get();
-		GLTUT_CATCH_ALL_END("Cannot create an " + elementName)
-		return result;
-	}
+// Local functions
+/// Helper function to create an element in a container
+template <typename InterfaceType, typename ClassType, typename... Args>
+InterfaceType* createElement(
+	std::vector<std::unique_ptr<InterfaceType>>& container,
+	const std::string& elementName,
+	Args&&... args)
+{
+	InterfaceType* result = nullptr;
+	GLTUT_CATCH_ALL_BEGIN
+	result = container.emplace_back(
+						  std::make_unique<ClassType>(std::forward<Args>(args)...))
+				 .get();
+	GLTUT_CATCH_ALL_END("Cannot create an " + elementName)
+	return result;
+}
 }
 
-//	Global classes
+// Global classes
 RendererC::RendererC(GraphicsDevice& device) noexcept :
 	mDevice(device)
 {
@@ -142,18 +150,19 @@ RenderPass* RendererC::createPass(
 {
 	RenderPass* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN
-		result = mPasses.emplace_back(std::make_unique<RenderPassC>(
-			viewpoint,
-			object,
-			target,
-			materialPass,
-			clearColor,
-			clearDepth,
-			viewport,
-			mDevice,
-			mShaderBindings,
-			mShaderUniformBufferBindings),
-			0).first.get();
+	result = mPasses.emplace_back(std::make_unique<RenderPassC>(
+									  viewpoint,
+									  object,
+									  target,
+									  materialPass,
+									  clearColor,
+									  clearDepth,
+									  viewport,
+									  mDevice,
+									  mShaderBindings,
+									  mShaderUniformBufferBindings),
+								  0)
+				 .first.get();
 	GLTUT_CATCH_ALL_END("Cannot create a scene render pass")
 
 	setPassPriority(result, 0);
@@ -176,18 +185,18 @@ RenderPass* RendererC::createDepthSortedPass(
 {
 	RenderPass* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN
-		result = mPasses.emplace_back(std::make_unique<DepthSortedRenderPassC>(
-			viewpoint,
-			group,
-			target,
-			materialPass,
-			clearColor,
-			clearDepth,
-			viewport,
-			mDevice,
-			mShaderBindings,
-			mShaderUniformBufferBindings),
-			0).first.get();
+	result = mPasses.emplace_back(std::make_unique<DepthSortedRenderPassC>(
+		viewpoint,
+		group,
+		target,
+		materialPass,
+		clearColor,
+		clearDepth,
+		viewport,
+		mDevice,
+		mShaderBindings,
+		mShaderUniformBufferBindings),
+		0).first.get();
 	GLTUT_CATCH_ALL_END("Cannot create a depth-sorted scene render pass")
 
 	setPassPriority(result, 0);

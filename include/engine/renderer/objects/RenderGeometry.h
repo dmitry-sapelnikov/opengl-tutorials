@@ -1,15 +1,19 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 #pragma once
 
 // Includes
-#include "engine/math/Matrix4.h"
 #include "engine/graphics/geometry/Geometry.h"
-#include "engine/renderer/objects/RenderObject.h"
+#include "engine/math/Matrix4.h"
 #include "engine/renderer/material/Material.h"
+#include "engine/renderer/objects/RenderObject.h"
 
 namespace gltut
 {
-//	Global classes
-///	Represents a render pipeline for the scene
+// Global classes
+/// Represents a render pipeline for the scene
 class RenderGeometry : public RenderObject
 {
 public:

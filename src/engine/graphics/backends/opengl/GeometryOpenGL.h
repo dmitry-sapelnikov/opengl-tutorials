@@ -1,3 +1,7 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 #pragma once
 
 // Includes
@@ -6,7 +10,8 @@
 
 namespace gltut
 {
-
+// Global classes
+/// OpenGL implementation of a geometry
 class GeometryOpenGL final : public Geometry, public NonCopyable
 {
 public:

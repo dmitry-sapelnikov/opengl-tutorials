@@ -1,3 +1,7 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 #pragma once
 
 // Includes
@@ -8,7 +12,7 @@
 namespace gltut
 {
 // Global classes
-/// Represents a 3x3 matrix
+/// Represents a 3x3 matrix in column-major order, i.e. m[column][row]
 class Matrix3
 {
 public:
@@ -18,9 +22,20 @@ public:
 		float m10 = 0, float m11 = 0, float m12 = 0,
 		float m20 = 0, float m21 = 0, float m22 = 0) noexcept
 	{
-		m[0][0] = m00; m[1][0] = m01; m[2][0] = m02;
-		m[0][1] = m10; m[1][1] = m11; m[2][1] = m12;
-		m[0][2] = m20; m[1][2] = m21; m[2][2] = m22;
+		// The 1st row
+		m[0][0] = m00;
+		m[1][0] = m01;
+		m[2][0] = m02;
+
+		// The 2nd row
+		m[0][1] = m10;
+		m[1][1] = m11;
+		m[2][1] = m12;
+
+		// The 3rd row
+		m[0][2] = m20;
+		m[1][2] = m21;
+		m[2][2] = m22;
 	}
 
 	// Data constructor
@@ -92,8 +107,7 @@ public:
 		return {
 			m[0][0] * v.x + m[1][0] * v.y + m[2][0] * v.z,
 			m[0][1] * v.x + m[1][1] * v.y + m[2][1] * v.z,
-			m[0][2] * v.x + m[1][2] * v.y + m[2][2] * v.z
-		};
+			m[0][2] * v.x + m[1][2] * v.y + m[2][2] * v.z};
 	}
 
 	/// *= operator
@@ -121,8 +135,7 @@ public:
 		return {
 			-m[0][0], -m[1][0], -m[2][0],
 			-m[0][1], -m[1][1], -m[2][1],
-			-m[0][2], -m[1][2], -m[2][2]
-		};
+			-m[0][2], -m[1][2], -m[2][2]};
 	}
 
 	/// Returns the transpose matrix
@@ -131,7 +144,7 @@ public:
 		return {
 			m[0][0], m[0][1], m[0][2],
 			m[1][0], m[1][1], m[1][2],
-			m[2][0], m[2][1], m[2][2] };
+			m[2][0], m[2][1], m[2][2]};
 	}
 
 	/// Returns the axis at the specified index
@@ -139,7 +152,7 @@ public:
 	{
 		GLTUT_ASSERT(i < 3);
 		const auto& col = m[i];
-		return { col[0], col[1], col[2] };
+		return {col[0], col[1], col[2]};
 	}
 
 	/// Sets the axis at the specified index
@@ -214,7 +227,7 @@ private:
 	float m[3][3];
 };
 
-//	Inline methods
+// Inline methods
 inline Matrix3 Matrix3::getInverse() const
 {
 	// Determinant
@@ -242,8 +255,7 @@ inline Matrix3 Matrix3::getInverse() const
 		// 2nd row
 		(m[0][1] * m[1][2] - m[0][2] * m[1][1]) * d,
 		(m[0][2] * m[1][0] - m[0][0] * m[1][2]) * d,
-		(m[0][0] * m[1][1] - m[0][1] * m[1][0]) * d
-	};
+		(m[0][0] * m[1][1] - m[0][1] * m[1][0]) * d};
 }
 
 // Global functions
@@ -259,7 +271,7 @@ inline Matrix3 Matrix3::identity() noexcept
 	return {
 		1.f, 0.f, 0.f,
 		0.f, 1.f, 0.f,
-		0.f, 0.f, 1.f };
+		0.f, 0.f, 1.f};
 }
 
 /// Returns the normal matrix for a rotation-scale matrix

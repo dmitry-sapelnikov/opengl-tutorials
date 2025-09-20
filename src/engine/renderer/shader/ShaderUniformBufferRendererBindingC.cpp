@@ -1,11 +1,13 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 // Includes
 #include "ShaderUniformBufferRendererBindingC.h"
 #include "engine/renderer/Renderer.h"
 
-
 namespace gltut
 {
-
 // Global classes
 void ShaderUniformBufferRendererBindingC::update(
 	const Viewpoint* viewpoint,
@@ -52,7 +54,7 @@ void ShaderUniformBufferRendererBindingC::update(const RenderGeometry* geometry)
 		target->setData(geometry->getTransform().data(), sizeof(Matrix4), *offset);
 	}
 
-	if (const u32* offset= getParameterOffset(RendererBinding::Parameter::GEOMETRY_NORMAL_MATRIX);
+	if (const u32* offset = getParameterOffset(RendererBinding::Parameter::GEOMETRY_NORMAL_MATRIX);
 		offset != nullptr)
 	{
 		const Matrix3 normalMatrix = getNormalMatrix(geometry->getTransform().getMatrix3());

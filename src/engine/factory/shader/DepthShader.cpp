@@ -1,11 +1,18 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 // Includes
 #include "DepthShader.h"
 
 namespace gltut
 {
-//	 Constants and enums
+
+namespace
+{
+// Local constants and enums
 // Vertex shader source code for flat color shading
-static const char* DEPTH_VERTEX_SHADER = R"(
+const char* DEPTH_VERTEX_SHADER = R"(
 #version 330 core
 
 // Uniforms
@@ -24,11 +31,14 @@ void main()
 })";
 
 // Fragment shader source code for flat color shading
-static const char* DEPTH_FRAGMENT_SHADER = R"(
+const char* DEPTH_FRAGMENT_SHADER = R"(
 #version 330 core
 void main()
 {
 })";
+
+// End of anonymous namespace
+}
 
 // Global functions
 ShaderRendererBinding* createDepthShader(Renderer& renderer) noexcept

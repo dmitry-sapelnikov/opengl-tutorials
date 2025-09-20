@@ -1,15 +1,18 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 #pragma once
 
 // Includes
+#include "asset_loader/AssetMaterialFactory.h"
 #include "engine/core/NonCopyable.h"
 #include "engine/factory/material/MaterialFactory.h"
-#include "asset_loader/AssetMaterialFactory.h"
 
 namespace gltut
 {
 // Global classes
-
-/// Asset material creation interface
+/// Phong asset material factory implementation
 class PhongAssetMaterialFactory final : public AssetMaterialFactory, public NonCopyable
 {
 public:

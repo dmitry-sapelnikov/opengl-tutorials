@@ -1,9 +1,13 @@
-# pragma once
-#include <vector>
-#include <memory>
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
+#pragma once
 #include "engine/core/Check.h"
-#include "engine/core/Types.h"
 #include "engine/core/NonCopyable.h"
+#include "engine/core/Types.h"
+#include <memory>
+#include <vector>
 
 namespace gltut
 {
@@ -24,7 +28,8 @@ public:
 		auto it = std::find_if(
 			mItems.begin(),
 			mItems.end(),
-			[item](const std::unique_ptr<ItemType>& itemPtr) {
+			[item](const std::unique_ptr<ItemType>& itemPtr)
+			{
 				return itemPtr.get() == item;
 			});
 		if (it != mItems.end())

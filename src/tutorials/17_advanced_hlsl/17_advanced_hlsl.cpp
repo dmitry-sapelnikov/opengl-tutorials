@@ -1,10 +1,19 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 // Includes
 #include <array>
 
-#include "engine/core/Check.h"
 #include "engine/Engine.h"
+#include "engine/core/Check.h"
 #include "imgui/EngineImgui.h"
 
+namespace
+{
+
+// Local constants
+/// Vertex shader to render points
 static const char* POINT_VERTEX_SHADER = R"(
 #version 330 core
 layout(location = 0) in vec3 inPosition;
@@ -23,6 +32,7 @@ void main()
 }
 )";
 
+/// Fragment shader to render points
 static const char* POINT_FRAGMENT_SHADER = R"(
 #version 330 core
 out vec4 outColor;
@@ -33,6 +43,7 @@ void main()
 }
 )";
 
+/// Vertex shader to render two-sided geometries
 static const char* TWO_SIDED_VERTEX_SHADER = R"(
 #version 330 core
 
@@ -53,6 +64,7 @@ void main()
 }
 )";
 
+/// Fragment shader to render two-sided geometries
 static const char* TWO_SIDED_FRAGMENT_SHADER = R"(
 #version 330 core
 
@@ -71,6 +83,7 @@ void main()
 }
 )";
 
+/// Vertex shader to demonstrate gl_FragCoord
 static const char* FRAG_COORD_VERTEX_SHADER = R"(
 #version 330 core
 layout(location = 0) in vec3 inPosition;
@@ -85,6 +98,7 @@ void main()
 }
 )";
 
+/// Fragment shader to demonstrate gl_FragCoord
 static const char* FRAG_COORD_FRAGMENT_SHADER = R"(
 #version 330 core
 out vec4 outColor;
@@ -95,9 +109,13 @@ void main()
 		outColor = vec4(1.0, 0.0, 0.0, 1.0);
 	else
 		outColor = vec4(0.0, 1.0, 0.0, 1.0);
+}
 )";
 
-///	The program entry point
+// End of the anonymous namespace
+}
+
+/// The program entry point
 int main()
 {
 	std::unique_ptr<gltut::Engine> engine;
@@ -115,9 +133,9 @@ int main()
 		auto* scene = engine->getScene();
 
 		gltut::Camera* camera = engine->getScene()->createCamera(
-			{ 2.0f, 2.0f, 2.0f },
-			{ 0.0f, 0.0f, 0.0f },
-			{ 0.0f, 1.0f, 0.0f },
+			{2.0f, 2.0f, 2.0f},
+			{0.0f, 0.0f, 0.0f},
+			{0.0f, 1.0f, 0.0f},
 			45.0f,
 			0.1f,
 			200.0f);
@@ -159,12 +177,10 @@ int main()
 		materialPass1->setFaceCulling(gltut::FaceCullingMode::NONE);
 
 		materialPass1->getTextures()->setTexture(
-			renderer->getDevice()->getTextures()->load("assets/brickwall.jpg"), 0
-		);
+			renderer->getDevice()->getTextures()->load("assets/brickwall.jpg"), 0);
 
 		materialPass1->getTextures()->setTexture(
-			renderer->getDevice()->getTextures()->load("assets/container.jpg"), 1
-		);
+			renderer->getDevice()->getTextures()->load("assets/container.jpg"), 1);
 
 		gltut::ShaderRendererBinding* fragCoordShader = gltut::createStandardShaderBinding(
 			renderer,
@@ -183,15 +199,15 @@ int main()
 
 		pointShader->getTarget()->setFloat("pointSize", 10.0f);
 
-		const char* shaderNames[] = { "Points", "Two-Sided", "FragCoord" };
+		const char* shaderNames[] = {"Points", "Two-Sided", "FragCoord"};
 		int currentShader = 0;
 		engine->getSceneRenderPass()->setMaterialPass(currentShader);
 
 		do
 		{
 			imgui->newFrame();
-			ImGui::SetNextWindowPos({ 10, 10 }, ImGuiCond_FirstUseEver);
-			ImGui::SetNextWindowSize({ 200, 400 }, ImGuiCond_FirstUseEver);
+			ImGui::SetNextWindowPos({10, 10}, ImGuiCond_FirstUseEver);
+			ImGui::SetNextWindowSize({200, 400}, ImGuiCond_FirstUseEver);
 			ImGui::Begin("Settings");
 			ImGui::Text("FPS: %u", engine->getWindow()->getFPS());
 

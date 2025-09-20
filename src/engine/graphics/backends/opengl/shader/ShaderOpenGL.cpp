@@ -1,3 +1,7 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 // Includes
 #include "ShaderOpenGL.h"
 
@@ -22,7 +26,7 @@ unsigned createShader(
 {
 	GLTUT_CHECK(!shaderSource.empty(), "Shader source is empty");
 
-	//	Create the shader
+	// Create the shader
 	unsigned shader = glCreateShader(shaderType);
 	GLTUT_CHECK(shader != 0, "Failed to create shader");
 
@@ -30,7 +34,7 @@ unsigned createShader(
 	glShaderSource(shader, 1, &charPointer, nullptr);
 	glCompileShader(shader);
 
-	//	Check for shader compilation errors
+	// Check for shader compilation errors
 	int shaderCompilationSuccess;
 	glGetShaderiv(shader, GL_COMPILE_STATUS, &shaderCompilationSuccess);
 	if (!shaderCompilationSuccess)
@@ -56,7 +60,7 @@ ShaderOpenGL::ShaderOpenGL(
 		GL_FRAGMENT_SHADER,
 		fragmentCode);
 
-	//	Create the shader program
+	// Create the shader program
 	mProgram = glCreateProgram();
 	GLTUT_CHECK(mProgram != 0, "Failed to create shader program");
 
@@ -64,7 +68,7 @@ ShaderOpenGL::ShaderOpenGL(
 	glAttachShader(mProgram, fragmentShader);
 	glLinkProgram(mProgram);
 
-	//	Check for shader program linking errors
+	// Check for shader program linking errors
 	int shaderProgramLinkingSuccess;
 	glGetProgramiv(mProgram, GL_LINK_STATUS, &shaderProgramLinkingSuccess);
 	if (!shaderProgramLinkingSuccess)

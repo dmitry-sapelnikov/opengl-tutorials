@@ -1,11 +1,15 @@
+// OpenGL tutorials and engine (https://github.com/dmitry-sapelnikov/opengl-tutorials)
+// SPDX-FileCopyrightText: 2024-2025 Dmitry Sapelnikov
+// SPDX-License-Identifier: MIT
+
 #pragma once
 
-//	Includes
+// Includes
 #include "engine/core/Check.h"
 
 namespace gltut
 {
-//	Global classes
+// Global classes
 /**
 	\brief Represents an axis-aligned bounding box (AABB)
 	\tparam D The number of space dimensions
@@ -62,19 +66,19 @@ public:
 		}
 	}
 
-	///	Returns the min point
+	/// Returns the min point
 	const PointType& getMin() const noexcept
 	{
 		return mMin;
 	}
 
-	///	Returns the max point
+	/// Returns the max point
 	const PointType& getMax() const noexcept
 	{
 		return mMax;
 	}
 
-	///	Returns the AABB size
+	/// Returns the AABB size
 	PointType getSize() const noexcept
 	{
 		return mMax - mMin;
@@ -94,10 +98,10 @@ private:
 		return true;
 	}
 
-	///	The min point
+	/// The min point
 	PointType mMin;
 
-	///	The max point
+	/// The max point
 	PointType mMax;
 };
 
