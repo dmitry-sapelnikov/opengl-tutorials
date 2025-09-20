@@ -19,10 +19,10 @@ PhongMaterialModelC::PhongMaterialModelC(
 	MaterialPass* lightingPass = getMaterial().createPass(
 		static_cast<u32>(MaterialPassIndex::LIGHTING),
 		phongShader.getShader(),
-		PhongShaderModel::TEXTURE_SLOTS_COUNT + 
-		phongShader.getMaxDirectionalLights() + 
-		phongShader.getMaxSpotLights(),
-		0); // No uniform buffers
+		PhongShaderModel::TEXTURE_SLOTS_COUNT +
+			phongShader.getMaxDirectionalLights() +
+			phongShader.getMaxSpotLights(),
+		1); // No uniform buffers
 
 	GLTUT_CHECK(lightingPass != nullptr, "Failed to create a material pass");
 	lightingPass->getShaderUniformBuffers()->set(
@@ -34,10 +34,10 @@ PhongMaterialModelC::PhongMaterialModelC(
 		MaterialPass* depthPass = getMaterial().createPass(
 			static_cast<u32>(MaterialPassIndex::DEPTH),
 			depthShader,
-			PhongShaderModel::TEXTURE_SLOTS_COUNT + 
-			phongShader.getMaxDirectionalLights() +
-			phongShader.getMaxSpotLights(),
-			0); // No uniform buffers
+			PhongShaderModel::TEXTURE_SLOTS_COUNT +
+				phongShader.getMaxDirectionalLights() +
+				phongShader.getMaxSpotLights(),
+			1); // No uniform buffers
 
 		GLTUT_CHECK(
 			depthPass != nullptr,
