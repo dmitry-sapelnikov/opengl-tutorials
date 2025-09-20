@@ -6,7 +6,7 @@
 namespace gltut
 {
 // Global classes
-/// Represents a 4x4 matrix
+/// Represents a 4x4 matrix in column-major order, i.e. m[column][row]
 class Matrix4
 {
 public:
@@ -17,10 +17,29 @@ public:
 		float m20 = 0, float m21 = 0, float m22 = 0, float m23 = 0,
 		float m30 = 0, float m31 = 0, float m32 = 0, float m33 = 0) noexcept
 	{
-		m[0][0] = m00; m[1][0] = m01; m[2][0] = m02; m[3][0] = m03;
-		m[0][1] = m10; m[1][1] = m11; m[2][1] = m12; m[3][1] = m13;
-		m[0][2] = m20; m[1][2] = m21; m[2][2] = m22; m[3][2] = m23;
-		m[0][3] = m30; m[1][3] = m31; m[2][3] = m32; m[3][3] = m33;
+		// The 1st row
+		m[0][0] = m00;
+		m[1][0] = m01;
+		m[2][0] = m02;
+		m[3][0] = m03;
+
+		// The 2nd row
+		m[0][1] = m10;
+		m[1][1] = m11;
+		m[2][1] = m12;
+		m[3][1] = m13;
+
+		// The 3rd row
+		m[0][2] = m20;
+		m[1][2] = m21;
+		m[2][2] = m22;
+		m[3][2] = m23;
+
+		// The 4th row
+		m[0][3] = m30;
+		m[1][3] = m31;
+		m[2][3] = m32;
+		m[3][3] = m33;
 	}
 
 	/// Data constructor
@@ -124,7 +143,7 @@ public:
 			-m[0][0], -m[1][0], -m[2][0], -m[3][0],
 			-m[0][1], -m[1][1], -m[2][1], -m[3][1],
 			-m[0][2], -m[1][2], -m[2][2], -m[3][2],
-			-m[0][3], -m[1][3], -m[2][3], -m[3][3] };
+			-m[0][3], -m[1][3], -m[2][3], -m[3][3]};
 	}
 
 	/// Returns the transpose matrix
@@ -134,7 +153,7 @@ public:
 			m[0][0], m[0][1], m[0][2], m[0][3],
 			m[1][0], m[1][1], m[1][2], m[1][3],
 			m[2][0], m[2][1], m[2][2], m[2][3],
-			m[3][0], m[3][1], m[3][2], m[3][3] };
+			m[3][0], m[3][1], m[3][2], m[3][3]};
 	}
 
 	/// Returns the axis at the specified index
@@ -142,7 +161,7 @@ public:
 	{
 		GLTUT_ASSERT(i < 3);
 		const auto& col = m[i];
-		return { col[0], col[1], col[2] };
+		return {col[0], col[1], col[2]};
 	}
 
 	/// Sets the axis at the specified index
@@ -211,13 +230,13 @@ public:
 		return {
 			m[0][0], m[1][0], m[2][0],
 			m[0][1], m[1][1], m[2][1],
-			m[0][2], m[1][2], m[2][2] };
+			m[0][2], m[1][2], m[2][2]};
 	}
 
 	/// Extracts the translation component from the matrix
 	Vector3 getTranslation() const noexcept
 	{
-		return { m[3][0], m[3][1], m[3][2] };
+		return {m[3][0], m[3][1], m[3][2]};
 	}
 
 	/// Returns the identity matrix
@@ -234,8 +253,8 @@ public:
 
 	static Matrix4 transformMatrix(
 		const Vector3& position,
-		const Vector3& axisAngle = { 0.0f, 0.0f, 0.0f },
-		const Vector3& scale = { 1.f, 1.f, 1.f }) noexcept;
+		const Vector3& axisAngle = {0.0f, 0.0f, 0.0f},
+		const Vector3& scale = {1.f, 1.f, 1.f}) noexcept;
 
 	/// Returns a 4x4 look-at matrix
 	static Matrix4 lookAtMatrix(
@@ -262,7 +281,7 @@ private:
 	float m[4][4];
 };
 
-//	Inline methods
+// Inline methods
 inline Matrix4 Matrix4::getInverse() const
 {
 	const auto& M = *this;
@@ -280,85 +299,69 @@ inline Matrix4 Matrix4::getInverse() const
 	d = 1.f / d;
 
 	Matrix4 out;
-	out(0, 0) = d * (
-		M(1, 1) * (M(2, 2) * M(3, 3) - M(2, 3) * M(3, 2)) +
-		M(1, 2) * (M(2, 3) * M(3, 1) - M(2, 1) * M(3, 3)) +
-		M(1, 3) * (M(2, 1) * M(3, 2) - M(2, 2) * M(3, 1)));
+	out(0, 0) = d * (M(1, 1) * (M(2, 2) * M(3, 3) - M(2, 3) * M(3, 2)) +
+					 M(1, 2) * (M(2, 3) * M(3, 1) - M(2, 1) * M(3, 3)) +
+					 M(1, 3) * (M(2, 1) * M(3, 2) - M(2, 2) * M(3, 1)));
 
-	out(0, 1) = d * (
-		M(2, 1) * (M(0, 2) * M(3, 3) - M(0, 3) * M(3, 2)) +
-		M(2, 2) * (M(0, 3) * M(3, 1) - M(0, 1) * M(3, 3)) +
-		M(2, 3) * (M(0, 1) * M(3, 2) - M(0, 2) * M(3, 1)));
+	out(0, 1) = d * (M(2, 1) * (M(0, 2) * M(3, 3) - M(0, 3) * M(3, 2)) +
+					 M(2, 2) * (M(0, 3) * M(3, 1) - M(0, 1) * M(3, 3)) +
+					 M(2, 3) * (M(0, 1) * M(3, 2) - M(0, 2) * M(3, 1)));
 
-	out(0, 2) = d * (
-		M(3, 1) * (M(0, 2) * M(1, 3) - M(0, 3) * M(1, 2)) +
-		M(3, 2) * (M(0, 3) * M(1, 1) - M(0, 1) * M(1, 3)) +
-		M(3, 3) * (M(0, 1) * M(1, 2) - M(0, 2) * M(1, 1)));
+	out(0, 2) = d * (M(3, 1) * (M(0, 2) * M(1, 3) - M(0, 3) * M(1, 2)) +
+					 M(3, 2) * (M(0, 3) * M(1, 1) - M(0, 1) * M(1, 3)) +
+					 M(3, 3) * (M(0, 1) * M(1, 2) - M(0, 2) * M(1, 1)));
 
-	out(0, 3) = d * (
-		M(0, 1) * (M(1, 3) * M(2, 2) - M(1, 2) * M(2, 3)) +
-		M(0, 2) * (M(1, 1) * M(2, 3) - M(1, 3) * M(2, 1)) +
-		M(0, 3) * (M(1, 2) * M(2, 1) - M(1, 1) * M(2, 2)));
+	out(0, 3) = d * (M(0, 1) * (M(1, 3) * M(2, 2) - M(1, 2) * M(2, 3)) +
+					 M(0, 2) * (M(1, 1) * M(2, 3) - M(1, 3) * M(2, 1)) +
+					 M(0, 3) * (M(1, 2) * M(2, 1) - M(1, 1) * M(2, 2)));
 
-	out(1, 0) = d * (
-		M(1, 2) * (M(2, 0) * M(3, 3) - M(2, 3) * M(3, 0)) +
-		M(1, 3) * (M(2, 2) * M(3, 0) - M(2, 0) * M(3, 2)) +
-		M(1, 0) * (M(2, 3) * M(3, 2) - M(2, 2) * M(3, 3)));
+	out(1, 0) = d * (M(1, 2) * (M(2, 0) * M(3, 3) - M(2, 3) * M(3, 0)) +
+					 M(1, 3) * (M(2, 2) * M(3, 0) - M(2, 0) * M(3, 2)) +
+					 M(1, 0) * (M(2, 3) * M(3, 2) - M(2, 2) * M(3, 3)));
 
-	out(1, 1) = d * (
-		M(2, 2) * (M(0, 0) * M(3, 3) - M(0, 3) * M(3, 0)) +
-		M(2, 3) * (M(0, 2) * M(3, 0) - M(0, 0) * M(3, 2)) +
-		M(2, 0) * (M(0, 3) * M(3, 2) - M(0, 2) * M(3, 3)));
+	out(1, 1) = d * (M(2, 2) * (M(0, 0) * M(3, 3) - M(0, 3) * M(3, 0)) +
+					 M(2, 3) * (M(0, 2) * M(3, 0) - M(0, 0) * M(3, 2)) +
+					 M(2, 0) * (M(0, 3) * M(3, 2) - M(0, 2) * M(3, 3)));
 
-	out(1, 2) = d * (
-		M(3, 2) * (M(0, 0) * M(1, 3) - M(0, 3) * M(1, 0)) +
-		M(3, 3) * (M(0, 2) * M(1, 0) - M(0, 0) * M(1, 2)) +
-		M(3, 0) * (M(0, 3) * M(1, 2) - M(0, 2) * M(1, 3)));
+	out(1, 2) = d * (M(3, 2) * (M(0, 0) * M(1, 3) - M(0, 3) * M(1, 0)) +
+					 M(3, 3) * (M(0, 2) * M(1, 0) - M(0, 0) * M(1, 2)) +
+					 M(3, 0) * (M(0, 3) * M(1, 2) - M(0, 2) * M(1, 3)));
 
-	out(1, 3) = d * (
-		M(0, 2) * (M(1, 3) * M(2, 0) - M(1, 0) * M(2, 3)) +
-		M(0, 3) * (M(1, 0) * M(2, 2) - M(1, 2) * M(2, 0)) +
-		M(0, 0) * (M(1, 2) * M(2, 3) - M(1, 3) * M(2, 2)));
+	out(1, 3) = d * (M(0, 2) * (M(1, 3) * M(2, 0) - M(1, 0) * M(2, 3)) +
+					 M(0, 3) * (M(1, 0) * M(2, 2) - M(1, 2) * M(2, 0)) +
+					 M(0, 0) * (M(1, 2) * M(2, 3) - M(1, 3) * M(2, 2)));
 
-	out(2, 0) = d * (
-		M(1, 3) * (M(2, 0) * M(3, 1) - M(2, 1) * M(3, 0)) +
-		M(1, 0) * (M(2, 1) * M(3, 3) - M(2, 3) * M(3, 1)) +
-		M(1, 1) * (M(2, 3) * M(3, 0) - M(2, 0) * M(3, 3)));
+	out(2, 0) = d * (M(1, 3) * (M(2, 0) * M(3, 1) - M(2, 1) * M(3, 0)) +
+					 M(1, 0) * (M(2, 1) * M(3, 3) - M(2, 3) * M(3, 1)) +
+					 M(1, 1) * (M(2, 3) * M(3, 0) - M(2, 0) * M(3, 3)));
 
-	out(2, 1) = d * (
-		M(2, 3) * (M(0, 0) * M(3, 1) - M(0, 1) * M(3, 0)) +
-		M(2, 0) * (M(0, 1) * M(3, 3) - M(0, 3) * M(3, 1)) +
-		M(2, 1) * (M(0, 3) * M(3, 0) - M(0, 0) * M(3, 3)));
+	out(2, 1) = d * (M(2, 3) * (M(0, 0) * M(3, 1) - M(0, 1) * M(3, 0)) +
+					 M(2, 0) * (M(0, 1) * M(3, 3) - M(0, 3) * M(3, 1)) +
+					 M(2, 1) * (M(0, 3) * M(3, 0) - M(0, 0) * M(3, 3)));
 
-	out(2, 2) = d * (
-		M(3, 3) * (M(0, 0) * M(1, 1) - M(0, 1) * M(1, 0)) +
-		M(3, 0) * (M(0, 1) * M(1, 3) - M(0, 3) * M(1, 1)) +
-		M(3, 1) * (M(0, 3) * M(1, 0) - M(0, 0) * M(1, 3)));
+	out(2, 2) = d * (M(3, 3) * (M(0, 0) * M(1, 1) - M(0, 1) * M(1, 0)) +
+					 M(3, 0) * (M(0, 1) * M(1, 3) - M(0, 3) * M(1, 1)) +
+					 M(3, 1) * (M(0, 3) * M(1, 0) - M(0, 0) * M(1, 3)));
 
-	out(2, 3) = d * (
-		M(0, 3) * (M(1, 1) * M(2, 0) - M(1, 0) * M(2, 1)) +
-		M(0, 0) * (M(1, 3) * M(2, 1) - M(1, 1) * M(2, 3)) +
-		M(0, 1) * (M(1, 0) * M(2, 3) - M(1, 3) * M(2, 0)));
+	out(2, 3) = d * (M(0, 3) * (M(1, 1) * M(2, 0) - M(1, 0) * M(2, 1)) +
+					 M(0, 0) * (M(1, 3) * M(2, 1) - M(1, 1) * M(2, 3)) +
+					 M(0, 1) * (M(1, 0) * M(2, 3) - M(1, 3) * M(2, 0)));
 
-	out(3, 0) = d * (
-		M(1, 0) * (M(2, 2) * M(3, 1) - M(2, 1) * M(3, 2)) +
-		M(1, 1) * (M(2, 0) * M(3, 2) - M(2, 2) * M(3, 0)) +
-		M(1, 2) * (M(2, 1) * M(3, 0) - M(2, 0) * M(3, 1)));
+	out(3, 0) = d * (M(1, 0) * (M(2, 2) * M(3, 1) - M(2, 1) * M(3, 2)) +
+					 M(1, 1) * (M(2, 0) * M(3, 2) - M(2, 2) * M(3, 0)) +
+					 M(1, 2) * (M(2, 1) * M(3, 0) - M(2, 0) * M(3, 1)));
 
-	out(3, 1) = d * (
-		M(2, 0) * (M(0, 2) * M(3, 1) - M(0, 1) * M(3, 2)) +
-		M(2, 1) * (M(0, 0) * M(3, 2) - M(0, 2) * M(3, 0)) +
-		M(2, 2) * (M(0, 1) * M(3, 0) - M(0, 0) * M(3, 1)));
+	out(3, 1) = d * (M(2, 0) * (M(0, 2) * M(3, 1) - M(0, 1) * M(3, 2)) +
+					 M(2, 1) * (M(0, 0) * M(3, 2) - M(0, 2) * M(3, 0)) +
+					 M(2, 2) * (M(0, 1) * M(3, 0) - M(0, 0) * M(3, 1)));
 
-	out(3, 2) = d * (
-		M(3, 0) * (M(0, 2) * M(1, 1) - M(0, 1) * M(1, 2)) +
-		M(3, 1) * (M(0, 0) * M(1, 2) - M(0, 2) * M(1, 0)) +
-		M(3, 2) * (M(0, 1) * M(1, 0) - M(0, 0) * M(1, 1)));
+	out(3, 2) = d * (M(3, 0) * (M(0, 2) * M(1, 1) - M(0, 1) * M(1, 2)) +
+					 M(3, 1) * (M(0, 0) * M(1, 2) - M(0, 2) * M(1, 0)) +
+					 M(3, 2) * (M(0, 1) * M(1, 0) - M(0, 0) * M(1, 1)));
 
-	out(3, 3) = d * (
-		M(0, 0) * (M(1, 1) * M(2, 2) - M(1, 2) * M(2, 1)) +
-		M(0, 1) * (M(1, 2) * M(2, 0) - M(1, 0) * M(2, 2)) +
-		M(0, 2) * (M(1, 0) * M(2, 1) - M(1, 1) * M(2, 0)));
+	out(3, 3) = d * (M(0, 0) * (M(1, 1) * M(2, 2) - M(1, 2) * M(2, 1)) +
+					 M(0, 1) * (M(1, 2) * M(2, 0) - M(1, 0) * M(2, 2)) +
+					 M(0, 2) * (M(1, 0) * M(2, 1) - M(1, 1) * M(2, 0)));
 
 	return out;
 }
@@ -377,7 +380,7 @@ inline Matrix4 Matrix4::identity() noexcept
 		1.f, 0.f, 0.f, 0.f,
 		0.f, 1.f, 0.f, 0.f,
 		0.f, 0.f, 1.f, 0.f,
-		0.f, 0.f, 0.f, 1.f };
+		0.f, 0.f, 0.f, 1.f};
 }
 
 /// Returns a 4x4 translation matrix
@@ -387,7 +390,7 @@ inline Matrix4 Matrix4::translationMatrix(const Vector3& v) noexcept
 		1.f, 0.f, 0.f, v.x,
 		0.f, 1.f, 0.f, v.y,
 		0.f, 0.f, 1.f, v.z,
-		0.f, 0.f, 0.f, 1.f };
+		0.f, 0.f, 0.f, 1.f};
 }
 
 /// Returns a 4x4 rotation matrix
@@ -421,7 +424,7 @@ inline Matrix4 Matrix4::rotationMatrix(const Vector3& axisAngle) noexcept
 		0.f,
 		0.f,
 		0.f,
-		1.f };
+		1.f};
 }
 
 inline Matrix4 Matrix4::scaleMatrix(const Vector3& s) noexcept
@@ -430,7 +433,7 @@ inline Matrix4 Matrix4::scaleMatrix(const Vector3& s) noexcept
 		s.x, 0.f, 0.f, 0.f,
 		0.f, s.y, 0.f, 0.f,
 		0.f, 0.f, s.z, 0.f,
-		0.f, 0.f, 0.f, 1.f };
+		0.f, 0.f, 0.f, 1.f};
 }
 
 inline Matrix4 Matrix4::transformMatrix(
@@ -438,10 +441,9 @@ inline Matrix4 Matrix4::transformMatrix(
 	const Vector3& axisAngle,
 	const Vector3& scale) noexcept
 {
-	return
-		translationMatrix(position) *
-		rotationMatrix(axisAngle) *
-		scaleMatrix(scale);
+	return translationMatrix(position) *
+		   rotationMatrix(axisAngle) *
+		   scaleMatrix(scale);
 }
 
 inline Matrix4 Matrix4::lookAtMatrix(
@@ -449,7 +451,7 @@ inline Matrix4 Matrix4::lookAtMatrix(
 	const Vector3& target,
 	const Vector3& up) noexcept
 {
-	// Row-major gluLookAt 
+	// Row-major gluLookAt
 	const Vector3 f = (target - position).normalize();
 	const Vector3 s = f.cross(up).normalize();
 	const Vector3 u = s.cross(f);
@@ -457,7 +459,7 @@ inline Matrix4 Matrix4::lookAtMatrix(
 		s.x, s.y, s.z, -s.dot(position),
 		u.x, u.y, u.z, -u.dot(position),
 		-f.x, -f.y, -f.z, f.dot(position),
-		0.f, 0.f, 0.f, 1.f };
+		0.f, 0.f, 0.f, 1.f};
 }
 
 inline Matrix4 Matrix4::perspectiveProjectionMatrix(
@@ -486,7 +488,7 @@ inline Matrix4 Matrix4::perspectiveProjectionMatrix(
 		fx, 0.f, 0.f, 0.f,
 		0.f, fy, 0.f, 0.f,
 		0.f, 0.f, fz, fw,
-		0.f, 0.f, -1.f, 0.f };
+		0.f, 0.f, -1.f, 0.f};
 }
 
 inline Matrix4 Matrix4::orthographicProjectionMatrix(
@@ -510,7 +512,7 @@ inline Matrix4 Matrix4::orthographicProjectionMatrix(
 		fx, 0.f, 0.f, 0.f,
 		0.f, fy, 0.f, 0.f,
 		0.f, 0.f, fz, fw,
-		0.f, 0.f, 0.f, 1.f };
+		0.f, 0.f, 0.f, 1.f};
 }
 
 // End of the namespace gltut

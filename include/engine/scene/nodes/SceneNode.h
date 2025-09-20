@@ -5,7 +5,6 @@
 
 namespace gltut
 {
-
 // Global classes
 /// Contains the colors used for a light source
 class SceneNode

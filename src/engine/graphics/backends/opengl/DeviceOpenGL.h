@@ -1,14 +1,16 @@
 #pragma once
 
 // Includes
-#include <vector>
 #include <memory>
+#include <vector>
+
 #include "../../GraphicsDeviceBase.h"
 #include "./framebuffer/WindowFramebufferOpenGL.h"
 
 namespace gltut
 {
-/// OpenGL device
+// Global classes
+/// OpenGL implementation of the GraphicsDevice interface
 class DeviceOpenGL final : public GraphicsDeviceBase
 {
 public:

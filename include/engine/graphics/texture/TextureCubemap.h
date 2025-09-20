@@ -6,7 +6,7 @@
 namespace gltut
 {
 
-///	Represents a texture cubemap
+/// Represents a texture cubemap
 class TextureCubemap : public Texture
 {
 };

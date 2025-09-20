@@ -1,10 +1,10 @@
 #pragma once
 
 // Includes
-#include <array>
-#include <string>
 #include "engine/core/NonCopyable.h"
 #include "engine/graphics/shader/Shader.h"
+#include <array>
+#include <string>
 
 namespace gltut
 {
@@ -16,7 +16,6 @@ class ShaderBindingT : public ShaderBindingInterface, public NonCopyable
 public:
 	/// Shader parameter parts
 	using ShaderParameterParts = std::pair<std::string, std::string>;
-
 
 	/// Constructor
 	explicit ShaderBindingT(Shader* shader) noexcept :
@@ -75,12 +74,12 @@ public:
 		if (dotPos != std::string::npos)
 		{
 			// Split the shader parameter name into two parts
-			mShaderParameterParts[index] = { param.substr(0, dotPos), param.substr(dotPos + 1) };
+			mShaderParameterParts[index] = {param.substr(0, dotPos), param.substr(dotPos + 1)};
 		}
 		else
 		{
 			// No dot found, use the whole name as the first part
-			mShaderParameterParts[index] = { param, "" };
+			mShaderParameterParts[index] = {param, ""};
 		}
 
 		if (!mShaderParameterParts[index].second.empty())

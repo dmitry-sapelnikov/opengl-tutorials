@@ -1,10 +1,10 @@
 #pragma once
 
 // Includes
-#include <vector>
 #include "engine/core/NonCopyable.h"
-#include "engine/renderer/material/Material.h"
 #include "engine/graphics/GraphicsDevice.h"
+#include "engine/renderer/material/Material.h"
+#include <vector>
 
 namespace gltut
 {

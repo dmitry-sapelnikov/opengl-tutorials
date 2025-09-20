@@ -92,7 +92,7 @@ Matrix4 CameraProjectionC::getMatrix(float aspectRatio) const noexcept
 		mFarPlane);
 }
 
-//	Global functions
+// Global functions
 Vector3 screenToCameraRay(
 	const Point2i& screenPoint,
 	const Point2u& windowSize,

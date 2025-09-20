@@ -1,23 +1,22 @@
 #pragma once
 
 // Includes
-#include "engine/graphics/texture/Texture.h"
+#include "engine/graphics/RenderModes.h"
 #include "engine/graphics/shader/ShaderParameters.h"
+#include "engine/graphics/texture/Texture.h"
 #include "engine/renderer/shader/ShaderRendererBinding.h"
 #include "engine/renderer/shader/ShaderUniformBufferSet.h"
 #include "engine/renderer/texture/TextureSet.h"
-#include "engine/graphics/RenderModes.h"
 
 namespace gltut
 {
-
 
 // Global classes
 /// The class represents a material for a single render pass
 class MaterialPass
 {
 public:
-	///	Virtual destructor
+	/// Virtual destructor
 	virtual ~MaterialPass() noexcept = default;
 
 	/// Returns the shader

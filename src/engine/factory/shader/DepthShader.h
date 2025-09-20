@@ -12,4 +12,3 @@ ShaderRendererBinding* createDepthShader(Renderer& renderer) noexcept;
 
 // End of the namespace gltut
 }
-

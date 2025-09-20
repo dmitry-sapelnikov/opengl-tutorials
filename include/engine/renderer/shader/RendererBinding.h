@@ -1,10 +1,10 @@
 #pragma once
 
-// Includes
-
 namespace gltut
 {
-
+// Global classes
+	
+// Forward declarations
 class RenderGeometry;
 class Viewpoint;
 

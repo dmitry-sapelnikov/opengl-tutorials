@@ -1,23 +1,28 @@
 #pragma once
 
 // Includes
-#include "engine/math/Point2.h"
 #include "engine/graphics/texture/TextureParameters.h"
+#include "engine/math/Point2.h"
 
 namespace gltut
 {
-
+// Global enums
 /// Represents the format of a texture
 enum class TextureFormat
 {
 	/// Single channel (red)
 	R,
+	/// Red and green channels
 	RGB,
+	/// Red, green and blue channels
 	RGBA,
+	/// 1-channel 32-bit floating point format
 	FLOAT,
+	/// The total number of texture formats
 	TOTAL_COUNT
 };
 
+// Global classes
 /// Represents raw texture data
 struct TextureData
 {
@@ -25,13 +30,13 @@ struct TextureData
 	const u8* data = nullptr;
 
 	/// Size of the texture
-	Point2u size = { 0, 0 };
+	Point2u size = {0, 0};
 
 	/// Format of the texture
 	TextureFormat format = TextureFormat::FLOAT;
 };
 
-///	Represents a texture
+/// Represents a texture
 class Texture
 {
 public:

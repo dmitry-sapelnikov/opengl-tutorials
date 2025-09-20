@@ -2,8 +2,8 @@
 
 // Includes
 #include "engine/math/Matrix4.h"
-#include "engine/window/Window.h"
 #include "engine/renderer/viewpoint/Viewpoint.h"
+#include "engine/window/Window.h"
 
 namespace gltut
 {
@@ -21,7 +21,7 @@ public:
 	/// Returns the position of the camera
 	virtual const Vector3& getPosition() const noexcept = 0;
 
-	///	Sets the position of the camera
+	/// Sets the position of the camera
 	virtual void setPosition(const Vector3& position) noexcept = 0;
 
 	/// Returns the target of the camera

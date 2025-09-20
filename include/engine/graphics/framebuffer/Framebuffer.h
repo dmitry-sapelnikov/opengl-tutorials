@@ -5,7 +5,7 @@
 
 namespace gltut
 {
-///	Represents a framebuffer
+/// Represents a framebuffer
 /// A framebuffer is a collection of textures that
 /// can be used for off-screen rendering.
 class Framebuffer

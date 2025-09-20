@@ -4,7 +4,11 @@
 namespace gltut
 {
 
-static const char* CUBEMAP_VERTEX_SHADER = R"(
+namespace
+{
+// Local constants
+/// Cubemap vertex shader
+const char* CUBEMAP_VERTEX_SHADER = R"(
 #version 330 core
 
 uniform mat4 view;
@@ -24,6 +28,7 @@ void main()
 	gl_Position = pos.xyww;
 })";
 
+/// Cubemap fragment shader
 static const char* CUBEMAP_FRAGMENT_SHADER = R"(
 #version 330 core
 uniform samplerCube skyboxSampler;
@@ -36,7 +41,10 @@ void main()
 	outColor = texture(skyboxSampler, texCoords);
 })";
 
-/// Creates a shadow map for the given light
+// End of the anonymous namespace
+}
+
+// Global classes
 ShadowMap* SceneFactoryC::createShadowMap(
 	const LightNode* light,
 	const RenderObject* shadowCaster,
@@ -53,46 +61,46 @@ ShadowMap* SceneFactoryC::createShadowMap(
 
 	ShadowMap* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN
-		if (auto findResult = mShadowMaps.find(light);
-			findResult != mShadowMaps.end())
+	if (auto findResult = mShadowMaps.find(light);
+		findResult != mShadowMaps.end())
+	{
+		result = &findResult->second;
+	}
+	else
+	{
+		switch (light->getType())
 		{
-			result = &findResult->second;
-		}
-		else
+		case LightNode::Type::DIRECTIONAL:
 		{
-			switch (light->getType())
-			{
-			case LightNode::Type::DIRECTIONAL:
-				{
-					// Create a new shadow map
-					result = &mShadowMaps.try_emplace(
-						light,
-						mRenderer,
-						*light,
-						*shadowCaster,
-						frustumSize,
-						frustumNear,
-						frustumFar,
-						shadowMapSize).first->second;
-				}
-				break;
-
-				case LightNode::Type::SPOT:
-				{
-					result = &mShadowMaps.try_emplace(
-						light,
-						mRenderer,
-						*light,
-						*shadowCaster,
-						frustumNear,
-						frustumFar,
-						shadowMapSize).first->second;
-				}
-				break;
-
-				GLTUT_UNEXPECTED_SWITCH_DEFAULT_CASE(light->getType())
-			}
+			// Create a new shadow map
+			result = &mShadowMaps.try_emplace(
+				light,
+				mRenderer,
+				*light,
+				*shadowCaster,
+				frustumSize,
+				frustumNear,
+				frustumFar,
+				shadowMapSize).first->second;
 		}
+		break;
+
+		case LightNode::Type::SPOT:
+		{
+			result = &mShadowMaps.try_emplace(
+				light,
+				mRenderer,
+				*light,
+				*shadowCaster,
+				frustumNear,
+				frustumFar,
+				shadowMapSize).first->second;
+		}
+		break;
+
+			GLTUT_UNEXPECTED_SWITCH_DEFAULT_CASE(light->getType())
+		}
+	}
 	GLTUT_CATCH_ALL_END("Failed to create shadow map for the light");
 	return result;
 }
@@ -117,7 +125,7 @@ bool SceneFactoryC::createSkybox(
 			mSkyboxCube = mGeometryFactory.createBox(gltut::Vector3(1.0f));
 			GLTUT_CHECK(mSkyboxCube != nullptr, "Failed to create skybox geometry");
 		}
-		
+
 		Material* skyboxMaterial = createSkyboxMaterial(*cubemapTexture);
 		GLTUT_CHECK(skyboxMaterial != nullptr, "Failed to create skybox material");
 
@@ -131,11 +139,11 @@ bool SceneFactoryC::createSkybox(
 			viewpoint,
 			skyboxRenderGeometry,
 			mRenderer.getDevice()->getFramebuffers()->getDefault(),
-			0, // Material pass
+			0,		 // Material pass
 			nullptr, // No clear color
-			false, // No depth clearing
-			nullptr // Full viewport
-			);
+			false,	 // No depth clearing
+			nullptr	 // Full viewport
+		);
 
 		GLTUT_CHECK(skyboxPass != nullptr, "Failed to create skybox render pass");
 		// Set the depth function to less equal since the z-buffer is filled with 1.0 and
@@ -175,7 +183,7 @@ gltut::Material* SceneFactoryC::createSkyboxMaterial(const TextureCubemap& cubem
 	auto* pass = skyboxMaterial->createPass(
 		0,
 		mSkyboxShaderBinding,
-		1, // One texture
+		1,	// One texture
 		0); // No uniform buffers
 
 	GLTUT_CHECK(pass != nullptr, "Failed to create skybox material pass");

@@ -7,6 +7,8 @@ namespace gltut
 {
 
 // Global classes
+
+/// Represents a set of shader uniform buffers
 class ShaderUniformBufferSet
 {
 public:

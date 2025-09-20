@@ -6,7 +6,7 @@
 namespace gltut
 {
 // Global classes
-/// The class represents a scene viewpoint
+/// Represents a viewpoint in the renderer
 class Viewpoint
 {
 public:

@@ -1,8 +1,8 @@
 #pragma once
 
 // Includes
-#include <glad/glad.h>
 #include "engine/core/Check.h"
+#include <glad/glad.h>
 
 namespace gltut
 {

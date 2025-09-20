@@ -1,12 +1,12 @@
 #pragma once
 
-//	Includes
-#include "engine/math/Point2.h"
+// Includes
 #include "engine/math/Aabb.h"
+#include "engine/math/Point2.h"
 
 namespace gltut
 {
-//	Global classes
+// Global classes
 /// Represents a 2D rectangle with unsigned integral coordinates
 using Rectangle2u = AABB<2, Point2u>;
 

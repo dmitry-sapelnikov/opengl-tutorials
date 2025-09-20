@@ -1,14 +1,16 @@
 #pragma once
 
 // Includes
-#include "engine/graphics/texture/Texture.h"
 #include "engine/graphics/shader/ShaderParameters.h"
+#include "engine/graphics/texture/Texture.h"
 #include "engine/renderer/shader/ShaderRendererBinding.h"
 
 namespace gltut
 {
 
 // Global classes
+
+/// Represents a set of textures
 class TextureSet
 {
 public:

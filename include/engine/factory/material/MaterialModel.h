@@ -6,6 +6,11 @@
 namespace gltut
 {
 // Global classes
+
+/**
+	\brief The material model interface.
+	Provides access to the underlying material.
+*/
 class MaterialModel
 {
 public:

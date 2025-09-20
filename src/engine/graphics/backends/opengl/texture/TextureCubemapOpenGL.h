@@ -1,12 +1,14 @@
 #pragma once
 
 // Includes
-#include "engine/graphics/texture/TextureCubemap.h"
 #include "TextureTOpenGL.h"
+#include "engine/graphics/texture/TextureCubemap.h"
 
 namespace gltut
 {
 
+// Global classes
+/// OpenGL implementation of a cubemap texture
 class TextureCubemapOpenGL final : public TextureTOpenGL<TextureCubemap, GL_TEXTURE_CUBE_MAP>
 {
 public:

@@ -7,7 +7,7 @@
 
 namespace gltut
 {
-//	Global classes
+// Global classes
 class Renderer;
 
 /// Binds shader parameters to renderer parameters

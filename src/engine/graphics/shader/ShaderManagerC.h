@@ -1,13 +1,13 @@
 #pragma once
 
 // Includes
-#include "engine/graphics/Shader/ShaderManager.h"
 #include "../../core/ItemManagerT.h"
+#include "engine/graphics/Shader/ShaderManager.h"
 
 namespace gltut
 {
-
-/// GraphicsDevice base class
+// Global classes
+// Forward declarations
 class GraphicsDeviceBase;
 
 /// Implementation of the ShaderManager interface

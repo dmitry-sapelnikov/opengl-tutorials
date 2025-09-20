@@ -2,7 +2,7 @@
 
 namespace gltut
 {
-
+// Global enums
 /// Texture filter modes
 enum class TextureFilterMode
 {
@@ -19,6 +19,8 @@ enum class TextureWrapMode
 	CLAMP_TO_EDGE
 };
 
+// Global classes
+/// Represents texture parameters
 struct TextureParameters
 {
 	/// The minification filter mode

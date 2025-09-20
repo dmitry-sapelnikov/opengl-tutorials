@@ -1,10 +1,10 @@
 #pragma once
 
 // Includes
-#include <unordered_map>
-#include "engine/core/ItemManager.h"
 #include "../../core/ItemManagerT.h"
+#include "engine/core/ItemManager.h"
 #include "engine/graphics/texture/TextureManager.h"
+#include <unordered_map>
 
 namespace gltut
 {

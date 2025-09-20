@@ -1,9 +1,10 @@
 #pragma once
 
 // Includes
-#include "../../graphics/shader/ShaderBindingT.h"
 #include "engine/renderer/shader/ShaderRendererBinding.h"
 #include "engine/renderer/viewpoint/Viewpoint.h"
+
+#include "../../graphics/shader/ShaderBindingT.h"
 
 namespace gltut
 {

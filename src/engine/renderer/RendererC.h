@@ -1,18 +1,18 @@
 #pragma once
 
 // Includes
-#include <vector>
 #include <memory>
+#include <vector>
 
 #include "engine/core/NonCopyable.h"
-#include "engine/renderer/Renderer.h"
 #include "engine/graphics/GraphicsDevice.h"
+#include "engine/renderer/Renderer.h"
 #include "engine/scene/Scene.h"
 
 namespace gltut
 {
-//	Global classes
-///	Represents a render pipeline for the scene
+// Global classes
+/// Implementation of the Renderer interface
 class RendererC final : public Renderer, public NonCopyable
 {
 public:
@@ -88,7 +88,7 @@ public:
 	void execute() noexcept;
 
 private:
-	/// GraphicsDevice
+	/// Graphics device
 	GraphicsDevice& mDevice;
 
 	/// Shader renderer bindings

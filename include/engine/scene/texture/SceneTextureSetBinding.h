@@ -5,7 +5,8 @@
 
 namespace gltut
 {
-//	Global classes
+// Global classes
+// Forward declarations
 class Scene;
 
 /// The class represents a shader binding for scene parameters

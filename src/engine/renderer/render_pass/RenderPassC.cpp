@@ -3,7 +3,7 @@
 
 namespace gltut
 {
-//	Global classes
+// Global classes
 RenderPassC::RenderPassC(
 	const Viewpoint* viewpoint,
 	const RenderObject* object,

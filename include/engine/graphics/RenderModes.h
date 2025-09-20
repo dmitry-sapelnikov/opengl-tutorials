@@ -1,9 +1,8 @@
 #pragma once
-// Includes
 
 namespace gltut
 {
-
+// Global enums
 /// Face cull mode
 enum class FaceCullingMode
 {

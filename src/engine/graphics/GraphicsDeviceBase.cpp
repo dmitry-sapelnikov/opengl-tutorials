@@ -2,11 +2,12 @@
 #include "GraphicsDeviceBase.h"
 
 #include <iostream>
+
 #include "../core/File.h"
 
 namespace gltut
 {
-
+// Global classes
 GraphicsDeviceBase::GraphicsDeviceBase(Window& window) noexcept :
 	mWindow(window),
 	mGeometries(*this),
@@ -34,7 +35,7 @@ void GraphicsDeviceBase::bindFramebuffer(
 	else
 	{
 		// If no viewport is provided, use the framebuffer size
-		setViewport({ { 0, 0 }, framebuffer->getSize() });
+		setViewport({{0, 0}, framebuffer->getSize()});
 	}
 }
 

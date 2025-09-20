@@ -5,7 +5,11 @@
 
 namespace gltut
 {
-///	Represents a shader uniform buffer
+// Global classes
+/**
+	Represents a shader uniform buffer,
+	a buffer containing uniforms that can be shared between multiple shaders.
+*/
 class ShaderUniformBuffer
 {
 public:
@@ -17,7 +21,6 @@ public:
 
 	/// Sets the data of the uniform buffer
 	virtual void setData(const void* data, u32 size, u32 offset) noexcept = 0;
-
 };
 
 // End of the namespace gltut

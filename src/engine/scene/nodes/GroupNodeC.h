@@ -6,7 +6,8 @@
 namespace gltut
 {
 
-/// A group scene node implementation
+// Global classes
+/// Implementation of the group node abstraction
 class GroupNodeC final : public SceneNodeT<SceneNode>
 {
 public:

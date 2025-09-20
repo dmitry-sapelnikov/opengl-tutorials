@@ -1,13 +1,13 @@
 #pragma once
 
 // Includes
-#include "engine/Engine.h"
 #include "asset_loader/AssetMaterialFactory.h"
+#include "engine/Engine.h"
 
 namespace gltut
 {
 // Global classes
-/// Loads assets from files
+/// Loads assets from files using the Assimp library
 class AssetLoader
 {
 public:

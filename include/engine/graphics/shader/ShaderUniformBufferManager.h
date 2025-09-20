@@ -6,7 +6,6 @@
 
 namespace gltut
 {
-
 // Global classes
 /// Interface for shader uniform buffer management
 class ShaderUniformBufferManager : public ItemManager<ShaderUniformBuffer>

@@ -12,8 +12,7 @@ std::string readFileToString(const std::filesystem::path& path)
 	file.open(path);
 	return {
 		std::istreambuf_iterator<char>(file),
-		std::istreambuf_iterator<char>()
-	};
+		std::istreambuf_iterator<char>()};
 }
 
 // End of the namespace gltut

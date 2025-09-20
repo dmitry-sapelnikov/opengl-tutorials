@@ -5,7 +5,7 @@
 
 namespace gltut
 {
-
+// Global classes
 /// Represents a framebuffer that contains textures
 class TextureFramebuffer : public Framebuffer
 {

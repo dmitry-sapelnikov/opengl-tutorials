@@ -2,11 +2,13 @@
 
 // Includes
 #include <glad/glad.h>
+
 #include "../../../framebuffer/WindowFramebufferBase.h"
 
 namespace gltut
 {
-
+// Global classes
+/// Implementation of a window framebuffer using OpenGL
 class WindowFramebufferOpenGL final : public WindowFramebufferBase
 {
 public:

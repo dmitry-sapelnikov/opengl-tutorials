@@ -5,6 +5,7 @@
 
 namespace gltut
 {
+// Global classes
 /// Float 2D Vector
 using Vector2 = Vector2T<float>;
 

@@ -1,10 +1,10 @@
 #pragma once
 
 // Includes
-#include "engine/graphics/GraphicsDevice.h"
-#include "engine/scene/Scene.h"
 #include "engine/factory/material/FlatColorMaterialModel.h"
 #include "engine/factory/material/PhongMaterialModel.h"
+#include "engine/graphics/GraphicsDevice.h"
+#include "engine/scene/Scene.h"
 
 namespace gltut
 {
@@ -26,7 +26,7 @@ public:
 		u32 maxPointLights,
 		u32 maxSpotLights) noexcept = 0;
 
-	///	Creates a Phong material model
+	/// Creates a Phong material model
 	virtual PhongMaterialModel* createPhongMaterial(
 		const PhongShaderModel* phongShader,
 		bool castShadows = true) noexcept = 0;

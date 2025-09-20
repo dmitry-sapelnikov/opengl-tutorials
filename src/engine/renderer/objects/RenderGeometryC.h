@@ -6,7 +6,8 @@
 
 namespace gltut
 {
-//	Global classes
+// Global classes
+/// Implementation of the RenderGeometry interface
 class RenderGeometryC final : public RenderGeometry, public NonCopyable
 {
 public:

@@ -2,16 +2,17 @@
 
 // Includes
 #include "engine/graphics/GraphicsDevice.h"
-#include "engine/renderer/shader/ShaderRendererBinding.h"
-#include "engine/renderer/shader/ShaderUniformBufferRendererBinding.h"
+
+#include "engine/renderer/RenderPass.h"
 #include "engine/renderer/objects/RenderGeometry.h"
 #include "engine/renderer/objects/RenderGeometryGroup.h"
-#include "engine/renderer/RenderPass.h"
+#include "engine/renderer/shader/ShaderRendererBinding.h"
+#include "engine/renderer/shader/ShaderUniformBufferRendererBinding.h"
 
 namespace gltut
 {
-//	Global classes
-///	Represents a render pipeline for the scene
+// Global classes
+/// Represents a render pipeline for the scene
 class Renderer
 {
 public:

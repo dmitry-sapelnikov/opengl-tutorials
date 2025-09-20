@@ -5,6 +5,7 @@
 
 namespace gltut
 {
+// Global classes
 /// Represents a 2D point with integral components
 /// Unsigned 32-bit point
 using Point2u = Vector2T<u32>;

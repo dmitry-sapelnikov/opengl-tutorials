@@ -50,7 +50,7 @@ PhongMaterialModelC::PhongMaterialModelC(
 
 	mTextureSetBinding = mScene.createTextureSetBinding(lightingPass->getTextures());
 	GLTUT_CHECK(mTextureSetBinding != nullptr, "Failed to create a texture set binding");
-	
+
 	mTextureSetBinding->bind(
 		SceneTextureSetBinding::Parameter::DIRECTIONAL_LIGHT_SHADOW_MAP,
 		PhongShaderModel::TEXTURE_SLOTS_COUNT);
@@ -86,11 +86,11 @@ void PhongMaterialModelC::setDepth(const Texture* height) noexcept
 	getMaterial()[0]->getTextures()->setTexture(height, 3);
 	if (height == nullptr)
 	{
-		setDepthtScale(0.0f);
+		setDepthScale(0.0f);
 	}
 }
 
-void PhongMaterialModelC::setDepthtScale(float depthScale) noexcept
+void PhongMaterialModelC::setDepthScale(float depthScale) noexcept
 {
 	getMaterial()[0]->getShaderArguments()->setFloat("depthScale", depthScale);
 }

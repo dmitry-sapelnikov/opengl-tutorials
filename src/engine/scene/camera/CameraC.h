@@ -2,9 +2,11 @@
 
 // Includes
 #include <optional>
+
 #include "engine/core/Check.h"
 #include "engine/core/NonCopyable.h"
 #include "engine/scene/camera/Camera.h"
+
 #include "./CameraViewpointC.h"
 
 namespace gltut
@@ -32,7 +34,7 @@ public:
 		return mPosition;
 	}
 
-	///	Sets the position of the camera
+	/// Sets the position of the camera
 	void setPosition(const Vector3& position) noexcept final
 	{
 		mPosition = position;
@@ -96,7 +98,7 @@ public:
 
 	~CameraProjectionC() noexcept final;
 
-	///	Returns the window associated with the camera
+	/// Returns the window associated with the camera
 	Window* getWindow() const noexcept final
 	{
 		return &mWindow;

@@ -1,17 +1,20 @@
 #pragma once
 
 // Includes
+#include "engine/core/Check.h"
+#include "engine/core/NonCopyable.h"
+#include "engine/graphics/shader/ShaderUniformBuffer.h"
 #include <array>
 #include <string>
-#include "engine/core/NonCopyable.h"
-#include "engine/core/Check.h"
-#include "engine/graphics/shader/ShaderUniformBuffer.h"
 
 namespace gltut
 {
 // Global classes
 /// Base implementation of the ShaderUniformBufferBinding interface
-template <typename ShaderUniformBufferBindingInterface, typename ShaderUniformBufferBindingParameter>
+template <
+	typename ShaderUniformBufferBindingInterface,
+	typename ShaderUniformBufferBindingParameter>
+
 class ShaderUniformBufferBindingT : public ShaderUniformBufferBindingInterface, public NonCopyable
 {
 public:

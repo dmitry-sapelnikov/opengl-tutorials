@@ -6,9 +6,9 @@
 
 namespace gltut
 {
-//	Global classes
-///	Represents a render pipeline for the scene
-class RenderGeometryGroup: public RenderObject
+// Global classes
+/// Represents a render pipeline for the scene
+class RenderGeometryGroup : public RenderObject
 {
 public:
 	/**

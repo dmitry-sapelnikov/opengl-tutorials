@@ -1,11 +1,11 @@
-//	Includes
+// Includes
 #include <algorithm>
 #include "FPSCameraControllerC.h"
 #include "engine/core/Check.h"
 
 namespace gltut
 {
-//	Global classes
+// Global classes
 FPSCameraControllerC::FPSCameraControllerC(
 	Camera& camera,
 	float translationSpeed,
@@ -128,7 +128,7 @@ bool FPSCameraControllerC::onEvent(const Event& event) noexcept
 	return false;
 }
 
-//	Global functions
+// Global functions
 CameraController* createFPSCameraController(
 	Camera& camera,
 	float translationSpeed,

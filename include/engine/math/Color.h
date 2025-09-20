@@ -7,7 +7,6 @@ namespace gltut
 {
 
 // Global classes
-
 /// Represents a color with red, green, blue and alpha components
 struct Color
 {
@@ -39,9 +38,10 @@ struct Color
 };
 
 // Global functions
+/// Converts a Color to a Vector3 (drops the alpha component)
 inline Vector3 toVector3(const Color& color) noexcept
 {
-	return { color.r, color.g, color.b };
+	return {color.r, color.g, color.b};
 }
 
 // End of the namespace gltut

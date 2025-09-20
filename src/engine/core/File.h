@@ -1,8 +1,8 @@
 #pragma once
 
 // Includes
-#include <string>
 #include <filesystem>
+#include <string>
 
 namespace gltut
 {

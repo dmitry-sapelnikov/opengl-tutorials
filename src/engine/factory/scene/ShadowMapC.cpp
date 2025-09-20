@@ -37,7 +37,6 @@ ShadowMapC::ShadowMapC(
 			frustumFar));
 }
 
-
 ShadowMapC::ShadowMapC(
 	Renderer& renderer,
 	const LightNode& light,
@@ -75,19 +74,19 @@ ShadowMapC::ShadowMapC(
 {
 	GLTUT_CHECK(
 		light.getType() == LightNode::Type::DIRECTIONAL ||
-		light.getType() == LightNode::Type::SPOT,
+			light.getType() == LightNode::Type::SPOT,
 		"Invalid light type for this contructor");
 
 	GLTUT_CHECK(mFrustumNear > 0.0f, "Frustum near must be greater than 0.0f");
 	GLTUT_CHECK(mFrustumFar > mFrustumNear, "Frustum far must be greater than frustum near");
 
 	mTexture = mRenderer.getDevice()->getTextures()->create(
-		{ nullptr, // No data, we will render to it
-		{ textureSize, textureSize },
-		gltut::TextureFormat::FLOAT },
-		{ gltut::TextureFilterMode::NEAREST,
-		gltut::TextureFilterMode::NEAREST,
-		gltut::TextureWrapMode::CLAMP_TO_EDGE });
+		{nullptr, // No data, we will render to it
+		 {textureSize, textureSize},
+		 gltut::TextureFormat::FLOAT},
+		{gltut::TextureFilterMode::NEAREST,
+		 gltut::TextureFilterMode::NEAREST,
+		 gltut::TextureWrapMode::CLAMP_TO_EDGE});
 
 	GLTUT_CHECK(mTexture != nullptr, "Failed to create depth texture");
 
@@ -102,7 +101,7 @@ ShadowMapC::ShadowMapC(
 		mFramebuffer,
 		static_cast<u32>(MaterialPassIndex::DEPTH),
 		nullptr, // No clear color
-		true, // Depth clearing
+		true,	 // Depth clearing
 		nullptr);
 
 	GLTUT_CHECK(mRenderPass != nullptr, "Failed to create shadow map render pass");
@@ -131,9 +130,7 @@ void ShadowMapC::update() noexcept
 
 	if (mLight.getType() == LightNode::Type::SPOT)
 	{
-		const float aspectRatio = mTexture != nullptr ?
-			mTexture->getAspectRatio() :
-			1.0f;
+		const float aspectRatio = mTexture != nullptr ? mTexture->getAspectRatio() : 1.0f;
 
 		mViewpoint.setProjectionMatrix(
 			Matrix4::perspectiveProjectionMatrix(

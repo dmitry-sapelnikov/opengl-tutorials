@@ -6,7 +6,6 @@
 namespace gltut
 {
 // Global classes
-
 /// Asset material creation interface
 class AssetMaterialFactory
 {
@@ -29,7 +28,7 @@ AssetMaterialFactory* createPhongAssetMaterialFactory(
 	bool castShadows) noexcept;
 
 /// Deletes a material factory
-void deleteAssetMaterialFactory(AssetMaterialFactory* creator) noexcept;
+void deleteAssetMaterialFactory(AssetMaterialFactory* factory) noexcept;
 
 // End of the namespace gltut
 }

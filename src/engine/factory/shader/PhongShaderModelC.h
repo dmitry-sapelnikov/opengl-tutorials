@@ -2,13 +2,14 @@
 
 // Includes
 #include "engine/core/NonCopyable.h"
+#include "engine/factory/shader/PhongShaderModel.h"
 #include "engine/renderer/Renderer.h"
 #include "engine/scene/Scene.h"
-#include "engine/factory/shader/PhongShaderModel.h"
 
 namespace gltut
 {
-// Global functions
+// Global classes
+/// Implementation of the PhongShaderModel interface
 class PhongShaderModelC final : public PhongShaderModel, public NonCopyable
 {
 public:
@@ -63,8 +64,10 @@ public:
 		return mMaxShadowMapBias;
 	}
 
-	/// Sets the maximum bias for the shadow map.
-	/// Clamps the bias to non-negative, min bias to [0, max bias].
+	/**
+		\brief Sets the maximum bias for the shadow map.
+		Clamps the bias to non-negative, min bias to [0, max bias].
+	*/
 	void setMaxShadowMapBias(float bias) noexcept final;
 
 private:

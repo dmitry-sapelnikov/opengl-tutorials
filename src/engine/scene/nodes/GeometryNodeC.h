@@ -1,14 +1,14 @@
 #pragma once
 
 // Includes
-#include "engine/scene/nodes/GeometryNode.h"
-#include "engine/renderer/objects/RenderGeometry.h"
 #include "./SceneNodeT.h"
+#include "engine/renderer/objects/RenderGeometry.h"
+#include "engine/scene/nodes/GeometryNode.h"
 
 namespace gltut
 {
 // Global classes
-/// Implementation of the Scene interface
+/// Implementation of the GeometryNode interface
 class GeometryNodeC final : public SceneNodeT<GeometryNode>
 {
 public:

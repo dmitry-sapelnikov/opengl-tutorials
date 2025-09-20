@@ -1,9 +1,9 @@
 #pragma once
 
 // Includes
+#include "Constants.h"
 #include <algorithm>
 #include <cmath>
-#include "Constants.h"
 
 namespace gltut
 {

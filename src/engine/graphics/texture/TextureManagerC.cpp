@@ -1,9 +1,9 @@
 // Includes
 #include "TextureManagerC.h"
+#include "../GraphicsDeviceBase.h"
+#include "./stb_image.h"
 #include <array>
 #include <string>
-#include "./stb_image.h"
-#include "../GraphicsDeviceBase.h"
 
 namespace gltut
 {
@@ -78,9 +78,8 @@ TextureData loadImage(
 		}
 	}
 
-	return { data, { static_cast<u32>(width), static_cast<u32>(height) }, format };
+	return {data, {static_cast<u32>(width), static_cast<u32>(height)}, format};
 }
-
 
 // End of the anonymous namespace
 }
@@ -92,10 +91,10 @@ Texture2* TextureManagerC::create(
 {
 	Texture2* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN
-		result = static_cast<Texture2*>(add(
-			mDevice.createBackendTexture2(data, parameters)));
+	result = static_cast<Texture2*>(add(
+		mDevice.createBackendTexture2(data, parameters)));
 	GLTUT_CATCH_ALL_END("Failed to create texture")
-		return result;
+	return result;
 }
 
 Texture2* TextureManagerC::load(
@@ -177,25 +176,25 @@ const Texture2* TextureManagerC::createSolidColor(const Color& color) noexcept
 
 	Texture2* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN
-		if (auto findResult = mSolidColorTextures.find(color_hex);
-			findResult != mSolidColorTextures.end())
+	if (auto findResult = mSolidColorTextures.find(color_hex);
+		findResult != mSolidColorTextures.end())
 	{
 		return findResult->second;
 	}
 
-	const u8 colorData[] = { r8, g8, b8, a8 };
+	const u8 colorData[] = {r8, g8, b8, a8};
 	result = create(
-		{ colorData, {1, 1}, TextureFormat::RGBA },
-		{ TextureFilterMode::NEAREST,
-		TextureFilterMode::NEAREST,
-		TextureWrapMode::CLAMP_TO_EDGE });
+		{colorData, {1, 1}, TextureFormat::RGBA},
+		{TextureFilterMode::NEAREST,
+		 TextureFilterMode::NEAREST,
+		 TextureWrapMode::CLAMP_TO_EDGE});
 
 	if (result != nullptr)
 	{
 		mSolidColorTextures[color_hex] = result;
 	}
 	GLTUT_CATCH_ALL_END("Failed to create solid color texture")
-		return result;
+	return result;
 }
 
 // End of the namespace gltut

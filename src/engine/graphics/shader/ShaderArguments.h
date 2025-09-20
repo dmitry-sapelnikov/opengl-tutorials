@@ -8,14 +8,14 @@
 
 #include "engine/core/NonCopyable.h"
 
-#include "engine/math/Vector3.h"
+#include "engine/graphics/shader/Shader.h"
 #include "engine/math/Matrix3.h"
 #include "engine/math/Matrix4.h"
-#include "engine/graphics/shader/Shader.h"
+#include "engine/math/Vector3.h"
 
 namespace gltut
 {
-
+// Global classes
 /// Represents a set of shader parameter values (like function arguments)
 class ShaderArguments final : public ShaderParameters, public NonCopyable
 {

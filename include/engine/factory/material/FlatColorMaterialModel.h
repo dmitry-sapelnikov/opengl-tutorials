@@ -11,7 +11,7 @@ class FlatColorMaterialModel
 public:
 	/// Virtual destructor
 	virtual ~FlatColorMaterialModel() = default;
-	
+
 	/// Returns the underlying material
 	virtual Material* getMaterial() const noexcept = 0;
 

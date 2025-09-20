@@ -5,7 +5,9 @@
 
 namespace gltut
 {
+// Global classes
 
+/// The render pass factory interface. Creates various render passes.
 class RenderPassFactory
 {
 public:

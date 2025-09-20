@@ -2,6 +2,7 @@
 
 // Includes
 #include <vector>
+
 #include "engine/core/NonCopyable.h"
 #include "engine/graphics/GraphicsDevice.h"
 #include "engine/renderer/shader/ShaderUniformBufferSet.h"

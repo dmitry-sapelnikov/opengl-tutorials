@@ -2,9 +2,10 @@
 
 // Includes
 #include <array>
+
 #include "engine/core/NonCopyable.h"
-#include "engine/renderer/texture/TextureSet.h"
 #include "engine/graphics/GraphicsDevice.h"
+#include "engine/renderer/texture/TextureSet.h"
 
 namespace gltut
 {

@@ -1,10 +1,10 @@
 #pragma once
 
 // Includes
-#include <array>
 #include "engine/core/NonCopyable.h"
-#include "engine/factory/render_pass/RenderPassFactory.h"
 #include "engine/factory/geometry/GeometryFactory.h"
+#include "engine/factory/render_pass/RenderPassFactory.h"
+#include <array>
 
 namespace gltut
 {
@@ -23,7 +23,6 @@ public:
 	RenderPass* createTextureToWindowRenderPass(
 		const Texture2* texture,
 		const Rectangle2u* viewport) noexcept final;
-
 
 	/// Creates a textures-to-window render pass
 	RenderPass* createTexturesToWindowRenderPass(

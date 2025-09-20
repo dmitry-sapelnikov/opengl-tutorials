@@ -3,9 +3,12 @@
 
 namespace gltut
 {
-//	 Constants and enums
+
+namespace
+{
+// Local constants and enums
 // Vertex shader source code for flat color shading
-static const char* FLAT_COLOR_VERTEX_SHADER = R"(
+const char* FLAT_COLOR_VERTEX_SHADER = R"(
 #version 330 core
 
 // Uniforms
@@ -31,7 +34,7 @@ void main()
 })";
 
 // Fragment shader source code for flat color shading
-static const char* FLAT_COLOR_FRAGMENT_SHADER = R"(
+const char* FLAT_COLOR_FRAGMENT_SHADER = R"(
 #version 330 core
 
 // Uniforms
@@ -51,6 +54,9 @@ void main()
 		discard;
 })";
 
+// End of anonymous namespace
+}
+
 // Global functions
 ShaderRendererBinding* createFlatColorShader(Renderer& renderer) noexcept
 {
@@ -59,7 +65,8 @@ ShaderRendererBinding* createFlatColorShader(Renderer& renderer) noexcept
 		FLAT_COLOR_VERTEX_SHADER,
 		FLAT_COLOR_FRAGMENT_SHADER,
 		"model",
-		nullptr, nullptr); // Don't need view, projection - using uniform buffer
+		nullptr,
+		nullptr); // Don't need view, projection - using uniform buffer
 
 	if (result == nullptr)
 	{

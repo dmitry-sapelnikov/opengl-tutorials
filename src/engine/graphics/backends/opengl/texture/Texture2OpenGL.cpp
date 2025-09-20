@@ -23,7 +23,7 @@ void Texture2OpenGL::setSize(const Point2u& size) noexcept
 	GLTUT_ASSERT(size.x > 0);
 	GLTUT_ASSERT(size.y > 0);
 
-	if (size.x == 0 || 
+	if (size.x == 0 ||
 		size.y == 0 ||
 		size.x == mSize.x && size.y == mSize.y)
 	{

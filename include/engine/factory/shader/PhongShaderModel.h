@@ -5,7 +5,11 @@
 
 namespace gltut
 {
-// Global functions
+// Global classes
+/**
+	The Phong shader model interface. Provides access to the underlying shader
+	and its properties.
+*/
 class PhongShaderModel
 {
 public:

@@ -2,10 +2,8 @@
 #include "ShaderRendererBindingC.h"
 #include "engine/renderer/Renderer.h"
 
-
 namespace gltut
 {
-
 // Global classes
 void ShaderRendererBindingC::update(const Viewpoint* viewpoint, float aspectRatio) const noexcept
 {
@@ -88,9 +86,9 @@ ShaderRendererBinding* createStandardShaderBinding(
 	{
 		return nullptr;
 	}
-	
+
 	ShaderRendererBinding* result = renderer->createShaderBinding(shader);
-	
+
 	if (result == nullptr)
 	{
 		device->getShaders()->remove(shader);

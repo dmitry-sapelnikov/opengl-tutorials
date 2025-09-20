@@ -1,13 +1,13 @@
 #pragma once
 
 // Includes
-#include "engine/core/Check.h"
 #include "ShaderParameters.h"
+#include "engine/core/Check.h"
 
 namespace gltut
 {
-///	Represents a shader
-class Shader: public ShaderParameters
+/// Represents a shader (shader program in OpenGL terminology)
+class Shader : public ShaderParameters
 {
 public:
 	/// Virtual destructor

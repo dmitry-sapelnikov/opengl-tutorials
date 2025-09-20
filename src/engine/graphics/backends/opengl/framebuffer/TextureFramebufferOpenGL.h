@@ -2,11 +2,13 @@
 
 // Includes
 #include <glad/glad.h>
+
 #include "../../../framebuffer/TextureFramebufferBase.h"
 
 namespace gltut
 {
-
+// Global classes
+/// Implementation of a texture framebuffer using OpenGL
 class TextureFramebufferOpenGL final : public TextureFramebufferBase
 {
 public:
@@ -18,7 +20,7 @@ public:
 		Texture2* color,
 		Texture2* depth);
 
-	/// Destructor
+	/// Destructor. Deletes the framebuffer.
 	~TextureFramebufferOpenGL() noexcept final;
 
 	/// Sets the color texture

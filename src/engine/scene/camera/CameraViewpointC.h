@@ -20,25 +20,19 @@ public:
 	/// Returns the position of the camera
 	Vector3 getPosition() const noexcept final
 	{
-		return mCamera != nullptr ?
-			mCamera->getView().getPosition() :
-			Vector3::zero();
+		return mCamera != nullptr ? mCamera->getView().getPosition() : Vector3::zero();
 	}
 
 	/// Returns the view matrix
 	Matrix4 getViewMatrix() const noexcept final
 	{
-		return mCamera != nullptr ?
-			mCamera->getView().getMatrix() :
-			Matrix4::identity();
+		return mCamera != nullptr ? mCamera->getView().getMatrix() : Matrix4::identity();
 	}
 
 	/// Returns the projection matrix
 	Matrix4 getProjectionMatrix(float aspectRatio) const noexcept final
 	{
-		return mCamera != nullptr ?
-			mCamera->getProjection().getMatrix(aspectRatio) :
-			Matrix4::identity();
+		return mCamera != nullptr ? mCamera->getProjection().getMatrix(aspectRatio) : Matrix4::identity();
 	}
 
 	/// Returns the camera

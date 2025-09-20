@@ -4,7 +4,7 @@
 namespace gltut
 {
 
-//	Global classes
+// Global classes
 DepthSortedRenderPassC::DepthSortedRenderPassC(
 	const Viewpoint* viewpoint,
 	const RenderGeometryGroup* group,
@@ -15,8 +15,7 @@ DepthSortedRenderPassC::DepthSortedRenderPassC(
 	const Rectangle2u* viewport,
 	GraphicsDevice& device,
 	const ShaderBindings& shaderBindings,
-	const ShaderUniformBufferBindings& shaderUniformBufferBindings
-	) noexcept :
+	const ShaderUniformBufferBindings& shaderUniformBufferBindings) noexcept :
 
 	RenderPassC(
 		viewpoint,

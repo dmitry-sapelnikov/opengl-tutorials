@@ -1,22 +1,20 @@
 #pragma once
 
 // Includes
-#include <string>
-#include <memory>
 #include <deque>
 #include <functional>
+#include <memory>
+#include <string>
 
 #include "engine/core/NonCopyable.h"
 #include "engine/window/Window.h"
-#include "../core/FPSCounter.h"
 
-struct GLFWwindow;
-class FPSCounter;
+#include "../core/FPSCounter.h"
 
 namespace gltut
 {
-
-///	Forward declarations
+// Global classes
+/// Forward declarations
 class WindowCallback;
 
 /// Implementation of the Window class
@@ -28,7 +26,7 @@ public:
 	/// Virtual destructor
 	~WindowC() noexcept final;
 
-	///	Sets the window title
+	/// Sets the window title
 	void setTitle(const char* title) noexcept final;
 
 	/// Shows frames per second (FPS) in the window title

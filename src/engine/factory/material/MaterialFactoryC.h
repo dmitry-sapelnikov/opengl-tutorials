@@ -1,11 +1,11 @@
 #pragma once
 
 // Includes
+#include "engine/core/NonCopyable.h"
+#include "engine/factory/material/MaterialFactory.h"
+#include "engine/renderer/Renderer.h"
 #include <deque>
 #include <map>
-#include "engine/core/NonCopyable.h"
-#include "engine/renderer/Renderer.h"
-#include "engine/factory/material/MaterialFactory.h"
 
 #include "../shader/PhongShaderModelC.h"
 #include "./FlatColorMaterialModelC.h"
@@ -35,7 +35,7 @@ public:
 		u32 maxPointLights,
 		u32 maxSpotLights) noexcept final;
 
-	///	Creates a Phong material model
+	/// Creates a Phong material model
 	PhongMaterialModel* createPhongMaterial(
 		const PhongShaderModel* phongShader,
 		bool castShadows = true) noexcept final;

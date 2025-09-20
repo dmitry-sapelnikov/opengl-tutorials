@@ -6,7 +6,7 @@
 
 namespace gltut
 {
-//	Global classes
+// Global classes
 /// The class represents a shader binding for scene parameters
 class SceneShaderBinding : public BindingT<Shader>, public SceneBinding
 {

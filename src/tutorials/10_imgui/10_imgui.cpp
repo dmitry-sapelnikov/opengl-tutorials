@@ -7,22 +7,19 @@ int main(int, char**)
 	gltut::EngineImgui* imgui = nullptr;
 
 	GLTUT_CATCH_ALL_BEGIN
-	
-	engine.reset(gltut::createEngine(1280, 720));
-	GLTUT_CHECK(engine != nullptr, "Failed to create Engine instance");
-	engine->getWindow()->setTitle("Dear ImGui OpenGL Example");
-	engine->getWindow()->showFPS(true);
+		engine.reset(gltut::createEngine(1280, 720));
+		GLTUT_CHECK(engine != nullptr, "Failed to create Engine instance");
+		engine->getWindow()->setTitle("Dear ImGui OpenGL Example");
+		engine->getWindow()->showFPS(true);
 
-	imgui = gltut::createEngineImgui(engine.get());
-	GLTUT_CHECK(imgui != nullptr, "Failed to create ImGui instance");
+		imgui = gltut::createEngineImgui(engine.get());
+		GLTUT_CHECK(imgui != nullptr, "Failed to create ImGui instance");
 
-	do
-	{
-		imgui->newFrame();
-		ImGui::ShowDemoWindow();
-	}
-	while (engine->update());
-
+		do
+		{
+			imgui->newFrame();
+			ImGui::ShowDemoWindow();
+		} while (engine->update());
 	GLTUT_CATCH_ALL_END("Failed to run 10_imgui example");
 
 	gltut::deleteEngineImgui(imgui);

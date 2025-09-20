@@ -6,9 +6,8 @@
 
 namespace gltut
 {
-
 // Global classes
-/// Interface for texture management
+/// Interface for geometry management
 class GeometryManager : public ItemManager<Geometry>
 {
 public:

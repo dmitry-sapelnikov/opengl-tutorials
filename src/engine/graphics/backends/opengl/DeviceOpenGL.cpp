@@ -7,8 +7,8 @@
 #include <Windows.h>
 #include <glad/glad.h>
 
-#include "engine/core/Check.h"
 #include "GeometryOpenGL.h"
+#include "engine/core/Check.h"
 #include "shader/ShaderOpenGL.h"
 #include "shader/ShaderUniformBufferOpenGL.h"
 #include "texture/Texture2OpenGL.h"
@@ -23,7 +23,6 @@ namespace gltut
 // Define the function pointer type
 typedef BOOL(WINAPI* PFNWGLSWAPINTERVALEXTPROC)(int interval);
 
-
 // Global classes
 DeviceOpenGL::DeviceOpenGL(Window& window) :
 	GraphicsDeviceBase(window),
@@ -31,7 +30,7 @@ DeviceOpenGL::DeviceOpenGL(Window& window) :
 {
 	GLTUT_CHECK(window.getDeviceContext() != nullptr, "Device context is null")
 
-		HDC hdc = static_cast<HDC>(window.getDeviceContext());
+	HDC hdc = static_cast<HDC>(window.getDeviceContext());
 
 	PIXELFORMATDESCRIPTOR pfd = {};
 	pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
@@ -55,7 +54,7 @@ DeviceOpenGL::DeviceOpenGL(Window& window) :
 		GLTUT_CHECK(false, "Failed to load GLAD");
 	}
 
-	//	Check that the current shader program is 0
+	// Check that the current shader program is 0
 	GLint currentProgram = 0;
 	glGetIntegerv(GL_CURRENT_PROGRAM, &currentProgram);
 	GLTUT_ASSERT(currentProgram == 0);
@@ -247,7 +246,7 @@ void DeviceOpenGL::setFaceCulling(FaceCullingMode mode) noexcept
 	}
 	break;
 
-	GLTUT_UNEXPECTED_SWITCH_DEFAULT_CASE(mode)
+		GLTUT_UNEXPECTED_SWITCH_DEFAULT_CASE(mode)
 	}
 }
 
@@ -317,34 +316,34 @@ void DeviceOpenGL::setPolygonFill(
 	switch (mode)
 	{
 	case PolygonFillMode::SOLID:
-		{
-			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		}
-		break;
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	}
+	break;
 
 	case PolygonFillMode::LINE:
-		{
-			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-			glLineWidth(size);
-		}
-		break;
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		glLineWidth(size);
+	}
+	break;
 
 	case PolygonFillMode::POINT:
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+		glPointSize(size);
+		if (enableSizeInShader)
 		{
-			glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
-			glPointSize(size);
-			if (enableSizeInShader)
-			{
-				glEnable(GL_PROGRAM_POINT_SIZE);
-			}
-			else
-			{
-				glDisable(GL_PROGRAM_POINT_SIZE);
-			}
+			glEnable(GL_PROGRAM_POINT_SIZE);
 		}
-		break;
+		else
+		{
+			glDisable(GL_PROGRAM_POINT_SIZE);
+		}
+	}
+	break;
 
-	GLTUT_UNEXPECTED_SWITCH_DEFAULT_CASE(mode)
+		GLTUT_UNEXPECTED_SWITCH_DEFAULT_CASE(mode)
 	}
 }
 

@@ -1,11 +1,9 @@
 #pragma once
 
-// Includes
-
 namespace gltut
 {
-//	Global classes
-/// The class represents a binding of a target object
+// Global classes
+/// Interface for a binding to a target of type TargetType
 template <typename TargetType>
 class BindingT
 {

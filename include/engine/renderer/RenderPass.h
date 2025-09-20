@@ -1,17 +1,17 @@
 #pragma once
 
 // Includes
+#include "engine/graphics/RenderModes.h"
+#include "engine/graphics/framebuffer/Framebuffer.h"
 #include "engine/math/Color.h"
 #include "engine/math/Rectangle.h"
-#include "engine/graphics/framebuffer/Framebuffer.h"
 #include "engine/renderer/objects/RenderObject.h"
 #include "engine/renderer/viewpoint/Viewpoint.h"
-#include "engine/graphics/RenderModes.h"
 
 namespace gltut
 {
-//	Global classes
-///	Represents a render pass
+// Global classes
+/// Represents a render pass
 class RenderPass
 {
 public:
@@ -36,7 +36,7 @@ public:
 	/// Returns if the depth clearing is enabled
 	virtual bool isDepthCleared() const noexcept = 0;
 
-	///	Returns the scene viewpoint
+	/// Returns the scene viewpoint
 	virtual const Viewpoint* getViewpoint() const noexcept = 0;
 
 	/// Returns the material layer for this render pass

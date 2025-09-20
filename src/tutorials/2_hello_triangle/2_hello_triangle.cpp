@@ -1,59 +1,79 @@
 // Includes
+#include "engine/Engine.h"
 #include <iostream>
 #include <string>
-#include "engine/Engine.h"
 
 namespace
 {
+// Local constants
+/// Vertex shader source code
+const char* VERTEX_SHADER_SOURCE_CODE = R"(
+#version 330 core
+layout(location = 0) in vec3 aPos;
+void main()
+{
+	gl_Position = vec4(aPos, 1.0);
+}
+)";
 
-// Vertex shader source code
-const char* VERTEX_SHADER_SOURCE_CODE =
-"#version 330 core\n"
-"layout(location = 0) in vec3 aPos;\n"
-"void main()\n"
-"{\n"
-"	gl_Position = vec4(aPos, 1.0);\n"
-"}";
+/// Fragment shader source code
+const char* FRAGMENT_SHADER_SOURCE_CODE = R"(
+#version 330 core
+out vec4 FragColor;
+void main()
+{
+	FragColor = vec4(0.5f, 0.5f, 0.5f, 1.0f);
+}
+)";
 
-// Fragment shader source code
-const char* FRAGMENT_SHADER_SOURCE_CODE =
-"#version 330 core\n"
-"out vec4 FragColor;\n"
-"void main()\n"
-"{\n"
-"	FragColor = vec4(0.5f, 0.5f, 0.5f, 1.0f);\n"
-"}";
-
+// End of the anonymous namespace
 }
 
-///	The program entry point
+/// The program entry point
 int main()
 {
 	try
 	{
 		std::unique_ptr<gltut::Engine> engine(gltut::createEngine(1024, 768));
 		GLTUT_CHECK(engine != nullptr, "Failed to create engine")
-	
+
 		engine->getWindow()->setTitle("Hello Triangle");
 		engine->getWindow()->showFPS(true);
 
 		float vertices1[] = {
-			0.5f,  0.5f, 0.0f,  // top right
-			0.5f, -0.5f, 0.0f,  // bottom right
-			-0.5f, -0.5f, 0.0f,  // bottom left
-			-0.5f,  0.5f, 0.0f   // top left 
+			0.5f, 0.5f, 0.0f, // top right
+			0.5f,
+			-0.5f,
+			0.0f, // bottom right
+			-0.5f,
+			-0.5f,
+			0.0f, // bottom left
+			-0.5f,
+			0.5f,
+			0.0f // top left
 		};
 
 		float vertices2[] = {
-			1.0f,  1.0f, 0.0f,  // top right
-			1.0f, 0.25f, 0.0f,  // bottom right
-			0.25f, 0.25f, 0.0f,  // bottom left
-			0.25f, 1.0f, 0.0f   // top left 
+			1.0f, 1.0f, 0.0f, // top right
+			1.0f,
+			0.25f,
+			0.0f, // bottom right
+			0.25f,
+			0.25f,
+			0.0f, // bottom left
+			0.25f,
+			1.0f,
+			0.0f // top left
 		};
 
-		unsigned indices[] = {  // note that we start from 0!
-			0, 1, 3,  // first Triangle
-			1, 2, 3   // second Triangle
+		unsigned indices[] = {
+			// note that we start from 0!
+			0,
+			1,
+			3, // first Triangle
+			1,
+			2,
+			3 // second Triangle
 		};
 
 		auto* device = engine->getDevice();
@@ -75,7 +95,7 @@ int main()
 			indices);
 
 		GLTUT_CHECK(mesh2 != nullptr, "Failed to create geometry #2")
-		
+
 		auto* shader = device->getShaders()->create(
 			VERTEX_SHADER_SOURCE_CODE,
 			FRAGMENT_SHADER_SOURCE_CODE);
@@ -83,7 +103,7 @@ int main()
 		auto* renderer = engine->getRenderer();
 
 		auto* shaderBinding = renderer->createShaderBinding(shader);
-		
+
 		auto* material = renderer->createMaterial();
 		GLTUT_CHECK(material != nullptr, "Failed to create material")
 

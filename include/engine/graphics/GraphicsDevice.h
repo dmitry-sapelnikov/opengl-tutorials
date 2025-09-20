@@ -1,26 +1,26 @@
 #pragma once
 
 // Includes
-#include "engine/core/Types.h"
 #include "engine/core/ItemManager.h"
+#include "engine/core/Types.h"
+
 #include "engine/math/Color.h"
 #include "engine/math/Rectangle.h"
-#include "engine/graphics/geometry/Geometry.h"
-#include "engine/graphics/shader/Shader.h"
 
-#include "engine/graphics/geometry/GeometryManager.h"
+#include "engine/graphics/RenderModes.h"
 #include "engine/graphics/framebuffer/FramebufferManager.h"
+#include "engine/graphics/geometry/GeometryManager.h"
 #include "engine/graphics/shader/ShaderManager.h"
 #include "engine/graphics/shader/ShaderUniformBufferManager.h"
 #include "engine/graphics/texture/TextureManager.h"
-#include "engine/graphics/framebuffer/TextureFramebuffer.h"
-
-#include "engine/graphics/RenderModes.h"
 
 namespace gltut
 {
-//	Global classes
-///	The graphics device
+// Global classes
+/**
+	The graphics device interface for 
+	OpenGL/DirectX/Vulkan/Metal/etc. abstraction
+*/
 class GraphicsDevice
 {
 public:

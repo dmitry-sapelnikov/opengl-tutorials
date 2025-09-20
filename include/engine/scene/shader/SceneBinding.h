@@ -1,12 +1,13 @@
 #pragma once
 
-// Includes
-
 namespace gltut
 {
+// Global classes
 
+// Forward declarations
 class Scene;
 
+/// The class represents a binding between a shader and a scene
 class SceneBinding
 {
 public:

@@ -9,8 +9,7 @@ namespace gltut
 {
 // Global classes
 /// Implementation of the SceneShaderBinding interface
-class ShaderUniformBufferRendererBindingC final :
-	public ShaderUniformBufferBindingT<ShaderUniformBufferRendererBinding, RendererBinding::Parameter>
+class ShaderUniformBufferRendererBindingC final : public ShaderUniformBufferBindingT<ShaderUniformBufferRendererBinding, RendererBinding::Parameter>
 {
 public:
 	/// Constructor

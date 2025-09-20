@@ -4,8 +4,8 @@
 
 namespace gltut
 {
-//	Global classes
-///	Represents a base class for render objects
+// Global classes
+/// Represents a base class for render objects
 class RenderObject
 {
 public:

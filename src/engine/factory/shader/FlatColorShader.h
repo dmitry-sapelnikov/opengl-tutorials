@@ -12,4 +12,3 @@ ShaderRendererBinding* createFlatColorShader(Renderer& renderer) noexcept;
 
 // End of the namespace gltut
 }
-

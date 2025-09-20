@@ -8,6 +8,8 @@
 namespace gltut
 {
 // Global classes
+
+/// The interface for a window, currently only for Windows OS
 class Window
 {
 public:

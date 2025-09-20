@@ -3,8 +3,7 @@
 
 namespace gltut
 {
-
-// Constructor
+// Global classes
 FactoryC::FactoryC(
 	Renderer& renderer,
 	Scene& scene,

@@ -6,9 +6,8 @@
 
 namespace gltut
 {
-//	Global classes
-
-///	Represents a shader
+// Global classes
+/// The shader parameters interface. Provides methods to set shader parameters.
 class ShaderParameters
 {
 public:

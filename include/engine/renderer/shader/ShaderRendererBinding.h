@@ -7,7 +7,9 @@
 
 namespace gltut
 {
-//	Global classes
+// Global classes
+
+// Forward declarations
 class Renderer;
 
 /// Binds shader parameters to renderer parameters
@@ -26,7 +28,7 @@ public:
 
 // Global functions
 
-///	Creates a standard shader binding with common parameters
+/// Creates a standard shader binding with common parameters
 ShaderRendererBinding* createStandardShaderBinding(
 	Renderer* renderer,
 	const char* vertexShaderSource,

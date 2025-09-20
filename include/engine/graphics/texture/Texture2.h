@@ -6,7 +6,7 @@
 namespace gltut
 {
 
-///	Represents a 2-dimensional texture
+/// Represents a 2-dimensional texture
 class Texture2 : public Texture
 {
 public:
@@ -23,9 +23,7 @@ public:
 	float getAspectRatio() const noexcept
 	{
 		const auto& size = getSize();
-		return size.y != 0 ?
-			static_cast<float>(size.x) / static_cast<float>(size.y) :
-			1.0f;
+		return size.y != 0 ? static_cast<float>(size.x) / static_cast<float>(size.y) : 1.0f;
 	}
 };
 

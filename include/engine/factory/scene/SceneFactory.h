@@ -1,15 +1,17 @@
 #pragma once
 
 // Includes
-#include "engine/math/Rectangle.h"
 #include "engine/graphics/texture/TextureCubemap.h"
-#include "engine/renderer/viewpoint/Viewpoint.h"
+#include "engine/math/Rectangle.h"
 #include "engine/renderer/objects/RenderObject.h"
+#include "engine/renderer/viewpoint/Viewpoint.h"
 #include "engine/scene/nodes/LightNode.h"
 
 namespace gltut
 {
+// Global classes
 
+/// The scene factory interface. Creates various scene elements.
 class SceneFactory
 {
 public:

@@ -4,33 +4,45 @@
 #include <iostream>
 #include <string>
 
-#include "engine/core/Check.h"
 #include "engine/Engine.h"
+#include "engine/core/Check.h"
 
+namespace
+{
+// Local constants
+/// Point light positions
 const std::vector<gltut::Vector3> POINT_LIGHT_POSITIONS = {
 	{0.0, 10.0f, 20.0f},
 	{5.0, 0.0f, 0.0f},
-	{0.0, 5.0f, 0.0f}
-};
+	{0.0, 5.0f, 0.0f}};
 
+/// Point light colors
 const std::vector<gltut::Color> POINT_LIGHT_COLORS = {
 	{1.0f, 1.0f, 1.0f}, // White light
 	{1.0f, 0.5f, 0.5f}, // Red light
-	{0.5f, 0.5f, 1.0f}  // Blue light
+	{0.5f, 0.5f, 1.0f}	// Blue light
 };
 
+/// Point light rotation axes
 const std::vector<gltut::Vector3> POINT_LIGHT_ROTATIONS = {
 	{0.0f, 1.0f, 0.0f},
 	{0.0f, 0.0f, -0.5f},
 	{1.5f, 0.0f, 0.0f},
 };
 
-const gltut::Color directionalLightColor = { 1.0f, 1.0f, 0.9f }; // Slightly yellowish light
+/// Directional light color
+const gltut::Color directionalLightColor = {1.0f, 1.0f, 0.9f}; // Slightly yellowish light
 
-const gltut::Color SPOT_LIGHT_COLOR = { 1.0f, 1.0f, 1.0f }; // White light
+/// Spot light color
+const gltut::Color SPOT_LIGHT_COLOR = {1.0f, 1.0f, 1.0f}; // White light
+
+/// Spot light y position
 constexpr float SPOT_LIGHT_Y = 10.0f;
+
+/// Spot light z position
 constexpr float SPOT_LIGHT_Z = 6.0f;
 
+// Local functions
 /// Creates boxes
 void createBoxes(
 	gltut::Engine& engine,
@@ -61,8 +73,7 @@ void createBoxes(
 	}
 }
 
-/// Creates lights
-
+/// Creates a light source + its visual representation
 gltut::GeometryNode* createLight(
 	gltut::Engine& engine,
 	gltut::Geometry* lightGeometry,
@@ -89,6 +100,7 @@ gltut::GeometryNode* createLight(
 	return light;
 }
 
+/// Creates the lights in the scene
 void createLights(
 	gltut::Engine& engine,
 	gltut::u32 usedPointLights,
@@ -114,7 +126,7 @@ void createLights(
 	GLTUT_CHECK(directionalLight, "Failed to create directional light");
 	gltut::LightNode* directionalLightSource = dynamic_cast<gltut::LightNode*>(directionalLight->getChild(0));
 	GLTUT_CHECK(directionalLightSource, "Failed to get directional light source");
-	directionalLightSource->setDirection({ -3.0f, -1.0f, 0.0f });
+	directionalLightSource->setDirection({-3.0f, -1.0f, 0.0f});
 
 	const gltut::u32 pointLightCount = std::min(
 		usedPointLights,
@@ -145,15 +157,18 @@ void createLights(
 	GLTUT_CHECK(spotLight, "Failed to create spot light");
 	gltut::LightNode* spotLightSource = dynamic_cast<gltut::LightNode*>(spotLight->getChild(0));
 	GLTUT_CHECK(spotLightSource, "Failed to get spot light source");
-	spotLightSource->setDirection({ 0.0f, -1.0f, -1.0f });
+	spotLightSource->setDirection({0.0f, -1.0f, -1.0f});
 	spotLightSource->setInnerAngle(gltut::toRadians(25.0f));
 	spotLightSource->setOuterAngle(gltut::toRadians(30.0f));
 	spotLightSource->setLinearAttenuation(0.1f);
 	spotLightSource->setQuadraticAttenuation(0.01f);
-	spotLightSource->setAmbient({ 0.5f, 0.5f, 0.5f, 1.0f });
+	spotLightSource->setAmbient({0.5f, 0.5f, 0.5f, 1.0f});
 }
 
-///	The program entry point
+// End of the anonymous namespace
+}
+
+/// The program entry point
 int main()
 {
 	try
@@ -170,8 +185,8 @@ int main()
 		auto* materialFactory = engine->getFactory()->getMaterial();
 
 		auto* phongShader = materialFactory->createPhongShader(
-			1, // No directional lights
-			3, // Use 3 point lights
+			1,	// No directional lights
+			3,	// Use 3 point lights
 			1); // Use 1 spot light
 
 		GLTUT_CHECK(phongShader, "Failed to create Phong shader");
@@ -188,12 +203,12 @@ int main()
 		phongMaterialModel->setDiffuse(diffuseTexture);
 		phongMaterialModel->setSpecular(specularTexture);
 
-		auto* floorGeometry = engine->getFactory()->getGeometry()->createBox({ 20.0f, 1.0f, 20.0f });
+		auto* floorGeometry = engine->getFactory()->getGeometry()->createBox({20.0f, 1.0f, 20.0f});
 		GLTUT_CHECK(floorGeometry, "Failed to create floor geometry");
 		scene->createGeometry(
 			floorGeometry,
 			phongMaterialModel->getMaterial(),
-			gltut::Matrix4::translationMatrix({ 0.0f, -0.5f, 0.0f }));
+			gltut::Matrix4::translationMatrix({0.0f, -0.5f, 0.0f}));
 
 		createBoxes(*engine, phongMaterialModel);
 
@@ -204,9 +219,9 @@ int main()
 		createLights(*engine, usedPointLights, directionalLight, pointLights, spotLight);
 
 		gltut::Camera* camera = engine->getScene()->createCamera(
-			{ -2.0f, 2.0f, 6.0f },
-			{ 0.0f, 0.0f, 0.0f },
-			{ 0.0f, 1.0f, 0.0f },
+			{-2.0f, 2.0f, 6.0f},
+			{0.0f, 0.0f, 0.0f},
+			{0.0f, 1.0f, 0.0f},
 			45.0f,
 			0.1f,
 			150.0f);
@@ -234,7 +249,7 @@ int main()
 
 			float spotLightHeight = (std::cos(time) * 0.5f + 0.5f) * SPOT_LIGHT_Y;
 			spotLight->setTransform(
-				gltut::Matrix4::translationMatrix({ 0.0f, spotLightHeight, SPOT_LIGHT_Z }));
+				gltut::Matrix4::translationMatrix({0.0f, spotLightHeight, SPOT_LIGHT_Z}));
 
 			if (!engine->update())
 			{

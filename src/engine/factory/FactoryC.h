@@ -12,7 +12,7 @@
 
 namespace gltut
 {
-
+// Global classes
 /// Implementation of the Factory interface
 class FactoryC final : public Factory, public NonCopyable
 {

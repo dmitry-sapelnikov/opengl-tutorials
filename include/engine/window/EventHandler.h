@@ -22,4 +22,3 @@ public:
 
 // End of the namespace gltut
 }
-

@@ -6,7 +6,8 @@
 
 namespace gltut
 {
-
+// Global classes
+/// OpenGL implementation of a geometry
 class GeometryOpenGL final : public Geometry, public NonCopyable
 {
 public:

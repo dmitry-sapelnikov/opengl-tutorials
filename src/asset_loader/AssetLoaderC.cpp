@@ -31,9 +31,9 @@ SceneNode* AssetLoaderC::loadAsset(
 		const aiScene* scene = importer.ReadFile(
 			filePath,
 			aiProcess_Triangulate |
-			aiProcess_FlipUVs |
-			aiProcess_GenSmoothNormals |
-			aiProcess_CalcTangentSpace);
+				aiProcess_FlipUVs |
+				aiProcess_GenSmoothNormals |
+				aiProcess_CalcTangentSpace);
 
 		GLTUT_CHECK(
 			scene != nullptr && !(scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE) && scene->mRootNode,
@@ -295,7 +295,7 @@ AssetLoader* createAssetLoader(Engine* engine) noexcept
 
 	AssetLoader* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN
-		result = new AssetLoaderC(*engine);
+	result = new AssetLoaderC(*engine);
 	GLTUT_CATCH_ALL_END("Failed to create scene factory");
 	return result;
 }

@@ -5,7 +5,7 @@
 
 namespace gltut
 {
-
+// Global classes
 TextureFramebufferOpenGL::TextureFramebufferOpenGL(
 	Texture2* color,
 	Texture2* depth)

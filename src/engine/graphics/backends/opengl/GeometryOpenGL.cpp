@@ -1,16 +1,15 @@
 // Includes
 #include "GeometryOpenGL.h"
 
-#include <glad/glad.h>
 #include "engine/core/Check.h"
+#include <glad/glad.h>
 
 namespace gltut
 {
 
-// Local functions
 namespace
 {
-
+// Local functions
 static_assert(sizeof(GLuint) == sizeof(u32), "GLuint must be the same size as u32");
 
 GLuint allocateVertexBuffer(const float* vertices, u32 count) noexcept
@@ -97,9 +96,10 @@ GLuint allocateVertexArray(
 	return vao;
 }
 
+// End of the anonymous namespace
 }
 
-//	Global classes
+// Global classes
 GeometryOpenGL::GeometryOpenGL(
 	VertexFormat vertexFormat,
 	u32 vertexCount,

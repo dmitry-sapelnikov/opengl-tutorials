@@ -7,7 +7,7 @@ namespace gltut
 {
 
 // Global classes
-/// OpenGL implementation of a shader uniform buffer
+/// OpenGL implementation of the ShaderUniformBuffer interface
 class ShaderUniformBufferOpenGL final : public ShaderUniformBuffer
 {
 public:

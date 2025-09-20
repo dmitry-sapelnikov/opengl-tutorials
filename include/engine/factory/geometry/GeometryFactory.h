@@ -21,7 +21,7 @@ public:
 		bool textureCoordinates;
 
 		// Whether to create tangent and bitangent vectors
-		bool tangentBitangent ;
+		bool tangentBitangent;
 
 		// Constructor
 		CreationOptions(

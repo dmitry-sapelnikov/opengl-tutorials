@@ -7,7 +7,6 @@
 namespace gltut
 {
 // Global classes
-
 /// Implementation of the PhongMaterialModel interface
 template <typename MaterialModelInterface>
 class MaterialModelT : public MaterialModelInterface, public NonCopyable

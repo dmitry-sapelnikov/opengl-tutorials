@@ -5,7 +5,9 @@
 
 namespace gltut
 {
+// Global classes
 
+/// Implementation of the Shader interface using OpenGL
 class ShaderOpenGL final : public Shader
 {
 public:

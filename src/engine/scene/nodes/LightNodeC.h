@@ -2,12 +2,13 @@
 
 // Includes
 #include "engine/scene/nodes/LightNode.h"
+
 #include "./SceneNodeT.h"
 
 namespace gltut
 {
 // Global classes
-/// Implementation of the Scene interface
+/// Implementation of the LightNode interface
 class LightNodeC final : public SceneNodeT<LightNode>
 {
 public:
@@ -47,9 +48,7 @@ public:
 	/// Sets the light direction in the local frame
 	void setDirection(const Vector3& direction) noexcept final
 	{
-		mDirection = direction.isNearZero() ?
-			DEFAULT_DIRECTION :
-			direction.getNormalized();
+		mDirection = direction.isNearZero() ? DEFAULT_DIRECTION : direction.getNormalized();
 	}
 
 	/**
@@ -62,7 +61,7 @@ public:
 	{
 		const Matrix4& t = getTransform();
 		setDirection(
-			t.getMatrix3().getTranspose() * 
+			t.getMatrix3().getTranspose() *
 			(target - t.getTranslation()));
 	}
 
@@ -168,28 +167,28 @@ private:
 	LightNode::Type mType;
 
 	/// The light direction
-	Vector3 mDirection{ DEFAULT_DIRECTION };
+	Vector3 mDirection {DEFAULT_DIRECTION};
 
 	/// The inner angle for spot lights, in radians
 	float mInnerAngle = PI * 0.5f;
 
 	/// The outer angle for spot lights, in radians
 	float mOuterAngle = PI * 0.5f;
-	
+
 	/// Linear attenuation for point and spot lights
-	float mLinearAttenuation{ 0.0f };
+	float mLinearAttenuation {0.0f};
 
 	/// Quadratic attenuation for point and spot lights
-	float mQuadraticAttenuation{ 0.0f };
+	float mQuadraticAttenuation {0.0f};
 
 	/// The ambient color
-	Color mAmbient{ DEFAULT_AMBIENT };
+	Color mAmbient {DEFAULT_AMBIENT};
 
 	/// The diffuse color
-	Color mDiffuse{ DEFAULT_DIFFUSE };
+	Color mDiffuse {DEFAULT_DIFFUSE};
 
 	/// The specular color
-	Color mSpecular{ DEFAULT_SPECULAR };
+	Color mSpecular {DEFAULT_SPECULAR};
 
 	/// The shadow map
 	ShadowMap* mShadowMap = nullptr;

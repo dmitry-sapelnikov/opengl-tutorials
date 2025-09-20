@@ -1,12 +1,15 @@
 // Includes
-#include <string>
 #include "PhongShaderModelC.h"
+#include <string>
 
 namespace gltut
 {
-//	 Constants and enums
 
-static const char* LIGHT_UNIFORMS = R"(
+namespace
+{
+
+// Local constants and enums
+const char* LIGHT_UNIFORMS = R"(
 struct Color
 {
 	vec3 ambient;
@@ -57,7 +60,7 @@ uniform SpotLight spotLights[MAX_SPOT_LIGHTS];
 )";
 
 // Vertex shader source code for Phong shading
-static const char* PHONG_VERTEX_SHADER = R"(
+const char* PHONG_VERTEX_SHADER = R"(
 // Uniforms
 
 layout (std140) uniform ViewProjection
@@ -123,7 +126,7 @@ void main()
 })";
 
 // Fragment shader source code for Phong shading
-static const char* PHONG_FRAGMENT_SHADER = R"(
+const char* PHONG_FRAGMENT_SHADER = R"(
 
 // Uniforms
 uniform sampler2D diffuseSampler;
@@ -379,6 +382,9 @@ void main()
 	outColor = vec4(result, 1.0f);
 })";
 
+// End of anonymous namespace
+}
+
 // Global classes
 PhongShaderModelC::PhongShaderModelC(
 	Renderer& renderer,
@@ -413,7 +419,8 @@ PhongShaderModelC::PhongShaderModelC(
 		(shaderHeader + PHONG_VERTEX_SHADER).c_str(),
 		(shaderHeader + PHONG_FRAGMENT_SHADER).c_str(),
 		"model",
-		nullptr, nullptr, // No bindings for view and projection matrices - they are in the uniform buffer
+		nullptr,
+		nullptr, // No bindings for view and projection matrices - they are in the uniform buffer
 		"normalMat");
 
 	GLTUT_CHECK(mRendererShaderBinding != nullptr, "Failed to create Phong shader binding");
@@ -469,9 +476,7 @@ PhongShaderModelC::PhongShaderModelC(
 
 PhongShaderModelC::~PhongShaderModelC() noexcept
 {
-	Shader* shader = mRendererShaderBinding != nullptr ?
-		mRendererShaderBinding->getTarget() :
-		nullptr;
+	Shader* shader = mRendererShaderBinding != nullptr ? mRendererShaderBinding->getTarget() : nullptr;
 	mRenderer.removeShaderBinding(mRendererShaderBinding);
 	mScene.removeShaderBinding(mSceneBinding);
 	mRenderer.getDevice()->getShaders()->remove(shader);

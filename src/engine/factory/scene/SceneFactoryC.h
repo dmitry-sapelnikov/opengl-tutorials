@@ -1,15 +1,15 @@
 #pragma once
 
 // Includes
-#include <unordered_map>
-#include "engine/factory/scene/SceneFactory.h"
-#include "engine/factory/geometry/GeometryFactory.h"
 #include "./ShadowMapC.h"
-
+#include "engine/factory/geometry/GeometryFactory.h"
+#include "engine/factory/scene/SceneFactory.h"
+#include <unordered_map>
 
 namespace gltut
 {
-
+// Global classes
+/// Implementation of the SceneFactory interface
 class SceneFactoryC : public SceneFactory, public NonCopyable
 {
 public:

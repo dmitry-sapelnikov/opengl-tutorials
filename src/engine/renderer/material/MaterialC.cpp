@@ -4,7 +4,7 @@
 
 namespace gltut
 {
-//	Global classes
+// Global classes
 MaterialPass* MaterialC::createPass(
 	u32 index,
 	const ShaderRendererBinding* shader,

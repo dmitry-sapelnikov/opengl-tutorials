@@ -2,6 +2,7 @@
 
 // Includes
 #include <array>
+
 #include "engine/core/NonCopyable.h"
 #include "engine/scene/texture/SceneTextureSetBinding.h"
 
@@ -84,7 +85,7 @@ public:
 private:
 	/// The bound texture set
 	TextureSet* mTextureSet = nullptr;
-	
+
 	/// The shader parameters for the scene parameters
 	std::array<u32, TOTAL_PARAMETERS> mParameters;
 };

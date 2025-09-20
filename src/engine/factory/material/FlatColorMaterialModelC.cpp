@@ -16,7 +16,7 @@ FlatColorMaterialModelC::FlatColorMaterialModelC(
 	auto* colorPass = getMaterial().createPass(
 		static_cast<u32>(MaterialPassIndex::LIGHTING),
 		&shader,
-		1, // One texture slot (the color texture)
+		1,	// One texture slot (the color texture)
 		1); // 1 uniform buffer
 
 	GLTUT_CHECK(colorPass != nullptr, "Failed to create a material pass");
@@ -28,7 +28,7 @@ FlatColorMaterialModelC::FlatColorMaterialModelC(
 		auto* depthPass = getMaterial().createPass(
 			static_cast<u32>(MaterialPassIndex::DEPTH),
 			depthShader,
-			0, // No texture slots
+			0,	// No texture slots
 			1); // 1 uniform buffer
 
 		GLTUT_CHECK(depthPass != nullptr, "Failed to create a depth pass");

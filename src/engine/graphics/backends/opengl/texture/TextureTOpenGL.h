@@ -1,11 +1,11 @@
 #pragma once
 
 // Includes
-#include <glad/glad.h>
-#include "engine/graphics/texture/Texture.h"
-#include "engine/core/NonCopyable.h"
-#include "engine/core/Check.h"
 #include "TextureBackupOpenGL.h"
+#include "engine/core/Check.h"
+#include "engine/core/NonCopyable.h"
+#include "engine/graphics/texture/Texture.h"
+#include <glad/glad.h>
 
 namespace gltut
 {
@@ -32,8 +32,8 @@ class TextureTOpenGL : public TextureInterfaceType, public NonCopyable
 {
 	static_assert(
 		glTextureType == glTextureType ||
-		glTextureType == GL_TEXTURE_CUBE_MAP ||
-		glTextureType == GL_TEXTURE_3D,
+			glTextureType == GL_TEXTURE_CUBE_MAP ||
+			glTextureType == GL_TEXTURE_3D,
 		"glTextureType must be glTextureType, GL_TEXTURE_CUBE_MAP or GL_TEXTURE_3D");
 
 public:
@@ -48,11 +48,11 @@ public:
 	{
 		glGenTextures(1, &mId);
 		GLTUT_CHECK(mId != 0, "Failed to generate texture");
-		//GLTUT_CHECK(mId < std::numeric_limits<u32>::max(), "Texture ID is out of 32-bit range");
+		// GLTUT_CHECK(mId < std::numeric_limits<u32>::max(), "Texture ID is out of 32-bit range");
 		if (mId > std::numeric_limits<u32>::max())
 		{
 		}
-		
+
 		setMinFilter(parameters.minFilter, false);
 		setMagFilter(parameters.magFilter, false);
 		setWrap(parameters.wrapMode);
@@ -111,7 +111,7 @@ public:
 		}
 		break;
 
-		GLTUT_UNEXPECTED_SWITCH_DEFAULT_CASE(wrapMode)
+			GLTUT_UNEXPECTED_SWITCH_DEFAULT_CASE(wrapMode)
 		}
 	}
 

@@ -1,8 +1,8 @@
 // Includes
 #include "GeometryFactoryC.h"
+#include "engine/math/Vector3.h"
 #include <array>
 #include <vector>
-#include "engine/math/Vector3.h"
 
 namespace gltut
 {
@@ -91,32 +91,29 @@ Geometry* GeometryFactoryC::createQuad(
 	const CreationOptions& options) noexcept
 {
 	static constexpr Vector3 normals[] =
-	{
-		{ 0.0f, 0.0f, 1.0f },
-		{ 0.0f, 0.0f, 1.0f },
-		{ 0.0f, 0.0f, 1.0f },
-		{ 0.0f, 0.0f, 1.0f }
-	};
+		{
+			{0.0f, 0.0f, 1.0f},
+			{0.0f, 0.0f, 1.0f},
+			{0.0f, 0.0f, 1.0f},
+			{0.0f, 0.0f, 1.0f}};
 
 	static constexpr Vector2 textureCoordinates[] =
-	{
-		{ 0.0f, 0.0f },
-		{ 1.0f, 0.0f },
-		{ 1.0f, 1.0f },
-		{ 0.0f, 1.0f }
-	};
+		{
+			{0.0f, 0.0f},
+			{1.0f, 0.0f},
+			{1.0f, 1.0f},
+			{0.0f, 1.0f}};
 
-	static constexpr u32 indices[] = { 0, 1, 2, 2, 3, 0 };
-	
+	static constexpr u32 indices[] = {0, 1, 2, 2, 3, 0};
+
 	const float x = size.x * 0.5f;
 	const float y = size.y * 0.5f;
 	const Vector3 positions[] =
-	{
-		{ -x, -y, 0.0f },
-		{  x, -y, 0.0f },
-		{  x,  y, 0.0f },
-		{ -x,  y, 0.0f }
-	};
+		{
+			{-x, -y, 0.0f},
+			{x, -y, 0.0f},
+			{x, y, 0.0f},
+			{-x, y, 0.0f}};
 
 	return createGeometry(
 		positions,
@@ -128,140 +125,135 @@ Geometry* GeometryFactoryC::createQuad(
 		options);
 }
 
-
 Geometry* GeometryFactoryC::createBox(
 	const Vector3& size,
 	const CreationOptions& options) noexcept
 {
 	static constexpr Vector3 normals[] =
-	{
-		// Front
-		{ 0.0f, 0.0f,  1.0f },
-		{ 0.0f, 0.0f,  1.0f },
-		{ 0.0f, 0.0f,  1.0f },
-		{ 0.0f, 0.0f,  1.0f },
+		{
+			// Front
+			{0.0f, 0.0f, 1.0f},
+			{0.0f, 0.0f, 1.0f},
+			{0.0f, 0.0f, 1.0f},
+			{0.0f, 0.0f, 1.0f},
 
-		// Back
-		{ 0.0f, 0.0f, -1.0f },
-		{ 0.0f, 0.0f, -1.0f },
-		{ 0.0f, 0.0f, -1.0f },
-		{ 0.0f, 0.0f, -1.0f },
+			// Back
+			{0.0f, 0.0f, -1.0f},
+			{0.0f, 0.0f, -1.0f},
+			{0.0f, 0.0f, -1.0f},
+			{0.0f, 0.0f, -1.0f},
 
-		// Left
-		{ -1.0f, 0.0f,  0.0f },
-		{ -1.0f, 0.0f,  0.0f },
-		{ -1.0f, 0.0f,  0.0f },
-		{ -1.0f, 0.0f,  0.0f },
+			// Left
+			{-1.0f, 0.0f, 0.0f},
+			{-1.0f, 0.0f, 0.0f},
+			{-1.0f, 0.0f, 0.0f},
+			{-1.0f, 0.0f, 0.0f},
 
-		// Right
-		{ 1.0f, 0.0f,  0.0f },
-		{ 1.0f, 0.0f,  0.0f },
-		{ 1.0f, 0.0f,  0.0f },
-		{ 1.0f, 0.0f,  0.0f },
+			// Right
+			{1.0f, 0.0f, 0.0f},
+			{1.0f, 0.0f, 0.0f},
+			{1.0f, 0.0f, 0.0f},
+			{1.0f, 0.0f, 0.0f},
 
-		// Top
-	   { 0.0f, 1.0f,  0.0f },
-	   { 0.0f, 1.0f,  0.0f },
-	   { 0.0f, 1.0f,  0.0f },
-	   { 0.0f, 1.0f,  0.0f },
+			// Top
+			{0.0f, 1.0f, 0.0f},
+			{0.0f, 1.0f, 0.0f},
+			{0.0f, 1.0f, 0.0f},
+			{0.0f, 1.0f, 0.0f},
 
-	   // Bottom
-	  { 0.0f, -1.0f, 0.0f },
-	  { 0.0f, -1.0f, 0.0f },
-	  { 0.0f, -1.0f, 0.0f },
-	  { 0.0f, -1.0f, 0.0f }
-	};
+			// Bottom
+			{0.0f, -1.0f, 0.0f},
+			{0.0f, -1.0f, 0.0f},
+			{0.0f, -1.0f, 0.0f},
+			{0.0f, -1.0f, 0.0f}};
 
 	static constexpr Vector2 textureCoordinates[] =
-	{
-		// Front
-		{ 0.0f, 0.0f },
-		{ 1.0f, 0.0f },
-		{ 1.0f, 1.0f },
-		{ 0.0f, 1.0f },
+		{
+			// Front
+			{0.0f, 0.0f},
+			{1.0f, 0.0f},
+			{1.0f, 1.0f},
+			{0.0f, 1.0f},
 
-		// Back
-		{ 0.0f, 0.0f },
-		{ 1.0f, 0.0f },
-		{ 1.0f, 1.0f },
-		{ 0.0f, 1.0f },
+			// Back
+			{0.0f, 0.0f},
+			{1.0f, 0.0f},
+			{1.0f, 1.0f},
+			{0.0f, 1.0f},
 
-		// Left
-		{ 0.0f, 0.0f },
-		{ 1.0f, 0.0f },
-		{ 1.0f, 1.0f },
-		{ 0.0f, 1.0f },
+			// Left
+			{0.0f, 0.0f},
+			{1.0f, 0.0f},
+			{1.0f, 1.0f},
+			{0.0f, 1.0f},
 
-		// Right
-		{ 0.0f, 0.0f },
-		{ 1.0f, 0.0f },
-		{ 1.0f, 1.0f },
-		{ 0.0f, 1.0f },
+			// Right
+			{0.0f, 0.0f},
+			{1.0f, 0.0f},
+			{1.0f, 1.0f},
+			{0.0f, 1.0f},
 
-		// Top
-		{ 0.0f, 0.0f },
-		{ 1.0f, 0.0f },
-		{ 1.0f, 1.0f },
-		{ 0.0f, 1.0f },
+			// Top
+			{0.0f, 0.0f},
+			{1.0f, 0.0f},
+			{1.0f, 1.0f},
+			{0.0f, 1.0f},
 
-		// Bottom
-	   { 0.0f, 0.0f },
-	   { 1.0f, 0.0f },
-	   { 1.0f, 1.0f },
-	   { 0.0f, 1.0f }
-	};
+			// Bottom
+			{0.0f, 0.0f},
+			{1.0f, 0.0f},
+			{1.0f, 1.0f},
+			{0.0f, 1.0f}};
 
 	static constexpr u32 indices[] =
-	{
-		0, 1, 2, 2, 3, 0,
-		5, 4, 6, 6, 4, 7,
-		8, 9, 10, 10, 11, 8,
-		13, 12, 14, 14, 12, 15,
-		17, 16, 18, 18, 16, 19,
-		20, 21, 22, 22, 23, 20
-	};
+		{
+			0, 1, 2, 2, 3, 0,
+			5, 4, 6, 6, 4, 7,
+			8, 9, 10, 10, 11, 8,
+			13, 12, 14, 14, 12, 15,
+			17, 16, 18, 18, 16, 19,
+			20, 21, 22, 22, 23, 20};
 
 	const float x = size.x * 0.5f;
 	const float y = size.y * 0.5f;
 	const float z = size.z * 0.5f;
 	Vector3 positions[] =
-	{
-		// Front
-		{ -x, -y,  z },
-		{  x, -y,  z },
-		{  x,  y,  z },
-		{ -x,  y,  z },
+		{
+			// Front
+			{-x, -y, z},
+			{x, -y, z},
+			{x, y, z},
+			{-x, y, z},
 
-		// Back
-		{ -x, -y, -z },
-		{  x, -y, -z },
-		{  x,  y, -z },
-		{ -x,  y, -z },
+			// Back
+			{-x, -y, -z},
+			{x, -y, -z},
+			{x, y, -z},
+			{-x, y, -z},
 
-		// Left
-		{ -x, -y, -z },
-		{ -x, -y,  z },
-		{ -x,  y,  z },
-		{ -x,  y, -z },
+			// Left
+			{-x, -y, -z},
+			{-x, -y, z},
+			{-x, y, z},
+			{-x, y, -z},
 
-		// Right
-		{  x, -y, -z },
-		{  x, -y,  z },
-		{  x,  y,  z },
-		{  x,  y, -z },
+			// Right
+			{x, -y, -z},
+			{x, -y, z},
+			{x, y, z},
+			{x, y, -z},
 
-		// Top
-		{  -x,  y, -z },
-		{   x,  y, -z },
-		{   x,  y,  z },
-		{  -x,  y,  z },
+			// Top
+			{-x, y, -z},
+			{x, y, -z},
+			{x, y, z},
+			{-x, y, z},
 
-		// Bottom
-		{  -x, -y, -z },
-		{   x, -y, -z },
-		{   x, -y,  z },
-		{  -x, -y,  z }
-	};
+			// Bottom
+			{-x, -y, -z},
+			{x, -y, -z},
+			{x, -y, z},
+			{-x, -y, z}};
 
 	return createGeometry(
 		positions,
@@ -277,7 +269,7 @@ Geometry* GeometryFactoryC::createSphere(float radius, u32 subdivisions) noexcep
 {
 	Geometry* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN
-		GLTUT_CHECK(subdivisions >= 1, "Subdivisions must be >= 1");
+	GLTUT_CHECK(subdivisions >= 1, "Subdivisions must be >= 1");
 
 	using Vertex = std::array<float, 8>;
 
@@ -292,19 +284,18 @@ Geometry* GeometryFactoryC::createSphere(float radius, u32 subdivisions) noexcep
 		for (u32 lonInd = 0; lonInd <= lonSubdivisions; ++lonInd)
 		{
 			const float longitude = angleDelta * static_cast<float>(lonInd);
-			const Vector3 normal = setDistanceAzimuthInclination({ 1.0, longitude, latitude });
+			const Vector3 normal = setDistanceAzimuthInclination({1.0, longitude, latitude});
 
 			// setDistanceAzimuthInclination uses z-axis as the up vector, so
 			// so we need to swap the x and z components to use y-axis as the up vector
-			vertices.push_back({
-				radius * normal.x,
-				radius * normal.z,
-				radius * normal.y,
-				normal.x,
-				normal.z,
-				normal.y,
-				static_cast<float>(lonInd) / lonSubdivisions,
-				static_cast<float>(latInd) / latSubdivisions });
+			vertices.push_back({radius * normal.x,
+								radius * normal.z,
+								radius * normal.y,
+								normal.x,
+								normal.z,
+								normal.y,
+								static_cast<float>(lonInd) / lonSubdivisions,
+								static_cast<float>(latInd) / latSubdivisions});
 		}
 	}
 
@@ -327,7 +318,7 @@ Geometry* GeometryFactoryC::createSphere(float radius, u32 subdivisions) noexcep
 		indices.data());
 
 	GLTUT_CATCH_ALL_END("Failed to create a sphere geometry")
-		return result;
+	return result;
 }
 
 Geometry* GeometryFactoryC::createGeometry(

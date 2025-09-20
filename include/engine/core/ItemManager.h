@@ -1,11 +1,11 @@
-# pragma once
+#pragma once
 
 // Includes
 #include "engine/core/Types.h"
 
 namespace gltut
 {
-
+// Global classes
 /**
 	Interface for item management.
 	Creation / serialization methods are defined in the derived classes.

@@ -1,20 +1,22 @@
 #pragma once
 
-// Libraries
+/// Libraries
+#include "Vector2.h"
 #include "engine/core/Check.h"
 #include "engine/math/Functions.h"
-#include "Vector2.h"
 
 namespace gltut
 {
 /// Represents a 3D vector.
+/// \todo Make it a template class
 struct Vector3
 {
-	// Components of the vector
+	/// Components of the vector
 	float x;
 	float y;
 	float z;
 
+	/// Default constructor
 	constexpr Vector3() noexcept :
 		x(0.f),
 		y(0.f),
@@ -22,6 +24,7 @@ struct Vector3
 	{
 	}
 
+	/// Construct from a single value
 	constexpr explicit Vector3(float value) noexcept :
 		x(value),
 		y(value),
@@ -29,6 +32,7 @@ struct Vector3
 	{
 	}
 
+	/// Construct from three values
 	constexpr Vector3(
 		float x,
 		float y,
@@ -40,7 +44,7 @@ struct Vector3
 	{
 	}
 
-	// Constructor
+	/// Copy constructor
 	Vector3(const Vector3& vector) noexcept :
 		x(vector.x),
 		y(vector.y),
@@ -48,13 +52,13 @@ struct Vector3
 	{
 	}
 
-	// + operator
+	/// + operator
 	Vector3 operator+(const Vector3& v) const noexcept
 	{
-		return { x + v.x, y + v.y, z + v.z };
+		return {x + v.x, y + v.y, z + v.z};
 	}
 
-	// += operator
+	/// += operator
 	Vector3& operator+=(const Vector3& v) noexcept
 	{
 		x += v.x;
@@ -63,13 +67,13 @@ struct Vector3
 		return *this;
 	}
 
-	// - operator
+	/// - operator
 	Vector3 operator-(const Vector3& v) const noexcept
 	{
-		return { x - v.x, y - v.y, z - v.z };
+		return {x - v.x, y - v.y, z - v.z};
 	}
 
-	// -= operator
+	/// -= operator
 	Vector3& operator-=(const Vector3& v) noexcept
 	{
 		x -= v.x;
@@ -78,7 +82,7 @@ struct Vector3
 		return *this;
 	}
 
-	// *= operator
+	/// *= operator
 	Vector3& operator*=(float f) noexcept
 	{
 		x *= f;
@@ -87,68 +91,68 @@ struct Vector3
 		return *this;
 	}
 
-	// * operator
+	/// * operator
 	Vector3 operator*(float f) const noexcept
 	{
-		return { f * x, f * y, f * z };
+		return {f * x, f * y, f * z};
 	}
 
-	// / operator
+	/// / operator
 	Vector3 operator/(float f) const noexcept
 	{
 		GLTUT_ASSERT(!gltut::isNearZero(f));
 		return operator*(1.f / f);
 	}
 
-	// /= operator
+	/// /= operator
 	Vector3& operator/=(float f) noexcept
 	{
 		GLTUT_ASSERT(!gltut::isNearZero(f));
 		return operator*=(1.f / f);
 	}
 
-	// - operator
+	/// - operator
 	Vector3 operator-() const noexcept
 	{
-		return { -x, -y, -z };
+		return {-x, -y, -z};
 	}
 
-	// [] operator
+	/// [] operator
 	float& operator[](unsigned i) noexcept
 	{
 		GLTUT_ASSERT(i < 3);
 		return (&x)[i];
 	}
 
-	// [] operator
+	/// [] operator
 	const float& operator[](unsigned i) const noexcept
 	{
 		GLTUT_ASSERT(i < 3);
 		return (&x)[i];
 	}
 
-	// Cross product operator
+	/// Cross product operator
 	Vector3 cross(const Vector3& v) const noexcept
 	{
 		return {
 			y * v.z - z * v.y,
 			z * v.x - x * v.z,
-			x * v.y - y * v.x };
+			x * v.y - y * v.x};
 	}
 
-	// Dot product operator
+	/// Dot product operator
 	float dot(const Vector3& v) const noexcept
 	{
 		return x * v.x + y * v.y + z * v.z;
 	}
 
-	// Normalize the vector and return it
+	/// Normalize the vector and return it
 	Vector3& normalize() noexcept
 	{
 		return operator/=(length());
 	}
 
-	// Return the normalized vector
+	/// Return the normalized vector
 	Vector3 getNormalized() const noexcept
 	{
 		return *this / length();
@@ -172,12 +176,13 @@ struct Vector3
 		return x * x + y * y + z * z;
 	}
 
-	//// Returns the length of the vector
+	/// Returns the length of the vector
 	float length() const noexcept
 	{
 		return sqrt(lengthSquared());
 	}
 
+	/// Returns a zero vector
 	static Vector3 zero() noexcept
 	{
 		return Vector3(0.f, 0.f, 0.f);
@@ -197,9 +202,9 @@ inline Vector3 operator*(float s, const Vector3& v) noexcept
 inline Vector3 getDistanceAzimuthInclination(const Vector3& v) noexcept
 {
 	const float distance = v.length();
-	return isNearZero(distance) ?
-		Vector3{ 0.f, 0.f, 0.f } :
-		Vector3{ distance, std::atan2(v.y, v.x), std::asin(v.z / distance) };
+	return isNearZero(distance) ? 
+		Vector3(0.f, 0.f, 0.f) :
+		Vector3(distance, std::atan2(v.y, v.x), std::asin(v.z / distance));
 }
 
 /**
@@ -210,10 +215,10 @@ inline Vector3 setDistanceAzimuthInclination(const Vector3& dai) noexcept
 {
 	const float d = dai.x;
 	const float cosInclination = std::cos(dai.z);
-	return Vector3{
+	return Vector3 {
 		d * std::cos(dai.y) * cosInclination,
 		d * std::sin(dai.y) * cosInclination,
-		d * std::sin(dai.z) };
+		d * std::sin(dai.z)};
 }
 
 /**
@@ -244,7 +249,7 @@ inline void getTangentSpace(
 	const Vector2 deltaUV1 = uv2 - uv1;
 	const Vector2 deltaUV2 = uv3 - uv1;
 	const float r = 1.f / (deltaUV1.x * deltaUV2.y - deltaUV1.y * deltaUV2.x);
-	tangent =   (deltaPos1 * deltaUV2.y - deltaPos2 * deltaUV1.y) * r;
+	tangent = (deltaPos1 * deltaUV2.y - deltaPos2 * deltaUV1.y) * r;
 	bitangent = (deltaPos2 * deltaUV1.x - deltaPos1 * deltaUV2.x) * r;
 
 	GLTUT_ASSERT(!tangent.isNearZero());

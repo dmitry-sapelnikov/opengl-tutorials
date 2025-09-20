@@ -1,13 +1,13 @@
 // Includes
 #include "EngineC.h"
 
-#include <stdexcept>
 #include <iostream>
+#include <stdexcept>
 
+#include "factory/FactoryC.h"
 #include "graphics/backends/opengl/DeviceOpenGL.h"
 #include "scene/SceneC.h"
 #include "window/WindowC.h"
-#include "factory/FactoryC.h"
 
 namespace gltut
 {
@@ -91,3 +91,4 @@ Engine* createEngine(u32 windowWidth, u32 windowHeight) noexcept
 
 // End of the namespace gltut
 }
+

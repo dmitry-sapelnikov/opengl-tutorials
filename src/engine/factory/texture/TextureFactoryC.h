@@ -1,14 +1,15 @@
 #pragma once
 
 // Includes
-#include <unordered_set>
 #include "engine/core/NonCopyable.h"
-#include "engine/window/Window.h"
 #include "engine/factory/texture/TextureFactory.h"
+#include "engine/window/Window.h"
+#include <unordered_set>
 
 namespace gltut
 {
-
+// Global classes
+/// Implementation of the TextureFactory interface
 class TextureFactoryC final : public TextureFactory, public EventHandler, public NonCopyable
 {
 public:
@@ -38,8 +39,10 @@ public:
 	bool onEvent(const Event& event) noexcept final;
 
 private:
+	/// Reference to the window
 	Window& mWindow;
 
+	/// Set of textures bound to the window size
 	std::unordered_set<Texture2*> mWindowSizeTextures;
 };
 

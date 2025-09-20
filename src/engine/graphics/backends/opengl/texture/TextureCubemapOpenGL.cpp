@@ -27,8 +27,7 @@ TextureCubemapOpenGL::TextureCubemapOpenGL(
 		&plusYData,
 		&minusYData,
 		&plusZData,
-		&minusZData
-	};
+		&minusZData};
 
 	for (size_t i = 0; i < faces.size(); ++i)
 	{

@@ -2,14 +2,16 @@
 
 // Includes
 #include "engine/core/NonCopyable.h"
+#include "engine/factory/render_pass/RenderPassFactory.h"
 #include "engine/graphics/texture/Texture.h"
 #include "engine/scene/nodes/LightNode.h"
-#include "engine/factory/render_pass/RenderPassFactory.h"
+
 #include "../../renderer/viewpoint/ViewpointC.h"
 
 namespace gltut
 {
-
+// Global classes
+/// Implementation of the ShadowMap interface
 class ShadowMapC : public ShadowMap, public NonCopyable
 {
 public:

@@ -2,8 +2,8 @@
 
 // Includes
 #include "engine/core/NonCopyable.h"
-#include "engine/graphics/GraphicsDevice.h"
 #include "engine/factory/geometry/GeometryFactory.h"
+#include "engine/graphics/GraphicsDevice.h"
 
 namespace gltut
 {

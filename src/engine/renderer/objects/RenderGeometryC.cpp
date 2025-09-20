@@ -5,7 +5,7 @@
 
 namespace gltut
 {
-//	Global classes
+// Global classes
 void RenderGeometryC::render(u32 materialPass) const noexcept
 {
 	if (mMaterial != nullptr &&
