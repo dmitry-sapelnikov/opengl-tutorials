@@ -18,10 +18,13 @@ public:
 	virtual ~TextureFactory() noexcept = default;
 
 	/// Creates a binding between a texture and the window size
-	virtual void createWindowSizeTextureBinding(Texture2* texture) noexcept = 0;
+	virtual bool createWindowSizeTextureBinding(Texture2* texture) noexcept = 0;
 
 	/// Removes the window-size texture binding for a texture
-	virtual void removeWindowSizeTextureBinding(Texture2* texture) noexcept = 0;
+	virtual bool removeWindowSizeTextureBinding(Texture2* texture) noexcept = 0;
+
+	/// Creates a window-size color texture
+	virtual Texture2* createWindowSizeTexture(TextureFormat format) noexcept = 0;
 };
 
 // End of the namespace gltut

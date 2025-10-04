@@ -30,6 +30,9 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\src\tutorials\18_water\18_water.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\src\tutorials\18_water\Waves.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>

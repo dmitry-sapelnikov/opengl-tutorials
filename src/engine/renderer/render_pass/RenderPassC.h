@@ -60,6 +60,15 @@ public:
 		return mTarget;
 	}
 
+	/// Sets the target frame buffer for this pass
+	void setTarget(Framebuffer* target) noexcept final
+	{
+		if (GLTUT_ASSERT(target != nullptr))
+		{
+			mTarget = target;
+		}
+	}
+
 	/// Returns the material pass for this render pass
 	u32 getMaterialPass() const noexcept final
 	{

@@ -35,7 +35,8 @@ public:
 	virtual bool createSkybox(
 		const TextureCubemap* cubemapTexture,
 		const Viewpoint* viewpoint,
-		const Rectangle2u* viewport) noexcept = 0;
+		const Rectangle2u* viewport,
+		Framebuffer* target) noexcept = 0;
 
 	/// Updates the factory
 	virtual void update() noexcept = 0;

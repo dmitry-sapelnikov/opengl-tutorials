@@ -31,6 +31,9 @@ public:
 	*/
 	virtual const Framebuffer* getTarget() const noexcept = 0;
 
+	/// Sets the target frame buffer for this pass
+	virtual void setTarget(Framebuffer* target) noexcept = 0;
+
 	/// Returns the clear color for the render target
 	virtual const Color* getClearColor() const noexcept = 0;
 

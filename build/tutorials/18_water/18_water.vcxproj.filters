@@ -6,4 +6,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\src\tutorials\18_water\18_water.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\src\tutorials\18_water\Waves.h" />
+  </ItemGroup>
 </Project>
