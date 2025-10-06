@@ -45,6 +45,12 @@ void main()
 				dot(waves[i].direction, inPosition.xy) * waves[i].waveNumber + 
 				time * waves[i].frequency +
 				waves[i].phase;
+			/*position.z += waves[i].amplitude * sin(theta);*/
+
+			// Gerstner Waves
+			float dir_offset = waves[i].amplitude * cos(theta);
+			position.x += waves[i].direction.x * dir_offset;
+			position.y += waves[i].direction.y * dir_offset;
 			position.z += waves[i].amplitude * sin(theta);
 		}
 	}
@@ -93,8 +99,9 @@ float getGlobalDistance(float depth)
 
 void main()
 {
-	float df_dx = 0.0f;
-	float df_dy = 0.0f;
+	vec3 tangent = vec3(1.0f, 0.0f, 0.0f);
+	vec3 bitangent = vec3(0.0f, 1.0f, 0.0f);
+
 	for (int i = 0; i < WAVE_COUNT; ++i)
 	{
 		if (waves[i].amplitude > 0.0)
@@ -108,12 +115,21 @@ void main()
 				time * waves[i].frequency +
 				waves[i].phase;
 
-			df_dx += amplitude * waveNumber * direction.x * cos(theta);
-			df_dy += amplitude * waveNumber * direction.y * cos(theta);
+			// Gerstner Waves
+			float steepness = amplitude * waveNumber;
+			tangent += vec3(
+				-steepness * direction.x * direction.x * sin(theta),
+				-steepness  * direction.x * direction.y * sin(theta),
+				steepness  * direction.x * cos(theta));
+
+			bitangent += vec3(
+				-steepness  * direction.x * direction.y * sin(theta),
+				-steepness * direction.y * direction.y * sin(theta),
+				steepness  * direction.y * cos(theta));
 		}
 	}
-	vec3 tangent = normalize(vec3(1.0f, 0.0f, df_dx));
-	vec3 bitangent = normalize(vec3(0.0f, 1.0f, df_dy));
+	tangent = normalize(tangent);
+	bitangent = normalize(bitangent);
 	vec3 normal = cross(tangent, bitangent);
 	normal = normalize(mat3(model) * normal);
 	
@@ -153,6 +169,7 @@ void main()
 			}
 		}
 	}
+
 	vec3 reflectColor = texture(skyboxSampler, reflectDir).rgb;
 	float fresnel = max(0.0, dot(-viewDir, normal));
 	outColor = vec4(mix(reflectColor, refractColor, fresnel), 1.0);
@@ -197,7 +214,7 @@ static constexpr float GRAVITY_ACCELERATION = 9.81f;
 
 static const std::array<gltut::Wave, 10> WAVES =
 {
-	gltut::Wave(0.15f, 6.0f, 0.0f, gltut::Vector2(1.0f, 0.0f)),
+	gltut::Wave(0.30f, 6.0f, 0.0f, gltut::Vector2(1.0f, 0.0f)),
 	gltut::Wave(0.10f, 5.0f, 1.0f, gltut::Vector2(0.8f, 0.6f)),
 	gltut::Wave(0.08f, 4.5f, 2.0f, gltut::Vector2(0.6f, 0.8f)),
 	gltut::Wave(0.05f, 3.0f, 3.0f, gltut::Vector2(0.4f, 0.9f)),
@@ -235,12 +252,13 @@ gltut::Material* createWaterMaterial(
 		std::string baseName = "waves[" + std::to_string(i) + "]";
 		shader->setFloat((baseName + ".amplitude").c_str(), WAVES[i].amplitude);
 
+		float period = WAVES[i].period / 2.0f;
 		const float waveNumber = getInfiniteWaterDepthWaveNumber(
-			WAVES[i].period,
+			period,
 			GRAVITY_ACCELERATION);
 		shader->setFloat((baseName + ".waveNumber").c_str(), waveNumber);
 
-		shader->setFloat((baseName + ".frequency").c_str(), 2.0f * gltut::PI / WAVES[i].period);
+		shader->setFloat((baseName + ".frequency").c_str(), 2.0f * gltut::PI / period);
 		shader->setFloat((baseName + ".phase").c_str(), WAVES[i].phase);
 
 		const gltut::Vector2 dir = WAVES[i].direction.getNormalized();
@@ -257,6 +275,7 @@ gltut::Material* createWaterMaterial(
 	pass->getTextures()->setTexture(sceneColorTexture, 1);
 	pass->getTextures()->setTexture(sceneDepthTexture, 2);
 
+	//pass->setPolygonFill(gltut::PolygonFillMode::LINE);
 	return waterMaterial;
 }
 
@@ -377,12 +396,12 @@ int main()
 		createBoxes(*engine, materialModel->getMaterial());
 		
 		gltut::TextureCubemap* skyboxTexture = engine->getDevice()->getTextures()->load(
-			"assets/skybox/negx.jpg",
-			"assets/skybox/posx.jpg",
-			"assets/skybox/negy.jpg",
-			"assets/skybox/posy.jpg",
-			"assets/skybox/negz.jpg",
-			"assets/skybox/posz.jpg",
+			"assets/skybox/negx.bmp",
+			"assets/skybox/posx.bmp",
+			"assets/skybox/negy.bmp",
+			"assets/skybox/posy.bmp",
+			"assets/skybox/negz.bmp",
+			"assets/skybox/posz.bmp",
 			gltut::TextureParameters(
 				gltut::TextureFilterMode::LINEAR,
 				gltut::TextureFilterMode::LINEAR,
@@ -402,7 +421,7 @@ int main()
 			depthTexture);
 
 		auto* waterPlaneMesh = engine->getFactory()->getGeometry()->createPlane(
-			{2000.0f, 2000.0f},
+			{400.0f, 400.0f},
 			{400, 400},
 			{false, false, false});
 
