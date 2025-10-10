@@ -1,5 +1,7 @@
 # OpenGL Tutorials
-This repository contains a collection of OpenGL tutorials and a
+![Water](assets/screenshots/water.png)
+
+This repository contains implementations of various OpenGL tutorials and a
 modular engine framework for graphics programming in C++.
 
 The tutorials are taken from [LearnOpenGL](https://learnopengl.com/)
