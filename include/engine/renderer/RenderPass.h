@@ -46,6 +46,9 @@ public:
 	/// Returns the scene viewpoint
 	virtual const Viewpoint* getViewpoint() const noexcept = 0;
 
+	/// Sets the scene viewpoint
+	virtual void setViewpoint(const Viewpoint* viewpoint) noexcept = 0;
+
 	/// Returns the material layer for this render pass
 	virtual u32 getMaterialPass() const noexcept = 0;
 

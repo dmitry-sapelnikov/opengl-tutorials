@@ -48,6 +48,11 @@ public:
 		return mViewpoint;
 	}
 
+	void setViewpoint(const Viewpoint* viewpoint) noexcept final
+	{
+		mViewpoint = viewpoint;
+	}
+
 	/// Returns the object to render
 	const RenderObject* getObject() const noexcept final
 	{
