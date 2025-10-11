@@ -37,7 +37,6 @@ static const char* WATER_FRAGMENT_SHADER = R"(
  
 uniform vec3      iResolution;           // viewport resolution (in pixels)
 uniform float     iTime;                 // shader playback time (in seconds)
-uniform vec4      iMouse;                // mouse pixel coords. xy: current (if MLB down), zw: click
 
 const int NUM_STEPS = 32;
 const float PI	 	= 3.141592;
@@ -531,11 +530,6 @@ int main()
 
             waterShader->setFloat("iTime", time);
 			const auto mousePos = engine->getWindow()->getCursorPosition();
-            waterShader->setVec4("iMouse", 
-                static_cast<float>(mousePos.x),
-                static_cast<float>(mousePos.y),
-                0.0f,
-				0.0f);
 
 			imgui->newFrame();
 			ImGui::SetNextWindowPos({10, 10}, ImGuiCond_FirstUseEver);
