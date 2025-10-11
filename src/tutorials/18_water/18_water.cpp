@@ -66,6 +66,9 @@ uniform samplerCube skyboxSampler;
 uniform sampler2D colorSampler;
 uniform sampler2D depthSampler;
 
+uniform sampler2D reflectionColorSampler;
+uniform sampler2D reflectionDepthSampler;
+
 // math
 float hash( vec2 p ) {
 	float h = dot(p,vec2(127.1,311.7));	
@@ -93,39 +96,22 @@ float specular(vec3 n,vec3 l,vec3 e,float s) {
 }
 
 // sky
-vec3 globalToScreen(vec3 p) {
-	vec4 clipSpacePos = iProjectionMatrix * iViewMatrix * vec4(p, 1.0);
+vec3 globalToScreen(vec3 p, mat4 view, mat4 projection)
+{
+	vec4 clipSpacePos = projection * view * vec4(p, 1.0);
 	clipSpacePos /= clipSpacePos.w;
 	return clipSpacePos.xyz * 0.5 + 0.5;
 }
 
-vec3 getReflectedColor(vec3 surfaceP, vec3 e) {
-	float maxDistance = min(1000, 100.0 / abs(e.y));
-	int steps = min(100, int(8.0 + 0.05 * maxDistance * maxDistance));
-
-	// Raycast along the view direction in the screen space
-	vec3 pScreenPos = globalToScreen(surfaceP);
-
-	for (int i = 1; i <= steps; i++)
+vec3 getReflectedColor(vec2 uv, vec3 surfaceP, vec3 e)
+{
+	uv.x = 1.0 - uv.x;
+	float depth = texture(reflectionDepthSampler, uv).r;
+	if (depth < 1.0)
 	{
-		float t = float(i) / float(steps);
-		t = maxDistance * t;
-
-		vec3 p = surfaceP + t * e;
-		vec3 screenPos = globalToScreen(p);
-		if (!(0.0 <= screenPos.x && screenPos.x <= 1.0 &&
-			0.0 <= screenPos.y && screenPos.y <= 1.0))
-		{
-			break;
-		}
-
-		float sceneDepth = texture(depthSampler, screenPos.xy).r;
-		if (sceneDepth < 1 && sceneDepth < screenPos.z && sceneDepth > pScreenPos.z)
-		{
-			return texture(colorSampler, screenPos.xy).rgb;
-		}
+		return texture(reflectionColorSampler, uv).rgb;
 	}
-    return texture(skyboxSampler, e).rgb;
+	return texture(skyboxSampler, e).rgb;
 }
 
 // sky
@@ -207,7 +193,9 @@ vec3 getSeaColor(vec3 p, vec3 n, vec3 l, vec3 eye, vec3 dist) {
     float fresnel = clamp(1.0 - dot(n, -eye), 0.0, 1.0);
     fresnel = min(fresnel * fresnel * fresnel, 0.5);
 
-    vec3 reflected = getReflectedColor(p, reflect(eye, n));
+
+    vec3 surfaceScreen = globalToScreen(vec3(p.x, 0, p.z), iViewMatrix, iProjectionMatrix);
+    vec3 reflected = getReflectedColor(surfaceScreen.xy, p, reflect(eye, n));
 
 	// refraction
 	vec3 waterColor = SEA_BASE + diffuse(n, l, 80.0) * SEA_WATER_COLOR * 0.12;
@@ -245,6 +233,7 @@ vec3 getSeaColor(vec3 p, vec3 n, vec3 l, vec3 eye, vec3 dist) {
 	float depthFactor = clamp(traceDepth / iDeepWaterDistance, 0.0, 1.0);
 	refracted = mix(refracted, waterColor, mix(0.3, 1.0, depthFactor));
 
+	fresnel = 1.0 - 1E-07;
 	vec3 color = mix(refracted, reflected, fresnel);
 	float atten = max(1.0 - dot(dist, dist) * 0.001, 0.0);
 	color += SEA_WATER_COLOR * (p.y - SEA_HEIGHT) * 0.18 * atten;
@@ -338,7 +327,6 @@ static float getInfiniteWaterDepthWaveNumber(
 	return (frequency * frequency) / gravityAcceleration;
 }
 
-
 /// Creates a Phong material model
 gltut::PhongMaterialModel* createMaterialModel(gltut::Engine* engine)
 {
@@ -373,7 +361,7 @@ void createBoxes(
 	GLTUT_CHECK(boxGeometry, "Failed to create geometry");
 
 	gltut::Rng rng;
-	for (int k = -2; k < COUNT - 2; ++k)
+	for (int k = -1; k < 0; ++k)
 	{
 		for (int i = 0; i < COUNT; ++i)
 		{
@@ -406,6 +394,87 @@ void createBoxes(
 	}
 }
 
+namespace gltut
+{
+
+class ReflectionViewpoint : public Viewpoint
+{
+public:
+	ReflectionViewpoint(const Camera& camera) :
+		mCamera(&camera)
+	{
+	}
+
+	Vector3 getPosition() const noexcept final
+	{
+		const Vector3 cameraPos = mCamera->getViewpoint().getPosition();
+		return Vector3(cameraPos.x, -cameraPos.y, cameraPos.z);
+	}
+
+	/// Returns the view matrix (inverse matrix of the viewer transformation)
+	Matrix4 getViewMatrix() const noexcept final
+	{
+		const Vector3 position = mCamera->getView().getPosition();
+		const Vector3 target = mCamera->getView().getTarget();
+		return Matrix4::lookAtMatrix(
+			Vector3(position.x, -position.y, position.z),
+			Vector3(target.x, -target.y, target.z),
+			-mCamera->getView().getUp());
+	}
+
+	/// Returns the projection matrix
+	Matrix4 getProjectionMatrix(float aspectRatio) const noexcept final
+	{
+		return mCamera->getProjection().getMatrix(aspectRatio);
+	}
+
+private:
+	const Camera* mCamera;
+};
+
+}
+
+gltut::Shader* createWaterEffect(gltut::Engine* engine,
+								 gltut::TextureCubemap* skyboxTexture,
+								 gltut::Texture2* colorTexture,
+								 gltut::Texture2* depthTexture,
+								 gltut::Texture2* reflectionTexture,
+								 gltut::Texture2* reflectionDepthTexture)
+{
+	gltut::Shader* waterShader = engine->getDevice()->getShaders()->create(
+		WATER_VERTEX_SHADER,
+		WATER_FRAGMENT_SHADER);
+	waterShader->setInt("skyboxSampler", 0);
+	waterShader->setInt("colorSampler", 1);
+	waterShader->setInt("depthSampler", 2);
+	waterShader->setInt("reflectionColorSampler", 3);
+	waterShader->setInt("reflectionDepthSampler", 4);
+
+	gltut::Camera* camera = engine->getScene()->getActiveCamera();
+
+	waterShader->setFloat("zNear", camera->getProjection().getNearPlane());
+	waterShader->setFloat("zFar", camera->getProjection().getFarPlane());
+	waterShader->setFloat("iDeepWaterDistance", 100.0f);
+
+	gltut::ShaderRendererBinding* waterShaderBinding = engine->getRenderer()->createShaderBinding(waterShader);
+	GLTUT_CHECK(waterShaderBinding != nullptr, "Failed to create water shader binding");
+	waterShaderBinding->bind(gltut::ShaderRendererBinding::Parameter::VIEWPOINT_VIEW_MATRIX, "iViewMatrix");
+	waterShaderBinding->bind(gltut::ShaderRendererBinding::Parameter::VIEWPOINT_PROJECTION_MATRIX, "iProjectionMatrix");
+	waterShaderBinding->bind(gltut::ShaderRendererBinding::Parameter::VIEWPOINT_POSITION, "iCameraPosition");
+
+	std::array<const gltut::Texture*, 5> textures = {skyboxTexture, colorTexture, depthTexture, reflectionTexture, reflectionDepthTexture};
+	gltut::RenderPass* textureToWindowPass = engine->getFactory()->getRenderPass()->createTexturesToWindowRenderPass(
+		nullptr,
+		waterShader,
+		textures.data(),
+		static_cast<gltut::u32>(textures.size()));
+
+	textureToWindowPass->setViewpoint(engine->getScene()->getActiveCameraViewpoint());
+
+	GLTUT_CHECK(textureToWindowPass != nullptr, "Failed to create texture to window pass");
+
+	return waterShader;
+}
 
 ///	The program entry point
 int main()
@@ -436,6 +505,7 @@ int main()
 
 		auto* scene = engine->getScene();
 		auto* factory = engine->getFactory();
+		createBoxes(*engine, createMaterialModel(engine.get())->getMaterial());
 
 		// Create framebuffer
 		gltut::Texture2* colorTexture = factory->getTexture()->createWindowSizeTexture(
@@ -450,11 +520,34 @@ int main()
 			colorTexture,
 			depthTexture);
 
+		// Create refection render pass
+		gltut::ReflectionViewpoint reflectionViewpoint(*camera);
+		gltut::Texture2* reflectionColorTexture = factory->getTexture()->createWindowSizeTexture(
+			gltut::TextureFormat::RGBA);
+		GLTUT_CHECK(reflectionColorTexture != nullptr, "Failed to create reflection color texture");
+
+		gltut::Texture2* reflectionDepthTexture = factory->getTexture()->createWindowSizeTexture(
+			gltut::TextureFormat::FLOAT);
+
+		gltut::Framebuffer* reflectionFramebuffer = engine->getRenderer()->getDevice()->getFramebuffers()->create(
+			reflectionColorTexture,
+			reflectionDepthTexture);
+		GLTUT_CHECK(reflectionFramebuffer, "Failed to create reflection framebuffer");
+
+		gltut::Color clearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		gltut::RenderPass* reflectionPass = engine->getRenderer()->createPass(
+			&reflectionViewpoint,
+			engine->getScene()->getRenderGroup(),
+			reflectionFramebuffer,
+			0,
+			&clearColor,
+			true,
+			nullptr);
+
 		GLTUT_CHECK(framebuffer, "Failed to create framebuffer");
 		engine->getSceneRenderPass()->setTarget(framebuffer);
-		createBoxes(*engine, createMaterialModel(engine.get())->getMaterial());
 
-        gltut::TextureCubemap* skyboxTexture = engine->getDevice()->getTextures()->load(
+		gltut::TextureCubemap* skyboxTexture = engine->getDevice()->getTextures()->load(
 			"assets/skybox/negx.bmp",
 			"assets/skybox/posx.bmp",
 			"assets/skybox/negy.bmp",
@@ -467,33 +560,13 @@ int main()
 				gltut::TextureWrapMode::CLAMP_TO_EDGE));
 		GLTUT_CHECK(skyboxTexture != nullptr, "Failed to load skybox texture");
 
-        gltut::Shader* waterShader = engine->getDevice()->getShaders()->create(
-			WATER_VERTEX_SHADER,
-			WATER_FRAGMENT_SHADER);
-		waterShader->setInt("skyboxSampler", 0);
-		waterShader->setInt("colorSampler", 1);
-		waterShader->setInt("depthSampler", 2);
-
-		waterShader->setFloat("zNear", camera->getProjection().getNearPlane());
-		waterShader->setFloat("zFar", camera->getProjection().getFarPlane());
-		waterShader->setFloat("iDeepWaterDistance", 100.0f);
-
-        gltut::ShaderRendererBinding* waterShaderBinding = engine->getRenderer()->createShaderBinding(waterShader);
-		GLTUT_CHECK(waterShaderBinding != nullptr, "Failed to create water shader binding");
-        waterShaderBinding->bind(gltut::ShaderRendererBinding::Parameter::VIEWPOINT_VIEW_MATRIX, "iViewMatrix");
-		waterShaderBinding->bind(gltut::ShaderRendererBinding::Parameter::VIEWPOINT_PROJECTION_MATRIX, "iProjectionMatrix");
-		waterShaderBinding->bind(gltut::ShaderRendererBinding::Parameter::VIEWPOINT_POSITION, "iCameraPosition");
-
-        std::array<const gltut::Texture*, 3> textures = {skyboxTexture, colorTexture, depthTexture};
-		gltut::RenderPass* textureToWindowPass = engine->getFactory()->getRenderPass()->createTexturesToWindowRenderPass(
-			nullptr,
-			waterShader,
-			textures.data(),
-			static_cast<gltut::u32>(textures.size()));
-
-        textureToWindowPass->setViewpoint(engine->getScene()->getActiveCameraViewpoint());
-
-		GLTUT_CHECK(textureToWindowPass != nullptr, "Failed to create texture to window pass");
+		gltut::Shader* waterShader = createWaterEffect(
+			engine.get(),
+			skyboxTexture,
+			colorTexture,
+			depthTexture,
+			reflectionColorTexture,
+			reflectionDepthTexture);
 
 		auto start = std::chrono::high_resolution_clock::now();
 		float seaHeight = 0.6f;
@@ -519,16 +592,16 @@ int main()
 
 		do
 		{
-			waterShader->setVec3("iResolution", 
-                static_cast<float>(engine->getWindow()->getSize().x),
-                static_cast<float>(engine->getWindow()->getSize().y),
-                0.0f);
+			waterShader->setVec3("iResolution",
+								 static_cast<float>(engine->getWindow()->getSize().x),
+								 static_cast<float>(engine->getWindow()->getSize().y),
+								 0.0f);
 
 			auto time = std::chrono::duration<float>(
 							std::chrono::high_resolution_clock::now() - start)
 							.count();
 
-            waterShader->setFloat("iTime", time);
+			waterShader->setFloat("iTime", time);
 			const auto mousePos = engine->getWindow()->getCursorPosition();
 
 			imgui->newFrame();
@@ -537,9 +610,9 @@ int main()
 			ImGui::Begin("Settings");
 			ImGui::Text("FPS: %u", engine->getWindow()->getFPS());
 
-            if (ImGui::SliderFloat("Sea Height", &seaHeight, 0.0f, 5.0f))
-            {
-                waterShader->setFloat("SEA_HEIGHT", seaHeight);
+			if (ImGui::SliderFloat("Sea Height", &seaHeight, 0.0f, 5.0f))
+			{
+				waterShader->setFloat("SEA_HEIGHT", seaHeight);
 			}
 
 			if (ImGui::SliderFloat("Deep Water Distance", &deepWaterDistance, 1.0f, 200.0f))
@@ -562,14 +635,22 @@ int main()
 				const float elevationRad = gltut::toRadians(lightElevation);
 				const gltut::Vector3 direction = gltut::setDistanceAzimuthInclination(
 					{1.0f,
-					azimuthRad,
-					elevationRad});
+					 azimuthRad,
+					 elevationRad});
 
 				const gltut::Vector3 lightDirection(-direction.x, -direction.z, -direction.y);
 				directionalLight->setDirection(lightDirection);
 
 				waterShader->setVec3("iLightDirection", lightDirection.x, lightDirection.y, lightDirection.z);
 			}
+
+			// Draw the reflection pass color texture
+			ImGui::Image(
+				reflectionColorTexture->getId(),
+				{200, 200},
+				{0, 1},
+				{1, 0});
+
 			ImGui::End();
 
 		} while (engine->update());
