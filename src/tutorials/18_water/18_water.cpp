@@ -11,194 +11,323 @@
 
 #include "Waves.h"
 
+/// Vertex shader for texture-to-window rendering
 static const char* WATER_VERTEX_SHADER = R"(
-#version 330 core
-layout(location = 0) in vec3 inPosition;
+	#version 330 core
+	layout(location = 0) in vec3 inPos;
+    layout(location = 1) in vec2 inTexCoord;
 
-out vec3 position;
+    out vec2 texCoord;
 
-uniform mat4 model;
-uniform mat4 view;
-uniform mat4 projection;
-uniform float time;
-
-struct Wave
-{
-	float amplitude;
-	float waveNumber;
-	float frequency;
-	float phase;
-	vec2 direction;
-};
-
-#define WAVE_COUNT 110
-uniform Wave waves[WAVE_COUNT];
-
-void main()
-{
-	position = inPosition;
-	for (int i = 0; i < WAVE_COUNT; ++i)
+	void main()
 	{
-		if (waves[i].amplitude > 0.0)
-		{
-			float theta = 
-				dot(waves[i].direction, inPosition.xy) * waves[i].waveNumber + 
-				time * waves[i].frequency +
-				waves[i].phase;
-			/*position.z += waves[i].amplitude * sin(theta);*/
-
-			// Gerstner Waves
-			float dir_offset = waves[i].amplitude * cos(theta);
-			position.x += waves[i].direction.x * dir_offset;
-			position.y += waves[i].direction.y * dir_offset;
-			position.z += waves[i].amplitude * sin(theta);
-		}
-	}
-	gl_Position = model * vec4(position, 1.0);
-	gl_Position = projection * view * gl_Position;
-}
+		gl_Position = vec4(inPos, 1.0);
+        texCoord = inTexCoord;
+	};
 )";
 
 static const char* WATER_FRAGMENT_SHADER = R"(
 #version 330 core
-in vec3 position;
-out vec4 outColor;
 
-struct Wave
-{
-	float amplitude;
-	float waveNumber;
-	float frequency;
-	float phase;
-	vec2 direction;
-};
+/*
+ * "Seascape" by Alexander Alekseev aka TDM - 2014
+ * License Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
+ * Contact: tdmaav@gmail.com
+*/
+ 
+uniform vec3      iResolution;           // viewport resolution (in pixels)
+uniform float     iTime;                 // shader playback time (in seconds)
+uniform vec4      iMouse;                // mouse pixel coords. xy: current (if MLB down), zw: click
 
-#define WAVE_COUNT 110
-uniform Wave waves[WAVE_COUNT];
+const int NUM_STEPS = 32;
+const float PI	 	= 3.141592;
+const float EPSILON	= 1e-3;
+#define EPSILON_NRM (0.1 / iResolution.x)
+//#define AA
 
-uniform mat4 model;
-uniform mat4 view;
-uniform mat4 projection;
-uniform vec3 viewPos;
+// sea
+const int ITER_GEOMETRY = 3;
+const int ITER_FRAGMENT = 5;
+uniform float SEA_HEIGHT;
+
+const float SEA_CHOPPY = 3.0;
+const float SEA_SPEED = 0.8;
+const float SEA_FREQ = 0.16;
+const vec3 SEA_BASE = vec3(0.0,0.09,0.18);
+const vec3 SEA_WATER_COLOR = vec3(0.8,0.9,0.6)*0.6;
+#define SEA_TIME (1.0 + iTime * SEA_SPEED)
+const mat2 octave_m = mat2(1.6,1.2,-1.2,1.6);
+
+uniform mat4 iViewMatrix;
+uniform mat4 iProjectionMatrix;
+uniform vec3 iCameraPosition;
+uniform vec3 iLightDirection;
+
+uniform samplerCube skyboxSampler;
+uniform sampler2D colorSampler;
+uniform sampler2D depthSampler;
+
+// math
+float hash( vec2 p ) {
+	float h = dot(p,vec2(127.1,311.7));	
+    return fract(sin(h)*43758.5453123);
+}
+
+float noise( in vec2 p ) {
+    vec2 i = floor( p );
+    vec2 f = fract( p );	
+	vec2 u = f*f*(3.0-2.0*f);
+    return -1.0+2.0*mix( mix( hash( i + vec2(0.0,0.0) ), 
+                     hash( i + vec2(1.0,0.0) ), u.x),
+                mix( hash( i + vec2(0.0,1.0) ), 
+                     hash( i + vec2(1.0,1.0) ), u.x), u.y);
+}
+
+// lighting
+float diffuse(vec3 n,vec3 l,float p) {
+    return pow(dot(n,l) * 0.4 + 0.6,p);
+}
+
+float specular(vec3 n,vec3 l,vec3 e,float s) {    
+    float nrm = (s + 8.0) / (PI * 8.0);
+    return pow(max(dot(reflect(e,n),l),0.0),s) * nrm;
+}
+
+// sky
+vec3 globalToScreen(vec3 p) {
+	vec4 clipSpacePos = iProjectionMatrix * iViewMatrix * vec4(p, 1.0);
+	clipSpacePos /= clipSpacePos.w;
+	return clipSpacePos.xyz * 0.5 + 0.5;
+}
+
+vec3 getReflectedColor(vec3 surfaceP, vec3 e) {
+	float maxDistance = min(1000, 100.0 / abs(e.y));
+	int steps = min(100, int(8.0 + 0.05 * maxDistance * maxDistance));
+
+	// Raycast along the view direction in the screen space
+	vec3 pScreenPos = globalToScreen(surfaceP);
+
+	for (int i = 1; i <= steps; i++)
+	{
+		float t = float(i) / float(steps);
+		t = maxDistance * t;
+
+		vec3 p = surfaceP + t * e;
+		vec3 screenPos = globalToScreen(p);
+		if (!(0.0 <= screenPos.x && screenPos.x <= 1.0 &&
+			0.0 <= screenPos.y && screenPos.y <= 1.0))
+		{
+			break;
+		}
+
+		float sceneDepth = texture(depthSampler, screenPos.xy).r;
+		if (sceneDepth < 1 && sceneDepth < screenPos.z && sceneDepth > pScreenPos.z)
+		{
+			return texture(colorSampler, screenPos.xy).rgb;
+		}
+	}
+    return texture(skyboxSampler, e).rgb;
+}
+
+// sky
+vec3 getSkyColor(vec2 uv, vec3 e) {
+	float depth = texture(depthSampler, uv).r;
+	if (depth < 1.0)
+	{
+		return texture(colorSampler, uv).rgb;
+	}
+    return texture(skyboxSampler, e).rgb;
+}
+
+// sea
+float sea_octave(vec2 uv, float choppy) {
+    uv += noise(uv);        
+    vec2 wv = 1.0-abs(sin(uv));
+    vec2 swv = abs(cos(uv));    
+    wv = mix(wv,swv,wv);
+    return pow(1.0-pow(wv.x * wv.y,0.65),choppy);
+}
+
+float map(vec3 p) {
+    float freq = SEA_FREQ;
+    float amp = SEA_HEIGHT;
+    float choppy = SEA_CHOPPY;
+    vec2 uv = p.xz; uv.x *= 0.75;
+    
+    float d, h = 0.0;    
+    for(int i = 0; i < ITER_GEOMETRY; i++) {        
+    	d = sea_octave((uv+SEA_TIME)*freq,choppy);
+    	d += sea_octave((uv-SEA_TIME)*freq,choppy);
+        h += d * amp;        
+    	uv *= octave_m; freq *= 1.9; amp *= 0.22;
+        choppy = mix(choppy,1.0,0.2);
+    }
+    return p.y - h;
+}
+
+float map_detailed(vec3 p) {
+    float freq = SEA_FREQ;
+    float amp = SEA_HEIGHT;
+    float choppy = SEA_CHOPPY;
+    vec2 uv = p.xz; uv.x *= 0.75;
+    
+    float d, h = 0.0;    
+    for(int i = 0; i < ITER_FRAGMENT; i++) {        
+    	d = sea_octave((uv+SEA_TIME)*freq,choppy);
+    	d += sea_octave((uv-SEA_TIME)*freq,choppy);
+        h += d * amp;        
+    	uv *= octave_m; freq *= 1.9; amp *= 0.22;
+        choppy = mix(choppy,1.0,0.2);
+    }
+    return p.y - h;
+}
+
+uniform float iRefractionScale;
 uniform float zNear;
 uniform float zFar;
-uniform vec3 deepWaterColor;
-uniform float deepWaterDistance;
-
-uniform float time;
-uniform samplerCube skyboxSampler;
-uniform sampler2D sceneColorSampler;
-uniform sampler2D sceneDepthSampler;
-
-#define SAMPLING_STEPS 10
+uniform float iDeepWaterDistance;
 
 float getGlobalDistance(float depth)
 {
 	return zNear * (zFar / (zFar + depth * (zNear - zFar)) - 1.0);
 }
 
-void main()
-{
-	vec3 tangent = vec3(1.0f, 0.0f, 0.0f);
-	vec3 bitangent = vec3(0.0f, 1.0f, 0.0f);
+vec3 getSeaColor(vec3 p, vec3 n, vec3 l, vec3 eye, vec3 dist) {
+	// Transform point to screen space
+	vec4 clipSpacePos = iProjectionMatrix * iViewMatrix * vec4(p, 1.0);
+	clipSpacePos /= clipSpacePos.w;
+	vec3 ndc = clipSpacePos.xyz * 0.5 + 0.5;
 
-	for (int i = 0; i < WAVE_COUNT; ++i)
+	// Compare depth with the depth buffer
+	float sceneDepth = texture(depthSampler, ndc.xy).r;
+	if (ndc.z > sceneDepth)
 	{
-		if (waves[i].amplitude > 0.0)
-		{
-			float amplitude = waves[i].amplitude;
-			float waveNumber = waves[i].waveNumber;
-			vec2 direction = waves[i].direction;
-
-			float theta = 
-				dot(direction, position.xy) * waveNumber + 
-				time * waves[i].frequency +
-				waves[i].phase;
-
-			// Gerstner Waves
-			float steepness = amplitude * waveNumber;
-			tangent += vec3(
-				-steepness * direction.x * direction.x * sin(theta),
-				-steepness  * direction.x * direction.y * sin(theta),
-				steepness  * direction.x * cos(theta));
-
-			bitangent += vec3(
-				-steepness  * direction.x * direction.y * sin(theta),
-				-steepness * direction.y * direction.y * sin(theta),
-				steepness  * direction.y * cos(theta));
-		}
+		return texture(colorSampler, ndc.xy).rgb;
 	}
-	tangent = normalize(tangent);
-	bitangent = normalize(bitangent);
-	vec3 normal = cross(tangent, bitangent);
-	normal = normalize(mat3(model) * normal);
+
+    float fresnel = clamp(1.0 - dot(n, -eye), 0.0, 1.0);
+    fresnel = min(fresnel * fresnel * fresnel, 0.5);
+
+    vec3 reflected = getReflectedColor(p, reflect(eye, n));
+
+	// refraction
+	vec3 waterColor = SEA_BASE + diffuse(n, l, 80.0) * SEA_WATER_COLOR * 0.12;
+
+	vec3 refractDir = normalize(refract(eye, n, 1.0 / 1.33));
+
+	vec4 refractNcd = iProjectionMatrix * iViewMatrix * vec4(p + iRefractionScale * refractDir, 1.0f);
+	refractNcd /= refractNcd.w;
+	vec2 refractUV = refractNcd.xy * 0.5 + 0.5;
 	
-	vec3 globalPos = vec3(model * vec4(position, 1.0));
-	vec3 viewDir = normalize(globalPos - viewPos);
-	vec3 reflectDir = reflect(viewDir, normal);
-	vec3 refractDir = refract(viewDir, normal, 1.00 / 1.33);
+	// Get 0..1 depth of the globalPos
+	vec4 posNcd = iProjectionMatrix * iViewMatrix * vec4(p, 1.0f);
+	posNcd /= posNcd.w;
+	vec2 uv = posNcd.xy * 0.5 + 0.5;
+	float posDepth = posNcd.z * 0.5 + 0.5;
 
-	//	 Perform path tracing along the refraction direction to get the refracted color
-	vec3 refractColor = deepWaterColor;
-	vec4 waterSurfaceNcd = projection * view * vec4(globalPos, 1.0);
-	waterSurfaceNcd /= waterSurfaceNcd.w;
-	float waterSurfaceDepth = waterSurfaceNcd.z * 0.5 + 0.5;
-	float sceneDepth = texture(sceneDepthSampler, waterSurfaceNcd.xy * 0.5 + 0.5).r;
+	refractUV.y = uv.y;
 
-	if (sceneDepth > waterSurfaceDepth)
+	sceneDepth = texture(depthSampler, refractUV).r;
+
+	vec3 refracted = waterColor;
+	if (sceneDepth > posDepth &&
+		0.0 <= refractUV.x && refractUV.x <= 1.0 &&
+		0.0 <= refractUV.y && refractUV.y <= 1.0)
 	{
-		float distanceFromSurface = getGlobalDistance(sceneDepth) - getGlobalDistance(waterSurfaceDepth);
-		if (distanceFromSurface < deepWaterDistance)
-		{
-			// Fake refraction sampling points
-			vec3 samplePos = globalPos + refractDir * distanceFromSurface;
-
-			vec4 samplePosNcd = (projection * view * vec4(samplePos, 1.0));
-			samplePosNcd /= samplePosNcd.w;
-			vec2 sampleUV = samplePosNcd.xy * 0.5 + 0.5;
-
-			float refractDepth = texture(sceneDepthSampler, sampleUV).r;
-
-			if (refractDepth > waterSurfaceDepth)
-			{
-				distanceFromSurface = getGlobalDistance(refractDepth) - getGlobalDistance(waterSurfaceDepth);
-				refractColor = mix(
-					texture(sceneColorSampler, sampleUV).rgb,
-					deepWaterColor,
-					clamp(distanceFromSurface / deepWaterDistance, 0.0, 1.0));
-			}
-		}
-	}
-
-	vec3 reflectColor = texture(skyboxSampler, reflectDir).rgb;
-	float fresnel = max(0.0, dot(-viewDir, normal));
-	outColor = vec4(mix(reflectColor, refractColor, fresnel), 1.0);
-}
-)";
-
-
-// Texture to window trivial fragment shader// Grayscale fragment shader
-static const char* TEXTURE_TO_WINDOW_FRAGMENT_SHADER = R"(
-#version 330 core
-in vec2 texCoord;
-out vec4 outColor;
-uniform sampler2D colorSampler;
-uniform sampler2D depthSampler;
-uniform sampler2D waterColorSampler;
-uniform sampler2D waterDepthSampler;
-
-void main()
-{
-	if (texture(depthSampler, texCoord).r <= texture(waterDepthSampler, texCoord).r)
-	{
-		outColor = texture(colorSampler, texCoord);
+		refracted = texture(colorSampler, refractUV).rgb;
 	}
 	else
 	{
-		outColor = texture(waterColorSampler, texCoord);
+		sceneDepth = texture(depthSampler, uv).r;
+		refracted = texture(colorSampler, uv).rgb;
 	}
-})";
+	
+	float traceDepth = getGlobalDistance(sceneDepth) - getGlobalDistance(posDepth);
+	float depthFactor = clamp(traceDepth / iDeepWaterDistance, 0.0, 1.0);
+	refracted = mix(refracted, waterColor, mix(0.3, 1.0, depthFactor));
 
+	vec3 color = mix(refracted, reflected, fresnel);
+	float atten = max(1.0 - dot(dist, dist) * 0.001, 0.0);
+	color += SEA_WATER_COLOR * (p.y - SEA_HEIGHT) * 0.18 * atten;
+    
+    color += specular(n, l, eye, 600.0 * inversesqrt(length(dist)));
+    
+    return color;
+}
+
+// tracing
+vec3 getNormal(vec3 p, float eps) {
+    vec3 n;
+    n.y = map_detailed(p);    
+    n.x = map_detailed(vec3(p.x+eps,p.y,p.z)) - n.y;
+    n.z = map_detailed(vec3(p.x,p.y,p.z+eps)) - n.y;
+    n.y = eps;
+    return normalize(n);
+}
+
+float heightMapTracing(vec3 ori, vec3 dir, out vec3 p) {  
+    float tm = 0.0;
+    float tx = 2000.0;    
+    float hx = map(ori + dir * tx);
+    if(hx > 0.0) {
+        p = ori + dir * tx;
+        return tx;   
+    }
+    float hm = map(ori);    
+    for(int i = 0; i < NUM_STEPS; i++) {
+        float tmid = mix(tm, tx, hm / (hm - hx));
+        p = ori + dir * tmid;
+        float hmid = map(p);        
+        if(hmid < 0.0) {
+            tx = tmid;
+            hx = hmid;
+        } else {
+            tm = tmid;
+            hm = hmid;
+        }        
+        if(abs(hmid) < EPSILON) break;
+    }
+    return mix(tm, tx, hm / (hm - hx));
+}
+
+vec3 getPixel(vec2 uv, float time)
+{
+    // ray
+    // Convert from screen space to NDC
+    vec2 xy = uv * 2.0 - 1.0;
+    // Convert from NDC to clip space
+    vec4 ray_clip = vec4(xy, -1.0, 1.0);
+    // Convert from clip space to eye space
+    vec4 ray_eye = inverse(iProjectionMatrix) * ray_clip;
+    ray_eye = vec4(ray_eye.xy, -1.0, 0.0);
+    // Convert from eye space to world space
+    vec3 dir = normalize((inverse(iViewMatrix) * ray_eye).xyz);
+
+    vec3 ori = iCameraPosition;
+
+    // tracing
+    vec3 p;
+    heightMapTracing(ori,dir,p);
+    vec3 dist = p - ori;
+    vec3 n = getNormal(p, dot(dist, dist) * EPSILON_NRM);
+             
+    // color
+    return mix(
+        getSkyColor(uv, dir),
+        getSeaColor(p,n,-iLightDirection,dir,dist),
+    	pow(smoothstep(0.0,-0.02,dir.y),0.2));
+}
+
+in vec2 texCoord;
+out vec4 fragColor;
+
+void main()
+{
+    vec3 color = getPixel(texCoord, 0.0f);
+    // post-processing
+	fragColor = vec4(pow(color,vec3(0.75)), 1.0);
+}
+)";
 
 static float getInfiniteWaterDepthWaveNumber(
 	float wavePeriod,
@@ -210,98 +339,33 @@ static float getInfiniteWaterDepthWaveNumber(
 	return (frequency * frequency) / gravityAcceleration;
 }
 
-static constexpr float GRAVITY_ACCELERATION = 9.81f;
-
-static const std::array<gltut::Wave, 10> WAVES =
-{
-	gltut::Wave(0.30f, 6.0f, 0.0f, gltut::Vector2(1.0f, 0.0f)),
-	gltut::Wave(0.10f, 5.0f, 1.0f, gltut::Vector2(0.8f, 0.6f)),
-	gltut::Wave(0.08f, 4.5f, 2.0f, gltut::Vector2(0.6f, 0.8f)),
-	gltut::Wave(0.05f, 3.0f, 3.0f, gltut::Vector2(0.4f, 0.9f)),
-	gltut::Wave(0.03f, 2.7f, 4.0f, gltut::Vector2(0.2f, 1.0f)),
-	gltut::Wave(0.02f, 2.5f, 5.0f, gltut::Vector2(-0.2f, 1.0f)),
-	gltut::Wave(0.01f, 2.3f, 6.0f, gltut::Vector2(-0.4f, 0.9f)),
-	gltut::Wave(0.008f, 2.2f, 7.0f, gltut::Vector2(-0.6f, 0.8f)),
-	gltut::Wave(0.005f, 2.15f, 8.0f, gltut::Vector2(-0.8f, 0.6f)),
-	gltut::Wave(0.003f, 2.1f, 9.0f, gltut::Vector2(-1.0f, 0.0f))
-};
-
-gltut::Material* createWaterMaterial(
-	gltut::Renderer* renderer,
-	gltut::TextureCubemap* skyboxTexture,
-	gltut::Texture2* sceneColorTexture,
-	gltut::Texture2* sceneDepthTexture)
-{
-	gltut::ShaderRendererBinding* shaderBinding = gltut::createStandardShaderBinding(
-		renderer,
-		WATER_VERTEX_SHADER,
-		WATER_FRAGMENT_SHADER);
-
-	shaderBinding->bind(
-		gltut::RendererBinding::Parameter::VIEWPOINT_POSITION,
-		"viewPos");
-
-	shaderBinding->getTarget()->setInt("skyboxSampler", 0);
-	shaderBinding->getTarget()->setInt("sceneColorSampler", 1);
-	shaderBinding->getTarget()->setInt("sceneDepthSampler", 2);
-
-	gltut::Shader* shader = shaderBinding->getTarget();
-
-	for (size_t i = 0; i < WAVES.size(); ++i)
-	{
-		std::string baseName = "waves[" + std::to_string(i) + "]";
-		shader->setFloat((baseName + ".amplitude").c_str(), WAVES[i].amplitude);
-
-		float period = WAVES[i].period / 2.0f;
-		const float waveNumber = getInfiniteWaterDepthWaveNumber(
-			period,
-			GRAVITY_ACCELERATION);
-		shader->setFloat((baseName + ".waveNumber").c_str(), waveNumber);
-
-		shader->setFloat((baseName + ".frequency").c_str(), 2.0f * gltut::PI / period);
-		shader->setFloat((baseName + ".phase").c_str(), WAVES[i].phase);
-
-		const gltut::Vector2 dir = WAVES[i].direction.getNormalized();
-		shader->setVec2((baseName + ".direction").c_str(), dir.x, dir.y);
-	}
-	GLTUT_CHECK(shaderBinding != nullptr, "Failed to create shader binding");
-
-	gltut::Material* waterMaterial = renderer->createMaterial();
-	GLTUT_CHECK(waterMaterial != nullptr, "Failed to create refractive material");
-
-	gltut::MaterialPass* pass = waterMaterial->createPass(1, shaderBinding, 3, 0);
-	GLTUT_CHECK(pass != nullptr, "Failed to create material pass");
-	pass->getTextures()->setTexture(skyboxTexture, 0);
-	pass->getTextures()->setTexture(sceneColorTexture, 1);
-	pass->getTextures()->setTexture(sceneDepthTexture, 2);
-
-	//pass->setPolygonFill(gltut::PolygonFillMode::LINE);
-	return waterMaterial;
-}
 
 /// Creates a Phong material model
-gltut::FlatColorMaterialModel* createMaterialModel(
-	gltut::Engine* engine,
-	gltut::PhongShaderModel* phongShader)
+gltut::PhongMaterialModel* createMaterialModel(gltut::Engine* engine)
 {
+	gltut::MaterialFactory* materialFactory = engine->getFactory()->getMaterial();
+	gltut::PhongShaderModel* phongShader = materialFactory->createPhongShader(1, 0, 0);
 	GLTUT_CHECK(phongShader, "Failed to create Phong shader");
 
-	gltut::MaterialFactory* materialFactory = engine->getFactory()->getMaterial();
-	gltut::FlatColorMaterialModel* materialModel = materialFactory->createFlatColorMaterial(phongShader);
+	gltut::PhongMaterialModel* materialModel = materialFactory->createPhongMaterial(phongShader);
 	GLTUT_CHECK(materialModel, "Failed to create Phong material model");
 
 	gltut::GraphicsDevice* device = engine->getDevice();
 	gltut::Texture* diffuseTexture = device->getTextures()->load("assets/container2.png");
 	GLTUT_CHECK(diffuseTexture, "Failed to create diffuse texture");
 
-	materialModel->setColor(diffuseTexture);
+	gltut::Texture* specularTexture = device->getTextures()->load("assets/container2_specular.png");
+	GLTUT_CHECK(specularTexture, "Failed to create specular texture");
+
+	materialModel->setDiffuse(diffuseTexture);
+	materialModel->setSpecular(specularTexture);
 	return materialModel;
 }
 
 /// Creates boxes
 void createBoxes(
 	gltut::Engine& engine,
-	gltut::Material* material)
+	const gltut::Material* material)
 {
 	const int COUNT = 5;
 	const float GEOMETRY_SIZE = 5.0f;
@@ -310,32 +374,35 @@ void createBoxes(
 	GLTUT_CHECK(boxGeometry, "Failed to create geometry");
 
 	gltut::Rng rng;
-	for (int i = 0; i < COUNT; ++i)
+	for (int k = -2; k < COUNT - 2; ++k)
 	{
-		for (int j = 0; j < COUNT; ++j)
+		for (int i = 0; i < COUNT; ++i)
 		{
-			const gltut::Vector3 size(
-				rng.nextFloat(0.5f, 2.0f),
-				rng.nextFloat(0.5f, 2.0f),
-				rng.nextFloat(0.5f, 2.0f));
+			for (int j = 0; j < COUNT; ++j)
+			{
+				const gltut::Vector3 size(
+					rng.nextFloat(0.5f, 2.0f),
+					rng.nextFloat(0.5f, 2.0f),
+					rng.nextFloat(0.5f, 2.0f));
 
-			const gltut::Vector3 position(
-				(i - (COUNT - 1.0f) * 0.5f + rng.nextFloat(-0.25f, 0.25f)) * STRIDE,
-				0.25f * size.y,
-				(j - (COUNT - 1.0f) * 0.5f + rng.nextFloat(-0.25f, 0.25f)) * STRIDE);
+				const gltut::Vector3 position(
+					(i - (COUNT - 1.0f) * 0.5f + rng.nextFloat(-0.25f, 0.25f)) * STRIDE,
+					-k * STRIDE - size.y * 0.5f,
+					(j - (COUNT - 1.0f) * 0.5f + rng.nextFloat(-0.25f, 0.25f)) * STRIDE);
 
-			auto* object = engine.getScene()->createGeometry(
-				boxGeometry,
-				material,
-				gltut::Matrix4::transformMatrix(
-					position,
-					gltut::Vector3(
-						rng.nextFloat(0.0f, gltut::PI * 2.0),
-						rng.nextFloat(0.0f, gltut::PI * 2.0),
-						rng.nextFloat(0.0f, gltut::PI * 2.0)),
-					size));
+				auto* object = engine.getScene()->createGeometry(
+					boxGeometry,
+					material,
+					gltut::Matrix4::transformMatrix(
+						position,
+						gltut::Vector3(
+							rng.nextFloat(0.0f, gltut::PI * 2.0),
+							rng.nextFloat(0.0f, gltut::PI * 2.0),
+							rng.nextFloat(0.0f, gltut::PI * 2.0)),
+						size));
 
-			GLTUT_CHECK(object, "Failed to create object");
+				GLTUT_CHECK(object, "Failed to create object");
+			}
 		}
 	}
 }
@@ -370,8 +437,6 @@ int main()
 
 		auto* scene = engine->getScene();
 		auto* factory = engine->getFactory();
-		auto* geometry = factory->getGeometry()->createBox(gltut::Vector3(1.0f));
-		GLTUT_CHECK(geometry != nullptr, "Failed to create geometry");
 
 		// Create framebuffer
 		gltut::Texture2* colorTexture = factory->getTexture()->createWindowSizeTexture(
@@ -388,14 +453,9 @@ int main()
 
 		GLTUT_CHECK(framebuffer, "Failed to create framebuffer");
 		engine->getSceneRenderPass()->setTarget(framebuffer);
+		createBoxes(*engine, createMaterialModel(engine.get())->getMaterial());
 
-		gltut::PhongShaderModel* phongShader = factory->getMaterial()->createPhongShader(1, 0, 0);
-		gltut::FlatColorMaterialModel* materialModel = createMaterialModel(
-			engine.get(),
-			phongShader);
-		createBoxes(*engine, materialModel->getMaterial());
-		
-		gltut::TextureCubemap* skyboxTexture = engine->getDevice()->getTextures()->load(
+        gltut::TextureCubemap* skyboxTexture = engine->getDevice()->getTextures()->load(
 			"assets/skybox/negx.bmp",
 			"assets/skybox/posx.bmp",
 			"assets/skybox/negy.bmp",
@@ -406,77 +466,76 @@ int main()
 				gltut::TextureFilterMode::LINEAR,
 				gltut::TextureFilterMode::LINEAR,
 				gltut::TextureWrapMode::CLAMP_TO_EDGE));
+		GLTUT_CHECK(skyboxTexture != nullptr, "Failed to load skybox texture");
 
-		const bool skyboxCreated = factory->getScene()->createSkybox(
-			skyboxTexture,
-			scene->getActiveCameraViewpoint(),
-			nullptr,
-			framebuffer);
-		GLTUT_CHECK(skyboxCreated, "Failed to create skybox");
+        gltut::Shader* waterShader = engine->getDevice()->getShaders()->create(
+			WATER_VERTEX_SHADER,
+			WATER_FRAGMENT_SHADER);
+		waterShader->setInt("skyboxSampler", 0);
+		waterShader->setInt("colorSampler", 1);
+		waterShader->setInt("depthSampler", 2);
 
-		auto* waterMaterial = createWaterMaterial(
-			engine->getRenderer(),
-			skyboxTexture,
-			colorTexture,
-			depthTexture);
+		waterShader->setFloat("zNear", camera->getProjection().getNearPlane());
+		waterShader->setFloat("zFar", camera->getProjection().getFarPlane());
+		waterShader->setFloat("iDeepWaterDistance", 100.0f);
 
-		auto* waterPlaneMesh = engine->getFactory()->getGeometry()->createPlane(
-			{400.0f, 400.0f},
-			{400, 400},
-			{false, false, false});
+        gltut::ShaderRendererBinding* waterShaderBinding = engine->getRenderer()->createShaderBinding(waterShader);
+		GLTUT_CHECK(waterShaderBinding != nullptr, "Failed to create water shader binding");
+        waterShaderBinding->bind(gltut::ShaderRendererBinding::Parameter::VIEWPOINT_VIEW_MATRIX, "iViewMatrix");
+		waterShaderBinding->bind(gltut::ShaderRendererBinding::Parameter::VIEWPOINT_PROJECTION_MATRIX, "iProjectionMatrix");
+		waterShaderBinding->bind(gltut::ShaderRendererBinding::Parameter::VIEWPOINT_POSITION, "iCameraPosition");
 
-		GLTUT_CHECK(waterPlaneMesh != nullptr, "Failed to create water plane geometry");
-
-		auto* waterGeometry = engine->getScene()->createGeometry(
-			waterPlaneMesh,
-			waterMaterial,
-			gltut::Matrix4::rotationMatrix({gltut::toRadians(-90.0f), 0.0f, 0.0f}));
-		GLTUT_CHECK(waterGeometry != nullptr, "Failed to create water geometry node");
-
-		auto* waterColorTexture = factory->getTexture()->createWindowSizeTexture(gltut::TextureFormat::RGBA);
-		auto* waterDepthTexture = factory->getTexture()->createWindowSizeTexture(gltut::TextureFormat::FLOAT);	
-		auto* waterFamebuffer = engine->getRenderer()->getDevice()->getFramebuffers()->create(
-			waterColorTexture,
-			waterDepthTexture);
-
-		gltut::Color clearColor(0.0f, 0.0f, 0.0f, 1.0f);
-		engine->getRenderer()->createPass(
-			scene->getActiveCameraViewpoint(),
-			waterGeometry->getGeometry(),
-			waterFamebuffer,
-			1,
-			&clearColor,
-			true, // Depth clearing
-			nullptr);
-
-		const char* samplerNames[] = {"colorSampler", "depthSampler", "waterColorSampler", "waterDepthSampler"};
-		std::array<const gltut::Texture2*, 4> textures = {colorTexture, depthTexture, waterColorTexture, waterDepthTexture};
+        std::array<const gltut::Texture*, 3> textures = {skyboxTexture, colorTexture, depthTexture};
 		gltut::RenderPass* textureToWindowPass = engine->getFactory()->getRenderPass()->createTexturesToWindowRenderPass(
-			textures.data(),
-			static_cast<gltut::u32>(textures.size()),
 			nullptr,
-			TEXTURE_TO_WINDOW_FRAGMENT_SHADER,
-			samplerNames);
+			waterShader,
+			textures.data(),
+			static_cast<gltut::u32>(textures.size()));
+
+        textureToWindowPass->setViewpoint(engine->getScene()->getActiveCameraViewpoint());
+
 		GLTUT_CHECK(textureToWindowPass != nullptr, "Failed to create texture to window pass");
 
 		auto start = std::chrono::high_resolution_clock::now();
+		float seaHeight = 0.6f;
+		waterShader->setFloat("SEA_HEIGHT", seaHeight);
 
-		gltut::Color deepWaterColor(float(21) / 255, float(51) / 255, float(70) / 255);
-		float deepWaterDistance = 5.0f;
+		float deepWaterDistance = 50.0f;
+		waterShader->setFloat("iDeepWaterDistance", deepWaterDistance);
 
-		auto* waterShaderArgs = waterMaterial->getPass(1)->getShaderArguments();
-		waterShaderArgs->setVec3("deepWaterColor", deepWaterColor.r, deepWaterColor.g, deepWaterColor.b);
-		waterShaderArgs->setFloat("deepWaterDistance", deepWaterDistance);
-		waterShaderArgs->setFloat("zNear", camera->getProjection().getNearPlane());
-		waterShaderArgs->setFloat("zFar", camera->getProjection().getFarPlane());
+		float refractionScale = 2.0f;
+		waterShader->setFloat("iRefractionScale", refractionScale);
+
+		auto* directionalLight = scene->createLight(
+			gltut::LightNode::Type::DIRECTIONAL,
+			gltut::Matrix4::identity());
+		GLTUT_CHECK(directionalLight != nullptr, "Failed to create directional light");
+
+		directionalLight->setAmbient(gltut::Color(0.3f, 0.3f, 0.3f));
+		directionalLight->setDiffuse(gltut::Color(2.0f, 2.0f, 2.0f));
+
+		float lightAzimuth = 0.0f;
+		float lightElevation = 45.0f;
+		bool lightIntialized = false;
 
 		do
 		{
+			waterShader->setVec3("iResolution", 
+                static_cast<float>(engine->getWindow()->getSize().x),
+                static_cast<float>(engine->getWindow()->getSize().y),
+                0.0f);
+
 			auto time = std::chrono::duration<float>(
 							std::chrono::high_resolution_clock::now() - start)
 							.count();
 
-			waterShaderArgs->setFloat("time", time);
+            waterShader->setFloat("iTime", time);
+			const auto mousePos = engine->getWindow()->getCursorPosition();
+            waterShader->setVec4("iMouse", 
+                static_cast<float>(mousePos.x),
+                static_cast<float>(mousePos.y),
+                0.0f,
+				0.0f);
 
 			imgui->newFrame();
 			ImGui::SetNextWindowPos({10, 10}, ImGuiCond_FirstUseEver);
@@ -484,37 +543,39 @@ int main()
 			ImGui::Begin("Settings");
 			ImGui::Text("FPS: %u", engine->getWindow()->getFPS());
 
-			// Water settings
-			if (ImGui::ColorEdit3("Deep water color", &deepWaterColor.r))
-			{
-				waterShaderArgs->setVec3("deepWaterColor", deepWaterColor.r, deepWaterColor.g, deepWaterColor.b);
+            if (ImGui::SliderFloat("Sea Height", &seaHeight, 0.0f, 5.0f))
+            {
+                waterShader->setFloat("SEA_HEIGHT", seaHeight);
 			}
 
-			if (ImGui::SliderFloat("Deep water distance", &deepWaterDistance, 1.0f, 20.0f))
+			if (ImGui::SliderFloat("Deep Water Distance", &deepWaterDistance, 1.0f, 200.0f))
 			{
-				waterShaderArgs->setFloat("deepWaterDistance", deepWaterDistance);
+				waterShader->setFloat("iDeepWaterDistance", deepWaterDistance);
 			}
 
-			// Render depth texture in ImGui
+			if (ImGui::SliderFloat("Refraction Scale", &refractionScale, 0.0f, 10.0f))
 			{
-				ImGui::Text("Scene depth");
-				ImGui::Image(
-					depthTexture->getId(),
-					{512, 512},
-					{0, 1},
-					{1, 0});
+				waterShader->setFloat("iRefractionScale", refractionScale);
 			}
 
-			// Render water depth texture in ImGui
+			// Add Light tab
+			const bool azimuthChanged = ImGui::SliderFloat("Azimuth", &lightAzimuth, -180.0f, 180.0f);
+			const bool elevationChanged = ImGui::SliderFloat("Elevation", &lightElevation, 0.0f, 90.0f);
+			if (azimuthChanged || elevationChanged || !lightIntialized)
 			{
-				ImGui::Text("Water depth");
-				ImGui::Image(
-					waterDepthTexture->getId(),
-					{512, 512},
-					{0, 1},
-					{1, 0});
-			}
+				lightIntialized = true;
+				const float azimuthRad = gltut::toRadians(lightAzimuth);
+				const float elevationRad = gltut::toRadians(lightElevation);
+				const gltut::Vector3 direction = gltut::setDistanceAzimuthInclination(
+					{1.0f,
+					azimuthRad,
+					elevationRad});
 
+				const gltut::Vector3 lightDirection(-direction.x, -direction.z, -direction.y);
+				directionalLight->setDirection(lightDirection);
+
+				waterShader->setVec3("iLightDirection", lightDirection.x, lightDirection.y, lightDirection.z);
+			}
 			ImGui::End();
 
 		} while (engine->update());
