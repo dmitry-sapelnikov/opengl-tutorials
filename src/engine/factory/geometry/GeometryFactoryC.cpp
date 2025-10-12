@@ -400,6 +400,78 @@ Geometry* GeometryFactoryC::createSphere(float radius, u32 subdivisions) noexcep
 	return result;
 }
 
+Geometry* GeometryFactoryC::createCylinder(
+	float radius,
+	float height,
+	u32 radialSubdivisions,
+	const CreationOptions& options) noexcept
+{
+	Geometry* result = nullptr;
+	try
+	{
+		GLTUT_CHECK(radialSubdivisions >= 3, "radialSubdivisions must be >= 3");
+		std::vector<Vector3> positions;
+		positions.reserve(2 * (radialSubdivisions + 1));
+		std::vector<Vector3> normals;
+		if (options.normal)
+		{
+			normals.reserve(2 * (radialSubdivisions + 1));
+		}
+
+		std::vector<Vector2> textureCoordinates;
+		if (options.textureCoordinates)
+		{
+			textureCoordinates.reserve(2 * (radialSubdivisions + 1));
+		}
+
+		std::vector<u32> indices;
+		indices.reserve(6 * radialSubdivisions);
+
+		const float angleStep = 2.0f * PI / radialSubdivisions;
+		const float halfHeight = height * 0.5f;
+
+		for (u32 h = 0; h < 2; ++h)
+		{
+			const float y = (h == 0) ? -halfHeight : halfHeight;
+			const float t = (h == 0) ? 0.0f : 1.0f;
+			for (u32 i = 0; i <= radialSubdivisions; ++i)
+			{
+				const float angle = static_cast<float>(i) * angleStep;
+				const float x = radius * std::cos(angle);
+				const float z = radius * std::sin(angle);
+				positions.push_back({x, y, z});
+				if (options.normal)
+				{
+					const Vector3 normal = {x, 0.0f, z};
+					normals.push_back(normal.getNormalized());
+				}
+				if (options.textureCoordinates)
+				{
+					const float s = static_cast<float>(i) / radialSubdivisions;
+					textureCoordinates.push_back({s, t});
+				}
+			}
+		}
+
+		addFacesBetweenCircles(
+			0,
+			radialSubdivisions + 1,
+			radialSubdivisions + 1,
+			indices);
+
+		result = createGeometry(
+			positions.data(),
+			normals.data(),
+			textureCoordinates.data(),
+			static_cast<u32>(positions.size()),
+			indices.data(),
+			static_cast<u32>(indices.size()),
+			options);
+	}
+	GLTUT_CATCH_ALL("Failed to create a cylinder geometry")
+	return result;
+}
+
 Geometry* GeometryFactoryC::createGeometry(
 	const Vector3* positions,
 	const Vector3* normals,

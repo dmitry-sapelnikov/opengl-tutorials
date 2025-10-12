@@ -37,6 +37,12 @@ public:
 
 	Geometry* createSphere(float radius, u32 subdivisions) noexcept final;
 
+	Geometry* createCylinder(
+		float radius,
+		float height,
+		u32 radialSubdivisions,
+		const CreationOptions& options) noexcept final;
+
 private:
 	Geometry* createGeometry(
 		const Vector3* positions,

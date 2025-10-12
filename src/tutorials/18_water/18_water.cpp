@@ -120,20 +120,14 @@ uniform float iReflectionTraceDistance;
 uniform float iReflectionThickness;
 
 
-vec3 getReflectedColor(vec3 surfaceP, vec3 e) 
+vec2 getScreenSpaceUV(vec3 surfaceP, vec3 e) 
 {
 	vec2 _ThicknessParams = vec2(0.0, iReflectionThickness); // thickness, max thickness
 
 	int steps = iReflectionSteps;
 	vec3 end = globalToScreen(surfaceP + iReflectionTraceDistance * e);
-
 	vec3 pScreen = globalToScreen(surfaceP);
-	if (pScreen.z > texture(depthSampler, pScreen.xy).r)
-	{
-		// Invalid case - we are already below the surface
-		return vec3(1.0, 0.0, 1.0);
-	}
-	
+
 	vec3 prevP = pScreen;
 	for (int i = 1; i <= steps; i++)
 	{
@@ -159,22 +153,30 @@ vec3 getReflectedColor(vec3 surfaceP, vec3 e)
 			vec2 screenPosXY = mix(prevP.xy, screenPos.xy, t);
 			if (getGlobalDistance(texture(depthSampler, screenPosXY).r) <= linZ)
 			{
-				return texture(colorSampler, screenPosXY).rgb;
+				return screenPosXY;
 			}
 			else
 			{
-				return texture(colorSampler, screenPos.xy).rgb;
+				return screenPos.xy;
 			}
 		}
 
 		if (linPrevZ - _ThicknessParams.y <= linearDepth && linearDepth <= linZ)
 		{
-			return texture(colorSampler, screenPos.xy).rgb;
+			return screenPos.xy;
 		}
 		prevP = screenPos;
 	}
+	return vec2(-1.0);
+}
 
-    return texture(skyboxSampler, e).rgb;
+vec3 getReflectedColor(vec3 p, vec3 e) {
+	vec2 screenUV = getScreenSpaceUV(p, e);
+	if (screenUV.x < 0.0)
+	{
+		return texture(skyboxSampler, e).rgb;
+	}
+	return texture(colorSampler, screenUV.xy).rgb;
 }
 
 // sky
@@ -254,36 +256,15 @@ vec3 getSeaColor(vec3 p, vec3 n, vec3 l, vec3 eye, vec3 dist) {
 
 	vec3 refractDir = normalize(refract(eye, n, 1.0 / 1.33));
 
-	vec4 refractNcd = iProjectionMatrix * iViewMatrix * vec4(p + iRefractionScale * refractDir, 1.0f);
-	refractNcd /= refractNcd.w;
-	vec2 refractUV = refractNcd.xy * 0.5 + 0.5;
-	
-	// Get 0..1 depth of the globalPos
-	vec4 posNcd = iProjectionMatrix * iViewMatrix * vec4(p, 1.0f);
-	posNcd /= posNcd.w;
-	vec2 uv = posNcd.xy * 0.5 + 0.5;
-	float posDepth = posNcd.z * 0.5 + 0.5;
-
-	refractUV.y = uv.y;
-
-	sceneDepth = texture(depthSampler, refractUV).r;
-
+	vec2 posDepthUV = getScreenSpaceUV(p, refractDir);
 	vec3 refracted = waterColor;
-	if (sceneDepth > posDepth &&
-		0.0 <= refractUV.x && refractUV.x <= 1.0 &&
-		0.0 <= refractUV.y && refractUV.y <= 1.0)
+	if (posDepthUV.x >= 0.0)
 	{
-		refracted = texture(colorSampler, refractUV).rgb;
+		float posDepth = texture(depthSampler, posDepthUV).r;
+		float traceDepth = getGlobalDistance(posDepth) - getGlobalDistance(ndc.z);
+		float depthFactor = clamp(traceDepth / iDeepWaterDistance, 0.0, 1.0);
+		refracted = mix(texture(colorSampler, posDepthUV.xy).rgb, waterColor, mix(0.3, 1.0, depthFactor));
 	}
-	else
-	{
-		sceneDepth = texture(depthSampler, uv).r;
-		refracted = texture(colorSampler, uv).rgb;
-	}
-	
-	float traceDepth = getGlobalDistance(sceneDepth) - getGlobalDistance(posDepth);
-	float depthFactor = clamp(traceDepth / iDeepWaterDistance, 0.0, 1.0);
-	refracted = mix(refracted, waterColor, mix(0.3, 1.0, depthFactor));
 
 	vec3 color = mix(refracted, reflected, fresnel);
 	float atten = max(1.0 - dot(dist, dist) * 0.001, 0.0);
@@ -392,11 +373,8 @@ gltut::PhongMaterialModel* createMaterialModel(gltut::Engine* engine)
 	gltut::Texture* diffuseTexture = device->getTextures()->load("assets/container2.png");
 	GLTUT_CHECK(diffuseTexture, "Failed to create diffuse texture");
 
-	gltut::Texture* specularTexture = device->getTextures()->load("assets/container2_specular.png");
-	GLTUT_CHECK(specularTexture, "Failed to create specular texture");
-
 	materialModel->setDiffuse(diffuseTexture);
-	materialModel->setSpecular(specularTexture);
+	materialModel->getMaterial()->getPass(0)->setFaceCulling(gltut::FaceCullingMode::NONE);
 	return materialModel;
 }
 
@@ -408,8 +386,15 @@ void createBoxes(
 	const int COUNT = 5;
 	const float GEOMETRY_SIZE = 5.0f;
 	const float STRIDE = 15.0f;
-	auto* boxGeometry = engine.getFactory()->getGeometry()->createBox(gltut::Vector3(GEOMETRY_SIZE));
-	GLTUT_CHECK(boxGeometry, "Failed to create geometry");
+	//auto* boxGeometry = engine.getFactory()->getGeometry()->createBox(gltut::Vector3(GEOMETRY_SIZE));
+	//GLTUT_CHECK(boxGeometry, "Failed to create geometry");
+
+	auto* cylinderGeometry = engine.getFactory()->getGeometry()->createCylinder(
+		GEOMETRY_SIZE * 0.5f,
+		GEOMETRY_SIZE,
+		12,
+		{ true, true, false});
+	GLTUT_CHECK(cylinderGeometry, "Failed to create geometry");
 
 	gltut::Rng rng;
 	for (int k = 0; k < 1; ++k)
@@ -418,18 +403,19 @@ void createBoxes(
 		{
 			for (int j = 0; j < COUNT; ++j)
 			{
+				const float sizeXZ = rng.nextFloat(0.5f, 1.0f);
 				const gltut::Vector3 size(
-					rng.nextFloat(0.5f, 1.0f),
-					rng.nextFloat(0.5f, 1.0f),
-					rng.nextFloat(0.5f, 1.0f));
+					sizeXZ,
+					rng.nextFloat(5.0f, 10.0f),
+					sizeXZ);
 
 				const gltut::Vector3 position(
 					(i - (COUNT - 1.0f) * 0.5f + rng.nextFloat(-0.25f, 0.25f)) * STRIDE,
-					-k * STRIDE + GEOMETRY_SIZE,
+					-k * STRIDE - size.y * 0.9,
 					(j - (COUNT - 1.0f) * 0.5f + rng.nextFloat(-0.25f, 0.25f)) * STRIDE);
 
 				auto* object = engine.getScene()->createGeometry(
-					boxGeometry,
+					cylinderGeometry,
 					material,
 					gltut::Matrix4::transformMatrix(
 						position,

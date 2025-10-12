@@ -94,6 +94,13 @@ public:
 		\note Negative radius produces an inverted geometry
 	*/
 	virtual Geometry* createSphere(float radius, u32 subdivisions) noexcept = 0;
+
+	
+	virtual Geometry* createCylinder(
+		float radius,
+		float height,
+		u32 radialSubdivisions,
+		const CreationOptions& options = {}) noexcept = 0;
 };
 
 // End of the namespace gltut
