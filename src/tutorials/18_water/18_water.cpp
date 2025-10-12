@@ -10,6 +10,7 @@
 #include "imgui/EngineImgui.h"
 
 #include "Waves.h"
+#include "WaterGui.h"
 
 /// Vertex shader for texture-to-window rendering
 static const char* WATER_VERTEX_SHADER = R"(
@@ -357,7 +358,6 @@ static float getInfiniteWaterDepthWaveNumber(
 	return (frequency * frequency) / gravityAcceleration;
 }
 
-
 /// Creates a Phong material model
 gltut::PhongMaterialModel* createMaterialModel(gltut::Engine* engine)
 {
@@ -425,22 +425,131 @@ void createBoxes(
 	}
 }
 
-void setLightDirection(
-	float lightAzimuth, float lightElevation,
-	gltut::LightNode* directionalLight,
-	gltut::Shader* waterShader)
+std::unique_ptr<gltut::CameraController> createCameraAndController(gltut::Engine& engine)
 {
-	const float azimuthRad = gltut::toRadians(lightAzimuth);
-	const float elevationRad = gltut::toRadians(lightElevation);
-	const gltut::Vector3 direction = gltut::setDistanceAzimuthInclination(
-		{1.0f,
-		 azimuthRad,
-		 elevationRad});
+	gltut::Camera* camera = engine.getScene()->createCamera(
+		{0.0f, 10.0f, 100.0f},
+		{0.0f, 0.0f, 0.0f},
+		{0.0f, 1.0f, 0.0f},
+		45.0f,
+		1.0f,
+		2500.0f);
+	GLTUT_CHECK(camera != nullptr, "Failed to create camera");
 
-	const gltut::Vector3 lightDirection(-direction.x, -direction.z, -direction.y);
-	directionalLight->setTransform(gltut::Matrix4::translationMatrix(200.0f * -lightDirection));
-	directionalLight->setDirection(lightDirection);
-	waterShader->setVec3("iLightDirection", lightDirection.x, lightDirection.y, lightDirection.z);
+	std::unique_ptr<gltut::CameraController> controller(
+		gltut::createMouseCameraController(*camera, 0.2f, 100.0f, 1.0f, 1000.0f));
+	GLTUT_CHECK(controller.get() != nullptr, "Failed to create camera controller");
+
+	engine.getScene()->addCameraController(controller.get());
+
+	return controller;
+}
+
+gltut::TextureFramebuffer* createTextureFramebuffer(gltut::Engine& engine)
+{
+	gltut::Factory* factory = engine.getFactory();
+
+	gltut::Texture2* colorTexture = factory->getTexture()->createWindowSizeTexture(
+		gltut::TextureFormat::RGBA);
+	GLTUT_CHECK(colorTexture != nullptr, "Failed to create color texture");
+
+	gltut::Texture2* depthTexture = factory->getTexture()->createWindowSizeTexture(
+		gltut::TextureFormat::FLOAT);
+	GLTUT_CHECK(depthTexture != nullptr, "Failed to create depth texture");
+
+	gltut::TextureFramebuffer* framebuffer = engine.getRenderer()->getDevice()->getFramebuffers()->create(
+		colorTexture,
+		depthTexture);
+	GLTUT_CHECK(framebuffer, "Failed to create framebuffer");
+
+	return framebuffer;
+}
+
+gltut::TextureCubemap* loadSkyboxTexture(gltut::Engine& engine)
+{
+	gltut::TextureCubemap* skyboxTexture = engine.getDevice()->getTextures()->load(
+		"assets/skybox/negx.bmp",
+		"assets/skybox/posx.bmp",
+		"assets/skybox/negy.bmp",
+		"assets/skybox/posy.bmp",
+		"assets/skybox/negz.bmp",
+		"assets/skybox/posz.bmp",
+		gltut::TextureParameters(
+			gltut::TextureFilterMode::LINEAR,
+			gltut::TextureFilterMode::LINEAR,
+			gltut::TextureWrapMode::CLAMP_TO_EDGE));
+	GLTUT_CHECK(skyboxTexture != nullptr, "Failed to load skybox texture");
+	return skyboxTexture;
+}
+
+gltut::ShaderRendererBinding* createWaterShader(gltut::Engine& engine)
+{
+	gltut::Shader* waterShader = engine.getDevice()->getShaders()->create(
+		WATER_VERTEX_SHADER,
+		WATER_FRAGMENT_SHADER);
+	GLTUT_CHECK(waterShader != nullptr, "Failed to create water shader");
+
+	waterShader->setInt("skyboxSampler", 0);
+	waterShader->setInt("colorSampler", 1);
+	waterShader->setInt("depthSampler", 2);
+
+	gltut::ShaderRendererBinding* waterShaderBinding = engine.getRenderer()->createShaderBinding(waterShader);
+	GLTUT_CHECK(waterShaderBinding != nullptr, "Failed to create water shader binding");
+
+	waterShaderBinding->bind(gltut::ShaderRendererBinding::Parameter::VIEWPOINT_VIEW_MATRIX, "iViewMatrix");
+	waterShaderBinding->bind(gltut::ShaderRendererBinding::Parameter::VIEWPOINT_PROJECTION_MATRIX, "iProjectionMatrix");
+	waterShaderBinding->bind(gltut::ShaderRendererBinding::Parameter::VIEWPOINT_POSITION, "iCameraPosition");
+
+	return waterShaderBinding;
+}
+
+gltut::RenderPass* createWaterRenderPass(
+	gltut::Engine& engine,
+	gltut::TextureFramebuffer& framebuffer,
+	gltut::Shader& waterShader)
+{
+	gltut::TextureCubemap* skyboxTexture = loadSkyboxTexture(engine);
+
+	std::array<const gltut::Texture*, 3> textures = {
+		skyboxTexture,
+		framebuffer.getColor(),
+		framebuffer.getDepth()};
+
+	gltut::RenderPass* waterPass = engine.getFactory()->getRenderPass()->createTexturesToWindowRenderPass(
+		nullptr,
+		&waterShader,
+		textures.data(),
+		static_cast<gltut::u32>(textures.size()));
+
+	waterPass->setViewpoint(engine.getScene()->getActiveCameraViewpoint());
+
+	GLTUT_CHECK(waterPass != nullptr, "Failed to create water rendering pass");
+
+	return waterPass;
+}
+
+gltut::LightNode* createSunlight(gltut::Engine& engine)
+{
+	gltut::LightNode* directionalLight = engine.getScene()->createLight(
+		gltut::LightNode::Type::DIRECTIONAL,
+		gltut::Matrix4::translationMatrix(gltut::Vector3(0.0f, 1.0f, 1.0f)));
+	GLTUT_CHECK(directionalLight != nullptr, "Failed to create directional light");
+
+	directionalLight->setAmbient(gltut::Color(0.57f, 0.57f, 0.6f));
+	directionalLight->setDiffuse(gltut::Color(1.1f, 1.1f, 1.0f));
+	directionalLight->setDirection(-directionalLight->getTransform().getTranslation());
+
+	gltut::ShadowMap* shadow = engine.getFactory()->getScene()->createShadowMap(
+		directionalLight,
+		engine.getScene()->getRenderGroup(),
+		200.0f,	   // Frustum size
+		0.1f,	   // Near plane
+		400.0f,	   // Far plane
+		2048 * 2); // Shadow map size
+	GLTUT_CHECK(shadow, "Failed to create shadow map");
+	directionalLight->setShadowMap(shadow);
+
+	return directionalLight;
 }
 
 ///	The program entry point
@@ -457,183 +566,40 @@ int main()
 		imgui = gltut::createEngineImgui(engine.get());
 		GLTUT_CHECK(imgui != nullptr, "Failed to create ImGui engine");
 
-		gltut::Camera* camera = engine->getScene()->createCamera(
-			{0.0f, 10.0f, 100.0f},
-			{0.0f, 0.0f, 0.0f},
-			{0.0f, 1.0f, 0.0f},
-			45.0f,
-			1.0f,
-			2500.0f);
+		auto cameraController = createCameraAndController(*engine);
+		gltut::Camera& camera = cameraController->getCamera();
 
-		std::unique_ptr<gltut::CameraController> controller(
-			gltut::createMouseCameraController(*camera, 0.2f, 100.0f, 1.0f, 1000.0f));
-		GLTUT_CHECK(controller.get() != nullptr, "Failed to create camera controller");
-		engine->getScene()->addCameraController(controller.get());
-
-		auto* scene = engine->getScene();
-		auto* factory = engine->getFactory();
-
-		// Create framebuffer
-		gltut::Texture2* colorTexture = factory->getTexture()->createWindowSizeTexture(
-			gltut::TextureFormat::RGBA);
-		GLTUT_CHECK(colorTexture != nullptr, "Failed to create color texture");
-
-		gltut::Texture2* depthTexture = factory->getTexture()->createWindowSizeTexture(
-			gltut::TextureFormat::FLOAT);
-		GLTUT_CHECK(depthTexture != nullptr, "Failed to create depth texture");
-
-		auto* framebuffer = engine->getRenderer()->getDevice()->getFramebuffers()->create(
-			colorTexture,
-			depthTexture);
-
-		GLTUT_CHECK(framebuffer, "Failed to create framebuffer");
-		engine->getSceneRenderPass()->setTarget(framebuffer);
+		// Create something to reflect/refract
 		createBoxes(*engine, createMaterialModel(engine.get())->getMaterial());
 
-        gltut::TextureCubemap* skyboxTexture = engine->getDevice()->getTextures()->load(
-			"assets/skybox/negx.bmp",
-			"assets/skybox/posx.bmp",
-			"assets/skybox/negy.bmp",
-			"assets/skybox/posy.bmp",
-			"assets/skybox/negz.bmp",
-			"assets/skybox/posz.bmp",
-			gltut::TextureParameters(
-				gltut::TextureFilterMode::LINEAR,
-				gltut::TextureFilterMode::LINEAR,
-				gltut::TextureWrapMode::CLAMP_TO_EDGE));
-		GLTUT_CHECK(skyboxTexture != nullptr, "Failed to load skybox texture");
+		// Create texture framebuffer
+		gltut::TextureFramebuffer* framebuffer = createTextureFramebuffer(*engine);
+		engine->getSceneRenderPass()->setTarget(framebuffer);
 
-        gltut::Shader* waterShader = engine->getDevice()->getShaders()->create(
-			WATER_VERTEX_SHADER,
-			WATER_FRAGMENT_SHADER);
-		waterShader->setInt("skyboxSampler", 0);
-		waterShader->setInt("colorSampler", 1);
-		waterShader->setInt("depthSampler", 2);
-
-		waterShader->setFloat("zNear", camera->getProjection().getNearPlane());
-		waterShader->setFloat("zFar", camera->getProjection().getFarPlane());
-		waterShader->setFloat("iDeepWaterDistance", 100.0f);
-
-        gltut::ShaderRendererBinding* waterShaderBinding = engine->getRenderer()->createShaderBinding(waterShader);
-		GLTUT_CHECK(waterShaderBinding != nullptr, "Failed to create water shader binding");
-        waterShaderBinding->bind(gltut::ShaderRendererBinding::Parameter::VIEWPOINT_VIEW_MATRIX, "iViewMatrix");
-		waterShaderBinding->bind(gltut::ShaderRendererBinding::Parameter::VIEWPOINT_PROJECTION_MATRIX, "iProjectionMatrix");
-		waterShaderBinding->bind(gltut::ShaderRendererBinding::Parameter::VIEWPOINT_POSITION, "iCameraPosition");
-
-        std::array<const gltut::Texture*, 3> textures = {skyboxTexture, colorTexture, depthTexture};
-		gltut::RenderPass* textureToWindowPass = engine->getFactory()->getRenderPass()->createTexturesToWindowRenderPass(
-			nullptr,
-			waterShader,
-			textures.data(),
-			static_cast<gltut::u32>(textures.size()));
-
-        textureToWindowPass->setViewpoint(engine->getScene()->getActiveCameraViewpoint());
-
-		GLTUT_CHECK(textureToWindowPass != nullptr, "Failed to create texture to window pass");
+		gltut::Shader* waterShader = createWaterShader(*engine)->getTarget();
+		createWaterRenderPass(*engine, *framebuffer, *waterShader);
 
 		auto start = std::chrono::high_resolution_clock::now();
-		float seaHeight = 0.0f;
-		waterShader->setFloat("SEA_HEIGHT", seaHeight);
 
-		float deepWaterDistance = 50.0f;
-		waterShader->setFloat("iDeepWaterDistance", deepWaterDistance);
+		waterShader->setFloat("zNear", camera.getProjection().getNearPlane());
+		waterShader->setFloat("zFar", camera.getProjection().getFarPlane());
 
-		float refractionScale = 2.0f;
-		waterShader->setFloat("iRefractionScale", refractionScale);
-
-		int reflectionSteps = 16;
-		float reflectionTraceDistance = 100.0f;
-		float reflectionThickness = 1.0f;
-
-		waterShader->setInt("iReflectionSteps", reflectionSteps);
-		waterShader->setFloat("iReflectionTraceDistance", reflectionTraceDistance);
-		waterShader->setFloat("iReflectionThickness", reflectionThickness);
-
-		auto* directionalLight = scene->createLight(
-			gltut::LightNode::Type::DIRECTIONAL,
-			gltut::Matrix4::identity());
-		GLTUT_CHECK(directionalLight != nullptr, "Failed to create directional light");
-
-		directionalLight->setAmbient(gltut::Color(0.57f, 0.57f, 0.6f));
-		directionalLight->setDiffuse(gltut::Color(1.1f, 1.1f, 1.0f));
-
-		float lightAzimuth = 0.0f;
-		float lightElevation = 45.0f;
-		setLightDirection(
-			lightAzimuth, lightElevation,
-			directionalLight, waterShader);
-
-		gltut::ShadowMap* shadow = factory->getScene()->createShadowMap(
-			directionalLight,
-			engine->getScene()->getRenderGroup(),
-			200.0f, // Frustum size
-			0.1f,  // Near plane
-			400.0f, // Far plane
-			2048 * 2); // Shadow map size
-		GLTUT_CHECK(shadow, "Failed to create shadow map");
-		directionalLight->setShadowMap(shadow);
+		gltut::LightNode* directionalLight = createSunlight(*engine);
+		WaterGui gui(imgui, engine.get(), waterShader, directionalLight);
 
 		do
 		{
-			waterShader->setVec3("iResolution", 
-                static_cast<float>(engine->getWindow()->getSize().x),
-                static_cast<float>(engine->getWindow()->getSize().y),
-                0.0f);
-
 			auto time = std::chrono::duration<float>(
 							std::chrono::high_resolution_clock::now() - start)
 							.count();
+			waterShader->setFloat("iTime", time);
 
-            waterShader->setFloat("iTime", time);
-			const auto mousePos = engine->getWindow()->getCursorPosition();
+			waterShader->setVec3("iResolution",
+								 static_cast<float>(engine->getWindow()->getSize().x),
+								 static_cast<float>(engine->getWindow()->getSize().y),
+								 0.0f);
 
-			imgui->newFrame();
-			ImGui::SetNextWindowPos({10, 10}, ImGuiCond_FirstUseEver);
-			ImGui::SetNextWindowSize({200, 400}, ImGuiCond_FirstUseEver);
-			ImGui::Begin("Settings");
-			ImGui::Text("FPS: %u", engine->getWindow()->getFPS());
-
-            if (ImGui::SliderFloat("Sea Height", &seaHeight, 0.0f, 5.0f))
-            {
-                waterShader->setFloat("SEA_HEIGHT", seaHeight);
-			}
-
-			if (ImGui::SliderFloat("Deep Water Distance", &deepWaterDistance, 1.0f, 200.0f))
-			{
-				waterShader->setFloat("iDeepWaterDistance", deepWaterDistance);
-			}
-
-			if (ImGui::SliderFloat("Refraction Scale", &refractionScale, 0.0f, 10.0f))
-			{
-				waterShader->setFloat("iRefractionScale", refractionScale);
-			}
-
-			// Add Light tab
-			const bool azimuthChanged = ImGui::SliderFloat("Azimuth", &lightAzimuth, -180.0f, 180.0f);
-			const bool elevationChanged = ImGui::SliderFloat("Elevation", &lightElevation, 0.0f, 90.0f);
-			if (azimuthChanged || elevationChanged)
-			{
-				setLightDirection(
-					lightAzimuth, lightElevation, directionalLight, waterShader);
-			}
-
-			// Create reflection collaspable group
-			if (ImGui::CollapsingHeader("Reflection"))
-			{
-				if (ImGui::SliderInt("Steps", &reflectionSteps, 1, 64))
-				{
-					waterShader->setInt("iReflectionSteps", reflectionSteps);
-				}
-				if (ImGui::SliderFloat("Trace Distance", &reflectionTraceDistance, 1.0f, 500.0f))
-				{
-					waterShader->setFloat("iReflectionTraceDistance", reflectionTraceDistance);
-				}
-				if (ImGui::SliderFloat("Thickness", &reflectionThickness, 0.1f, 10.0f))
-				{
-					waterShader->setFloat("iReflectionThickness", reflectionThickness);
-				}
-			}
-			ImGui::End();
+			gui.draw();
 
 		} while (engine->update());
 	}

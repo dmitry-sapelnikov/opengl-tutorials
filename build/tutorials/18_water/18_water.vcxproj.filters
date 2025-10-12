@@ -5,8 +5,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\tutorials\18_water\18_water.cpp" />
+    <ClCompile Include="..\..\..\src\tutorials\18_water\WaterGui.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\tutorials\18_water\Waves.h" />
+    <ClInclude Include="..\..\..\src\tutorials\18_water\WaterGui.h" />
   </ItemGroup>
 </Project>
