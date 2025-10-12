@@ -66,6 +66,11 @@ uniform samplerCube skyboxSampler;
 uniform sampler2D colorSampler;
 uniform sampler2D depthSampler;
 
+uniform float iRefractionScale;
+uniform float zNear;
+uniform float zFar;
+uniform float iDeepWaterDistance;
+
 // math
 float hash( vec2 p ) {
 	float h = dot(p,vec2(127.1,311.7));	
@@ -80,6 +85,11 @@ float noise( in vec2 p ) {
                      hash( i + vec2(1.0,0.0) ), u.x),
                 mix( hash( i + vec2(0.0,1.0) ), 
                      hash( i + vec2(1.0,1.0) ), u.x), u.y);
+}
+
+float getGlobalDistance(float depth)
+{
+	return zNear * (zFar / (zFar + depth * (zNear - zFar)) - 1.0);
 }
 
 // lighting
@@ -99,32 +109,46 @@ vec3 globalToScreen(vec3 p) {
 	return clipSpacePos.xyz * 0.5 + 0.5;
 }
 
-vec3 getReflectedColor(vec3 surfaceP, vec3 e) {
-	float maxDistance = min(1000, 100.0 / abs(e.y));
-	int steps = min(100, int(8.0 + 0.05 * maxDistance * maxDistance));
+float getThicknessDiff(float diff, float linearSampleDepth, vec2 thicknessParams)
+{
+    return (diff - thicknessParams.x);
+}
 
-	// Raycast along the view direction in the screen space
-	vec3 pScreenPos = globalToScreen(surfaceP);
+vec3 getReflectedColor(vec3 surfaceP, vec3 e) 
+{
+	const vec2 _ThicknessParams = vec2(0.0, 2.5); // thickness, max thickness
+
+	int steps = 128;
+	vec3 end = surfaceP + 100 * e;
+
+	vec3 pScreen = globalToScreen(surfaceP);
+	vec3 endScreen = globalToScreen(end);
 
 	for (int i = 1; i <= steps; i++)
 	{
 		float t = float(i) / float(steps);
-		t = maxDistance * t;
-
-		vec3 p = surfaceP + t * e;
-		vec3 screenPos = globalToScreen(p);
+		vec3 screenPos = mix(pScreen, endScreen, t);
 		if (!(0.0 <= screenPos.x && screenPos.x <= 1.0 &&
-			0.0 <= screenPos.y && screenPos.y <= 1.0))
+			  0.0 <= screenPos.y && screenPos.y <= 1.0))
 		{
 			break;
 		}
 
-		float sceneDepth = texture(depthSampler, screenPos.xy).r;
-		if (sceneDepth < 1 && sceneDepth < screenPos.z && sceneDepth > pScreenPos.z)
+		float depth = texture(depthSampler, screenPos.xy).r;
+
+		if (depth < 1 && depth < screenPos.z)
 		{
-			return texture(colorSampler, screenPos.xy).rgb;
+			float linearSampleDepth = getGlobalDistance(depth);
+			float linearRayDepth = getGlobalDistance(screenPos.z);
+
+			float hitDiff = linearRayDepth - linearSampleDepth;
+            if (hitDiff < _ThicknessParams.y)
+            {
+                return texture(colorSampler, screenPos.xy).rgb;
+            }
 		}
 	}
+
     return texture(skyboxSampler, e).rgb;
 }
 
@@ -181,15 +205,6 @@ float map_detailed(vec3 p) {
     return p.y - h;
 }
 
-uniform float iRefractionScale;
-uniform float zNear;
-uniform float zFar;
-uniform float iDeepWaterDistance;
-
-float getGlobalDistance(float depth)
-{
-	return zNear * (zFar / (zFar + depth * (zNear - zFar)) - 1.0);
-}
 
 vec3 getSeaColor(vec3 p, vec3 n, vec3 l, vec3 eye, vec3 dist) {
 	// Transform point to screen space
@@ -350,14 +365,20 @@ gltut::PhongMaterialModel* createMaterialModel(gltut::Engine* engine)
 	GLTUT_CHECK(materialModel, "Failed to create Phong material model");
 
 	gltut::GraphicsDevice* device = engine->getDevice();
-	gltut::Texture* diffuseTexture = device->getTextures()->load("assets/container2.png");
+	/*gltut::Texture* diffuseTexture = device->getTextures()->load("assets/container2.png");
 	GLTUT_CHECK(diffuseTexture, "Failed to create diffuse texture");
 
 	gltut::Texture* specularTexture = device->getTextures()->load("assets/container2_specular.png");
-	GLTUT_CHECK(specularTexture, "Failed to create specular texture");
+	GLTUT_CHECK(specularTexture, "Failed to create specular texture");*/
+
+	const gltut::Texture* diffuseTexture = device->getTextures()->createSolidColor({240.0f / 255.0f, 140.0f / 255.0f, 39.0f / 255.0f});
+	GLTUT_CHECK(diffuseTexture, "Failed to create diffuse texture");
+
+	//const gltut::Texture* specularTexture = device->getTextures()->createSolidColor({1.0f, 1.0f, 1.0f});
+	//GLTUT_CHECK(specularTexture, "Failed to create specular texture");
 
 	materialModel->setDiffuse(diffuseTexture);
-	materialModel->setSpecular(specularTexture);
+	//materialModel->setSpecular(specularTexture);
 	return materialModel;
 }
 
@@ -373,20 +394,20 @@ void createBoxes(
 	GLTUT_CHECK(boxGeometry, "Failed to create geometry");
 
 	gltut::Rng rng;
-	for (int k = -2; k < COUNT - 2; ++k)
+	for (int k = 0; k < 1; ++k)
 	{
 		for (int i = 0; i < COUNT; ++i)
 		{
 			for (int j = 0; j < COUNT; ++j)
 			{
 				const gltut::Vector3 size(
-					rng.nextFloat(0.5f, 2.0f),
-					rng.nextFloat(0.5f, 2.0f),
-					rng.nextFloat(0.5f, 2.0f));
+					rng.nextFloat(0.5f, 1.0f),
+					rng.nextFloat(2.5f, 10.0f),
+					rng.nextFloat(0.5f, 1.0f));
 
 				const gltut::Vector3 position(
 					(i - (COUNT - 1.0f) * 0.5f + rng.nextFloat(-0.25f, 0.25f)) * STRIDE,
-					-k * STRIDE - size.y * 0.5f,
+					-k * STRIDE + GEOMETRY_SIZE,
 					(j - (COUNT - 1.0f) * 0.5f + rng.nextFloat(-0.25f, 0.25f)) * STRIDE);
 
 				auto* object = engine.getScene()->createGeometry(
@@ -395,9 +416,9 @@ void createBoxes(
 					gltut::Matrix4::transformMatrix(
 						position,
 						gltut::Vector3(
+							0,
 							rng.nextFloat(0.0f, gltut::PI * 2.0),
-							rng.nextFloat(0.0f, gltut::PI * 2.0),
-							rng.nextFloat(0.0f, gltut::PI * 2.0)),
+							0),
 						size));
 
 				GLTUT_CHECK(object, "Failed to create object");
@@ -406,6 +427,23 @@ void createBoxes(
 	}
 }
 
+void setLightDirection(
+	float lightAzimuth, float lightElevation,
+	gltut::LightNode* directionalLight,
+	gltut::Shader* waterShader)
+{
+	const float azimuthRad = gltut::toRadians(lightAzimuth);
+	const float elevationRad = gltut::toRadians(lightElevation);
+	const gltut::Vector3 direction = gltut::setDistanceAzimuthInclination(
+		{1.0f,
+		 azimuthRad,
+		 elevationRad});
+
+	const gltut::Vector3 lightDirection(-direction.x, -direction.z, -direction.y);
+	directionalLight->setTransform(gltut::Matrix4::translationMatrix(200.0f * -lightDirection));
+	directionalLight->setDirection(lightDirection);
+	waterShader->setVec3("iLightDirection", lightDirection.x, lightDirection.y, lightDirection.z);
+}
 
 ///	The program entry point
 int main()
@@ -427,7 +465,7 @@ int main()
 			{0.0f, 1.0f, 0.0f},
 			45.0f,
 			1.0f,
-			2000.0f);
+			2500.0f);
 
 		std::unique_ptr<gltut::CameraController> controller(
 			gltut::createMouseCameraController(*camera, 0.2f, 100.0f, 1.0f, 1000.0f));
@@ -496,7 +534,7 @@ int main()
 		GLTUT_CHECK(textureToWindowPass != nullptr, "Failed to create texture to window pass");
 
 		auto start = std::chrono::high_resolution_clock::now();
-		float seaHeight = 0.6f;
+		float seaHeight = 0.0f;
 		waterShader->setFloat("SEA_HEIGHT", seaHeight);
 
 		float deepWaterDistance = 50.0f;
@@ -510,12 +548,24 @@ int main()
 			gltut::Matrix4::identity());
 		GLTUT_CHECK(directionalLight != nullptr, "Failed to create directional light");
 
-		directionalLight->setAmbient(gltut::Color(0.3f, 0.3f, 0.3f));
-		directionalLight->setDiffuse(gltut::Color(2.0f, 2.0f, 2.0f));
+		directionalLight->setAmbient(gltut::Color(0.57f, 0.57f, 0.6f));
+		directionalLight->setDiffuse(gltut::Color(1.1f, 1.1f, 1.0f));
 
 		float lightAzimuth = 0.0f;
 		float lightElevation = 45.0f;
-		bool lightIntialized = false;
+		setLightDirection(
+			lightAzimuth, lightElevation,
+			directionalLight, waterShader);
+
+		gltut::ShadowMap* shadow = factory->getScene()->createShadowMap(
+			directionalLight,
+			engine->getScene()->getRenderGroup(),
+			200.0f, // Frustum size
+			0.1f,  // Near plane
+			400.0f, // Far plane
+			2048 * 2); // Shadow map size
+		GLTUT_CHECK(shadow, "Failed to create shadow map");
+		directionalLight->setShadowMap(shadow);
 
 		do
 		{
@@ -555,21 +605,12 @@ int main()
 			// Add Light tab
 			const bool azimuthChanged = ImGui::SliderFloat("Azimuth", &lightAzimuth, -180.0f, 180.0f);
 			const bool elevationChanged = ImGui::SliderFloat("Elevation", &lightElevation, 0.0f, 90.0f);
-			if (azimuthChanged || elevationChanged || !lightIntialized)
+			if (azimuthChanged || elevationChanged)
 			{
-				lightIntialized = true;
-				const float azimuthRad = gltut::toRadians(lightAzimuth);
-				const float elevationRad = gltut::toRadians(lightElevation);
-				const gltut::Vector3 direction = gltut::setDistanceAzimuthInclination(
-					{1.0f,
-					azimuthRad,
-					elevationRad});
-
-				const gltut::Vector3 lightDirection(-direction.x, -direction.z, -direction.y);
-				directionalLight->setDirection(lightDirection);
-
-				waterShader->setVec3("iLightDirection", lightDirection.x, lightDirection.y, lightDirection.z);
+				setLightDirection(
+					lightAzimuth, lightElevation, directionalLight, waterShader);
 			}
+
 			ImGui::End();
 
 		} while (engine->update());
