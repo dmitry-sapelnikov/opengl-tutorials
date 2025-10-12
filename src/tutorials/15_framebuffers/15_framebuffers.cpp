@@ -169,7 +169,7 @@ int main()
 
 		GLTUT_CHECK(renderToTexturePass, "Failed to create render to texture pass");
 
-		const gltut::Texture2* textures[] = {colorTexture};
+		const gltut::Texture* textures[] = {colorTexture};
 		const char* textureNames[] = {"textureSampler"};
 
 		std::vector<std::pair<std::string, const char*>> effects = {
