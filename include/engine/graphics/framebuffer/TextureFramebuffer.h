@@ -13,6 +13,7 @@ namespace gltut
 /// Represents a framebuffer that contains textures
 class TextureFramebuffer : public Framebuffer
 {
+public:
 	/// Returns the color texture
 	virtual Texture2* getColor() const noexcept = 0;
 
