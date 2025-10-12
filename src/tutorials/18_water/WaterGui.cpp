@@ -42,7 +42,7 @@ void WaterGui::draw()
 
 		if (ImGui::CollapsingHeader("Reflection", ImGuiTreeNodeFlags_DefaultOpen))
 		{
-			if (ImGui::SliderInt("Steps", &mReflectionSteps, 1, 64))
+			if (ImGui::SliderInt("Steps", &mReflectionSteps, 1, 256))
 			{
 				mWaterShader->setInt("iReflectionSteps", mReflectionSteps);
 			}

@@ -119,39 +119,59 @@ uniform int iReflectionSteps;
 uniform float iReflectionTraceDistance;
 uniform float iReflectionThickness;
 
+
 vec3 getReflectedColor(vec3 surfaceP, vec3 e) 
 {
 	vec2 _ThicknessParams = vec2(0.0, iReflectionThickness); // thickness, max thickness
 
 	int steps = iReflectionSteps;
-	vec3 end = surfaceP + iReflectionTraceDistance * e;
+	vec3 end = globalToScreen(surfaceP + iReflectionTraceDistance * e);
 
 	vec3 pScreen = globalToScreen(surfaceP);
-	vec3 endScreen = globalToScreen(end);
-
+	if (pScreen.z > texture(depthSampler, pScreen.xy).r)
+	{
+		// Invalid case - we are already below the surface
+		return vec3(1.0, 0.0, 1.0);
+	}
+	
+	vec3 prevP = pScreen;
 	for (int i = 1; i <= steps; i++)
 	{
 		float t = float(i) / float(steps);
-		vec3 screenPos = mix(pScreen, endScreen, t);
+		vec3 screenPos = mix(pScreen, end, t);
+
 		if (!(0.0 <= screenPos.x && screenPos.x <= 1.0 &&
-			  0.0 <= screenPos.y && screenPos.y <= 1.0))
+			  0.0 <= screenPos.y && screenPos.y <= 1.0 &&
+			  screenPos.z < 1.0))
 		{
 			break;
 		}
 
 		float depth = texture(depthSampler, screenPos.xy).r;
 
-		if (depth < 1 && depth < screenPos.z)
-		{
-			float linearSampleDepth = getGlobalDistance(depth);
-			float linearRayDepth = getGlobalDistance(screenPos.z);
+		float linPrevZ = getGlobalDistance(prevP.z);
+		float linZ = getGlobalDistance(screenPos.z);
+		float linearDepth = getGlobalDistance(depth);
 
-			float hitDiff = linearRayDepth - linearSampleDepth;
-            if (hitDiff < _ThicknessParams.y)
-            {
-                return texture(colorSampler, screenPos.xy).rgb;
-            }
+		if (linPrevZ <= linearDepth && linearDepth <= linZ)
+		{
+            float t = (linearDepth - linPrevZ) / (linZ - linPrevZ);
+			vec2 screenPosXY = mix(prevP.xy, screenPos.xy, t);
+			if (getGlobalDistance(texture(depthSampler, screenPosXY).r) <= linZ)
+			{
+				return texture(colorSampler, screenPosXY).rgb;
+			}
+			else
+			{
+				return texture(colorSampler, screenPos.xy).rgb;
+			}
 		}
+
+		if (linPrevZ - _ThicknessParams.y <= linearDepth && linearDepth <= linZ)
+		{
+			return texture(colorSampler, screenPos.xy).rgb;
+		}
+		prevP = screenPos;
 	}
 
     return texture(skyboxSampler, e).rgb;
