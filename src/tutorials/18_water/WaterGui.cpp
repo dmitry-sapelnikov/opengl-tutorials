@@ -13,9 +13,9 @@ WaterGui::WaterGui(
 	mWaterShader(waterShader),
 	mDirectionalLight(directionalLight)
 {
-	mWaterShader->setInt("iReflectionSteps", mReflectionSteps);
-	mWaterShader->setFloat("iReflectionTraceDistance", mReflectionTraceDistance);
-	mWaterShader->setFloat("iReflectionThickness", mReflectionThickness);
+	mWaterShader->setInt("iReflectionSteps", mTraceSteps);
+	mWaterShader->setFloat("iReflectionTraceDistance", mTraceDistance);
+	mWaterShader->setFloat("iReflectionThickness", mTraceThickness);
 	mWaterShader->setFloat("iRefractionScale", mRefractionScale);
 	mWaterShader->setFloat("iDeepWaterDistance", mDeepWaterDistance);
 	mWaterShader->setFloat("SEA_HEIGHT", mSeaHeight);
@@ -35,24 +35,24 @@ void WaterGui::draw()
 	ImGui::PushItemWidth(ImGui::GetWindowWidth() * 0.5f);
 	if (ImGui::CollapsingHeader("Water", ImGuiTreeNodeFlags_DefaultOpen))
 	{
-		if (ImGui::SliderFloat("Sea Height", &mSeaHeight, 0.0f, 2.5f))
+		if (ImGui::SliderFloat("Sea Height", &mSeaHeight, 0.0f, 1.0f))
 		{
 			mWaterShader->setFloat("SEA_HEIGHT", mSeaHeight);
 		}
 
 		if (ImGui::CollapsingHeader("Reflection", ImGuiTreeNodeFlags_DefaultOpen))
 		{
-			if (ImGui::SliderInt("Steps", &mReflectionSteps, 1, 256))
+			if (ImGui::SliderInt("Steps", &mTraceSteps, 1, 256))
 			{
-				mWaterShader->setInt("iReflectionSteps", mReflectionSteps);
+				mWaterShader->setInt("iReflectionSteps", mTraceSteps);
 			}
-			if (ImGui::SliderFloat("Trace Distance", &mReflectionTraceDistance, 1.0f, 500.0f))
+			if (ImGui::SliderFloat("Trace Distance", &mTraceDistance, 1.0f, 500.0f))
 			{
-				mWaterShader->setFloat("iReflectionTraceDistance", mReflectionTraceDistance);
+				mWaterShader->setFloat("iReflectionTraceDistance", mTraceDistance);
 			}
-			if (ImGui::SliderFloat("Thickness", &mReflectionThickness, 0.1f, 10.0f))
+			if (ImGui::SliderFloat("Thickness", &mTraceThickness, 0.1f, 10.0f))
 			{
-				mWaterShader->setFloat("iReflectionThickness", mReflectionThickness);
+				mWaterShader->setFloat("iReflectionThickness", mTraceThickness);
 			}
 		}
 

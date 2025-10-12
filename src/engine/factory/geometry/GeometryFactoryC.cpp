@@ -404,6 +404,7 @@ Geometry* GeometryFactoryC::createCylinder(
 	float radius,
 	float height,
 	u32 radialSubdivisions,
+	bool addCaps,
 	const CreationOptions& options) noexcept
 {
 	Geometry* result = nullptr;
@@ -458,6 +459,52 @@ Geometry* GeometryFactoryC::createCylinder(
 			radialSubdivisions + 1,
 			radialSubdivisions + 1,
 			indices);
+
+		if (addCaps)
+		{
+			// Copy the top and bottom vertices, change their normals and texture coordinates
+			positions.insert(
+				positions.end(),
+				positions.begin(),
+				positions.end());
+
+			if (options.normal)
+			{
+				for (u32 h = 0; h < 2; ++h)
+				{
+					const Vector3 normal = (h == 0) ? Vector3{0.0f, -1.0f, 0.0f} : Vector3{0.0f, 1.0f, 0.0f};
+					for (u32 i = 0; i <= radialSubdivisions; ++i)
+					{
+						normals.push_back(normal);
+					}
+				}
+			}
+
+			if (options.textureCoordinates)
+			{
+				// Set 0, 0 for bottom face and 0, 1 for top face
+				for (u32 h = 0; h < 2; ++h)
+				{
+					const float t = (h == 0) ? 0.0f : 1.0f;
+					for (u32 i = 0; i <= radialSubdivisions; ++i)
+					{
+						textureCoordinates.push_back({float(i) / radialSubdivisions, t});
+					}
+				}
+			}
+
+			// Create tri-fan for the bottom face
+			for (u32 h = 0; h < 2; ++h)
+			{
+				u32 bottomFaceOffset = (2 + h) * (radialSubdivisions + 1);
+				for (u32 i = 1; i < radialSubdivisions; ++i)
+				{
+					indices.push_back(bottomFaceOffset); // center vertex
+					indices.push_back(bottomFaceOffset + i + (h != 0));
+					indices.push_back(bottomFaceOffset + i + (h == 0));
+				}
+			}
+		}
 
 		result = createGeometry(
 			positions.data(),

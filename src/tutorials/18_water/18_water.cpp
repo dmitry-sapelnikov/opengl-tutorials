@@ -46,7 +46,7 @@ const float EPSILON	= 1e-3;
 //#define AA
 
 // sea
-const int ITER_GEOMETRY = 3;
+const int ITER_GEOMETRY = 5;
 const int ITER_FRAGMENT = 5;
 uniform float SEA_HEIGHT;
 
@@ -108,11 +108,6 @@ vec3 globalToScreen(vec3 p) {
 	vec4 clipSpacePos = iProjectionMatrix * iViewMatrix * vec4(p, 1.0);
 	clipSpacePos /= clipSpacePos.w;
 	return clipSpacePos.xyz * 0.5 + 0.5;
-}
-
-float getThicknessDiff(float diff, float linearSampleDepth, vec2 thicknessParams)
-{
-    return (diff - thicknessParams.x);
 }
 
 uniform int iReflectionSteps;
@@ -345,7 +340,7 @@ void main()
 {
     vec3 color = getPixel(texCoord, 0.0f);
     // post-processing
-	fragColor = vec4(pow(color,vec3(0.75)), 1.0);
+	fragColor = vec4(pow(color,vec3(0.8)), 1.0);
 }
 )";
 
@@ -370,29 +365,32 @@ gltut::PhongMaterialModel* createMaterialModel(gltut::Engine* engine)
 	GLTUT_CHECK(materialModel, "Failed to create Phong material model");
 
 	gltut::GraphicsDevice* device = engine->getDevice();
-	gltut::Texture* diffuseTexture = device->getTextures()->load("assets/container2.png");
+	gltut::Texture* diffuseTexture = device->getTextures()->load(
+		"assets/container2.png",
+		gltut::TextureParameters(
+			gltut::TextureFilterMode::LINEAR_MIPMAP,
+			gltut::TextureFilterMode::LINEAR,
+			gltut::TextureWrapMode::CLAMP_TO_EDGE));
 	GLTUT_CHECK(diffuseTexture, "Failed to create diffuse texture");
 
 	materialModel->setDiffuse(diffuseTexture);
-	materialModel->getMaterial()->getPass(0)->setFaceCulling(gltut::FaceCullingMode::NONE);
 	return materialModel;
 }
 
 /// Creates boxes
-void createBoxes(
+void createSceneObjects(
 	gltut::Engine& engine,
 	const gltut::Material* material)
 {
-	const int COUNT = 5;
+	const int COUNT = 4;
 	const float GEOMETRY_SIZE = 5.0f;
 	const float STRIDE = 15.0f;
-	//auto* boxGeometry = engine.getFactory()->getGeometry()->createBox(gltut::Vector3(GEOMETRY_SIZE));
-	//GLTUT_CHECK(boxGeometry, "Failed to create geometry");
 
 	auto* cylinderGeometry = engine.getFactory()->getGeometry()->createCylinder(
 		GEOMETRY_SIZE * 0.5f,
 		GEOMETRY_SIZE,
-		12,
+		48,
+		true,
 		{ true, true, false});
 	GLTUT_CHECK(cylinderGeometry, "Failed to create geometry");
 
@@ -403,15 +401,15 @@ void createBoxes(
 		{
 			for (int j = 0; j < COUNT; ++j)
 			{
-				const float sizeXZ = rng.nextFloat(0.5f, 1.0f);
+				const float sizeXZ = rng.nextFloat(0.25f, 0.5f);
 				const gltut::Vector3 size(
 					sizeXZ,
-					rng.nextFloat(5.0f, 10.0f),
+					rng.nextFloat(3.0f, 5.0f),
 					sizeXZ);
 
 				const gltut::Vector3 position(
 					(i - (COUNT - 1.0f) * 0.5f + rng.nextFloat(-0.25f, 0.25f)) * STRIDE,
-					-k * STRIDE - size.y * 0.9,
+					-k * STRIDE - GEOMETRY_SIZE * size.y * 0.3f,
 					(j - (COUNT - 1.0f) * 0.5f + rng.nextFloat(-0.25f, 0.25f)) * STRIDE);
 
 				auto* object = engine.getScene()->createGeometry(
@@ -434,12 +432,12 @@ void createBoxes(
 std::unique_ptr<gltut::CameraController> createCameraAndController(gltut::Engine& engine)
 {
 	gltut::Camera* camera = engine.getScene()->createCamera(
-		{0.0f, 10.0f, 100.0f},
+		{16.0f, 3.0f, 20.0f},
 		{0.0f, 0.0f, 0.0f},
 		{0.0f, 1.0f, 0.0f},
 		45.0f,
 		1.0f,
-		2500.0f);
+		2000.0f);
 	GLTUT_CHECK(camera != nullptr, "Failed to create camera");
 
 	std::unique_ptr<gltut::CameraController> controller(
@@ -541,17 +539,17 @@ gltut::LightNode* createSunlight(gltut::Engine& engine)
 		gltut::Matrix4::translationMatrix(gltut::Vector3(0.0f, 1.0f, 1.0f)));
 	GLTUT_CHECK(directionalLight != nullptr, "Failed to create directional light");
 
-	directionalLight->setAmbient(gltut::Color(0.57f, 0.57f, 0.6f));
-	directionalLight->setDiffuse(gltut::Color(1.1f, 1.1f, 1.0f));
+	directionalLight->setAmbient(gltut::Color(0.37f, 0.37f, 0.4f));
+	directionalLight->setDiffuse(gltut::Color(1.05f, 1.05f, 1.0f));
 	directionalLight->setDirection(-directionalLight->getTransform().getTranslation());
 
 	gltut::ShadowMap* shadow = engine.getFactory()->getScene()->createShadowMap(
 		directionalLight,
 		engine.getScene()->getRenderGroup(),
 		200.0f,	   // Frustum size
-		0.1f,	   // Near plane
+		1.0f,	   // Near plane
 		400.0f,	   // Far plane
-		2048 * 2); // Shadow map size
+		1024 * 4); // Shadow map size
 	GLTUT_CHECK(shadow, "Failed to create shadow map");
 	directionalLight->setShadowMap(shadow);
 
@@ -576,7 +574,7 @@ int main()
 		gltut::Camera& camera = cameraController->getCamera();
 
 		// Create something to reflect/refract
-		createBoxes(*engine, createMaterialModel(engine.get())->getMaterial());
+		createSceneObjects(*engine, createMaterialModel(engine.get())->getMaterial());
 
 		// Create texture framebuffer
 		gltut::TextureFramebuffer* framebuffer = createTextureFramebuffer(*engine);

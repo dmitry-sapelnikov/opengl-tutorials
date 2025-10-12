@@ -37,22 +37,22 @@ private:
 	gltut::LightNode* mDirectionalLight;
 
 	/// Sea height
-	float mSeaHeight = 0.0f;
+	float mSeaHeight = 0.2f;
 
 	/// Distance at which water is considered deep
-	float mDeepWaterDistance = 50.0f;
+	float mDeepWaterDistance = 15.0f;
 
 	/// Refraction scale
 	float mRefractionScale = 2.0f;
 
 	/// Number of steps for reflection tracing
-	int mReflectionSteps = 16;
+	int mTraceSteps = 50;
 
-	/// Maximum distance for reflection tracing
-	float mReflectionTraceDistance = 100.0f;
+	/// Maximum distance for reflection/refraction ray marching
+	float mTraceDistance = 200.0f;
 
-	/// Thickness for reflection ray marching
-	float mReflectionThickness = 1.0f;
+	/// Thickness for reflection/refraction ray marching
+	float mTraceThickness = 2.0f;
 
 	/// Light azimuth angle in degrees
 	float mLightAzimuth = 0.0f;

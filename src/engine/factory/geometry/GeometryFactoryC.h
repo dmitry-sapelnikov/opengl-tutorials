@@ -41,6 +41,7 @@ public:
 		float radius,
 		float height,
 		u32 radialSubdivisions,
+		bool addCaps,
 		const CreationOptions& options) noexcept final;
 
 private:

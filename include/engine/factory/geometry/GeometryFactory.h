@@ -100,6 +100,7 @@ public:
 		float radius,
 		float height,
 		u32 radialSubdivisions,
+		bool addCaps = true,
 		const CreationOptions& options = {}) noexcept = 0;
 };
 
