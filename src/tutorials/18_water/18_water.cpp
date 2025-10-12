@@ -114,12 +114,16 @@ float getThicknessDiff(float diff, float linearSampleDepth, vec2 thicknessParams
     return (diff - thicknessParams.x);
 }
 
+uniform int iReflectionSteps;
+uniform float iReflectionTraceDistance;
+uniform float iReflectionThickness;
+
 vec3 getReflectedColor(vec3 surfaceP, vec3 e) 
 {
-	const vec2 _ThicknessParams = vec2(0.0, 2.5); // thickness, max thickness
+	vec2 _ThicknessParams = vec2(0.0, iReflectionThickness); // thickness, max thickness
 
-	int steps = 128;
-	vec3 end = surfaceP + 100 * e;
+	int steps = iReflectionSteps;
+	vec3 end = surfaceP + iReflectionTraceDistance * e;
 
 	vec3 pScreen = globalToScreen(surfaceP);
 	vec3 endScreen = globalToScreen(end);
@@ -365,20 +369,14 @@ gltut::PhongMaterialModel* createMaterialModel(gltut::Engine* engine)
 	GLTUT_CHECK(materialModel, "Failed to create Phong material model");
 
 	gltut::GraphicsDevice* device = engine->getDevice();
-	/*gltut::Texture* diffuseTexture = device->getTextures()->load("assets/container2.png");
+	gltut::Texture* diffuseTexture = device->getTextures()->load("assets/container2.png");
 	GLTUT_CHECK(diffuseTexture, "Failed to create diffuse texture");
 
 	gltut::Texture* specularTexture = device->getTextures()->load("assets/container2_specular.png");
-	GLTUT_CHECK(specularTexture, "Failed to create specular texture");*/
-
-	const gltut::Texture* diffuseTexture = device->getTextures()->createSolidColor({240.0f / 255.0f, 140.0f / 255.0f, 39.0f / 255.0f});
-	GLTUT_CHECK(diffuseTexture, "Failed to create diffuse texture");
-
-	//const gltut::Texture* specularTexture = device->getTextures()->createSolidColor({1.0f, 1.0f, 1.0f});
-	//GLTUT_CHECK(specularTexture, "Failed to create specular texture");
+	GLTUT_CHECK(specularTexture, "Failed to create specular texture");
 
 	materialModel->setDiffuse(diffuseTexture);
-	//materialModel->setSpecular(specularTexture);
+	materialModel->setSpecular(specularTexture);
 	return materialModel;
 }
 
@@ -402,7 +400,7 @@ void createBoxes(
 			{
 				const gltut::Vector3 size(
 					rng.nextFloat(0.5f, 1.0f),
-					rng.nextFloat(2.5f, 10.0f),
+					rng.nextFloat(0.5f, 1.0f),
 					rng.nextFloat(0.5f, 1.0f));
 
 				const gltut::Vector3 position(
@@ -543,6 +541,14 @@ int main()
 		float refractionScale = 2.0f;
 		waterShader->setFloat("iRefractionScale", refractionScale);
 
+		int reflectionSteps = 16;
+		float reflectionTraceDistance = 100.0f;
+		float reflectionThickness = 1.0f;
+
+		waterShader->setInt("iReflectionSteps", reflectionSteps);
+		waterShader->setFloat("iReflectionTraceDistance", reflectionTraceDistance);
+		waterShader->setFloat("iReflectionThickness", reflectionThickness);
+
 		auto* directionalLight = scene->createLight(
 			gltut::LightNode::Type::DIRECTIONAL,
 			gltut::Matrix4::identity());
@@ -611,6 +617,22 @@ int main()
 					lightAzimuth, lightElevation, directionalLight, waterShader);
 			}
 
+			// Create reflection collaspable group
+			if (ImGui::CollapsingHeader("Reflection"))
+			{
+				if (ImGui::SliderInt("Steps", &reflectionSteps, 1, 64))
+				{
+					waterShader->setInt("iReflectionSteps", reflectionSteps);
+				}
+				if (ImGui::SliderFloat("Trace Distance", &reflectionTraceDistance, 1.0f, 500.0f))
+				{
+					waterShader->setFloat("iReflectionTraceDistance", reflectionTraceDistance);
+				}
+				if (ImGui::SliderFloat("Thickness", &reflectionThickness, 0.1f, 10.0f))
+				{
+					waterShader->setFloat("iReflectionThickness", reflectionThickness);
+				}
+			}
 			ImGui::End();
 
 		} while (engine->update());
