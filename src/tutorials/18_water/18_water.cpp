@@ -46,13 +46,13 @@ const float EPSILON	= 1e-3;
 //#define AA
 
 // sea
-const int ITER_GEOMETRY = 5;
-const int ITER_FRAGMENT = 5;
+const int ITER_GEOMETRY = 3;
+const int ITER_FRAGMENT = 3;
 uniform float SEA_HEIGHT;
 
-const float SEA_CHOPPY = 3.0;
-const float SEA_SPEED = 0.8;
-const float SEA_FREQ = 0.16;
+const float SEA_CHOPPY = 1.5;
+const float SEA_SPEED = 0.25;
+const float SEA_FREQ = 1.0;
 const vec3 SEA_BASE = vec3(0.0,0.09,0.18);
 const vec3 SEA_WATER_COLOR = vec3(0.8,0.9,0.6)*0.6;
 #define SEA_TIME (1.0 + iTime * SEA_SPEED)
@@ -168,11 +168,25 @@ float sea_octave(vec2 uv, float choppy) {
     return pow(1.0-pow(wv.x * wv.y,0.65),choppy);
 }
 
-float map(vec3 p) {
-    float freq = SEA_FREQ;
-    float amp = SEA_HEIGHT;
+struct Wave
+{
+	float amplitude;
+	float waveNumber;
+	float frequency;
+	float phase;
+	vec2 direction;
+};
+
+#define WAVE_COUNT 110
+uniform Wave waves[WAVE_COUNT];
+
+float map(vec3 p)
+{
+	float freq = SEA_FREQ;
+    float amp = 0.02;
     float choppy = SEA_CHOPPY;
-    vec2 uv = p.xz; uv.x *= 0.75;
+    vec2 uv = p.xz;
+	uv.x *= 0.75;
     
     float d, h = 0.0;    
     for(int i = 0; i < ITER_GEOMETRY; i++) {        
@@ -182,26 +196,24 @@ float map(vec3 p) {
     	uv *= octave_m; freq *= 1.9; amp *= 0.22;
         choppy = mix(choppy,1.0,0.2);
     }
-    return p.y - h;
+
+	for (int i = 0; i < WAVE_COUNT; ++i)
+	{
+		if (waves[i].amplitude > 0.0)
+		{
+			float theta = 
+				dot(waves[i].direction, p.xz) * waves[i].waveNumber + 
+				iTime * waves[i].frequency +
+				waves[i].phase;
+			h += SEA_HEIGHT * waves[i].amplitude * sin(theta);
+		}
+	}
+	return p.y - h;
 }
 
 float map_detailed(vec3 p) {
-    float freq = SEA_FREQ;
-    float amp = SEA_HEIGHT;
-    float choppy = SEA_CHOPPY;
-    vec2 uv = p.xz; uv.x *= 0.75;
-    
-    float d, h = 0.0;    
-    for(int i = 0; i < ITER_FRAGMENT; i++) {        
-    	d = sea_octave((uv+SEA_TIME)*freq,choppy);
-    	d += sea_octave((uv-SEA_TIME)*freq,choppy);
-        h += d * amp;        
-    	uv *= octave_m; freq *= 1.9; amp *= 0.22;
-        choppy = mix(choppy,1.0,0.2);
-    }
-    return p.y - h;
+	return map(p);
 }
-
 
 vec3 getSeaColor(vec3 p, vec3 n, vec3 l, vec3 eye, vec3 dist) {
 	// Transform point to screen space
@@ -240,7 +252,7 @@ vec3 getSeaColor(vec3 p, vec3 n, vec3 l, vec3 eye, vec3 dist) {
 	float atten = max(1.0 - dot(dist, dist) * 0.001, 0.0);
 	color += SEA_WATER_COLOR * (p.y - SEA_HEIGHT) * 0.18 * atten;
     
-    color += specular(n, l, eye, 600.0 * inversesqrt(length(dist)));
+    color += specular(n, l, eye, 3000.0 * inversesqrt(length(dist)));
     
     return color;
 }
@@ -490,6 +502,16 @@ gltut::TextureCubemap* loadSkyboxTexture(gltut::Engine& engine)
 	return skyboxTexture;
 }
 
+static const std::array<gltut::Wave, 3> WAVES =
+{
+	gltut::Wave(1.0f, 5.0f, 0.0f, gltut::Vector2(1.0f, 0.0f)),
+	gltut::Wave(1.0f, 5.0f, 0.0f, gltut::Vector2(-1.0f, 0.0f)),
+	//gltut::Wave(0.5f, 3.0f, gltut::PI * 0.5f, gltut::Vector2(0.0f, 1.0f)),
+	//gltut::Wave(0.2f, 2.0f, gltut::PI * 0.25f, gltut::Vector2(1.0f, 1.0f))
+};
+
+static constexpr float GRAVITY_ACCELERATION = 9.81f;
+
 gltut::ShaderRendererBinding* createWaterShader(gltut::Engine& engine)
 {
 	gltut::Shader* waterShader = engine.getDevice()->getShaders()->create(
@@ -501,6 +523,24 @@ gltut::ShaderRendererBinding* createWaterShader(gltut::Engine& engine)
 	waterShader->setInt("colorSampler", 1);
 	waterShader->setInt("depthSampler", 2);
 	waterShader->setInt("backfaceDepthSampler", 3);
+
+	for (size_t i = 0; i < WAVES.size(); ++i)
+	{
+		std::string baseName = "waves[" + std::to_string(i) + "]";
+		waterShader->setFloat((baseName + ".amplitude").c_str(), WAVES[i].amplitude);
+
+		float period = WAVES[i].period;
+		const float waveNumber = getInfiniteWaterDepthWaveNumber(
+			period,
+			GRAVITY_ACCELERATION);
+		waterShader->setFloat((baseName + ".waveNumber").c_str(), waveNumber);
+
+		waterShader->setFloat((baseName + ".frequency").c_str(), 2.0f * gltut::PI / period);
+		waterShader->setFloat((baseName + ".phase").c_str(), WAVES[i].phase);
+
+		const gltut::Vector2 dir = WAVES[i].direction.getNormalized();
+		waterShader->setVec2((baseName + ".direction").c_str(), dir.x, dir.y);
+	}
 
 	gltut::ShaderRendererBinding* waterShaderBinding = engine.getRenderer()->createShaderBinding(waterShader);
 	GLTUT_CHECK(waterShaderBinding != nullptr, "Failed to create water shader binding");
@@ -549,16 +589,6 @@ gltut::LightNode* createSunlight(gltut::Engine& engine)
 	directionalLight->setAmbient(gltut::Color(0.37f, 0.37f, 0.4f));
 	directionalLight->setDiffuse(gltut::Color(1.05f, 1.05f, 1.0f));
 	directionalLight->setDirection(-directionalLight->getTransform().getTranslation());
-
-	gltut::ShadowMap* shadow = engine.getFactory()->getScene()->createShadowMap(
-		directionalLight,
-		engine.getScene()->getRenderGroup(),
-		200.0f,	   // Frustum size
-		1.0f,	   // Near plane
-		400.0f,	   // Far plane
-		1024 * 4); // Shadow map size
-	GLTUT_CHECK(shadow, "Failed to create shadow map");
-	directionalLight->setShadowMap(shadow);
 
 	return directionalLight;
 }
