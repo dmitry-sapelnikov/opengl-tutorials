@@ -89,11 +89,13 @@ void WaterGui::draw()
 	{
 		const bool yScaleChanged = ImGui::SliderFloat("Y Scale", &mObjectsInWaterScaleY, 0.1, 5.0f);
 		const bool transformChanged = ImGui::SliderFloat("Y Position", &mObjectsInWaterY, -20.0f, 20.0f);
+		const bool rotationChanged = ImGui::SliderFloat("X Rotation", &mObjectsInWaterRotationX, -180.0f, 180.0f);
 
-		if (yScaleChanged || transformChanged)
+		if (yScaleChanged || transformChanged || rotationChanged)
 		{
 			mObjectsInWater->setTransform(
 				gltut::Matrix4::translationMatrix({0.0f, mObjectsInWaterY, 0.0f}) *
+				gltut::Matrix4::rotationMatrix({gltut::toRadians(mObjectsInWaterRotationX), 0.0f, 0.0f}) *
 				gltut::Matrix4::scaleMatrix({1.0f, mObjectsInWaterScaleY, 1.0f}));
 		}
 	}
