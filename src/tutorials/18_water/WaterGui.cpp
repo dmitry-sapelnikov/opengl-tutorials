@@ -85,13 +85,6 @@ void WaterGui::draw()
 		}
 	}
 
-	// Plot the backface texture
-	ImGui::Image(
-		mBackfaceTexture->getId(),
-		{256, 256},
-		{0, 1},
-		{1, 0});
-
 	ImGui::End();
 }
 

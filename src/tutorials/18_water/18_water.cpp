@@ -9,8 +9,8 @@
 #include "engine/math/Rng.h"
 #include "imgui/EngineImgui.h"
 
-#include "Waves.h"
 #include "WaterGui.h"
+#include "Waves.h"
 
 /// Vertex shader for texture-to-window rendering
 static const char* WATER_VERTEX_SHADER = R"(
@@ -113,22 +113,16 @@ vec3 globalToScreen(vec3 p) {
 
 uniform int iReflectionSteps;
 uniform float iReflectionTraceDistance;
-uniform float iReflectionThickness;
-
 
 vec2 getScreenSpaceUV(vec3 surfaceP, vec3 e) 
 {
-	vec2 _ThicknessParams = vec2(0.0, iReflectionThickness); // thickness, max thickness
+	vec3 end = surfaceP + iReflectionTraceDistance * e;
+	float stepSize = iReflectionTraceDistance / float(iReflectionSteps);
 
-	int steps = iReflectionSteps;
-	vec3 end = globalToScreen(surfaceP + iReflectionTraceDistance * e);
-	vec3 pScreen = globalToScreen(surfaceP);
-
-	for (int i = 1; i <= steps; i++)
+	for (int i = 1; i <= iReflectionSteps; i++)
 	{
-		float t = float(i) / float(steps);
-		vec3 screenPos = mix(pScreen, end, t);
-
+		float t = float(i) / float(iReflectionSteps);
+		vec3 screenPos = globalToScreen(mix(surfaceP, end, t));
 		if (!(0.0 <= screenPos.x && screenPos.x <= 1.0 &&
 			  0.0 <= screenPos.y && screenPos.y <= 1.0 &&
 			  screenPos.z < 1.0))
@@ -136,12 +130,14 @@ vec2 getScreenSpaceUV(vec3 surfaceP, vec3 e)
 			break;
 		}
 
-		float depth = texture(depthSampler, screenPos.xy).r;
-		float bottomDepth = texture(backfaceDepthSampler, screenPos.xy).r;
-
-		if (depth <= screenPos.z && screenPos.z <= bottomDepth)
+		float sampleDepth = getGlobalDistance(screenPos.z);
+		if (sampleDepth < getGlobalDistance(texture(backfaceDepthSampler, screenPos.xy).r) + stepSize)
 		{
-			return screenPos.xy;
+			float depth = texture(depthSampler, screenPos.xy).r;
+			if (depth < 1.0 && getGlobalDistance(depth) - stepSize < sampleDepth)
+			{
+				return screenPos.xy;
+			}
 		}
 	}
 	return vec2(-1.0);
@@ -382,30 +378,29 @@ void createSceneObjects(
 	const float GEOMETRY_SIZE = 5.0f;
 	const float STRIDE = 15.0f;
 
-	//auto* cylinderGeometry = engine.getFactory()->getGeometry()->createCylinder(
-	/*	GEOMETRY_SIZE * 0.5f,
+	auto* geometry = engine.getFactory()->getGeometry()->createCylinder(
+		GEOMETRY_SIZE * 0.5f,
 		GEOMETRY_SIZE,
 		48,
 		true,
-		{ true, true, false});*/
-	//GLTUT_CHECK(cylinderGeometry, "Failed to create geometry");
-
-	auto* geometry = engine.getFactory()->getGeometry()->createBox(
-		{ GEOMETRY_SIZE, GEOMETRY_SIZE, GEOMETRY_SIZE},
 		{true, true, false});
+	/*auto* geometry = engine.getFactory()->getGeometry()->createBox(
+		{ GEOMETRY_SIZE, GEOMETRY_SIZE, GEOMETRY_SIZE},
+		{true, true, false});*/
 	GLTUT_CHECK(geometry, "Failed to create geometry");
 
 	gltut::Rng rng;
-	for (int k = -1; k < 0; ++k)
+	for (int k = 0; k < 1; ++k)
 	{
 		for (int i = 0; i < COUNT; ++i)
 		{
 			for (int j = 0; j < COUNT; ++j)
 			{
+				const float sizeXZ = rng.nextFloat(0.25f, 0.5f);
 				const gltut::Vector3 size(
-					rng.nextFloat(0.5f, 2.0f),
-					rng.nextFloat(0.5f, 2.0f),
-					rng.nextFloat(0.5f, 2.0f));
+					sizeXZ,
+					rng.nextFloat(3.0f, 5.0f),
+					sizeXZ);
 
 				const gltut::Vector3 position(
 					(i - (COUNT - 1.0f) * 0.5f + rng.nextFloat(-0.25f, 0.25f)) * STRIDE,
@@ -529,7 +524,7 @@ gltut::RenderPass* createWaterRenderPass(
 		skyboxTexture,
 		framebuffer.getColor(),
 		framebuffer.getDepth(),
-		backcullFramebuffer.getDepth() };
+		backcullFramebuffer.getDepth()};
 
 	gltut::RenderPass* waterPass = engine.getFactory()->getRenderPass()->createTexturesToWindowRenderPass(
 		nullptr,
@@ -593,7 +588,7 @@ int main()
 		engine->getSceneRenderPass()->setTarget(framebuffer);
 
 		gltut::TextureFramebuffer* backcullFramebuffer = createTextureFramebuffer(*engine, true, true);
-		auto* backfaceDepthPass = engine->getRenderer()->createPass(
+		engine->getRenderer()->createPass(
 			engine->getScene()->getActiveCameraViewpoint(),
 			engine->getScene()->getRenderGroup(),
 			backcullFramebuffer,

@@ -50,7 +50,7 @@ private:
 	int mTraceSteps = 50;
 
 	/// Maximum distance for reflection/refraction ray marching
-	float mTraceDistance = 200.0f;
+	float mTraceDistance = 50.0f;
 
 	/// Thickness for reflection/refraction ray marching
 	float mTraceThickness = 2.0f;
