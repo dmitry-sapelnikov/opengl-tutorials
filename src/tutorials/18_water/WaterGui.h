@@ -16,7 +16,7 @@ public:
 		gltut::Engine* engine,
 		gltut::Shader* waterShader,
 		gltut::LightNode* directionalLight,
-		gltut::Texture2* backfaceTexture); 
+		gltut::SceneNode* objectsInWater);
 
 	/// Draws the GUI
 	void draw();
@@ -36,6 +36,9 @@ private:
 
 	/// Reference to the directional light
 	gltut::LightNode* mDirectionalLight;
+
+	/// Objects in water
+	gltut::SceneNode* mObjectsInWater;
 
 	/// Sea height
 	float mSeaHeight = 0.2f;
@@ -61,5 +64,9 @@ private:
 	/// Light elevation angle in degrees
 	float mLightElevation = 45.0f;
 
-	gltut::Texture2* mBackfaceTexture;
+	/// Y scale of the objects in water
+	float mObjectsInWaterScaleY = 1.0f;
+
+	/// Y position of the objects in water
+	float mObjectsInWaterY = 0.0f;
 };

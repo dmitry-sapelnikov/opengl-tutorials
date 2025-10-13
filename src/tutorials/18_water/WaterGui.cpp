@@ -7,13 +7,13 @@ WaterGui::WaterGui(
 	gltut::Engine* engine,
 	gltut::Shader* waterShader,
 	gltut::LightNode* directionalLight,
-	gltut::Texture2* backfaceTexture) :
+	gltut::SceneNode* objectsInWater) :
 
 	mImgui(imgui),
 	mEngine(engine),
 	mWaterShader(waterShader),
 	mDirectionalLight(directionalLight),
-	mBackfaceTexture(backfaceTexture)
+	mObjectsInWater(objectsInWater)
 {
 	mWaterShader->setInt("iReflectionSteps", mTraceSteps);
 	mWaterShader->setFloat("iReflectionTraceDistance", mTraceDistance);
@@ -82,6 +82,19 @@ void WaterGui::draw()
 		if (ImGui::SliderFloat("Elevation", &mLightElevation, 0.0f, 89.0f))
 		{
 			updateLightDirection();
+		}
+	}
+
+	if (ImGui::CollapsingHeader("Objects in Water", ImGuiTreeNodeFlags_DefaultOpen))
+	{
+		const bool yScaleChanged = ImGui::SliderFloat("Y Scale", &mObjectsInWaterScaleY, 0.1, 5.0f);
+		const bool transformChanged = ImGui::SliderFloat("Y Position", &mObjectsInWaterY, -20.0f, 20.0f);
+
+		if (yScaleChanged || transformChanged)
+		{
+			mObjectsInWater->setTransform(
+				gltut::Matrix4::translationMatrix({0.0f, mObjectsInWaterY, 0.0f}) *
+				gltut::Matrix4::scaleMatrix({1.0f, mObjectsInWaterScaleY, 1.0f}));
 		}
 	}
 

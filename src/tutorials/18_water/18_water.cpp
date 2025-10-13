@@ -370,13 +370,16 @@ gltut::PhongMaterialModel* createMaterialModel(gltut::Engine* engine)
 }
 
 /// Creates boxes
-void createSceneObjects(
+gltut::SceneNode* createObjectsInWater(
 	gltut::Engine& engine,
 	const gltut::Material* material)
 {
 	const int COUNT = 4;
 	const float GEOMETRY_SIZE = 5.0f;
 	const float STRIDE = 15.0f;
+
+	gltut::SceneNode* group = engine.getScene()->createGeometryGroup();
+	GLTUT_CHECK(group, "Failed to create geometry group");
 
 	auto* geometry = engine.getFactory()->getGeometry()->createCylinder(
 		GEOMETRY_SIZE * 0.5f,
@@ -412,16 +415,16 @@ void createSceneObjects(
 					material,
 					gltut::Matrix4::transformMatrix(
 						position,
-						gltut::Vector3(
-							0,
-							rng.nextFloat(0.0f, gltut::PI * 2.0),
-							0),
-						size));
+						gltut::Vector3(0, rng.nextFloat(0.0f, gltut::PI * 2.0), 0),
+						size),
+					group);
 
 				GLTUT_CHECK(object, "Failed to create object");
 			}
 		}
 	}
+
+	return group;
 }
 
 std::unique_ptr<gltut::CameraController> createCameraAndController(gltut::Engine& engine)
@@ -581,7 +584,9 @@ int main()
 		gltut::Camera& camera = cameraController->getCamera();
 
 		// Create something to reflect/refract
-		createSceneObjects(*engine, createMaterialModel(engine.get())->getMaterial());
+		gltut::SceneNode* objectsInWater = createObjectsInWater(
+			*engine, 
+			createMaterialModel(engine.get())->getMaterial());
 
 		// Create texture framebuffer
 		gltut::TextureFramebuffer* framebuffer = createTextureFramebuffer(*engine, true, true);
@@ -606,7 +611,7 @@ int main()
 		waterShader->setFloat("zFar", camera.getProjection().getFarPlane());
 
 		gltut::LightNode* directionalLight = createSunlight(*engine);
-		WaterGui gui(imgui, engine.get(), waterShader, directionalLight, backcullFramebuffer->getDepth());
+		WaterGui gui(imgui, engine.get(), waterShader, directionalLight, objectsInWater);
 
 		do
 		{
