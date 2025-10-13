@@ -50,7 +50,7 @@ const int ITER_GEOMETRY = 3;
 const int ITER_FRAGMENT = 3;
 uniform float SEA_HEIGHT;
 
-const float SEA_CHOPPY = 1.5;
+const float SEA_CHOPPY = 1.6;
 const float SEA_SPEED = 0.25;
 const float SEA_FREQ = 1.0;
 const vec3 SEA_BASE = vec3(0.0,0.09,0.18);
