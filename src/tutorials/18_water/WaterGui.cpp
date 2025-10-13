@@ -29,7 +29,7 @@ void WaterGui::draw()
 {
 	mImgui->newFrame();
 	ImGui::SetNextWindowPos({10, 10}, ImGuiCond_FirstUseEver);
-	ImGui::SetNextWindowSize({300, 400}, ImGuiCond_FirstUseEver);
+	ImGui::SetNextWindowSize({300, 600}, ImGuiCond_FirstUseEver);
 
 	ImGui::Begin("Settings");
 	ImGui::Text("FPS: %u", mEngine->getWindow()->getFPS());
@@ -89,13 +89,17 @@ void WaterGui::draw()
 	{
 		const bool yScaleChanged = ImGui::SliderFloat("Y Scale", &mObjectsInWaterScaleY, 0.1, 5.0f);
 		const bool transformChanged = ImGui::SliderFloat("Y Position", &mObjectsInWaterY, -20.0f, 20.0f);
-		const bool rotationChanged = ImGui::SliderFloat("X Rotation", &mObjectsInWaterRotationX, -180.0f, 180.0f);
+		const bool xRotationChanged = ImGui::SliderFloat("X Rotation", &mObjectsInWaterRotationX, -180.0f, 180.0f);
+		const bool yRotationChanged = ImGui::SliderFloat("Y Rotation", &mObjectsInWaterRotationY, -180.0f, 180.0f);
 
-		if (yScaleChanged || transformChanged || rotationChanged)
+		if (yScaleChanged || transformChanged || xRotationChanged || yRotationChanged)
 		{
 			mObjectsInWater->setTransform(
 				gltut::Matrix4::translationMatrix({0.0f, mObjectsInWaterY, 0.0f}) *
-				gltut::Matrix4::rotationMatrix({gltut::toRadians(mObjectsInWaterRotationX), 0.0f, 0.0f}) *
+				gltut::Matrix4::rotationMatrix(
+					{gltut::toRadians(mObjectsInWaterRotationX),
+					gltut::toRadians(mObjectsInWaterRotationY),
+					 0.0f}) *
 				gltut::Matrix4::scaleMatrix({1.0f, mObjectsInWaterScaleY, 1.0f}));
 		}
 	}

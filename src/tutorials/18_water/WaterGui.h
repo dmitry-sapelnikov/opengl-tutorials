@@ -70,6 +70,9 @@ private:
 	/// Y position of the objects in water
 	float mObjectsInWaterY = 0.0f;
 
-	/// Y rotation of the objects in water
+	/// X rotation of the objects in water
 	float mObjectsInWaterRotationX = 0.0f;
+
+	/// Y rotation of the objects in water
+	float mObjectsInWaterRotationY = 0.0f;
 };
