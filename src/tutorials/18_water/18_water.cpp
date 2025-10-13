@@ -130,14 +130,11 @@ vec2 getScreenSpaceUV(vec3 surfaceP, vec3 e)
 			break;
 		}
 
-		float sampleDepth = getGlobalDistance(screenPos.z);
-		if (sampleDepth < getGlobalDistance(texture(backfaceDepthSampler, screenPos.xy).r) + stepSize)
+		float backfaceDepth = texture(backfaceDepthSampler, screenPos.xy).r;
+		if (backfaceDepth < 1.0 && getGlobalDistance(screenPos.z) < getGlobalDistance(backfaceDepth) + stepSize &&
+			texture(depthSampler, screenPos.xy).r < screenPos.z)
 		{
-			float depth = texture(depthSampler, screenPos.xy).r;
-			if (depth < 1.0 && getGlobalDistance(depth) - stepSize < sampleDepth)
-			{
-				return screenPos.xy;
-			}
+			return screenPos.xy;
 		}
 	}
 	return vec2(-1.0);
