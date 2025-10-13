@@ -66,6 +66,7 @@ uniform vec3 iLightDirection;
 uniform samplerCube skyboxSampler;
 uniform sampler2D colorSampler;
 uniform sampler2D depthSampler;
+uniform sampler2D backfaceDepthSampler;
 
 uniform float iRefractionScale;
 uniform float zNear;
@@ -123,7 +124,6 @@ vec2 getScreenSpaceUV(vec3 surfaceP, vec3 e)
 	vec3 end = globalToScreen(surfaceP + iReflectionTraceDistance * e);
 	vec3 pScreen = globalToScreen(surfaceP);
 
-	vec3 prevP = pScreen;
 	for (int i = 1; i <= steps; i++)
 	{
 		float t = float(i) / float(steps);
@@ -137,30 +137,12 @@ vec2 getScreenSpaceUV(vec3 surfaceP, vec3 e)
 		}
 
 		float depth = texture(depthSampler, screenPos.xy).r;
+		float bottomDepth = texture(backfaceDepthSampler, screenPos.xy).r;
 
-		float linPrevZ = getGlobalDistance(prevP.z);
-		float linZ = getGlobalDistance(screenPos.z);
-		float linearDepth = getGlobalDistance(depth);
-
-		if (linPrevZ <= linearDepth && linearDepth <= linZ)
-		{
-            float t = (linearDepth - linPrevZ) / (linZ - linPrevZ);
-			vec2 screenPosXY = mix(prevP.xy, screenPos.xy, t);
-			if (getGlobalDistance(texture(depthSampler, screenPosXY).r) <= linZ)
-			{
-				return screenPosXY;
-			}
-			else
-			{
-				return screenPos.xy;
-			}
-		}
-
-		if (linPrevZ - _ThicknessParams.y <= linearDepth && linearDepth <= linZ)
+		if (depth <= screenPos.z && screenPos.z <= bottomDepth)
 		{
 			return screenPos.xy;
 		}
-		prevP = screenPos;
 	}
 	return vec2(-1.0);
 }
@@ -354,6 +336,8 @@ static float getInfiniteWaterDepthWaveNumber(
 	return (frequency * frequency) / gravityAcceleration;
 }
 
+static constexpr gltut::u32 BACKFACE_DEPTH_PASS_INDEX = 2;
+
 /// Creates a Phong material model
 gltut::PhongMaterialModel* createMaterialModel(gltut::Engine* engine)
 {
@@ -374,6 +358,18 @@ gltut::PhongMaterialModel* createMaterialModel(gltut::Engine* engine)
 	GLTUT_CHECK(diffuseTexture, "Failed to create diffuse texture");
 
 	materialModel->setDiffuse(diffuseTexture);
+
+	// Create a pass for reverse depth
+	gltut::Material* material = materialModel->getMaterial();
+	gltut::MaterialPass* backfaceDepthPass = material->createPass(
+		BACKFACE_DEPTH_PASS_INDEX,
+		materialFactory->getDepthShader(),
+		0,
+		0);
+
+	GLTUT_CHECK(backfaceDepthPass, "Failed to create backface depth pass");
+	backfaceDepthPass->setFaceCulling(gltut::FaceCullingMode::FRONT);
+
 	return materialModel;
 }
 
@@ -386,26 +382,30 @@ void createSceneObjects(
 	const float GEOMETRY_SIZE = 5.0f;
 	const float STRIDE = 15.0f;
 
-	auto* cylinderGeometry = engine.getFactory()->getGeometry()->createCylinder(
-		GEOMETRY_SIZE * 0.5f,
+	//auto* cylinderGeometry = engine.getFactory()->getGeometry()->createCylinder(
+	/*	GEOMETRY_SIZE * 0.5f,
 		GEOMETRY_SIZE,
 		48,
 		true,
-		{ true, true, false});
-	GLTUT_CHECK(cylinderGeometry, "Failed to create geometry");
+		{ true, true, false});*/
+	//GLTUT_CHECK(cylinderGeometry, "Failed to create geometry");
+
+	auto* geometry = engine.getFactory()->getGeometry()->createBox(
+		{ GEOMETRY_SIZE, GEOMETRY_SIZE, GEOMETRY_SIZE},
+		{true, true, false});
+	GLTUT_CHECK(geometry, "Failed to create geometry");
 
 	gltut::Rng rng;
-	for (int k = 0; k < 1; ++k)
+	for (int k = -1; k < 0; ++k)
 	{
 		for (int i = 0; i < COUNT; ++i)
 		{
 			for (int j = 0; j < COUNT; ++j)
 			{
-				const float sizeXZ = rng.nextFloat(0.25f, 0.5f);
 				const gltut::Vector3 size(
-					sizeXZ,
-					rng.nextFloat(3.0f, 5.0f),
-					sizeXZ);
+					rng.nextFloat(0.5f, 2.0f),
+					rng.nextFloat(0.5f, 2.0f),
+					rng.nextFloat(0.5f, 2.0f));
 
 				const gltut::Vector3 position(
 					(i - (COUNT - 1.0f) * 0.5f + rng.nextFloat(-0.25f, 0.25f)) * STRIDE,
@@ -413,7 +413,7 @@ void createSceneObjects(
 					(j - (COUNT - 1.0f) * 0.5f + rng.nextFloat(-0.25f, 0.25f)) * STRIDE);
 
 				auto* object = engine.getScene()->createGeometry(
-					cylinderGeometry,
+					geometry,
 					material,
 					gltut::Matrix4::transformMatrix(
 						position,
@@ -449,17 +449,26 @@ std::unique_ptr<gltut::CameraController> createCameraAndController(gltut::Engine
 	return controller;
 }
 
-gltut::TextureFramebuffer* createTextureFramebuffer(gltut::Engine& engine)
+gltut::TextureFramebuffer* createTextureFramebuffer(gltut::Engine& engine, bool useColor, bool useDepth)
 {
 	gltut::Factory* factory = engine.getFactory();
 
-	gltut::Texture2* colorTexture = factory->getTexture()->createWindowSizeTexture(
-		gltut::TextureFormat::RGBA);
-	GLTUT_CHECK(colorTexture != nullptr, "Failed to create color texture");
+	gltut::Texture2* colorTexture = nullptr;
+	if (useColor)
+	{
+		colorTexture = factory->getTexture()->createWindowSizeTexture(
+			gltut::TextureFormat::RGBA);
+		GLTUT_CHECK(colorTexture != nullptr, "Failed to create color texture");
+	}
 
-	gltut::Texture2* depthTexture = factory->getTexture()->createWindowSizeTexture(
-		gltut::TextureFormat::FLOAT);
-	GLTUT_CHECK(depthTexture != nullptr, "Failed to create depth texture");
+	gltut::Texture2* depthTexture = nullptr;
+
+	if (useDepth)
+	{
+		depthTexture = factory->getTexture()->createWindowSizeTexture(
+			gltut::TextureFormat::FLOAT);
+		GLTUT_CHECK(depthTexture != nullptr, "Failed to create depth texture");
+	}
 
 	gltut::TextureFramebuffer* framebuffer = engine.getRenderer()->getDevice()->getFramebuffers()->create(
 		colorTexture,
@@ -496,6 +505,7 @@ gltut::ShaderRendererBinding* createWaterShader(gltut::Engine& engine)
 	waterShader->setInt("skyboxSampler", 0);
 	waterShader->setInt("colorSampler", 1);
 	waterShader->setInt("depthSampler", 2);
+	waterShader->setInt("backfaceDepthSampler", 3);
 
 	gltut::ShaderRendererBinding* waterShaderBinding = engine.getRenderer()->createShaderBinding(waterShader);
 	GLTUT_CHECK(waterShaderBinding != nullptr, "Failed to create water shader binding");
@@ -510,14 +520,16 @@ gltut::ShaderRendererBinding* createWaterShader(gltut::Engine& engine)
 gltut::RenderPass* createWaterRenderPass(
 	gltut::Engine& engine,
 	gltut::TextureFramebuffer& framebuffer,
+	gltut::TextureFramebuffer& backcullFramebuffer,
 	gltut::Shader& waterShader)
 {
 	gltut::TextureCubemap* skyboxTexture = loadSkyboxTexture(engine);
 
-	std::array<const gltut::Texture*, 3> textures = {
+	std::array<const gltut::Texture*, 4> textures = {
 		skyboxTexture,
 		framebuffer.getColor(),
-		framebuffer.getDepth()};
+		framebuffer.getDepth(),
+		backcullFramebuffer.getDepth() };
 
 	gltut::RenderPass* waterPass = engine.getFactory()->getRenderPass()->createTexturesToWindowRenderPass(
 		nullptr,
@@ -577,11 +589,21 @@ int main()
 		createSceneObjects(*engine, createMaterialModel(engine.get())->getMaterial());
 
 		// Create texture framebuffer
-		gltut::TextureFramebuffer* framebuffer = createTextureFramebuffer(*engine);
+		gltut::TextureFramebuffer* framebuffer = createTextureFramebuffer(*engine, true, true);
 		engine->getSceneRenderPass()->setTarget(framebuffer);
 
+		gltut::TextureFramebuffer* backcullFramebuffer = createTextureFramebuffer(*engine, true, true);
+		auto* backfaceDepthPass = engine->getRenderer()->createPass(
+			engine->getScene()->getActiveCameraViewpoint(),
+			engine->getScene()->getRenderGroup(),
+			backcullFramebuffer,
+			BACKFACE_DEPTH_PASS_INDEX,
+			nullptr,
+			true,
+			nullptr);
+
 		gltut::Shader* waterShader = createWaterShader(*engine)->getTarget();
-		createWaterRenderPass(*engine, *framebuffer, *waterShader);
+		createWaterRenderPass(*engine, *framebuffer, *backcullFramebuffer, *waterShader);
 
 		auto start = std::chrono::high_resolution_clock::now();
 
@@ -589,7 +611,7 @@ int main()
 		waterShader->setFloat("zFar", camera.getProjection().getFarPlane());
 
 		gltut::LightNode* directionalLight = createSunlight(*engine);
-		WaterGui gui(imgui, engine.get(), waterShader, directionalLight);
+		WaterGui gui(imgui, engine.get(), waterShader, directionalLight, backcullFramebuffer->getDepth());
 
 		do
 		{

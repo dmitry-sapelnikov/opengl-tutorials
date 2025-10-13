@@ -15,7 +15,8 @@ public:
 		gltut::EngineImgui* imgui,
 		gltut::Engine* engine,
 		gltut::Shader* waterShader,
-		gltut::LightNode* directionalLight);
+		gltut::LightNode* directionalLight,
+		gltut::Texture2* backfaceTexture); 
 
 	/// Draws the GUI
 	void draw();
@@ -59,4 +60,6 @@ private:
 
 	/// Light elevation angle in degrees
 	float mLightElevation = 45.0f;
+
+	gltut::Texture2* mBackfaceTexture;
 };

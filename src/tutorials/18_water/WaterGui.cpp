@@ -6,12 +6,14 @@ WaterGui::WaterGui(
 	gltut::EngineImgui* imgui,
 	gltut::Engine* engine,
 	gltut::Shader* waterShader,
-	gltut::LightNode* directionalLight) :
+	gltut::LightNode* directionalLight,
+	gltut::Texture2* backfaceTexture) :
 
 	mImgui(imgui),
 	mEngine(engine),
 	mWaterShader(waterShader),
-	mDirectionalLight(directionalLight)
+	mDirectionalLight(directionalLight),
+	mBackfaceTexture(backfaceTexture)
 {
 	mWaterShader->setInt("iReflectionSteps", mTraceSteps);
 	mWaterShader->setFloat("iReflectionTraceDistance", mTraceDistance);
@@ -82,6 +84,13 @@ void WaterGui::draw()
 			updateLightDirection();
 		}
 	}
+
+	// Plot the backface texture
+	ImGui::Image(
+		mBackfaceTexture->getId(),
+		{256, 256},
+		{0, 1},
+		{1, 0});
 
 	ImGui::End();
 }
