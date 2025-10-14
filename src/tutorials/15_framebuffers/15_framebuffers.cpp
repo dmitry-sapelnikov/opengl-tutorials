@@ -145,27 +145,13 @@ int main()
 		gltut::Color clearColor(0.1f, 0.1f, 0.1f);
 
 		engine->getRenderer()->removeAllPasses();
-		const gltut::Point2u textureSize = engine->getWindow()->getSize();
-		auto* colorTexture = renderer->getDevice()->getTextures()->create(
-			{nullptr,
-			 textureSize,
-			 gltut::TextureFormat::RGBA},
-			{gltut::TextureFilterMode::NEAREST,
-			 gltut::TextureFilterMode::NEAREST,
-			 gltut::TextureWrapMode::CLAMP_TO_EDGE});
-
+		auto* colorTexture = engine->getFactory()->getTexture()->createWindowSizeTexture(
+			gltut::TextureFormat::RGBA);
 		GLTUT_CHECK(colorTexture != nullptr, "Failed to create color texture");
 
-		auto* depthTexture = renderer->getDevice()->getTextures()->create(
-			{nullptr,
-			 textureSize,
-			 gltut::TextureFormat::FLOAT},
-			{gltut::TextureFilterMode::NEAREST,
-			 gltut::TextureFilterMode::NEAREST,
-			 gltut::TextureWrapMode::CLAMP_TO_EDGE});
-
-		engine->getFactory()->getTexture()->createWindowSizeTextureBinding(colorTexture);
-		engine->getFactory()->getTexture()->createWindowSizeTextureBinding(depthTexture);
+		auto* depthTexture = engine->getFactory()->getTexture()->createWindowSizeTexture(
+			gltut::TextureFormat::FLOAT);
+		GLTUT_CHECK(depthTexture != nullptr, "Failed to create depth texture");
 
 		auto* framebuffer = renderer->getDevice()->getFramebuffers()->create(
 			colorTexture,
@@ -183,7 +169,7 @@ int main()
 
 		GLTUT_CHECK(renderToTexturePass, "Failed to create render to texture pass");
 
-		const gltut::Texture2* textures[] = {colorTexture};
+		const gltut::Texture* textures[] = {colorTexture};
 		const char* textureNames[] = {"textureSampler"};
 
 		std::vector<std::pair<std::string, const char*>> effects = {

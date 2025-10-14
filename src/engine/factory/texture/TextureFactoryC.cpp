@@ -8,19 +8,54 @@
 namespace gltut
 {
 
-void TextureFactoryC::createWindowSizeTextureBinding(Texture2* texture) noexcept
+bool TextureFactoryC::createWindowSizeTextureBinding(Texture2* texture) noexcept
 {
-	if (mWindowSizeTextures.contains(texture))
+	try
 	{
-		return;
+		if (!mWindowSizeTextures.contains(texture))
+		{
+			mWindowSizeTextures.insert(texture);
+			texture->setSize(mWindow.getSize());
+		}
+		return true;
 	}
-	mWindowSizeTextures.insert(texture);
-	texture->setSize(mWindow.getSize());
+	GLTUT_CATCH_ALL("TextureFactoryC::createWindowSizeTextureBinding failed")
+	return false;
 }
 
-void TextureFactoryC::removeWindowSizeTextureBinding(Texture2* texture) noexcept
+bool TextureFactoryC::removeWindowSizeTextureBinding(Texture2* texture) noexcept
 {
-	mWindowSizeTextures.erase(texture);
+	try
+	{
+		mWindowSizeTextures.erase(texture);
+		return true;
+	}
+	GLTUT_CATCH_ALL("TextureFactoryC::removeWindowSizeTextureBinding failed");
+	return false;
+}
+
+Texture2* TextureFactoryC::createWindowSizeTexture(TextureFormat format) noexcept
+{
+	Texture2* colorTexture = mGraphicsDevice.getTextures()->create(
+		{nullptr,
+		 mWindow.getSize(),
+		 format},
+		{TextureFilterMode::NEAREST,
+		 TextureFilterMode::NEAREST,
+		 TextureWrapMode::CLAMP_TO_EDGE});
+
+	if (colorTexture == nullptr)
+	{
+		return nullptr;
+	}
+
+	if (bool bindingCreated = createWindowSizeTextureBinding(colorTexture);
+		!bindingCreated)
+	{
+		mGraphicsDevice.getTextures()->remove(colorTexture);
+		return nullptr;
+	}
+	return colorTexture;
 }
 
 bool TextureFactoryC::onEvent(const Event& event) noexcept

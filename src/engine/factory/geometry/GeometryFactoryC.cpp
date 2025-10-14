@@ -129,6 +129,81 @@ Geometry* GeometryFactoryC::createQuad(
 		options);
 }
 
+Geometry* GeometryFactoryC::createPlane(
+	const Vector2& size,
+	const Point2u& subdivisions,
+	const CreationOptions& options) noexcept
+{
+	if (!GLTUT_ASSERT(subdivisions.x > 0 && subdivisions.y > 0))
+	{
+		return nullptr;
+	}
+
+	Geometry* result = nullptr;
+	std::vector<Vector3> positions;
+	positions.reserve((subdivisions.x + 1) * (subdivisions.y + 1));
+
+	std::vector<Vector2> textureCoordinates;
+	if (options.textureCoordinates)
+	{
+		textureCoordinates.reserve((subdivisions.x + 1) * (subdivisions.y + 1));
+	}
+
+	std::vector<u32> indices;
+	indices.reserve(subdivisions.x * subdivisions.y * 6);
+
+	const float xStep = size.x / subdivisions.x;
+	const float yStep = size.y / subdivisions.y;
+
+	const float xStart = -0.5f * size.x;
+	const float yStart = -0.5f * size.y;
+
+	for (u32 yInd = 0; yInd <= subdivisions.y; ++yInd)
+	{
+		const float y = yStart + static_cast<float>(yInd) * yStep;
+		const float t = static_cast<float>(yInd) / subdivisions.y;
+		for (u32 xInd = 0; xInd <= subdivisions.x; ++xInd)
+		{
+			const float x = xStart + static_cast<float>(xInd) * xStep;
+			const float s = static_cast<float>(xInd) / subdivisions.x;
+			positions.push_back({ x, y, 0.0f });
+			if (options.textureCoordinates)
+			{
+				textureCoordinates.push_back({ s, t });
+			}
+
+			if (xInd != subdivisions.x && yInd != subdivisions.y)
+			{
+				const u32 i0 = yInd * (subdivisions.x + 1) + xInd;
+				const u32 i1 = i0 + 1;
+				const u32 i2 = i0 + (subdivisions.x + 1);
+				const u32 i3 = i2 + 1;
+				indices.push_back(i0);
+				indices.push_back(i1);
+				indices.push_back(i3);
+				indices.push_back(i3);
+				indices.push_back(i2);
+				indices.push_back(i0);
+			}
+		}
+	}
+
+	std::vector<Vector3> normals;
+	if (options.normal)
+	{
+		normals.resize(positions.size(), { 0.0f, 0.0f, 1.0f });
+	}
+
+	return createGeometry(
+		positions.data(),
+		normals.data(),
+		textureCoordinates.data(),
+		static_cast<u32>(positions.size()),
+		indices.data(),
+		static_cast<u32>(indices.size()),
+		options);
+}
+
 Geometry* GeometryFactoryC::createBox(
 	const Vector3& size,
 	const CreationOptions& options) noexcept
@@ -322,6 +397,125 @@ Geometry* GeometryFactoryC::createSphere(float radius, u32 subdivisions) noexcep
 		indices.data());
 
 	GLTUT_CATCH_ALL_END("Failed to create a sphere geometry")
+	return result;
+}
+
+Geometry* GeometryFactoryC::createCylinder(
+	float radius,
+	float height,
+	u32 radialSubdivisions,
+	bool addCaps,
+	const CreationOptions& options) noexcept
+{
+	Geometry* result = nullptr;
+	try
+	{
+		GLTUT_CHECK(radialSubdivisions >= 3, "radialSubdivisions must be >= 3");
+		std::vector<Vector3> positions;
+		positions.reserve(2 * (radialSubdivisions + 1));
+		std::vector<Vector3> normals;
+		if (options.normal)
+		{
+			normals.reserve(2 * (radialSubdivisions + 1));
+		}
+
+		std::vector<Vector2> textureCoordinates;
+		if (options.textureCoordinates)
+		{
+			textureCoordinates.reserve(2 * (radialSubdivisions + 1));
+		}
+
+		std::vector<u32> indices;
+		indices.reserve(6 * radialSubdivisions);
+
+		const float angleStep = 2.0f * PI / radialSubdivisions;
+		const float halfHeight = height * 0.5f;
+
+		for (u32 h = 0; h < 2; ++h)
+		{
+			const float y = (h == 0) ? -halfHeight : halfHeight;
+			const float t = (h == 0) ? 0.0f : 1.0f;
+			for (u32 i = 0; i <= radialSubdivisions; ++i)
+			{
+				const float angle = static_cast<float>(i) * angleStep;
+				const float x = radius * std::cos(angle);
+				const float z = radius * std::sin(angle);
+				positions.push_back({x, y, z});
+				if (options.normal)
+				{
+					const Vector3 normal = {x, 0.0f, z};
+					normals.push_back(normal.getNormalized());
+				}
+				if (options.textureCoordinates)
+				{
+					const float s = static_cast<float>(i) / radialSubdivisions;
+					textureCoordinates.push_back({s, t});
+				}
+			}
+		}
+
+		addFacesBetweenCircles(
+			0,
+			radialSubdivisions + 1,
+			radialSubdivisions + 1,
+			indices);
+
+		if (addCaps)
+		{
+			// Copy the top and bottom vertices, change their normals and texture coordinates
+			positions.insert(
+				positions.end(),
+				positions.begin(),
+				positions.end());
+
+			if (options.normal)
+			{
+				for (u32 h = 0; h < 2; ++h)
+				{
+					const Vector3 normal = (h == 0) ? Vector3{0.0f, -1.0f, 0.0f} : Vector3{0.0f, 1.0f, 0.0f};
+					for (u32 i = 0; i <= radialSubdivisions; ++i)
+					{
+						normals.push_back(normal);
+					}
+				}
+			}
+
+			if (options.textureCoordinates)
+			{
+				// Set 0, 0 for bottom face and 0, 1 for top face
+				for (u32 h = 0; h < 2; ++h)
+				{
+					const float t = (h == 0) ? 0.0f : 1.0f;
+					for (u32 i = 0; i <= radialSubdivisions; ++i)
+					{
+						textureCoordinates.push_back({float(i) / radialSubdivisions, t});
+					}
+				}
+			}
+
+			// Create tri-fan for the bottom face
+			for (u32 h = 0; h < 2; ++h)
+			{
+				u32 bottomFaceOffset = (2 + h) * (radialSubdivisions + 1);
+				for (u32 i = 1; i < radialSubdivisions; ++i)
+				{
+					indices.push_back(bottomFaceOffset); // center vertex
+					indices.push_back(bottomFaceOffset + i + (h != 0));
+					indices.push_back(bottomFaceOffset + i + (h == 0));
+				}
+			}
+		}
+
+		result = createGeometry(
+			positions.data(),
+			normals.data(),
+			textureCoordinates.data(),
+			static_cast<u32>(positions.size()),
+			indices.data(),
+			static_cast<u32>(indices.size()),
+			options);
+	}
+	GLTUT_CATCH_ALL("Failed to create a cylinder geometry")
 	return result;
 }
 

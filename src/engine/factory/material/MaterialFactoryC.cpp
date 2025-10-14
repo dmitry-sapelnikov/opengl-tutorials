@@ -106,6 +106,12 @@ PhongMaterialModel* MaterialFactoryC::createPhongMaterial(
 	return result;
 }
 
+ShaderRendererBinding* MaterialFactoryC::getDepthShader() noexcept
+{
+	createDepthShader();
+	return mDepthShader;
+}
+
 void MaterialFactoryC::createViewProjectionBuffer()
 {
 	static_assert(sizeof(Matrix4) == 16 * sizeof(float));

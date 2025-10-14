@@ -112,11 +112,20 @@ ShadowMap* SceneFactoryC::createShadowMap(
 bool SceneFactoryC::createSkybox(
 	const TextureCubemap* cubemapTexture,
 	const Viewpoint* viewpoint,
-	const Rectangle2u* viewport) noexcept
+	const Rectangle2u* viewport,
+	Framebuffer* target) noexcept
 {
-	GLTUT_ASSERT(cubemapTexture != nullptr);
-	GLTUT_ASSERT(viewpoint != nullptr);
-	if (cubemapTexture == nullptr || viewpoint == nullptr)
+	if (!GLTUT_ASSERT(cubemapTexture != nullptr))
+	{
+		return false;
+	}
+
+	if (!GLTUT_ASSERT(viewpoint != nullptr))
+	{
+		return false;
+	}
+	
+	if (!GLTUT_ASSERT(target != nullptr))
 	{
 		return false;
 	}
@@ -142,7 +151,7 @@ bool SceneFactoryC::createSkybox(
 		gltut::RenderPass* skyboxPass = mRenderer.createPass(
 			viewpoint,
 			skyboxRenderGeometry,
-			mRenderer.getDevice()->getFramebuffers()->getDefault(),
+			target,
 			0,		 // Material pass
 			nullptr, // No clear color
 			false,	 // No depth clearing

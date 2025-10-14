@@ -48,6 +48,11 @@ public:
 		return mViewpoint;
 	}
 
+	void setViewpoint(const Viewpoint* viewpoint) noexcept final
+	{
+		mViewpoint = viewpoint;
+	}
+
 	/// Returns the object to render
 	const RenderObject* getObject() const noexcept final
 	{
@@ -58,6 +63,15 @@ public:
 	Framebuffer* getTarget() const noexcept final
 	{
 		return mTarget;
+	}
+
+	/// Sets the target frame buffer for this pass
+	void setTarget(Framebuffer* target) noexcept final
+	{
+		if (GLTUT_ASSERT(target != nullptr))
+		{
+			mTarget = target;
+		}
 	}
 
 	/// Returns the material pass for this render pass

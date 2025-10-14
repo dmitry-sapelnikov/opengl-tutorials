@@ -187,7 +187,8 @@ int main()
 		const bool skyboxCreated = engine->getFactory()->getScene()->createSkybox(
 			skyboxTexture,
 			scene->getActiveCameraViewpoint(),
-			nullptr);
+			nullptr,
+			engine->getRenderer()->getDevice()->getFramebuffers()->getDefault());
 
 		GLTUT_CHECK(skyboxCreated, "Failed to create skybox");
 

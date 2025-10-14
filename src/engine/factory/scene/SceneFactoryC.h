@@ -40,7 +40,8 @@ public:
 	bool createSkybox(
 		const TextureCubemap* cubemapTexture,
 		const Viewpoint* viewpoint,
-		const Rectangle2u* viewport) noexcept final;
+		const Rectangle2u* viewport,
+		Framebuffer* target) noexcept final;
 
 	/// Updates the shadow factory
 	void update() noexcept final;

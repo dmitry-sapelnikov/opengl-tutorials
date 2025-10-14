@@ -27,7 +27,7 @@ public:
 	virtual const PhongShaderModel* getPhongShader() const noexcept = 0;
 
 	/// Returns the underlying material.
-	virtual const Material* getMaterial() const noexcept = 0;
+	virtual Material* getMaterial() const noexcept = 0;
 
 	/// Sets the diffuse texture.
 	virtual void setDiffuse(const Texture* diffuse) noexcept = 0;

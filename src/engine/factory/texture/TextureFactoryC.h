@@ -7,6 +7,7 @@
 // Includes
 #include "engine/core/NonCopyable.h"
 #include "engine/factory/texture/TextureFactory.h"
+#include "engine/graphics/GraphicsDevice.h"
 #include "engine/window/Window.h"
 #include <unordered_set>
 
@@ -18,7 +19,8 @@ class TextureFactoryC final : public TextureFactory, public EventHandler, public
 {
 public:
 	/// Constructor
-	explicit TextureFactoryC(Window& window) noexcept :
+	explicit TextureFactoryC(GraphicsDevice& device, Window& window) noexcept :
+		mGraphicsDevice(device),
 		mWindow(window)
 	{
 		mWindow.addEventHandler(this);
@@ -31,10 +33,13 @@ public:
 	}
 
 	/// Creates a binding between a texture and the window size
-	void createWindowSizeTextureBinding(Texture2* texture) noexcept final;
+	bool createWindowSizeTextureBinding(Texture2* texture) noexcept final;
 
 	/// Removes the window-size texture binding for a texture
-	void removeWindowSizeTextureBinding(Texture2* texture) noexcept final;
+	bool removeWindowSizeTextureBinding(Texture2* texture) noexcept final;
+
+	/// Creates a texture with auto-updated window size
+	Texture2* createWindowSizeTexture(TextureFormat format) noexcept final;
 
 	/**
 		\brief Called when an event occurs
@@ -43,6 +48,9 @@ public:
 	bool onEvent(const Event& event) noexcept final;
 
 private:
+	/// Reference to the graphics device
+	GraphicsDevice& mGraphicsDevice;
+
 	/// Reference to the window
 	Window& mWindow;
 

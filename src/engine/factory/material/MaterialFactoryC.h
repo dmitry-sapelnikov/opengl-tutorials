@@ -44,6 +44,9 @@ public:
 		const PhongShaderModel* phongShader,
 		bool castShadows = true) noexcept final;
 
+	/// Returns the depth shader
+	virtual ShaderRendererBinding* getDepthShader() noexcept final;
+
 	/// Updates the factory
 	void update() noexcept final;
 

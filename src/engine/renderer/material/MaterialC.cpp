@@ -15,13 +15,15 @@ MaterialPass* MaterialC::createPass(
 	u32 textureSlotsCount,
 	u32 shaderBindingPointsCount) noexcept
 {
-	if (index < mPasses.size() && mPasses[index] != nullptr)
-	{
-		return mPasses[index].get();
-	}
-
 	MaterialPass* result = nullptr;
 	GLTUT_CATCH_ALL_BEGIN
+		if (index < mPasses.size())
+		{
+			GLTUT_CHECK(
+				mPasses[index] == nullptr,
+				"Material pass at index " + std::to_string(index) + " already exists");
+		}
+
 		auto pass = std::make_unique<MaterialPassC>(
 			mDevice,
 			shader,

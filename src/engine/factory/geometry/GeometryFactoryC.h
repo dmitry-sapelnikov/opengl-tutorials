@@ -26,11 +26,23 @@ public:
 		const Vector2& size,
 		const CreationOptions& options) noexcept final;
 
+	Geometry* createPlane(
+		const Vector2& size,
+		const Point2u& subdivisions,
+		const CreationOptions& options) noexcept final;
+
 	Geometry* createBox(
 		const Vector3& size,
 		const CreationOptions& options) noexcept final;
 
 	Geometry* createSphere(float radius, u32 subdivisions) noexcept final;
+
+	Geometry* createCylinder(
+		float radius,
+		float height,
+		u32 radialSubdivisions,
+		bool addCaps,
+		const CreationOptions& options) noexcept final;
 
 private:
 	Geometry* createGeometry(

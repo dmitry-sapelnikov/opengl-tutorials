@@ -6,6 +6,7 @@
 
 // Libraries
 #include "engine/math/Vector2T.h"
+#include "engine/math/Functions.h"
 
 namespace gltut
 {

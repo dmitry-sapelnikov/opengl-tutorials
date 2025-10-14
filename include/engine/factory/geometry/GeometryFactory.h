@@ -55,6 +55,20 @@ public:
 		const CreationOptions& options = {}) noexcept = 0;
 
 	/**
+		\brief Creates a XY subdivided plane geometry
+		\param size The size of the plane
+		\param subdivisions The number of subdivisions along each axis, must be greater than 0
+		\param options The creation options
+
+		\return The geometry if it was created successfully, nullptr otherwise
+		\note The plane is created in the XY plane, with normal pointing in the +Z direction
+	*/
+	virtual Geometry* createPlane(
+		const Vector2& size,
+		const Point2u& subdivisions,
+		const CreationOptions& options = {}) noexcept = 0;
+
+	/**
 		\brief Creates a box geometry with non-smooth normals
 		\param size The size of the box
 		\param options The creation options
@@ -80,6 +94,14 @@ public:
 		\note Negative radius produces an inverted geometry
 	*/
 	virtual Geometry* createSphere(float radius, u32 subdivisions) noexcept = 0;
+
+	
+	virtual Geometry* createCylinder(
+		float radius,
+		float height,
+		u32 radialSubdivisions,
+		bool addCaps = true,
+		const CreationOptions& options = {}) noexcept = 0;
 };
 
 // End of the namespace gltut
