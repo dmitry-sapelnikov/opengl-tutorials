@@ -119,6 +119,9 @@ vec2 getScreenSpaceUV(vec3 surfaceP, vec3 e)
 	vec3 end = surfaceP + iReflectionTraceDistance * e;
 	float stepSize = iReflectionTraceDistance / float(iReflectionSteps);
 
+	vec3 prev = globalToScreen(surfaceP);
+	float prevDepth = texture(depthSampler, prev.xy).r;
+
 	for (int i = 1; i <= iReflectionSteps; i++)
 	{
 		float t = float(i) / float(iReflectionSteps);
@@ -129,13 +132,20 @@ vec2 getScreenSpaceUV(vec3 surfaceP, vec3 e)
 		{
 			break;
 		}
-
+		
+		float depth = texture(depthSampler, screenPos.xy).r;
 		float backfaceDepth = texture(backfaceDepthSampler, screenPos.xy).r;
 		if (backfaceDepth < 1.0 && getGlobalDistance(screenPos.z) < getGlobalDistance(backfaceDepth) + stepSize &&
-			texture(depthSampler, screenPos.xy).r < screenPos.z)
+			depth < screenPos.z)
 		{
-			return screenPos.xy;
+			float curDiff = screenPos.z - depth;
+			float prevDiff = prev.z - prevDepth;
+
+			float f = prevDiff / (prevDiff - curDiff);
+			return mix(prev.xy, screenPos.xy, f);
 		}
+		prev = screenPos;
+		prevDepth = depth;
 	}
 	return vec2(-1.0);
 }
