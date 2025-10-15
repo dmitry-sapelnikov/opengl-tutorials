@@ -329,16 +329,6 @@ void main()
 }
 )";
 
-static float getInfiniteWaterDepthWaveNumber(
-	float wavePeriod,
-	float gravityAcceleration)
-{
-	GLTUT_ASSERT(wavePeriod > 0.0);
-	GLTUT_ASSERT(gravityAcceleration > 0.0);
-	const float frequency = float(2.0) * gltut::PI / wavePeriod;
-	return (frequency * frequency) / gravityAcceleration;
-}
-
 static constexpr gltut::u32 BACKFACE_DEPTH_PASS_INDEX = 2;
 
 /// Creates a Phong material model

@@ -87,7 +87,7 @@ void WaterGui::draw()
 
 	if (ImGui::CollapsingHeader("Objects in Water", ImGuiTreeNodeFlags_DefaultOpen))
 	{
-		const bool yScaleChanged = ImGui::SliderFloat("Y Scale", &mObjectsInWaterScaleY, 0.1, 5.0f);
+		const bool yScaleChanged = ImGui::SliderFloat("Y Scale", &mObjectsInWaterScaleY, 0.1f, 5.0f);
 		const bool transformChanged = ImGui::SliderFloat("Y Position", &mObjectsInWaterY, -20.0f, 20.0f);
 		const bool xRotationChanged = ImGui::SliderFloat("X Rotation", &mObjectsInWaterRotationX, -180.0f, 180.0f);
 		const bool yRotationChanged = ImGui::SliderFloat("Y Rotation", &mObjectsInWaterRotationY, -180.0f, 180.0f);
