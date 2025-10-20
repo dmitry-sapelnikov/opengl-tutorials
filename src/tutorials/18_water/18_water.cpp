@@ -1,3 +1,13 @@
+/*
+	A water rendering demo with reflections and refractions.
+	The initial code is based on the "Seascape" shader by Alexander Alekseev aka TDM,
+	accompained with cubmap and screen-space reflections/refractions.
+	The SSR are implemented using
+	backface depth rendering and ray marching.
+	The ray marching is quite naive and can be further optimized using
+	hierarchical min-max depth buffers.
+*/
+
 // Includes
 #include <array>
 #include <chrono>
@@ -329,19 +339,20 @@ void main()
 }
 )";
 
+/// Backface depth rendering pass index
 static constexpr gltut::u32 BACKFACE_DEPTH_PASS_INDEX = 2;
 
-/// Creates a Phong material model
-gltut::PhongMaterialModel* createMaterialModel(gltut::Engine* engine)
+/// Creates a Phong material model with backface depth pass
+gltut::PhongMaterialModel* createMaterialModel(gltut::Engine& engine)
 {
-	gltut::MaterialFactory* materialFactory = engine->getFactory()->getMaterial();
+	gltut::MaterialFactory* materialFactory = engine.getFactory()->getMaterial();
 	gltut::PhongShaderModel* phongShader = materialFactory->createPhongShader(1, 0, 0);
 	GLTUT_CHECK(phongShader, "Failed to create Phong shader");
 
 	gltut::PhongMaterialModel* materialModel = materialFactory->createPhongMaterial(phongShader);
 	GLTUT_CHECK(materialModel, "Failed to create Phong material model");
 
-	gltut::GraphicsDevice* device = engine->getDevice();
+	gltut::GraphicsDevice* device = engine.getDevice();
 	gltut::Texture* diffuseTexture = device->getTextures()->load(
 		"assets/container2.png",
 		gltut::TextureParameters(
@@ -352,7 +363,7 @@ gltut::PhongMaterialModel* createMaterialModel(gltut::Engine* engine)
 
 	materialModel->setDiffuse(diffuseTexture);
 
-	// Create a pass for reverse depth
+	// Create a pass to render the backface depth
 	gltut::Material* material = materialModel->getMaterial();
 	gltut::MaterialPass* backfaceDepthPass = material->createPass(
 		BACKFACE_DEPTH_PASS_INDEX,
@@ -366,14 +377,14 @@ gltut::PhongMaterialModel* createMaterialModel(gltut::Engine* engine)
 	return materialModel;
 }
 
-/// Creates boxes
+/// Creates objects to be placed in the water
 gltut::SceneNode* createObjectsInWater(
 	gltut::Engine& engine,
-	const gltut::Material* material)
+	const gltut::Material& material)
 {
-	const int COUNT = 4;
-	const float GEOMETRY_SIZE = 5.0f;
-	const float STRIDE = 15.0f;
+	static constexpr int COUNT = 4;
+	static constexpr float GEOMETRY_SIZE = 5.0f;
+	static constexpr float STRIDE = 15.0f;
 
 	gltut::SceneNode* group = engine.getScene()->createGeometryGroup();
 	GLTUT_CHECK(group, "Failed to create geometry group");
@@ -384,10 +395,7 @@ gltut::SceneNode* createObjectsInWater(
 		48,
 		true,
 		{true, true, false});
-	/*auto* geometry = engine.getFactory()->getGeometry()->createBox(
-		{ GEOMETRY_SIZE, GEOMETRY_SIZE, GEOMETRY_SIZE},
-		{true, true, false});*/
-	GLTUT_CHECK(geometry, "Failed to create geometry");
+	GLTUT_CHECK(geometry, "Failed to create the geometry");
 
 	gltut::Rng rng;
 	for (int k = 0; k < 1; ++k)
@@ -409,14 +417,14 @@ gltut::SceneNode* createObjectsInWater(
 
 				auto* object = engine.getScene()->createGeometry(
 					geometry,
-					material,
+					&material,
 					gltut::Matrix4::transformMatrix(
 						position,
 						gltut::Vector3(0, rng.nextFloat(0.0f, gltut::PI * 2.0), 0),
 						size),
 					group);
 
-				GLTUT_CHECK(object, "Failed to create object");
+				GLTUT_CHECK(object, "Failed to create the geometry instance");
 			}
 		}
 	}
@@ -424,6 +432,7 @@ gltut::SceneNode* createObjectsInWater(
 	return group;
 }
 
+/// Creates a camera and its controller
 std::unique_ptr<gltut::CameraController> createCameraAndController(gltut::Engine& engine)
 {
 	gltut::Camera* camera = engine.getScene()->createCamera(
@@ -444,6 +453,7 @@ std::unique_ptr<gltut::CameraController> createCameraAndController(gltut::Engine
 	return controller;
 }
 
+/// Creates a texture framebuffer. \todo (Dmitry): move it to the engine factory
 gltut::TextureFramebuffer* createTextureFramebuffer(gltut::Engine& engine, bool useColor, bool useDepth)
 {
 	gltut::Factory* factory = engine.getFactory();
@@ -473,6 +483,7 @@ gltut::TextureFramebuffer* createTextureFramebuffer(gltut::Engine& engine, bool 
 	return framebuffer;
 }
 
+/// Loads the skybox texture
 gltut::TextureCubemap* loadSkyboxTexture(gltut::Engine& engine)
 {
 	gltut::TextureCubemap* skyboxTexture = engine.getDevice()->getTextures()->load(
@@ -490,6 +501,7 @@ gltut::TextureCubemap* loadSkyboxTexture(gltut::Engine& engine)
 	return skyboxTexture;
 }
 
+/// Creates the water shader and its renderer binding
 gltut::ShaderRendererBinding* createWaterShader(gltut::Engine& engine)
 {
 	gltut::Shader* waterShader = engine.getDevice()->getShaders()->create(
@@ -512,6 +524,7 @@ gltut::ShaderRendererBinding* createWaterShader(gltut::Engine& engine)
 	return waterShaderBinding;
 }
 
+/// Creates the water rendering pass
 gltut::RenderPass* createWaterRenderPass(
 	gltut::Engine& engine,
 	gltut::TextureFramebuffer& framebuffer,
@@ -539,6 +552,7 @@ gltut::RenderPass* createWaterRenderPass(
 	return waterPass;
 }
 
+/// Creates a directional light to simulate sunlight
 gltut::LightNode* createSunlight(gltut::Engine& engine)
 {
 	gltut::LightNode* directionalLight = engine.getScene()->createLight(
@@ -582,14 +596,14 @@ int main()
 
 		// Create something to reflect/refract
 		gltut::SceneNode* objectsInWater = createObjectsInWater(
-			*engine, 
-			createMaterialModel(engine.get())->getMaterial());
+			*engine,
+			*createMaterialModel(*engine)->getMaterial());
 
 		// Create texture framebuffer
 		gltut::TextureFramebuffer* framebuffer = createTextureFramebuffer(*engine, true, true);
 		engine->getSceneRenderPass()->setTarget(framebuffer);
 
-		gltut::TextureFramebuffer* backcullFramebuffer = createTextureFramebuffer(*engine, true, true);
+		gltut::TextureFramebuffer* backcullFramebuffer = createTextureFramebuffer(*engine, false, true);
 		engine->getRenderer()->createPass(
 			engine->getScene()->getActiveCameraViewpoint(),
 			engine->getScene()->getRenderGroup(),
@@ -600,16 +614,14 @@ int main()
 			nullptr);
 
 		gltut::Shader* waterShader = createWaterShader(*engine)->getTarget();
-		createWaterRenderPass(*engine, *framebuffer, *backcullFramebuffer, *waterShader);
-
-		auto start = std::chrono::high_resolution_clock::now();
-
 		waterShader->setFloat("zNear", camera.getProjection().getNearPlane());
 		waterShader->setFloat("zFar", camera.getProjection().getFarPlane());
+		createWaterRenderPass(*engine, *framebuffer, *backcullFramebuffer, *waterShader);
 
-		gltut::LightNode* directionalLight = createSunlight(*engine);
-		WaterGui gui(imgui, engine.get(), waterShader, directionalLight, objectsInWater);
+		gltut::LightNode* sunlight = createSunlight(*engine);
+		WaterGui gui(imgui, engine.get(), waterShader, sunlight, objectsInWater);
 
+		auto start = std::chrono::high_resolution_clock::now();
 		do
 		{
 			auto time = std::chrono::duration<float>(
@@ -617,11 +629,11 @@ int main()
 							.count();
 			waterShader->setFloat("iTime", time);
 
+			const gltut::Point2u& windowSize = engine->getWindow()->getSize();
 			waterShader->setVec3("iResolution",
-								 static_cast<float>(engine->getWindow()->getSize().x),
-								 static_cast<float>(engine->getWindow()->getSize().y),
+								 static_cast<float>(windowSize.x),
+								 static_cast<float>(windowSize.y),
 								 0.0f);
-
 			gui.draw();
 
 		} while (engine->update());
@@ -633,3 +645,4 @@ int main()
 
 	return 0;
 }
+
