@@ -1,3 +1,13 @@
+/*
+	A water rendering demo with reflections and refractions.
+	The initial code is based on the "Seascape" shader by Alexander Alekseev aka TDM,
+	accompained with cubmap and screen-space reflections/refractions.
+	The SSR are implemented using
+	backface depth rendering and ray marching.
+	The ray marching is quite naive and can be further optimized using
+	hierarchical min-max depth buffers.
+*/
+
 // Includes
 #include <array>
 #include <chrono>
@@ -73,6 +83,9 @@ uniform float zNear;
 uniform float zFar;
 uniform float iDeepWaterDistance;
 
+uniform int iReflectionSteps;
+uniform float iReflectionTraceDistance;
+
 // math
 float hash( vec2 p ) {
 	float h = dot(p,vec2(127.1,311.7));	
@@ -104,28 +117,25 @@ float specular(vec3 n,vec3 l,vec3 e,float s) {
     return pow(max(dot(reflect(e,n),l),0.0),s) * nrm;
 }
 
-// sky
 vec3 globalToScreen(vec3 p) {
 	vec4 clipSpacePos = iProjectionMatrix * iViewMatrix * vec4(p, 1.0);
 	clipSpacePos /= clipSpacePos.w;
 	return clipSpacePos.xyz * 0.5 + 0.5;
 }
 
-uniform int iReflectionSteps;
-uniform float iReflectionTraceDistance;
-
-vec2 getScreenSpaceUV(vec3 surfaceP, vec3 e) 
+// Ray marching using front and backface depth buffers
+vec2 getRayMarchUV(vec3 surfacePoint, vec3 direction) 
 {
-	vec3 end = surfaceP + iReflectionTraceDistance * e;
+	vec3 end = surfacePoint + iReflectionTraceDistance * direction;
 	float stepSize = iReflectionTraceDistance / float(iReflectionSteps);
 
-	vec3 prev = globalToScreen(surfaceP);
+	vec3 prev = globalToScreen(surfacePoint);
 	float prevDepth = texture(depthSampler, prev.xy).r;
 
-	for (int i = 1; i <= iReflectionSteps; i++)
+	for (int i = 1; i <= iReflectionSteps; ++i)
 	{
 		float t = float(i) / float(iReflectionSteps);
-		vec3 screenPos = globalToScreen(mix(surfaceP, end, t));
+		vec3 screenPos = globalToScreen(mix(surfacePoint, end, t));
 		if (!(0.0 <= screenPos.x && screenPos.x <= 1.0 &&
 			  0.0 <= screenPos.y && screenPos.y <= 1.0 &&
 			  screenPos.z < 1.0))
@@ -135,7 +145,8 @@ vec2 getScreenSpaceUV(vec3 surfaceP, vec3 e)
 		
 		float depth = texture(depthSampler, screenPos.xy).r;
 		float backfaceDepth = texture(backfaceDepthSampler, screenPos.xy).r;
-		if (backfaceDepth < 1.0 && getGlobalDistance(screenPos.z) < getGlobalDistance(backfaceDepth) + stepSize &&
+		if (backfaceDepth < 1.0 && 
+			getGlobalDistance(screenPos.z) < getGlobalDistance(backfaceDepth) + stepSize &&
 			depth < screenPos.z)
 		{
 			float curDiff = screenPos.z - depth;
@@ -150,17 +161,18 @@ vec2 getScreenSpaceUV(vec3 surfaceP, vec3 e)
 	return vec2(-1.0);
 }
 
-vec3 getReflectedColor(vec3 p, vec3 e) {
-	vec2 screenUV = getScreenSpaceUV(p, e);
-	if (screenUV.x < 0.0)
+vec3 getReflectedColor(vec3 surfacePoint, vec3 direction)
+{
+	vec2 uv = getRayMarchUV(surfacePoint, direction);
+	if (uv.x < 0.0)
 	{
-		return texture(skyboxSampler, e).rgb;
+		return texture(skyboxSampler, direction).rgb;
 	}
-	return texture(colorSampler, screenUV.xy).rgb;
+	return texture(colorSampler, uv.xy).rgb;
 }
-
 // sky
-vec3 getSkyColor(vec2 uv, vec3 e) {
+vec3 getSkyColor(vec2 uv, vec3 e)
+{
 	float depth = texture(depthSampler, uv).r;
 	if (depth < 1.0)
 	{
@@ -170,7 +182,8 @@ vec3 getSkyColor(vec2 uv, vec3 e) {
 }
 
 // sea
-float sea_octave(vec2 uv, float choppy) {
+float getSeaOctave(vec2 uv, float choppy)
+{
     uv += noise(uv);        
     vec2 wv = 1.0-abs(sin(uv));
     vec2 swv = abs(cos(uv));    
@@ -178,7 +191,8 @@ float sea_octave(vec2 uv, float choppy) {
     return pow(1.0-pow(wv.x * wv.y,0.65),choppy);
 }
 
-float map(vec3 p) {
+float getWaterElevation(vec3 p)
+{
     float freq = SEA_FREQ;
     float amp = SEA_HEIGHT;
     float choppy = SEA_CHOPPY;
@@ -186,8 +200,8 @@ float map(vec3 p) {
     
     float d, h = 0.0;    
     for(int i = 0; i < ITER_GEOMETRY; i++) {        
-    	d = sea_octave((uv+SEA_TIME)*freq,choppy);
-    	d += sea_octave((uv-SEA_TIME)*freq,choppy);
+    	d = getSeaOctave((uv+SEA_TIME)*freq,choppy);
+    	d += getSeaOctave((uv-SEA_TIME)*freq,choppy);
         h += d * amp;        
     	uv *= octave_m; freq *= 1.9; amp *= 0.22;
         choppy = mix(choppy,1.0,0.2);
@@ -195,127 +209,131 @@ float map(vec3 p) {
     return p.y - h;
 }
 
-float map_detailed(vec3 p) {
+float getDetailedWaterElevation(vec3 p)
+{
     float freq = SEA_FREQ;
     float amp = SEA_HEIGHT;
     float choppy = SEA_CHOPPY;
-    vec2 uv = p.xz; uv.x *= 0.75;
+    vec2 uv = p.xz;
+	uv.x *= 0.75;
     
     float d, h = 0.0;    
-    for(int i = 0; i < ITER_FRAGMENT; i++) {        
-    	d = sea_octave((uv+SEA_TIME)*freq,choppy);
-    	d += sea_octave((uv-SEA_TIME)*freq,choppy);
+    for(int i = 0; i < ITER_FRAGMENT; i++)
+	{
+    	d = getSeaOctave((uv + SEA_TIME) * freq, choppy);
+    	d += getSeaOctave((uv - SEA_TIME) * freq, choppy);
         h += d * amp;        
-    	uv *= octave_m; freq *= 1.9; amp *= 0.22;
-        choppy = mix(choppy,1.0,0.2);
+    	uv *= octave_m;
+		freq *= 1.9;
+		amp *= 0.22;
+        choppy = mix(choppy, 1.0, 0.2);
     }
     return p.y - h;
 }
 
-
-vec3 getSeaColor(vec3 p, vec3 n, vec3 l, vec3 eye, vec3 dist) {
+vec3 getSeaColor(vec3 surfacePoint, vec3 normal, vec3 l, vec3 eye, vec3 dist)
+{
 	// Transform point to screen space
-	vec4 clipSpacePos = iProjectionMatrix * iViewMatrix * vec4(p, 1.0);
-	clipSpacePos /= clipSpacePos.w;
-	vec3 ndc = clipSpacePos.xyz * 0.5 + 0.5;
+	vec3 uv = globalToScreen(surfacePoint);
 
 	// Compare depth with the depth buffer
-	float sceneDepth = texture(depthSampler, ndc.xy).r;
-	if (ndc.z > sceneDepth)
+	float sceneDepth = texture(depthSampler, uv.xy).r;
+	if (uv.z > sceneDepth)
 	{
-		return texture(colorSampler, ndc.xy).rgb;
+		return texture(colorSampler, uv.xy).rgb;
 	}
 
-    float fresnel = clamp(1.0 - dot(n, -eye), 0.0, 1.0);
+    float fresnel = clamp(1.0 - dot(normal, -eye), 0.0, 1.0);
     fresnel = min(fresnel * fresnel * fresnel, 0.5);
 
-    vec3 reflected = getReflectedColor(p, reflect(eye, n));
+    vec3 reflected = getReflectedColor(surfacePoint, reflect(eye, normal));
 
 	// refraction
-	vec3 waterColor = SEA_BASE + diffuse(n, l, 80.0) * SEA_WATER_COLOR * 0.12;
+	vec3 waterColor = SEA_BASE + diffuse(normal, l, 80.0) * SEA_WATER_COLOR * 0.12;
 
-	vec3 refractDir = normalize(refract(eye, n, 1.0 / 1.33));
+	vec3 refractDir = normalize(refract(eye, normal, 1.0 / 1.33));
 
-	vec2 posDepthUV = getScreenSpaceUV(p, refractDir);
+	vec2 posDepthUV = getRayMarchUV(surfacePoint, refractDir);
 	vec3 refracted = waterColor;
 	if (posDepthUV.x >= 0.0)
 	{
 		float posDepth = texture(depthSampler, posDepthUV).r;
-		float traceDepth = getGlobalDistance(posDepth) - getGlobalDistance(ndc.z);
+		float traceDepth = getGlobalDistance(posDepth) - getGlobalDistance(uv.z);
 		float depthFactor = clamp(traceDepth / iDeepWaterDistance, 0.0, 1.0);
-		refracted = mix(texture(colorSampler, posDepthUV.xy).rgb, waterColor, mix(0.3, 1.0, depthFactor));
+		refracted = mix(
+			texture(colorSampler, posDepthUV.xy).rgb, 
+			waterColor,
+			mix(0.3, 1.0, depthFactor));
 	}
 
 	vec3 color = mix(refracted, reflected, fresnel);
-	float atten = max(1.0 - dot(dist, dist) * 0.001, 0.0);
-	color += SEA_WATER_COLOR * (p.y - SEA_HEIGHT) * 0.18 * atten;
-    
-    color += specular(n, l, eye, 600.0 * inversesqrt(length(dist)));
-    
-    return color;
+	float attenuation = max(1.0 - dot(dist, dist) * 0.001, 0.0);
+	color += SEA_WATER_COLOR * (surfacePoint.y - SEA_HEIGHT) * 0.18 * attenuation;
+
+	color += specular(normal, l, eye, 600.0 * inversesqrt(length(dist)));
+	return color;
 }
 
-// tracing
-vec3 getNormal(vec3 p, float eps) {
+vec3 getNormal(vec3 p, float eps)
+{
     vec3 n;
-    n.y = map_detailed(p);    
-    n.x = map_detailed(vec3(p.x+eps,p.y,p.z)) - n.y;
-    n.z = map_detailed(vec3(p.x,p.y,p.z+eps)) - n.y;
+    n.y = getDetailedWaterElevation(p);    
+    n.x = getDetailedWaterElevation(vec3(p.x + eps, p.y, p.z)) - n.y;
+    n.z = getDetailedWaterElevation(vec3(p.x, p.y, p.z + eps)) - n.y;
     n.y = eps;
     return normalize(n);
 }
 
-float heightMapTracing(vec3 ori, vec3 dir, out vec3 p) {  
+float traceWaterSurface(vec3 origin, vec3 direction, out vec3 result)
+{  
     float tm = 0.0;
     float tx = 2000.0;    
-    float hx = map(ori + dir * tx);
-    if(hx > 0.0) {
-        p = ori + dir * tx;
+    float hx = getWaterElevation(origin + direction * tx);
+    if (hx > 0.0)
+	{
+        result = origin + direction * tx;
         return tx;   
     }
-    float hm = map(ori);    
-    for(int i = 0; i < NUM_STEPS; i++) {
+
+    float hm = getWaterElevation(origin);    
+    for (int i = 0; i < NUM_STEPS; i++)
+	{
         float tmid = mix(tm, tx, hm / (hm - hx));
-        p = ori + dir * tmid;
-        float hmid = map(p);        
-        if(hmid < 0.0) {
+        result = origin + direction * tmid;
+        float hmid = getWaterElevation(result);        
+        if(hmid < 0.0)
+		{
             tx = tmid;
             hx = hmid;
-        } else {
+        }
+		else 
+		{
             tm = tmid;
             hm = hmid;
-        }        
-        if(abs(hmid) < EPSILON) break;
+        }      
+  
+        if(abs(hmid) < EPSILON)
+		{
+			break;
+		}
     }
     return mix(tm, tx, hm / (hm - hx));
 }
 
-vec3 getPixel(vec2 uv, float time)
+// Converts UV coordinates to a global ray direction
+// \todo (Dmitry): optimize by precomputing inverse matrices on CPU
+vec3 uvToGlobal(vec2 uv)
 {
-    // ray
-    // Convert from screen space to NDC
+	// Convert from screen space to NDC
     vec2 xy = uv * 2.0 - 1.0;
-    // Convert from NDC to clip space
     vec4 ray_clip = vec4(xy, -1.0, 1.0);
+
     // Convert from clip space to eye space
-    vec4 ray_eye = inverse(iProjectionMatrix) * ray_clip;
-    ray_eye = vec4(ray_eye.xy, -1.0, 0.0);
+    vec4 rayEye = inverse(iProjectionMatrix) * ray_clip;
+    rayEye = vec4(rayEye.xy, -1.0, 0.0);
+
     // Convert from eye space to world space
-    vec3 dir = normalize((inverse(iViewMatrix) * ray_eye).xyz);
-
-    vec3 ori = iCameraPosition;
-
-    // tracing
-    vec3 p;
-    heightMapTracing(ori,dir,p);
-    vec3 dist = p - ori;
-    vec3 n = getNormal(p, dot(dist, dist) * EPSILON_NRM);
-             
-    // color
-    return mix(
-        getSkyColor(uv, dir),
-        getSeaColor(p,n,-iLightDirection,dir,dist),
-    	pow(smoothstep(0.0,-0.02,dir.y),0.2));
+    return normalize((inverse(iViewMatrix) * rayEye).xyz);
 }
 
 in vec2 texCoord;
@@ -323,25 +341,42 @@ out vec4 fragColor;
 
 void main()
 {
-    vec3 color = getPixel(texCoord, 0.0f);
+    vec3 direction = uvToGlobal(texCoord);
+    vec3 origin = iCameraPosition;
+
+    // Water surface tracing
+    vec3 surfacePoint;
+    traceWaterSurface(origin, direction, surfacePoint);
+    vec3 dist = surfacePoint - origin;
+
+	// Make the surface smoother at a distance
+    vec3 normal = getNormal(surfacePoint, dot(dist, dist) * EPSILON_NRM);
+             
+    // color
+    vec3 color = mix(
+        getSkyColor(texCoord, direction),
+        getSeaColor(surfacePoint, normal, -iLightDirection, direction, dist),
+    	pow(smoothstep(0.0, -0.02, direction.y), 0.2));
+
     // post-processing
-	fragColor = vec4(pow(color,vec3(0.8)), 1.0);
+	fragColor = vec4(pow(color, vec3(0.8)), 1.0);
 }
 )";
 
+/// Backface depth rendering pass index
 static constexpr gltut::u32 BACKFACE_DEPTH_PASS_INDEX = 2;
 
-/// Creates a Phong material model
-gltut::PhongMaterialModel* createMaterialModel(gltut::Engine* engine)
+/// Creates a Phong material model with backface depth pass
+gltut::PhongMaterialModel* createMaterialModel(gltut::Engine& engine)
 {
-	gltut::MaterialFactory* materialFactory = engine->getFactory()->getMaterial();
+	gltut::MaterialFactory* materialFactory = engine.getFactory()->getMaterial();
 	gltut::PhongShaderModel* phongShader = materialFactory->createPhongShader(1, 0, 0);
 	GLTUT_CHECK(phongShader, "Failed to create Phong shader");
 
 	gltut::PhongMaterialModel* materialModel = materialFactory->createPhongMaterial(phongShader);
 	GLTUT_CHECK(materialModel, "Failed to create Phong material model");
 
-	gltut::GraphicsDevice* device = engine->getDevice();
+	gltut::GraphicsDevice* device = engine.getDevice();
 	gltut::Texture* diffuseTexture = device->getTextures()->load(
 		"assets/container2.png",
 		gltut::TextureParameters(
@@ -352,7 +387,7 @@ gltut::PhongMaterialModel* createMaterialModel(gltut::Engine* engine)
 
 	materialModel->setDiffuse(diffuseTexture);
 
-	// Create a pass for reverse depth
+	// Create a pass to render the backface depth
 	gltut::Material* material = materialModel->getMaterial();
 	gltut::MaterialPass* backfaceDepthPass = material->createPass(
 		BACKFACE_DEPTH_PASS_INDEX,
@@ -366,14 +401,14 @@ gltut::PhongMaterialModel* createMaterialModel(gltut::Engine* engine)
 	return materialModel;
 }
 
-/// Creates boxes
+/// Creates objects to be placed in the water
 gltut::SceneNode* createObjectsInWater(
 	gltut::Engine& engine,
-	const gltut::Material* material)
+	const gltut::Material& material)
 {
-	const int COUNT = 4;
-	const float GEOMETRY_SIZE = 5.0f;
-	const float STRIDE = 15.0f;
+	static constexpr int COUNT = 4;
+	static constexpr float GEOMETRY_SIZE = 5.0f;
+	static constexpr float STRIDE = 15.0f;
 
 	gltut::SceneNode* group = engine.getScene()->createGeometryGroup();
 	GLTUT_CHECK(group, "Failed to create geometry group");
@@ -384,10 +419,7 @@ gltut::SceneNode* createObjectsInWater(
 		48,
 		true,
 		{true, true, false});
-	/*auto* geometry = engine.getFactory()->getGeometry()->createBox(
-		{ GEOMETRY_SIZE, GEOMETRY_SIZE, GEOMETRY_SIZE},
-		{true, true, false});*/
-	GLTUT_CHECK(geometry, "Failed to create geometry");
+	GLTUT_CHECK(geometry, "Failed to create the geometry");
 
 	gltut::Rng rng;
 	for (int k = 0; k < 1; ++k)
@@ -409,14 +441,14 @@ gltut::SceneNode* createObjectsInWater(
 
 				auto* object = engine.getScene()->createGeometry(
 					geometry,
-					material,
+					&material,
 					gltut::Matrix4::transformMatrix(
 						position,
 						gltut::Vector3(0, rng.nextFloat(0.0f, gltut::PI * 2.0), 0),
 						size),
 					group);
 
-				GLTUT_CHECK(object, "Failed to create object");
+				GLTUT_CHECK(object, "Failed to create the geometry instance");
 			}
 		}
 	}
@@ -424,6 +456,7 @@ gltut::SceneNode* createObjectsInWater(
 	return group;
 }
 
+/// Creates a camera and its controller
 std::unique_ptr<gltut::CameraController> createCameraAndController(gltut::Engine& engine)
 {
 	gltut::Camera* camera = engine.getScene()->createCamera(
@@ -444,6 +477,7 @@ std::unique_ptr<gltut::CameraController> createCameraAndController(gltut::Engine
 	return controller;
 }
 
+/// Creates a texture framebuffer. \todo (Dmitry): move it to the engine factory
 gltut::TextureFramebuffer* createTextureFramebuffer(gltut::Engine& engine, bool useColor, bool useDepth)
 {
 	gltut::Factory* factory = engine.getFactory();
@@ -473,6 +507,7 @@ gltut::TextureFramebuffer* createTextureFramebuffer(gltut::Engine& engine, bool 
 	return framebuffer;
 }
 
+/// Loads the skybox texture
 gltut::TextureCubemap* loadSkyboxTexture(gltut::Engine& engine)
 {
 	gltut::TextureCubemap* skyboxTexture = engine.getDevice()->getTextures()->load(
@@ -490,6 +525,7 @@ gltut::TextureCubemap* loadSkyboxTexture(gltut::Engine& engine)
 	return skyboxTexture;
 }
 
+/// Creates the water shader and its renderer binding
 gltut::ShaderRendererBinding* createWaterShader(gltut::Engine& engine)
 {
 	gltut::Shader* waterShader = engine.getDevice()->getShaders()->create(
@@ -512,6 +548,7 @@ gltut::ShaderRendererBinding* createWaterShader(gltut::Engine& engine)
 	return waterShaderBinding;
 }
 
+/// Creates the water rendering pass
 gltut::RenderPass* createWaterRenderPass(
 	gltut::Engine& engine,
 	gltut::TextureFramebuffer& framebuffer,
@@ -539,6 +576,7 @@ gltut::RenderPass* createWaterRenderPass(
 	return waterPass;
 }
 
+/// Creates a directional light to simulate sunlight
 gltut::LightNode* createSunlight(gltut::Engine& engine)
 {
 	gltut::LightNode* directionalLight = engine.getScene()->createLight(
@@ -582,14 +620,14 @@ int main()
 
 		// Create something to reflect/refract
 		gltut::SceneNode* objectsInWater = createObjectsInWater(
-			*engine, 
-			createMaterialModel(engine.get())->getMaterial());
+			*engine,
+			*createMaterialModel(*engine)->getMaterial());
 
 		// Create texture framebuffer
 		gltut::TextureFramebuffer* framebuffer = createTextureFramebuffer(*engine, true, true);
 		engine->getSceneRenderPass()->setTarget(framebuffer);
 
-		gltut::TextureFramebuffer* backcullFramebuffer = createTextureFramebuffer(*engine, true, true);
+		gltut::TextureFramebuffer* backcullFramebuffer = createTextureFramebuffer(*engine, false, true);
 		engine->getRenderer()->createPass(
 			engine->getScene()->getActiveCameraViewpoint(),
 			engine->getScene()->getRenderGroup(),
@@ -600,16 +638,14 @@ int main()
 			nullptr);
 
 		gltut::Shader* waterShader = createWaterShader(*engine)->getTarget();
-		createWaterRenderPass(*engine, *framebuffer, *backcullFramebuffer, *waterShader);
-
-		auto start = std::chrono::high_resolution_clock::now();
-
 		waterShader->setFloat("zNear", camera.getProjection().getNearPlane());
 		waterShader->setFloat("zFar", camera.getProjection().getFarPlane());
+		createWaterRenderPass(*engine, *framebuffer, *backcullFramebuffer, *waterShader);
 
-		gltut::LightNode* directionalLight = createSunlight(*engine);
-		WaterGui gui(imgui, engine.get(), waterShader, directionalLight, objectsInWater);
+		gltut::LightNode* sunlight = createSunlight(*engine);
+		WaterGui gui(imgui, engine.get(), waterShader, sunlight, objectsInWater);
 
+		auto start = std::chrono::high_resolution_clock::now();
 		do
 		{
 			auto time = std::chrono::duration<float>(
@@ -617,11 +653,11 @@ int main()
 							.count();
 			waterShader->setFloat("iTime", time);
 
+			const gltut::Point2u& windowSize = engine->getWindow()->getSize();
 			waterShader->setVec3("iResolution",
-								 static_cast<float>(engine->getWindow()->getSize().x),
-								 static_cast<float>(engine->getWindow()->getSize().y),
+								 static_cast<float>(windowSize.x),
+								 static_cast<float>(windowSize.y),
 								 0.0f);
-
 			gui.draw();
 
 		} while (engine->update());
@@ -633,3 +669,4 @@ int main()
 
 	return 0;
 }
+
