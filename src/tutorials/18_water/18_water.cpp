@@ -170,9 +170,9 @@ vec3 getReflectedColor(vec3 surfacePoint, vec3 direction)
 	}
 	return texture(colorSampler, uv.xy).rgb;
 }
-
 // sky
-vec3 getSkyColor(vec2 uv, vec3 e) {
+vec3 getSkyColor(vec2 uv, vec3 e)
+{
 	float depth = texture(depthSampler, uv).r;
 	if (depth < 1.0)
 	{
@@ -182,7 +182,8 @@ vec3 getSkyColor(vec2 uv, vec3 e) {
 }
 
 // sea
-float sea_octave(vec2 uv, float choppy) {
+float getSeaOctave(vec2 uv, float choppy)
+{
     uv += noise(uv);        
     vec2 wv = 1.0-abs(sin(uv));
     vec2 swv = abs(cos(uv));    
@@ -190,7 +191,8 @@ float sea_octave(vec2 uv, float choppy) {
     return pow(1.0-pow(wv.x * wv.y,0.65),choppy);
 }
 
-float map(vec3 p) {
+float getWaterElevation(vec3 p)
+{
     float freq = SEA_FREQ;
     float amp = SEA_HEIGHT;
     float choppy = SEA_CHOPPY;
@@ -198,8 +200,8 @@ float map(vec3 p) {
     
     float d, h = 0.0;    
     for(int i = 0; i < ITER_GEOMETRY; i++) {        
-    	d = sea_octave((uv+SEA_TIME)*freq,choppy);
-    	d += sea_octave((uv-SEA_TIME)*freq,choppy);
+    	d = getSeaOctave((uv+SEA_TIME)*freq,choppy);
+    	d += getSeaOctave((uv-SEA_TIME)*freq,choppy);
         h += d * amp;        
     	uv *= octave_m; freq *= 1.9; amp *= 0.22;
         choppy = mix(choppy,1.0,0.2);
@@ -207,97 +209,113 @@ float map(vec3 p) {
     return p.y - h;
 }
 
-float map_detailed(vec3 p) {
+float getDetailedWaterElevation(vec3 p)
+{
     float freq = SEA_FREQ;
     float amp = SEA_HEIGHT;
     float choppy = SEA_CHOPPY;
-    vec2 uv = p.xz; uv.x *= 0.75;
+    vec2 uv = p.xz;
+	uv.x *= 0.75;
     
     float d, h = 0.0;    
-    for(int i = 0; i < ITER_FRAGMENT; i++) {        
-    	d = sea_octave((uv+SEA_TIME)*freq,choppy);
-    	d += sea_octave((uv-SEA_TIME)*freq,choppy);
+    for(int i = 0; i < ITER_FRAGMENT; i++)
+	{
+    	d = getSeaOctave((uv + SEA_TIME) * freq, choppy);
+    	d += getSeaOctave((uv - SEA_TIME) * freq, choppy);
         h += d * amp;        
-    	uv *= octave_m; freq *= 1.9; amp *= 0.22;
-        choppy = mix(choppy,1.0,0.2);
+    	uv *= octave_m;
+		freq *= 1.9;
+		amp *= 0.22;
+        choppy = mix(choppy, 1.0, 0.2);
     }
     return p.y - h;
 }
 
-
-vec3 getSeaColor(vec3 p, vec3 n, vec3 l, vec3 eye, vec3 dist) {
+vec3 getSeaColor(vec3 surfacePoint, vec3 normal, vec3 l, vec3 eye, vec3 dist)
+{
 	// Transform point to screen space
-	vec4 clipSpacePos = iProjectionMatrix * iViewMatrix * vec4(p, 1.0);
-	clipSpacePos /= clipSpacePos.w;
-	vec3 ndc = clipSpacePos.xyz * 0.5 + 0.5;
+	vec3 uv = globalToScreen(surfacePoint);
 
 	// Compare depth with the depth buffer
-	float sceneDepth = texture(depthSampler, ndc.xy).r;
-	if (ndc.z > sceneDepth)
+	float sceneDepth = texture(depthSampler, uv.xy).r;
+	if (uv.z > sceneDepth)
 	{
-		return texture(colorSampler, ndc.xy).rgb;
+		return texture(colorSampler, uv.xy).rgb;
 	}
 
-    float fresnel = clamp(1.0 - dot(n, -eye), 0.0, 1.0);
+    float fresnel = clamp(1.0 - dot(normal, -eye), 0.0, 1.0);
     fresnel = min(fresnel * fresnel * fresnel, 0.5);
 
-    vec3 reflected = getReflectedColor(p, reflect(eye, n));
+    vec3 reflected = getReflectedColor(surfacePoint, reflect(eye, normal));
 
 	// refraction
-	vec3 waterColor = SEA_BASE + diffuse(n, l, 80.0) * SEA_WATER_COLOR * 0.12;
+	vec3 waterColor = SEA_BASE + diffuse(normal, l, 80.0) * SEA_WATER_COLOR * 0.12;
 
-	vec3 refractDir = normalize(refract(eye, n, 1.0 / 1.33));
+	vec3 refractDir = normalize(refract(eye, normal, 1.0 / 1.33));
 
-	vec2 posDepthUV = getRayMarchUV(p, refractDir);
+	vec2 posDepthUV = getRayMarchUV(surfacePoint, refractDir);
 	vec3 refracted = waterColor;
 	if (posDepthUV.x >= 0.0)
 	{
 		float posDepth = texture(depthSampler, posDepthUV).r;
-		float traceDepth = getGlobalDistance(posDepth) - getGlobalDistance(ndc.z);
+		float traceDepth = getGlobalDistance(posDepth) - getGlobalDistance(uv.z);
 		float depthFactor = clamp(traceDepth / iDeepWaterDistance, 0.0, 1.0);
-		refracted = mix(texture(colorSampler, posDepthUV.xy).rgb, waterColor, mix(0.3, 1.0, depthFactor));
+		refracted = mix(
+			texture(colorSampler, posDepthUV.xy).rgb, 
+			waterColor,
+			mix(0.3, 1.0, depthFactor));
 	}
 
 	vec3 color = mix(refracted, reflected, fresnel);
-	float atten = max(1.0 - dot(dist, dist) * 0.001, 0.0);
-	color += SEA_WATER_COLOR * (p.y - SEA_HEIGHT) * 0.18 * atten;
-    
-    color += specular(n, l, eye, 600.0 * inversesqrt(length(dist)));
-    
-    return color;
+	float attenuation = max(1.0 - dot(dist, dist) * 0.001, 0.0);
+	color += SEA_WATER_COLOR * (surfacePoint.y - SEA_HEIGHT) * 0.18 * attenuation;
+
+	color += specular(normal, l, eye, 600.0 * inversesqrt(length(dist)));
+	return color;
 }
 
-// tracing
-vec3 getNormal(vec3 p, float eps) {
+vec3 getNormal(vec3 p, float eps)
+{
     vec3 n;
-    n.y = map_detailed(p);    
-    n.x = map_detailed(vec3(p.x+eps,p.y,p.z)) - n.y;
-    n.z = map_detailed(vec3(p.x,p.y,p.z+eps)) - n.y;
+    n.y = getDetailedWaterElevation(p);    
+    n.x = getDetailedWaterElevation(vec3(p.x + eps, p.y, p.z)) - n.y;
+    n.z = getDetailedWaterElevation(vec3(p.x, p.y, p.z + eps)) - n.y;
     n.y = eps;
     return normalize(n);
 }
 
-float heightMapTracing(vec3 ori, vec3 dir, out vec3 p) {  
+float traceWaterSurface(vec3 origin, vec3 direction, out vec3 result)
+{  
     float tm = 0.0;
     float tx = 2000.0;    
-    float hx = map(ori + dir * tx);
-    if(hx > 0.0) {
-        p = ori + dir * tx;
+    float hx = getWaterElevation(origin + direction * tx);
+    if (hx > 0.0)
+	{
+        result = origin + direction * tx;
         return tx;   
     }
-    float hm = map(ori);    
-    for(int i = 0; i < NUM_STEPS; i++) {
+
+    float hm = getWaterElevation(origin);    
+    for (int i = 0; i < NUM_STEPS; i++)
+	{
         float tmid = mix(tm, tx, hm / (hm - hx));
-        p = ori + dir * tmid;
-        float hmid = map(p);        
-        if(hmid < 0.0) {
+        result = origin + direction * tmid;
+        float hmid = getWaterElevation(result);        
+        if(hmid < 0.0)
+		{
             tx = tmid;
             hx = hmid;
-        } else {
+        }
+		else 
+		{
             tm = tmid;
             hm = hmid;
-        }        
-        if(abs(hmid) < EPSILON) break;
+        }      
+  
+        if(abs(hmid) < EPSILON)
+		{
+			break;
+		}
     }
     return mix(tm, tx, hm / (hm - hx));
 }
@@ -328,7 +346,7 @@ void main()
 
     // Water surface tracing
     vec3 surfacePoint;
-    heightMapTracing(origin, direction, surfacePoint);
+    traceWaterSurface(origin, direction, surfacePoint);
     vec3 dist = surfacePoint - origin;
 
 	// Make the surface smoother at a distance
