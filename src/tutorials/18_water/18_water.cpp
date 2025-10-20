@@ -83,6 +83,9 @@ uniform float zNear;
 uniform float zFar;
 uniform float iDeepWaterDistance;
 
+uniform int iReflectionSteps;
+uniform float iReflectionTraceDistance;
+
 // math
 float hash( vec2 p ) {
 	float h = dot(p,vec2(127.1,311.7));	
@@ -114,28 +117,25 @@ float specular(vec3 n,vec3 l,vec3 e,float s) {
     return pow(max(dot(reflect(e,n),l),0.0),s) * nrm;
 }
 
-// sky
 vec3 globalToScreen(vec3 p) {
 	vec4 clipSpacePos = iProjectionMatrix * iViewMatrix * vec4(p, 1.0);
 	clipSpacePos /= clipSpacePos.w;
 	return clipSpacePos.xyz * 0.5 + 0.5;
 }
 
-uniform int iReflectionSteps;
-uniform float iReflectionTraceDistance;
-
-vec2 getScreenSpaceUV(vec3 surfaceP, vec3 e) 
+// Ray marching using front and backface depth buffers
+vec2 getRayMarchUV(vec3 surfacePoint, vec3 direction) 
 {
-	vec3 end = surfaceP + iReflectionTraceDistance * e;
+	vec3 end = surfacePoint + iReflectionTraceDistance * direction;
 	float stepSize = iReflectionTraceDistance / float(iReflectionSteps);
 
-	vec3 prev = globalToScreen(surfaceP);
+	vec3 prev = globalToScreen(surfacePoint);
 	float prevDepth = texture(depthSampler, prev.xy).r;
 
-	for (int i = 1; i <= iReflectionSteps; i++)
+	for (int i = 1; i <= iReflectionSteps; ++i)
 	{
 		float t = float(i) / float(iReflectionSteps);
-		vec3 screenPos = globalToScreen(mix(surfaceP, end, t));
+		vec3 screenPos = globalToScreen(mix(surfacePoint, end, t));
 		if (!(0.0 <= screenPos.x && screenPos.x <= 1.0 &&
 			  0.0 <= screenPos.y && screenPos.y <= 1.0 &&
 			  screenPos.z < 1.0))
@@ -145,7 +145,8 @@ vec2 getScreenSpaceUV(vec3 surfaceP, vec3 e)
 		
 		float depth = texture(depthSampler, screenPos.xy).r;
 		float backfaceDepth = texture(backfaceDepthSampler, screenPos.xy).r;
-		if (backfaceDepth < 1.0 && getGlobalDistance(screenPos.z) < getGlobalDistance(backfaceDepth) + stepSize &&
+		if (backfaceDepth < 1.0 && 
+			getGlobalDistance(screenPos.z) < getGlobalDistance(backfaceDepth) + stepSize &&
 			depth < screenPos.z)
 		{
 			float curDiff = screenPos.z - depth;
@@ -160,13 +161,14 @@ vec2 getScreenSpaceUV(vec3 surfaceP, vec3 e)
 	return vec2(-1.0);
 }
 
-vec3 getReflectedColor(vec3 p, vec3 e) {
-	vec2 screenUV = getScreenSpaceUV(p, e);
-	if (screenUV.x < 0.0)
+vec3 getReflectedColor(vec3 surfacePoint, vec3 direction)
+{
+	vec2 uv = getRayMarchUV(surfacePoint, direction);
+	if (uv.x < 0.0)
 	{
-		return texture(skyboxSampler, e).rgb;
+		return texture(skyboxSampler, direction).rgb;
 	}
-	return texture(colorSampler, screenUV.xy).rgb;
+	return texture(colorSampler, uv.xy).rgb;
 }
 
 // sky
@@ -246,7 +248,7 @@ vec3 getSeaColor(vec3 p, vec3 n, vec3 l, vec3 eye, vec3 dist) {
 
 	vec3 refractDir = normalize(refract(eye, n, 1.0 / 1.33));
 
-	vec2 posDepthUV = getScreenSpaceUV(p, refractDir);
+	vec2 posDepthUV = getRayMarchUV(p, refractDir);
 	vec3 refracted = waterColor;
 	if (posDepthUV.x >= 0.0)
 	{
