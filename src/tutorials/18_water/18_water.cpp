@@ -302,32 +302,20 @@ float heightMapTracing(vec3 ori, vec3 dir, out vec3 p) {
     return mix(tm, tx, hm / (hm - hx));
 }
 
-vec3 getPixel(vec2 uv, float time)
+// Converts UV coordinates to a global ray direction
+// \todo (Dmitry): optimize by precomputing inverse matrices on CPU
+vec3 uvToGlobal(vec2 uv)
 {
-    // ray
-    // Convert from screen space to NDC
+	// Convert from screen space to NDC
     vec2 xy = uv * 2.0 - 1.0;
-    // Convert from NDC to clip space
     vec4 ray_clip = vec4(xy, -1.0, 1.0);
+
     // Convert from clip space to eye space
-    vec4 ray_eye = inverse(iProjectionMatrix) * ray_clip;
-    ray_eye = vec4(ray_eye.xy, -1.0, 0.0);
+    vec4 rayEye = inverse(iProjectionMatrix) * ray_clip;
+    rayEye = vec4(rayEye.xy, -1.0, 0.0);
+
     // Convert from eye space to world space
-    vec3 dir = normalize((inverse(iViewMatrix) * ray_eye).xyz);
-
-    vec3 ori = iCameraPosition;
-
-    // tracing
-    vec3 p;
-    heightMapTracing(ori,dir,p);
-    vec3 dist = p - ori;
-    vec3 n = getNormal(p, dot(dist, dist) * EPSILON_NRM);
-             
-    // color
-    return mix(
-        getSkyColor(uv, dir),
-        getSeaColor(p,n,-iLightDirection,dir,dist),
-    	pow(smoothstep(0.0,-0.02,dir.y),0.2));
+    return normalize((inverse(iViewMatrix) * rayEye).xyz);
 }
 
 in vec2 texCoord;
@@ -335,9 +323,25 @@ out vec4 fragColor;
 
 void main()
 {
-    vec3 color = getPixel(texCoord, 0.0f);
+    vec3 direction = uvToGlobal(texCoord);
+    vec3 origin = iCameraPosition;
+
+    // Water surface tracing
+    vec3 surfacePoint;
+    heightMapTracing(origin, direction, surfacePoint);
+    vec3 dist = surfacePoint - origin;
+
+	// Make the surface smoother at a distance
+    vec3 normal = getNormal(surfacePoint, dot(dist, dist) * EPSILON_NRM);
+             
+    // color
+    vec3 color = mix(
+        getSkyColor(texCoord, direction),
+        getSeaColor(surfacePoint, normal, -iLightDirection, direction, dist),
+    	pow(smoothstep(0.0, -0.02, direction.y), 0.2));
+
     // post-processing
-	fragColor = vec4(pow(color,vec3(0.8)), 1.0);
+	fragColor = vec4(pow(color, vec3(0.8)), 1.0);
 }
 )";
 
