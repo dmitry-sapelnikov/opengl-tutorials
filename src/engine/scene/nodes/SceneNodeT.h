@@ -93,9 +93,8 @@ public:
 				return;
 			}
 			mChildren.push_back(child);
+			child->setParent(this);
 		GLTUT_CATCH_ALL_END("Failed to add child node")
-
-		child->setParent(this);
 	}
 
 	/**
