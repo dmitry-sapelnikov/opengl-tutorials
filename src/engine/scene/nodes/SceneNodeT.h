@@ -74,15 +74,16 @@ public:
 			return;
 		}
 
-		const SceneNode* node = this;
-		while (node != nullptr)
+		const SceneNode* root = this;
+		while (root->getParent() != nullptr)
 		{
-			// Prevent adding an anchestor node as a child
-			if (node == child)
-			{
-				return;
-			}
-			node = node->getParent();
+			root = root->getParent();
+		}
+
+		// Prevent adding an anchestor node as a child
+		if (root == child)
+		{
+			return;
 		}
 
 		GLTUT_CATCH_ALL_BEGIN
